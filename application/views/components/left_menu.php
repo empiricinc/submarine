@@ -468,7 +468,7 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
         <!-- Accounting -->
       <li class="menu-title"><?php echo $this->lang->line('xin_acc_accounting');?></li>
 
-       <li class="with-sub"> 
+       <!-- <li class="with-sub"> 
           <a href="javascript:void(0);" class="waves-effect  waves-light"> 
             <span class="s-caret"><i class="fa fa-angle-down"></i></span> 
             <span class="s-icon"><i class="fa fa-university"></i></span> 
@@ -491,21 +491,21 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
         </ul>
 
-        </li> 
+        </li>  -->
 
         <!-- payroll settings -->
-         <li> 
+         <!-- <li> 
             <a href="<?php echo site_url();?>Payroll_settings/payroll_settings" class="waves-effect waves-light"> 
               <span class="s-icon"><i class="ti-settings"></i></span> 
               <span class="s-text"><?php echo $this->lang->line('left_payroll_settings');?></span> 
             </a> 
-          </li>
+          </li> -->
 
         <?php } ?>
 
         <?php if(in_array('74',$role_resources_ids) || in_array('75',$role_resources_ids) || in_array('76',$role_resources_ids) || in_array('77',$role_resources_ids) || in_array('78',$role_resources_ids)){?>
 
-        <li class="with-sub"> 
+        <!-- <li class="with-sub"> 
           <a href="javascript:void(0);" class="waves-effect  waves-light"> 
             <span class="s-caret"><i class="fa fa-angle-down"></i></span> 
             <span class="s-icon"><i class="fa fa-money"></i></span> 
@@ -540,13 +540,13 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
         </ul>
 
-        </li>
+        </li> -->
 
          <?php } ?>
 
          <?php if(in_array('79',$role_resources_ids) || in_array('80',$role_resources_ids) || in_array('81',$role_resources_ids)){?>
 
-        <li class="with-sub"> 
+        <!-- <li class="with-sub"> 
           <a href="javascript:void(0);" class="waves-effect  waves-light"> 
             <span class="s-caret"><i class="fa fa-angle-down"></i></span> 
             <span class="s-icon"><i class="fa fa-exchange"></i></span> 
@@ -569,7 +569,7 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
         </ul>
 
-        </li>
+        </li> -->
 
         </li>
 
@@ -577,7 +577,7 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
         <?php if(in_array('82',$role_resources_ids) || in_array('83',$role_resources_ids) || in_array('84',$role_resources_ids) || in_array('85',$role_resources_ids) || in_array('86',$role_resources_ids)){?>
 
-        <li class="with-sub"> 
+       <!--  <li class="with-sub"> 
           <a href="javascript:void(0);" class="waves-effect  waves-light"> 
             <span class="s-caret"><i class="fa fa-angle-down"></i></span> 
             <span class="s-icon"><i class="fa fa-bar-chart-o"></i></span> 
@@ -612,7 +612,7 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
         </ul>
 
-        </li>   
+        </li>   --> 
 
         <?php } ?>     
 
@@ -632,19 +632,19 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
       <?php if(in_array('54',$role_resources_ids)){?>
 
-      <li> <a href="<?php echo site_url();?>settings/constants" class="waves-effect waves-light"> <span class="s-icon"><i class="ti-menu"></i></span> <span class="s-text"><?php echo $this->lang->line('left_constants');?></span> </a> </li>
+     <!--  <li> <a href="<?php echo site_url();?>settings/constants" class="waves-effect waves-light"> <span class="s-icon"><i class="ti-menu"></i></span> <span class="s-text"><?php echo $this->lang->line('left_constants');?></span> </a> </li> -->
 
       <?php } ?>
 
       <?php if(in_array('56',$role_resources_ids)){?>
 
-      <li> <a href="<?php echo site_url();?>settings/database_backup/" class="waves-effect waves-light"> <span class="s-icon"><i class="fa fa-database"></i></span> <span class="s-text"><?php echo $this->lang->line('left_db_backup');?></span> </a> </li>
+     <!--  <li> <a href="<?php echo site_url();?>settings/database_backup/" class="waves-effect waves-light"> <span class="s-icon"><i class="fa fa-database"></i></span> <span class="s-text"><?php echo $this->lang->line('left_db_backup');?></span> </a> </li> -->
 
       <?php } ?>
 
       <?php if(in_array('55',$role_resources_ids)){?>
 
-      <li> <a href="<?php echo site_url();?>settings/email_template/" class="waves-effect waves-light"> <span class="s-icon"><i class="fa fa-envelope-o"></i></span> <span class="s-text"><?php echo $this->lang->line('left_email_templates');?></span> </a> </li>
+      <!-- <li> <a href="<?php echo site_url();?>settings/email_template/" class="waves-effect waves-light"> <span class="s-icon"><i class="fa fa-envelope-o"></i></span> <span class="s-text"><?php echo $this->lang->line('left_email_templates');?></span> </a> </li> -->
 
       <?php } ?>
 
