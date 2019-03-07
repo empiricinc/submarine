@@ -468,7 +468,7 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
         <!-- Accounting -->
       <li class="menu-title"><?php echo $this->lang->line('xin_acc_accounting');?></li>
 
-        <!-- <li class="with-sub"> 
+       <li class="with-sub"> 
           <a href="javascript:void(0);" class="waves-effect  waves-light"> 
             <span class="s-caret"><i class="fa fa-angle-down"></i></span> 
             <span class="s-icon"><i class="fa fa-university"></i></span> 
@@ -491,7 +491,7 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
         </ul>
 
-        </li> -->
+        </li> 
 
         <!-- payroll settings -->
          <li> 
