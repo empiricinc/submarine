@@ -43,8 +43,40 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 	  ?>
 
       <li class="menu-title"><?php echo $this->lang->line('dashboard_main');?></li>
+      
 
       <li> <a href="<?php echo site_url('dashboard');?>" class="waves-effect waves-light"> <span class="s-icon"><i class="fa fa-home"></i></span> <span class="s-text"><?php echo $this->lang->line('dashboard_title');?></span> </a> </li>
+
+
+
+
+ <!-- dashboard_employees -->
+      <li class="with-sub"> 
+          <a href="javascript:void(0);" class="waves-effect  waves-light"> 
+            <span class="s-caret"><i class="fa fa-angle-down"></i></span> 
+            <span class="s-icon"><i class="ti-user"></i></span> 
+            <span class="s-text"> Test System<?php //echo $this->lang->line('dashboard_employees');?></span> 
+          </a>
+
+        <ul>
+
+          <?php  if(in_array('13',$role_resources_ids)) { ?>
+
+          <li><a href="<?php //echo site_url('employees');?>">Test System</a></li>
+
+          <?php } ?>
+
+           
+
+        </ul>
+
+      </li>
+
+
+
+
+
+
 
       <?php  if(in_array('1',$role_resources_ids) || in_array('3',$role_resources_ids) || in_array('4',$role_resources_ids) || in_array('5',$role_resources_ids) || in_array('6',$role_resources_ids) || in_array('7',$role_resources_ids) || in_array('8',$role_resources_ids) || in_array('9',$role_resources_ids) || in_array('10',$role_resources_ids)){?>
 
@@ -106,6 +138,15 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
       </li>
 
       <?php } ?>
+
+
+
+
+
+
+
+
+
 
       <?php  if(in_array('11',$role_resources_ids) || in_array('13',$role_resources_ids) || in_array('14',$role_resources_ids) || in_array('15',$role_resources_ids) || in_array('16',$role_resources_ids) || in_array('17',$role_resources_ids) || in_array('18',$role_resources_ids) || in_array('19',$role_resources_ids) || in_array('20',$role_resources_ids) || in_array('21',$role_resources_ids) || in_array('22',$role_resources_ids) || in_array('23',$role_resources_ids) || in_array('24',$role_resources_ids) || in_array('25',$role_resources_ids) || in_array('26',$role_resources_ids) || in_array('27',$role_resources_ids)){?>
 
