@@ -62,7 +62,8 @@ $designation_info = $this->Xin_model->read_designation_info($user_info[0]->desig
 
           <?php  if(in_array('13',$role_resources_ids)) { ?>
 
-          <li><a href="<?php echo site_url('tests');?>">Test System<?php echo $this->lang->line('left_tests'); ?></a></li>
+          <li><a href="<?php echo site_url('tests');?>">Add Questions<?php echo $this->lang->line('left_tests'); ?></a></li>
+          <li><a href="<?php echo site_url('tests/all_questions'); ?>">All Questions<?php echo $this->lang->line('left_tests'); ?></a></li>
 
           <?php } ?>
 
