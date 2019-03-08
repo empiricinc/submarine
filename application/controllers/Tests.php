@@ -40,6 +40,7 @@ class Tests extends MY_Controller{
 			redirect('');
 		}
 	}
+	public function all_questions(){
 }
 
 ?>
