@@ -19,7 +19,7 @@
 				<?php foreach($questions as $que) : ?>
 					<tr>
 						<td><?php echo $counter++; ?></td>
-						<td><?php echo $que->question; ?></td>
+						<td><a href="<?= base_url(); ?>tests/viewsingle/<?php echo $que->id; ?>"><?php echo $que->question; ?></a></td>
 						<td>
 							<a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>tests/viewsingle/<?php echo $que->id; ?>">View</a>
 							<a class="btn btn-primary btn-xs" href="<?php echo base_url(); ?>tests/edit/<?php echo $que->id; ?>">Edit</a>
