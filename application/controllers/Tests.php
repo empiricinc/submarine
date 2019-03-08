@@ -100,11 +100,20 @@ class Tests extends MY_Controller{
 		$this->load->view('components/template', $data);
 	}
 	// View single record...
-	public function viewsingle($id){
-		$data['viewone'] = $this->test_model->get_row('ex_questions', $id);
-		$data['title'] = 'Online Exam | Single Record';
-		$data['body'] = 'viewsingle';
-		$this->load->view('components/template', $data);
+	public function view_single($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$data['view_one'] = $this->Tests_model->get_single($id);
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'single_record';
+		if(!empty($session)){
+			$data['subview'] = $this->load->view('test-system/view_single', $data, TRUE);
+			$this->load->view('layout_main', $data); // Page Load.
+		}
+		
 	}
 	// Delete a record...
 	public function delete($id){

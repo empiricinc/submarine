@@ -14,7 +14,9 @@ class tests_model extends CI_Model{
 	// Get all questions to display to the user ... 
 	public function get_questions()
 	{
-		$query = $this->db->get('ex_questions');
+		$this->db->select('id, question, status');
+		$this->db->from('ex_questions');
+		$query = $this->db->get();
 		return $query->result();
 	}
 	// Creating new questions ...
@@ -25,6 +27,12 @@ class tests_model extends CI_Model{
 		} else {
 			return FALSE;
 		}
+	}
+	// View single record ... 
+	public function get_single($id){
+		$this->db->where('id', $id);
+		$query = $this->db->get('ex_questions');
+		return $query->row_array();
 	}
 }
 
