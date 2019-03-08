@@ -1,3 +1,8 @@
+<!-- Filename: view_single.php
+	 Location: views/test-system/view_single.php
+	 Author: Saddam
+-->
+
 <div class="container">
 	<div class="row">
 		<div class="col-md-5">
@@ -15,7 +20,7 @@
 				<input type="radio" name="option" value="option4"> D. None of These 
 			</strong><hr>
 			<button type="submit" class="btn btn-info">Next &raquo;</button>
-			<a class="btn btn-warning" href="<?php echo base_url('test/allquestions'); ?>">&raquo; Back</a>
+			<a class="btn btn-warning" href="<?php echo base_url('tests/all_questions'); ?>">&raquo; Back</a>
 		</div>
 	</div>
 </div>

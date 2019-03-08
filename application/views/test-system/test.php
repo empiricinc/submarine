@@ -1,7 +1,6 @@
 <!--Filename : test.php
 	Author: Saddam
-	Location : views / test-system
- -->
+	Location : views / test-system / test.php -->
 
 <div class="container">
 	<div class="row">

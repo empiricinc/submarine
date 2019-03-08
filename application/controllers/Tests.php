@@ -2,7 +2,6 @@
 /* File name: Tests.php
 * Author: Saddam
 * Location: Controllers / Tests
-* Views: test-system - test.php
 */
 if(! defined("BASEPATH")) exit ("No direct script access allowed!");
 
@@ -26,9 +25,6 @@ class Tests extends MY_Controller{
 		// Load all models here to easily access them and their functions ...
 		$this->load->model('Tests_model');
 		$this->load->model('Xin_model');
-		$this->load->model('Employees_model');
-		$this->load->model('Finance_model');
-		$this->load->model('Expense_model');
 	}
 	public function index(){
 		$session = $this->session->userdata('username');
@@ -92,12 +88,45 @@ class Tests extends MY_Controller{
 			$this->load->view('layout_main', $data); // Page Load 
 		}
 	}
-	// Add options for the question...
-	public function addoptions($id){
-		$data['addopt'] = $this->Tests_model->get_row('ex_questions', $id);
-		$data['title'] = 'Online Exam | Add Options';
-		$data['body'] = 'addoptions';
-		$this->load->view('components/template', $data);
+	// Get the page that shows question with the form with it ...
+	public function add_options($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$data['addopt'] = $this->Tests_model->get_single($id);
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'add_options'; 
+		if(!empty($session)){
+			$data['subview'] = $this->load->view('test-system/add_options', $data, TRUE);
+			$this->load->view('layout_main', $data); // Page Load
+		}
+	}
+	// Create answers for a question with its ID...
+	public function add_answers(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$id = $this->uri->segment(3);
+		$this->form_validation->set_rules('option1', 'Option 1', 'required');
+		$this->form_validation->set_rules('option2', 'Option 2', 'required');
+		$this->form_validation->set_rules('option3', 'Option 3', 'required');
+		$this->form_validation->set_rules('option3', 'Option 4', 'required');
+		if($this->form_validation->run() == FALSE ){
+			$data['title'] = $this->Xin_model->site_title();
+			$data['breadcrumbs'] = $this->lang->line('xin_tests');
+			$data['path_url'] = 'add_options';
+			$data['subview'] = $this->load->view('test-system/add_options', $data, TRUE);
+			$this->load->view('layout_main', $data); // Page Load... 
+		} else {
+			$data = array(
+				'ans_name' => $this->input->post('option1'),
+				'que_id'   => $id
+			);
+		}
+
 	}
 	// View single record...
 	public function view_single($id){

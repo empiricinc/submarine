@@ -28,12 +28,22 @@ class tests_model extends CI_Model{
 			return FALSE;
 		}
 	}
+	// Creating answers for the questions 
+	public function create_answers($data){
+		$this->db->insert('ex_answers', $data);
+		if($this->db->affected_rows() > 0 ){
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
 	// View single record ... 
 	public function get_single($id){
 		$this->db->where('id', $id);
 		$query = $this->db->get('ex_questions');
 		return $query->row_array();
 	}
+
 }
 
 ?>

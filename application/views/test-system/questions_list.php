@@ -1,3 +1,8 @@
+<!-- Filename: questions_list.php
+	 Location: Views/test-system/questions_list.php
+	 Author: Saddam
+-->
+
 <div class="container">
 	<div class="col-md-12">
 		<h1>Questions List</h1><hr>
@@ -24,7 +29,7 @@
 							<a class="btn btn-info btn-xs" href="<?php echo base_url(); ?>tests/view_single/<?php echo $que->id; ?>">View</a>
 							<a class="btn btn-primary btn-xs" href="<?php echo base_url(); ?>tests/edit/<?php echo $que->id; ?>">Edit</a>
 							<a class="btn btn-danger btn-xs" onclick="javascript: return confirm('Are you sure to delete this?')" href="<?php echo base_url(); ?>tests/delete/<?php echo $que->id; ?>">Delete</a>
-							<a class="btn btn-warning btn-xs" href="<?php echo base_url(); ?>tests/addoptions/<?php echo $que->id; ?>">Add</span></a>
+							<a class="btn btn-warning btn-xs" href="<?php echo base_url(); ?>tests/add_options/<?php echo $que->id; ?>">Add</span></a>
 						</td>
 
 					</tr>
