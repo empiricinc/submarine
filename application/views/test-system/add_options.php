@@ -1,7 +1,9 @@
-<!-- Filename: add_options.php
-	 Author: Saddam
-	 Location: Views/test-system/add_options.php
--->
+<?php 
+/* Filename: add_options.php
+*  Author: Saddam
+*  Location: Views/test-system/add_options.php
+*/
+?>
 
 <div class="container">
 	<div class="row">

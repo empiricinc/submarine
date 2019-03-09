@@ -1,11 +1,20 @@
-<!-- Filename: questions_list.php
-	 Location: Views/test-system/questions_list.php
-	 Author: Saddam
--->
-
+<?php
+/* Filename: questions_list.php
+*  Location: Views/test-system/questions_list.php
+*  Author: Saddam
+*/
+?>
 <div class="container">
 	<div class="col-md-12">
-		<h1>Questions List</h1><hr>
+		<div class="row">
+			<div class="col-md-6 text-left">
+				<h1>Questions List</h1>
+			</div>
+			<div class="col-md-6 text-right">
+				<a class="btn btn-info text-right" href="<?=base_url('tests/questions_for_test'); ?>">GO TO PAPER &raquo;</a>
+			</div>
+		</div>
+		<hr>
 		<?php if($this->session->flashdata('success')) : ?>
 			<div class="alert alert-success text-center">
 				<?php echo $this->session->flashdata('success'); ?>

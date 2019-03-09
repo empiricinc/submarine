@@ -123,7 +123,7 @@ class Tests extends MY_Controller{
 		} else {
 			$data = array(
 				'ans_name' => $this->input->post('option1'),
-				'que_id'   => $id
+				'que_id'   => $id // Do it later... 
 			);
 		}
 
@@ -146,10 +146,32 @@ class Tests extends MY_Controller{
 	}
 	// Delete a record...
 	public function delete($id){
-		var_dump($id); exit();
-		$data['delete'] = $this->test_model->delete_data('ex_questions', $id);
+		// var_dump($id); exit();
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$data['delete'] = $this->Tests_model->delete_question();
 		$this->session->set_flashdata('msg', 'Question has been deleted successfully!');
-		return redirect('test/allquestions');
+		// return redirect('tests/all_questions');
+		$this->all_questions();
+	}
+	// Random questions / data to display
+	public function questions_for_test(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$data['questions_rand'] = $this->Tests_model->test_questions();
+		// echo "<pre>";
+		// var_dump($data); exit;
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'question_paper';
+		if(!empty($session)){
+			$data['subview'] = $this->load->view('test-system/question_paper', $data, TRUE);
+			$this->load->view('layout_main', $data); // Page Load ... 
+		}
 	}
 }
 

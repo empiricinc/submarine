@@ -39,11 +39,31 @@ class tests_model extends CI_Model{
 	}
 	// View single record ... 
 	public function get_single($id){
-		$this->db->where('id', $id);
-		$query = $this->db->get('ex_questions');
-		return $query->row_array();
+		// $this->db->where('id', $id);
+		// $query = $this->db->get('ex_questions');
+		// return $query->row_array();
+		$this->db->select('ex_answers.ans_id, ex_answers.q_id, ex_answers.ans_name, ex_answers.status as ans_status, ex_questions.id as que_id, ex_questions.question, ex_questions.status as que_status');
+		$this->db->from('ex_answers');
+		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id');
+		$this->db->where(array('ex_questions.id' => $id));
+		$query = $this->db->get();
+		// echo $this->db->last_query(); exit();
+		return $query->result();
 	}
-
+	// Delete questions...
+	public function delete_question($id){
+		$this->db->where('id', $id);
+		$this->db->delete('ex_questions');
+		return TRUE;
+	}
+	// Get random questions...
+	public function test_questions(){
+		$this->db->order_by('id', 'RANDOM');
+		$this->db->where('id > ', 2);
+		$this->db->limit(3);
+		$query = $this->db->get('ex_questions');
+		return $query->result();
+	}
 }
 
 ?>
