@@ -12,7 +12,8 @@
 			<small>Here you can add possible answers/options for the question!</small>
 		</div>
 		<div class="col-md-8">
-			<form action="<?php echo base_url('tests/add_options/'); ?><?php echo $addopt['id']; ?>" method="post">
+			<form action="<?php echo base_url('tests/add_options/'); ?>" method="post">
+				<input type="hidden" name="que_id" value="<?php echo $addopt['id']; ?>">
 			  <div class="form-group">
 			    <label for="question">Add possible answers for this question:</label>
 			    <textarea name="question" class="form-control" rows="12" id="question" required="required"><?php echo $addopt['question']; ?></textarea>
@@ -35,8 +36,8 @@
 			  	<input type="checkbox" name="select"> Mark as Correct
 			  </div>
 			  </div><hr>
-			  <button type="submit" class="btn btn-primary btn-sm"> Save</button>
-			  <a class="btn btn-warning btn-sm" href="<?php echo base_url('tests/all_questions'); ?>">Cancel</a>
+			  <button type="submit" class="btn btn-primary"> Save</button>
+			  <a class="btn btn-warning" href="<?php echo base_url('tests/all_questions'); ?>">Cancel</a>
 			</form>
 		</div>
 	</div>

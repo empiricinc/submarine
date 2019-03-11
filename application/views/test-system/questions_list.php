@@ -11,7 +11,7 @@
 				<h1>Questions List</h1>
 			</div>
 			<div class="col-md-6 text-right">
-				<a class="btn btn-info text-right" href="<?=base_url('tests/questions_for_test'); ?>">GO TO PAPER &raquo;</a>
+				<a class="btn btn-info btn-lg text-right" href="<?=base_url('tests/questions_for_test'); ?>">GO TO PAPER &raquo;</a>
 			</div>
 		</div>
 		<hr>
