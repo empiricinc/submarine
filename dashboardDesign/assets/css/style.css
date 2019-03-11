@@ -1,0 +1,364 @@
+@font-face {
+  font-family: 'lato';
+  src: url('../fonts/Lato/Lato-Regular.ttf');
+}
+@font-face {
+  font-family: 'roboto';
+  src: url('../fonts/Roboto/Roboto-Regular.ttf');
+}
+@font-face {
+  font-family: 'raleway';
+  src: url('../fonts/Raleway/Raleway-Regular.ttf');
+}
+@font-face {
+  font-family: 'ralewayB';
+  src: url('../fonts/Raleway/Raleway-Bold.ttf');
+}
+@font-face {
+  font-family: 'openSans';
+  src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
+body {
+  font-family: 'roboto';
+  background-color: #f1f3f5;
+}
+::selection {
+  background-color: #42324e;
+  color: #fff;
+}
+.marg {
+  margin: 0px !important;
+}
+.marg-top {
+  margin-top: 10px;
+}
+.marg-top-8 {
+  margin-top: 9px;
+}
+.marg-20 {
+  margin-top: 20px !important;
+}
+.pad {
+  padding: 0px !Important;
+}
+.mt-20 {
+  margin-top: 23px;
+}
+a {
+  text-decoration: none !important;
+  outline: none !important;
+}
+button {
+  outline: none !important;
+}
+.no-border {
+  border: 0px !important;
+}
+.heading-all {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.heading-all h3 {
+  font-size: 36px;
+  font-weight: bold;
+  position: relative;
+  text-transform: uppercase;
+  margin: 0px;
+  margin-top: 5px;
+  display: inline-block;
+}
+.heading-all h3:before {
+  content: "";
+  position: absolute;
+  padding: 2px;
+  left: 25%;
+  right: 25%;
+  background-color: #f64827;
+  bottom: -7px;
+}
+.heading-all img {
+  width: 23px;
+  display: none;
+}
+.anchor {
+  display: block;
+}
+.margint-top-0 {
+  margin-top: 0px !important;
+}
+section.secnavMain {
+  position: relative;
+}
+section.secnavMain nav.navbar-inverse {
+  border-radius: 0px;
+  background-color: #3a3b3c;
+  text-transform: capitalize;
+  margin-bottom: 0px;
+}
+section.secnavMain nav.navbar-inverse a.navbar-brand {
+  padding: 18px 15px;
+  margin-right: 35px;
+}
+section.secnavMain nav.navbar-inverse .navbar-nav li a {
+  color: #fff;
+  padding: 0px 0px;
+  margin: 15px 15px;
+}
+section.secnavMain nav.navbar-inverse .navbar-nav li a > span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: relative;
+  top: -1px;
+}
+section.secMainWidth {
+  padding: 0px 100px;
+}
+section.secMainWidth section.secIndex .headingMain {
+  margin: 30px 0px;
+}
+section.secMainWidth section.secIndex .headingMain h1 {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0px;
+}
+section.secMainWidth section.secIndex .headingMain h1 span {
+  font-weight: lighter;
+  font-size: 28px;
+}
+section.secMainWidth section.secIndex .mainGrid {
+  text-align: center;
+  min-height: 240px;
+  display: grid;
+  align-items: center;
+  border: 1px solid #e0e4e7;
+  border-radius: 3px;
+  margin: 15px 0px;
+  transition: 0.4s;
+  background: linear-gradient(0deg, #fff, #fff);
+  box-shadow: 0 0 40px 3px rgba(0, 0, 0, 0.01);
+}
+section.secMainWidth section.secIndex .mainGrid:hover {
+  background: linear-gradient(0deg, #395dff, #3ce0ff);
+}
+section.secMainWidth section.secIndex .mainGrid:hover .gridContent h3,
+section.secMainWidth section.secIndex .mainGrid:hover .gridContent p {
+  color: #fff;
+}
+section.secMainWidth section.secIndex .mainGrid:hover .gridIcon {
+  background-color: #fff;
+}
+section.secMainWidth section.secIndex .mainGrid .gridContent h3 {
+  font-size: 36px;
+  font-weight: bold;
+  color: #333;
+}
+section.secMainWidth section.secIndex .mainGrid .gridContent p {
+  font-size: 14px;
+  font-weight: 100;
+  text-transform: capitalize;
+  color: #7d7e7e;
+}
+section.secMainWidth section.secIndex .mainGrid .gridIcon {
+  text-align: center;
+  display: inline-grid;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  align-items: center;
+}
+section.secMainWidth section.secIndex .mainGrid .gridIcon img {
+  margin: auto;
+}
+section.secMainWidth section.secIndex .mainGrid .icon1 {
+  background-color: #dfefff;
+}
+section.secMainWidth section.secIndex .mainGrid .icon2 {
+  background-color: #fef7dd;
+}
+section.secMainWidth section.secIndex .mainGrid .icon3 {
+  background-color: #fcecf4;
+}
+section.secMainWidth section.secIndex .mainGrid .icon4 {
+  background-color: #efedfe;
+}
+section.secMainWidth section.secIndex .mainGrid .icon5 {
+  background-color: #fce3e2;
+}
+section.secMainWidth .secIndexTable {
+  margin: 15px 0px;
+}
+section.secMainWidth .secIndexTable .mainTableWhite {
+  background-color: #fff;
+  border: 1px solid #e1e5e8;
+  border-radius: 3px;
+  box-shadow: 0 0 40px 3px rgba(0, 0, 0, 0.01);
+}
+section.secMainWidth .secIndexTable .tabelHeading {
+  margin: 15px 0px;
+}
+section.secMainWidth .secIndexTable .tabelHeading h3 {
+  margin: 0px;
+  padding: 0px 15px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #3a3b3c;
+  font-size: 20px;
+}
+section.secMainWidth .secIndexTable .tabelHeading h3 span {
+  font-weight: lighter;
+}
+section.secMainWidth .secIndexTable .tabelTopBtn {
+  text-align: right;
+  padding-right: 15px;
+  padding-top: 12px;
+}
+section.secMainWidth .secIndexTable .tabelTopBtn .btn {
+  position: relative;
+  background-color: transparent;
+  border: 1px solid #0088ff;
+  color: #0088ff;
+  transition: 0.4s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+}
+section.secMainWidth .secIndexTable .tabelTopBtn .btn:hover {
+  background-color: #0088ff;
+  color: #fff;
+}
+section.secMainWidth .secIndexTable .tabelTopBtn .btn:hover img {
+  filter: brightness(0) invert(1);
+}
+section.secMainWidth .secIndexTable .tabelTopBtn .btn img {
+  position: relative;
+  top: -1px;
+  margin-right: 5px;
+  transition: 0.4s cubic-bezier(0.55, 0.06, 0.68, 0.19);
+}
+section.secMainWidth .secIndexTable .tableMain table {
+  margin-top: 10px;
+}
+section.secMainWidth .secIndexTable .tableMain table tr th {
+  text-transform: capitalize;
+  color: #3a3b3c;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+section.secMainWidth .secIndexTable .tableMain table tr td {
+  border-bottom: 1px solid #ddd;
+  border-top: 0px solid #ddd;
+  color: #818181;
+  padding: 10px 10px;
+  font-size: 13px;
+}
+section.secMainWidth .secIndexTable .tableMain table tr .action a img {
+  width: 12px;
+}
+section.secMainWidth .secIndexTable .tableMain table tr .action a:nth-child(1) {
+  border-right: 1px solid #ddd;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+section.secMainWidth .secIndexTable .tabelSideListing {
+  padding: 10px 10px;
+  margin: 15px 0px;
+  color: #787878;
+}
+section.secMainWidth .secIndexTable .tabelSideListing span {
+  position: relative;
+  color: #454545;
+}
+section.secMainWidth .secIndexTable .tabelSideListing img {
+  position: relative;
+  margin: 0px 3px;
+}
+section.secMainWidth .secIndexTable .tabelSideListing img:hover {
+  filter: brightness(0) invert(0.1);
+}
+section.secMainWidth .secIndexTable .tabelCenterListing {
+  text-align: center;
+  margin: 15px 0px;
+}
+section.secMainWidth .secIndexTable .tabelCenterListing a.arrowIcons {
+  position: relative;
+  top: 1px;
+}
+section.secMainWidth .secIndexTable .tabelCenterListing a {
+  color: #757575;
+  border: 1px solid #ddd;
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  border-radius: 3px;
+}
+section.secMainWidth .secIndexTable .tabelCenterListing a img {
+  margin: auto;
+}
+section.secMainWidth .secIndexTable .tabelCenterListing a:hover {
+  border-color: #0088ff;
+  color: #0088ff;
+}
+section.secLogin .loginWhite {
+  background-color: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+  min-height: 591px;
+  margin-top: 60px;
+}
+section.secLogin .mainLeftImg {
+  background-color: #1f87ff;
+  padding: 20px;
+  color: #fff;
+  text-align: center;
+}
+section.secLogin .mainLeftImg > img {
+  margin-bottom: 20px;
+}
+section.secLogin .mainLeftImg p {
+  font-size: 13px;
+  width: 80%;
+  margin: 20px auto 50px auto;
+}
+section.secLogin .mainLeftImg .loginLogo {
+  text-align: left;
+  margin-bottom: 20px;
+}
+section.secLogin .rightLoginMain {
+  min-height: 591px;
+  display: grid;
+  align-items: center;
+  width: 60%;
+  margin: auto;
+}
+section.secLogin .rightLoginMain h3 {
+  font-weight: bold;
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+section.secLogin .rightLoginMain .loginInput {
+  margin: 15px 0px;
+  text-align: center;
+}
+section.secLogin .rightLoginMain .loginInput .form-control {
+  min-height: 47px;
+  box-shadow: 0 0 0 0;
+  border-color: #e1e4e7;
+  border-radius: 3px;
+}
+section.secLogin .rightLoginMain .loginInput .btn {
+  background-color: #1f87ff;
+  color: #fff;
+  padding: 10px 0px;
+  font-size: 16px;
+  text-transform: capitalize;
+  font-weight: bold;
+}
+section.secLogin .rightLoginMain .loginInput a {
+  margin-top: 15px;
+  color: #333;
+  display: inline-block;
+  font-size: 12px;
+  font-weight: bold;
+}
+/*# sourceMappingURL=style.css.map */
