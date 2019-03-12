@@ -1,7 +1,7 @@
 <?php 
 /* File name: Tests.php
 * Author: Saddam
-* Location: Controllers / Tests
+* Location: Controllers / Tests / Tests.php
 */
 if(! defined("BASEPATH")) exit ("No direct script access allowed!");
 
@@ -22,7 +22,7 @@ class Tests extends MY_Controller{
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->helper('html');
-		// Load all models here to easily access them and their functions ...
+		// Load all models here to easily access them and their functions that you need...
 		$this->load->model('Tests_model');
 		$this->load->model('Xin_model');
 	}
@@ -94,7 +94,7 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$data['addopt'] = $this->Tests_model->get_single($id);
+		$data['addopt'] = $this->Tests_model->add_choices($id);
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'add_options'; 
@@ -151,10 +151,10 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$data['delete'] = $this->Tests_model->delete_question();
-		$this->session->set_flashdata('msg', 'Question has been deleted successfully!');
+		$data['delete'] = $this->Tests_model->delete_question($id);
+		$this->session->set_flashdata('success', '<strong>Good Job! </strong> Question has been deleted successfully!');
 		// return redirect('tests/all_questions');
-		$this->all_questions();
+		return redirect('tests/all_questions');
 	}
 	// Random questions / data to display
 	public function questions_for_test(){
@@ -172,6 +172,40 @@ class Tests extends MY_Controller{
 			$data['subview'] = $this->load->view('test-system/question_paper', $data, TRUE);
 			$this->load->view('layout_main', $data); // Page Load ... 
 		}
+	}
+	// Edit records...
+	public function edit($id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$data['edit'] = $this->Tests_model->edit_question($id);
+		// echo "<pre>"; print_r($data); exit();
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'edit_question';
+		if(!empty($session)){
+			$data['subview'] = $this->load->view('test-system/edit_question', $data, TRUE);
+			$this->load->view('layout_main', $data); // Page Load
+		}
+	}
+	// Update the question that's been fetched previously ... 
+	public function update_question(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$id = $this->input->post('que_id');
+		$data = array(
+			'question' => $this->input->post('question')
+		);
+		$this->Tests_model->update_question($id, $data);
+		$this->session->set_flashdata('success', '<strong>Great ! </strong> Data has been updated successfully!'); // Display a message to let the admin know that something has happend...
+		return redirect('tests/all_questions'); // Redirect to main page where he left...
+	}
+	public function applicant_result(){
+		$data = $this->Tests_model->count_uploads();
+		echo "You scored <strong style='color: red;'>" . $data . "</strong> out of <strong style='color: red;'> 100</strong>. So you're considered fail, better luck next time !";
 	}
 }
 
