@@ -109,24 +109,24 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$id = $this->uri->segment(3);
-		$this->form_validation->set_rules('option1', 'Option 1', 'required');
-		$this->form_validation->set_rules('option2', 'Option 2', 'required');
-		$this->form_validation->set_rules('option3', 'Option 3', 'required');
-		$this->form_validation->set_rules('option3', 'Option 4', 'required');
-		if($this->form_validation->run() == FALSE ){
-			$data['title'] = $this->Xin_model->site_title();
-			$data['breadcrumbs'] = $this->lang->line('xin_tests');
-			$data['path_url'] = 'add_options';
-			$data['subview'] = $this->load->view('test-system/add_options', $data, TRUE);
-			$this->load->view('layout_main', $data); // Page Load... 
-		} else {
-			$data = array(
-				'ans_name' => $this->input->post('option1'),
-				'que_id'   => $id // Do it later... 
-			);
+		$options_array = $_POST['option'];
+		$ques_id = $_POST['que_id'];
+		$options_len = count($options_array);
+		$data = $this->input->post('mark');
+		$chkbox = 0;
+		if(isset($_POST['mark']) ){
+			$chkbox = 1;
 		}
-
+		for($i = 0; $i < $options_len; $i++){
+			$data = array(
+				'q_id' => $ques_id,
+				'ans_name' => $_POST['option'][$i],
+			);
+			// echo "<pre>"; print_r($data); exit();
+			$this->Tests_model->create_answers($data);
+			}
+		$this->session->set_flashdata('success', '<strong>Good Job! </strong>  Options have been added successfully!');
+		return redirect('tests/all_questions');
 	}
 	// View single record...
 	public function view_single($id){
@@ -135,6 +135,7 @@ class Tests extends MY_Controller{
 			redirect('');
 		}
 		$data['view_one'] = $this->Tests_model->get_single($id);
+		// echo "<pre>"; print_r($data); exit();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'single_record';
@@ -142,7 +143,6 @@ class Tests extends MY_Controller{
 			$data['subview'] = $this->load->view('test-system/view_single', $data, TRUE);
 			$this->load->view('layout_main', $data); // Page Load.
 		}
-		
 	}
 	// Delete a record...
 	public function delete($id){
@@ -203,9 +203,10 @@ class Tests extends MY_Controller{
 		$this->session->set_flashdata('success', '<strong>Great ! </strong> Data has been updated successfully!'); // Display a message to let the admin know that something has happend...
 		return redirect('tests/all_questions'); // Redirect to main page where he left...
 	}
+	// Count the correct answers and return the total score.
 	public function applicant_result(){
 		$data = $this->Tests_model->count_uploads();
-		echo "You scored <strong style='color: red;'>" . $data . "</strong> out of <strong style='color: red;'> 100</strong>. So you're considered fail, better luck next time !";
+		echo "You scored <strong style='color: red;'>" . $data . "</strong> out of <strong style='color: red;'> 50</strong>. So you're considered fail, better luck next time !";
 	}
 }
 
