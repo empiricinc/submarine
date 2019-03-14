@@ -35,10 +35,11 @@ class tests_model extends CI_Model{
     }
 	// View single record ...  ---> It's buggy, do it later...
 	public function get_single($id){
-		$this->db->select('ex_answers.q_id as que_id, ex_answers.ans_name, ex_answers.status as ans_status, ex_questions.id as ques_id, ex_questions.question as ques');
+		$this->db->select('ex_answers.q_id as que_id, ex_answers.ans_id, ex_answers.ans_name, ex_answers.status as ans_status, ex_questions.id as ques_id, ex_questions.question as ques');
 		$this->db->from('ex_answers');
 		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id');
 		$this->db->where(array('ex_answers.q_id' => $id));
+		// $this->db->where(array('ex_answers.status' => 0));
 		// $this->db->distinct();
 		$query = $this->db->get();
 		// echo $this->db->last_query(); exit();
@@ -91,6 +92,12 @@ class tests_model extends CI_Model{
 		$this->db->where('id', $id);
 		$query = $this->db->get('ex_questions');
 		return $query->row_array();
+	}
+	// Search for specific questions in the database...
+	public function search_questions($keyword){
+		$this->db->like('question', $keyword);
+		$query = $this->db->get('ex_questions');
+		return $query->result();
 	}
 }
 

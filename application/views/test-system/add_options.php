@@ -21,19 +21,19 @@
 			  <div class="row">
 			  	<div class="col-md-3">
 			  	<input type="text" id="option1" name="option[]" placeholder="1. Write option..." class="form-control input-sm">
-			  	<input type="checkbox" name="mark"> Mark as Correct
+			  	<input type="checkbox" name="mark1"> Mark as Correct
 			  </div>
 			  <div class="col-md-3">
 			  	<input type="text" id="option2" name="option[]" placeholder="2. Write option..." class="form-control input-sm">
-			  	<input type="checkbox" name="mark"> Mark as Correct
+			  	<input type="checkbox" name="mark2"> Mark as Correct
 			  </div>
 			  <div class="col-md-3">
 			  	<input type="text" id="option3" name="option[]" placeholder="3. Write option..." class="form-control input-sm">
-			  	<input type="checkbox" name="mark"> Mark as Correct
+			  	<input type="checkbox" name="mark3"> Mark as Correct
 			  </div>
 			  <div class="col-md-3">
 			  	<input type="text" id="option4" name="option[]" placeholder="4. Write option..." class="form-control input-sm">
-			  	<input type="checkbox" name="mark"> Mark as Correct
+			  	<input type="checkbox" name="mark4"> Mark as Correct
 			  </div>
 			  </div><hr>
 			  <button type="submit" class="btn btn-primary"> Save</button>

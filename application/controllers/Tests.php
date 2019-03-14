@@ -112,16 +112,19 @@ class Tests extends MY_Controller{
 		$options_array = $_POST['option'];
 		$ques_id = $_POST['que_id'];
 		$options_len = count($options_array);
-		$data = $this->input->post('mark');
+		// $data = $this->input->post('mark');
+		// Take the checkbox value and insert it into the database with the status of 1 or 0
 		$chkbox = 0;
-		if(isset($_POST['mark']) ){
-			$chkbox = 1;
-		}
 		for($i = 0; $i < $options_len; $i++){
 			$data = array(
 				'q_id' => $ques_id,
 				'ans_name' => $_POST['option'][$i],
+				//'status' => $chkbox
 			);
+			// if(isset($_POST['mark1'])){ $chkbox = 1; } else { $chkbox = 0; }
+			// if(isset($_POST['mark2'])){ $chkbox = 1; } else { $chkbox = 0; }
+			// if(isset($_POST['mark3'])){ $chkbox = 1; } else { $chkbox = 0; }
+			// if(isset($_POST['mark4'])){ $chkbox = 1; } else { $chkbox = 0; }
 			// echo "<pre>"; print_r($data); exit();
 			$this->Tests_model->create_answers($data);
 			}
@@ -202,6 +205,24 @@ class Tests extends MY_Controller{
 		$this->Tests_model->update_question($id, $data);
 		$this->session->set_flashdata('success', '<strong>Great ! </strong> Data has been updated successfully!'); // Display a message to let the admin know that something has happend...
 		return redirect('tests/all_questions'); // Redirect to main page where he left...
+	}
+	// Search questions ....
+	public function search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$keyword = $this->input->post('keyword');
+		$data['results'] = $this->Tests_model->search_questions($keyword);
+		echo "<pre>"; print_r($data); exit();
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'search_results';
+		if(!empty($session)){
+			$data['subview'] = $this->load->view('test-system/search_results', $data, TRUE);
+			$this->load->view('layout_main', $data); // Page Load ... 
+		}
+
 	}
 	// Count the correct answers and return the total score.
 	public function applicant_result(){

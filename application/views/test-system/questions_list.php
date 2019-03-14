@@ -7,11 +7,23 @@
 <div class="container">
 	<div class="col-md-12">
 		<div class="row">
-			<div class="col-md-6 text-left">
+			<div class="col-md-4 text-left">
 				<h1>Questions List</h1>
 			</div>
 			<div class="col-md-6 text-right">
-				<a class="btn btn-info btn-lg text-right" href="<?=base_url('tests/questions_for_test'); ?>">GO TO PAPER &raquo;</a>
+				<form class="form-inline" action="<?php echo base_url('tests/search') ?>" method="post">
+				<select name="designation" class="form-control">
+					<option value="">--Select Title--</option>
+					<option value="CM">Community Mobilizer</option>
+					<option value="PM">Polio</option>
+					<option value="who">UNICEF</option>
+				</select>
+					<input type="text" name="keyword" class="form-control" placeholder="Search this page ...">
+					<input type="submit" name="submit" class="btn btn-success" value="Search">
+				</form>
+			</div>
+			<div class="col-md-2 text-right">
+				<a class="btn btn-info" href="<?=base_url('tests/questions_for_test'); ?>">GO TO PAPER &raquo;</a>
 			</div>
 		</div>
 		<hr>
@@ -23,7 +35,7 @@
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>S. No</th>
+					<th>Serial</th>
 					<th>Question description</th>
 					<th>Action</th>
 				</tr>
