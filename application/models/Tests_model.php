@@ -99,6 +99,12 @@ class tests_model extends CI_Model{
 		$query = $this->db->get('ex_questions');
 		return $query->result();
 	}
+	// Get selected data from database... 
+	public function onchange(){
+		//$this->db->where('id', $id);
+		$query = $this->db->get('xin_designations');
+		return $query->result();
+	}
 }
 
 ?>

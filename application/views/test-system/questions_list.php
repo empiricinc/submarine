@@ -9,16 +9,17 @@
 		<div class="row">
 			<div class="col-md-4 text-left">
 				<h1>Questions List</h1>
+				<p id="show"></p>
 			</div>
 			<div class="col-md-6 text-right">
-				<form class="form-inline" action="<?php echo base_url('tests/search') ?>" method="post">
-				<select name="designation" class="form-control">
-					<option value="">--Select Title--</option>
-					<option value="CM">Community Mobilizer</option>
-					<option value="PM">Polio</option>
-					<option value="who">UNICEF</option>
+				<form class="form-inline" action="<?php echo base_url('tests/search') ?>" method="get">
+				<select name="designation" id="designation" class="form-control text-center" onchange="changeFunction(this);">
+					<option value=""> Select Designation </option>
+					<?php foreach ($designations as $desg) : ?>
+						<option value="<?php echo $desg->designation_id; ?>"><?php echo $desg->designation_name; ?></option>
+					<?php endforeach; ?>
 				</select>
-					<input type="text" name="keyword" class="form-control" placeholder="Search this page ...">
+					<input type="text" name="keyword" class="form-control" placeholder="Search for questins..." required="required">
 					<input type="submit" name="submit" class="btn btn-success" value="Search">
 				</form>
 			</div>
@@ -60,3 +61,26 @@
 		<?php //echo $this->pagination->create_links(); ?>
 	</div>
 </div>
+<script type="text/javascript">
+	// function desg(){
+	// 	var x = document.getElementById('designation').value;
+	// 	document.getElementById("show").innerHTML = "You selected: " + x;
+	// }
+	$('#designation').change(function(){
+    $.ajax({
+        type: "POST",
+        url: "<?php echo base_url('tests/designation_wise_questions'); ?>", 
+        data:designation_id,
+        dataType:"json",// Return type is expected as JSON ... 
+        success: function(designation){
+           $.each(designation,function(key,val){
+                var opt = $('<option />'); 
+                opt.val(key);
+                opt.text(val);
+                $('#questions').append(opt);
+                alert(opt);
+           });
+        },
+    });
+});
+</script>

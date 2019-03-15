@@ -10,7 +10,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<h1>Question Paper</h1>
-			<p class="lead">Select only one optio from the list, OR your answer will not be given credit. So please be very careful in selecting options. When you complete the questions on this page move to the next page through the links given below.</p>
+			<p class="lead text-justify">Select only one optio from the list, OR your answer will not be given credit. So please be very careful in selecting options. When you complete the questions on this page move to the next page through the links given below.</p>
 		</div>
 		<div class="col-md-8">
 			<?php $counter = 1; ?>

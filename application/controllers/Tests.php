@@ -80,6 +80,7 @@ class Tests extends MY_Controller{
 		// $config['per_page'] = 2;
 		// $this->pagination->initialize($config);
 		$data['questions'] = $this->Tests_model->get_questions();
+		$data['designations'] = $this->Tests_model->onchange();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'questions_list';
@@ -212,9 +213,9 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$keyword = $this->input->post('keyword');
+		$keyword = $this->input->get('keyword');
 		$data['results'] = $this->Tests_model->search_questions($keyword);
-		echo "<pre>"; print_r($data); exit();
+		// echo "<pre>"; print_r($data); exit();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'search_results';
@@ -223,6 +224,17 @@ class Tests extends MY_Controller{
 			$this->load->view('layout_main', $data); // Page Load ... 
 		}
 
+	}
+	// Function to get data changing the dropdown value..
+	public function designation_wise_questions(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$designation = $this->input->post('designation');
+		$posts = array();
+		$posts = $this->Tests_model->onchange();
+		echo "<pre>" . json_encode($posts);
 	}
 	// Count the correct answers and return the total score.
 	public function applicant_result(){
