@@ -24,7 +24,7 @@
 			<?php endforeach; break; // END and BREAK the second "foreach". ?>
 			<?php endforeach; // END the first "foreach loop". ?>
 			<button type="submit" class="btn btn-info">Next &raquo;</button>
-			<a class="btn btn-warning" href="<?php echo base_url('tests/all_questions'); ?>">&raquo; Back</a>
+			<a class="btn btn-warning" href="<?php echo base_url('tests/all_questions'); ?>">Back &laquo;</a>
 		</div>
 	</div>
 </div>

@@ -166,7 +166,26 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$data['questions_rand'] = $this->Tests_model->test_questions();
+		$this->load->library('pagination');
+		$config['base_url'] = base_url('tests/questions_for_test/');
+		$config['total_rows'] = count($this->Tests_model->test_questions());
+		$config['per_page'] = 2;
+		$config['use_page_numbers'] = TRUE;
+		$config['page_query_string'] = TRUE;
+		$config['full_tag_open'] = '<ul class="pagination">';
+		$config['full_tag_close'] = '</ul>';
+		$config['prev_link'] = '&laquo;';
+		$config['next_link'] = '&raquo;';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['cur_tag_open'] = '<li class="active"><a href="javascript:void(0);">';
+		$config['cur_tag_close'] = '<span class="sr-only"></span></a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		$this->pagination->initialize($config);
+		$data['questions_rand'] = $this->Tests_model->test_questions($config['per_page'], $this->uri->segment(3));
 		// echo "<pre>";
 		// var_dump($data); exit;
 		$data['title'] = $this->Xin_model->site_title();

@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-md-3">
 			<h1>Search Results</h1><hr>
-			For: <span style="background-color: yellow; font-family: lucida calligraphy; font-weight: bold; color: red; "><?php echo $_GET['keyword']; ?></span><hr>
+			Search results for: <span style="background-color: yellow; font-family: lucida calligraphy; font-weight: bold; color: red; "><?php echo $_GET['keyword']; ?></span><hr>
 			<p class="text-justify">Here you can see the results for the query you're looking for, you can edit, delete, view and add options for the question as well !</p>
 		</div>
 		<div class="col-md-9">

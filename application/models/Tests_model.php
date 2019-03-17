@@ -55,7 +55,7 @@ class tests_model extends CI_Model{
 	public function test_questions(){
 		$this->db->order_by('id', 'RANDOM');
 		$this->db->where('id > ', 2);
-		$this->db->limit(3);
+		$this->db->limit(5);
 		$query = $this->db->get('ex_questions');
 		return $query->result();
 	}

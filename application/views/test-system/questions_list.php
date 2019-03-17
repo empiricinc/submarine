@@ -13,7 +13,7 @@
 			</div>
 			<div class="col-md-6 text-right">
 				<form class="form-inline" action="<?php echo base_url('tests/search') ?>" method="get">
-				<select name="designation" id="designation" class="form-control text-center" onchange="changeFunction(this);">
+				<select name="designation" id="designation" class="form-control" onchange="changeFunction(this);">
 					<option value=""> Select Designation </option>
 					<?php foreach ($designations as $desg) : ?>
 						<option value="<?php echo $desg->designation_id; ?>"><?php echo $desg->designation_name; ?></option>
