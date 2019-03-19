@@ -115,7 +115,7 @@ class Tests extends MY_Controller{
 		$options_len = count($options_array);
 		// $data = $this->input->post('mark');
 		// Take the checkbox value and insert it into the database with the status of 1 or 0
-		$chkbox = 0;
+		//$chkbox = 0;
 		for($i = 0; $i < $options_len; $i++){
 			$data = array(
 				'q_id' => $ques_id,
@@ -167,9 +167,9 @@ class Tests extends MY_Controller{
 			redirect('');
 		}
 		$this->load->library('pagination');
-		$config['base_url'] = base_url('tests/questions_for_test/');
+		$config['base_url'] = base_url('tests/questions_for_test/index/');
 		$config['total_rows'] = count($this->Tests_model->test_questions());
-		$config['per_page'] = 2;
+		$config['per_page'] = 1;
 		$config['use_page_numbers'] = TRUE;
 		$config['page_query_string'] = TRUE;
 		$config['full_tag_open'] = '<ul class="pagination">';

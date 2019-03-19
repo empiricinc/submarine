@@ -66,6 +66,7 @@
 	// 	var x = document.getElementById('designation').value;
 	// 	document.getElementById("show").innerHTML = "You selected: " + x;
 	// }
+	// By changing the option, the table will display the results from database according to the ID that has selected from the list !
 	$('#designation').change(function(){
     $.ajax({
         type: "POST",

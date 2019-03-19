@@ -21,13 +21,13 @@
 					<a href="<?php echo base_url('tests/all_questions'); ?>" class="btn btn-info btn-lg btn-block">Back To Home</a>
 				</div>
 			</div>
-			<?php $counter = 1; ?>
+			<?php $counter = 1; $i = 'A'; ?>
 			<?php foreach($questions_rand as $que_rand) : ?>
-				<p><strong><?php echo $counter++; ?>. <?php echo $que_rand->question; ?></strong></p>
-				<?php for($i = 'A'; $i <= 'D'; $i++): ?>
+				<p><strong><?php echo $counter++; ?>. <?php echo $que_rand->quest; ?></strong></p>
+				<?php foreach($questions_rand as $ans_rand): ?>
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<?php echo $i; ?> - <input type="checkbox" name="option" value="<?=$que_rand->id; ?>"> <?='Option' ?><br>
-			<?php endfor; echo "<hr>"; endforeach; ?>
+				<?php echo $i++; ?> - <input type="checkbox" name="option" value="<?=$ans_rand->ans_id; ?>"> <?= $ans_rand->ans_name; ?><br>
+			<?php endforeach;  echo "<hr>"; endforeach; ?>
 			<?php echo $this->pagination->create_links(); ?>
 		</div>
 	</div>
