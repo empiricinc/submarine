@@ -75,9 +75,9 @@ class Tests extends MY_Controller{
 			redirect('');
 		}
 		// $this->load->library('pagination');
-		// $cofig['base_url'] = base_url('tests/all_questions');
-		// $config['total_rows'] = 200;
-		// $config['per_page'] = 2;
+		// $config['base_url'] = base_url(). 'tests/all_questions/index';
+		// $config['total_rows'] = count($this->Tests_model->get_questions());
+		// $config['per_page'] = 3;
 		// $this->pagination->initialize($config);
 		$data['questions'] = $this->Tests_model->get_questions();
 		$data['designations'] = $this->Tests_model->onchange();
@@ -166,28 +166,28 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$this->load->library('pagination');
-		$config['base_url'] = base_url('tests/questions_for_test/index/');
-		$config['total_rows'] = count($this->Tests_model->test_questions());
-		$config['per_page'] = 1;
-		$config['use_page_numbers'] = TRUE;
-		$config['page_query_string'] = TRUE;
-		$config['full_tag_open'] = '<ul class="pagination">';
-		$config['full_tag_close'] = '</ul>';
-		$config['prev_link'] = '&laquo;';
-		$config['next_link'] = '&raquo;';
-		$config['prev_tag_open'] = '<li>';
-		$config['prev_tag_close'] = '</li>';
-		$config['next_tag_open'] = '<li>';
-		$config['next_tag_close'] = '</li>';
-		$config['cur_tag_open'] = '<li class="active"><a href="javascript:void(0);">';
-		$config['cur_tag_close'] = '<span class="sr-only"></span></a></li>';
-		$config['num_tag_open'] = '<li>';
-		$config['num_tag_close'] = '</li>';
-		$this->pagination->initialize($config);
-		$data['questions_rand'] = $this->Tests_model->test_questions($config['per_page'], $this->uri->segment(3));
-		// echo "<pre>";
-		// var_dump($data); exit;
+		// $this->load->library('pagination');
+		// $config['base_url'] = base_url(). 'tests/questions_for_test/';
+		// $config['total_rows'] = count($this->Tests_model->quest_paper());
+		// $config['per_page'] = 3;
+		// $config['use_page_numbers'] = TRUE;
+		// $config['page_query_string'] = TRUE;
+		// $config['full_tag_open'] = '<ul class="pagination">';
+		// $config['full_tag_close'] = '</ul>';
+		// $config['prev_link'] = '&laquo;';
+		// $config['next_link'] = '&raquo;';
+		// $config['prev_tag_open'] = '<li>';
+		// $config['prev_tag_close'] = '</li>';
+		// $config['next_tag_open'] = '<li>';
+		// $config['next_tag_close'] = '</li>';
+		// $config['cur_tag_open'] = '<li class="active"><a href="javascript:void(0);">';
+		// $config['cur_tag_close'] = '<span class="sr-only"></span></a></li>';
+		// $config['num_tag_open'] = '<li>';
+		// $config['num_tag_close'] = '</li>';
+		// $this->pagination->initialize($config);
+		// $data['questions_rand'] = $this->Tests_model->test_questions($config['per_page'], $this->uri->segment(3));
+		$data['questions_rand'] = $this->Tests_model->test_questions();
+		 $data['qdash'] = $this->Tests_model->quest_paper();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'question_paper';
@@ -260,6 +260,10 @@ class Tests extends MY_Controller{
 		$data = $this->Tests_model->count_uploads();
 		echo "You scored <strong style='color: red;'>" . $data . "</strong> out of <strong style='color: red;'> 50</strong>. So you're considered fail, better luck next time !";
 	}
+	// Print the question paper for applicant ... 
+	// public function paper(){
+	// 	$data['results'] = $this->Tests_model->quest_paper();
+	// }
 }
 
 ?>

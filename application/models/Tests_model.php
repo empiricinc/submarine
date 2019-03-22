@@ -35,14 +35,16 @@ class tests_model extends CI_Model{
     }
 	// View single record ...  ---> It's buggy, do it later...
 	public function get_single($id){
-		$this->db->select('ex_answers.q_id as que_id, ex_answers.ans_id, ex_answers.ans_name, ex_answers.status as ans_status, ex_questions.id as ques_id, ex_questions.question as ques');
+		$this->db->select('ex_answers.q_id as que_id, 
+							ex_answers.ans_id, 
+							ex_answers.ans_name, 
+							ex_answers.status as ans_status, 
+							ex_questions.id as ques_id, 
+							ex_questions.question as ques');
 		$this->db->from('ex_answers');
 		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id');
 		$this->db->where(array('ex_answers.q_id' => $id));
-		// $this->db->where(array('ex_answers.status' => 0));
-		// $this->db->distinct();
 		$query = $this->db->get();
-		// echo $this->db->last_query(); exit();
 		return $query->result_array();
 	}
 	// Delete questions...
@@ -61,22 +63,11 @@ class tests_model extends CI_Model{
 								ex_questions.question as quest');
 		$this->db->from('ex_answers');
 		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id');
-		$this->db->order_by('quest_id', 'RANDOM');
-		// $this->db->where();
-		$this->db->where('id >', 2);
-		$this->db->limit(4);
+		// $this->db->order_by('ex_questions.id', 'RANDOM');
+		// $this->db->where('ex_questions.id >', 2);
+		// $this->db->limit(4);
 		$query = $this->db->get();
-		 // echo $this->db->last_query(); exit();
 		return $query->result();
-		// $sql = $query->result();
-		// $arr = array_column($sql, 'ans_id');
-		// echo "<pre>"; var_dump($arr); exit();
-
-		// $this->db->order_by('id', 'RANDOM');
-		// $this->db->where('id > ', 2);
-		// $this->db->limit(5);
-		// $query = $this->db->get('ex_questions');
-		// return $query->result();
 	}
 	// Edit questions ... 
 	public function edit_question($id){
@@ -123,6 +114,22 @@ class tests_model extends CI_Model{
 		//$this->db->where('id', $id);
 		$query = $this->db->get('xin_designations');
 		return $query->result();
+	}
+	// Question paper, get questions and answers separately...
+	public function quest_paper(){
+		$this->db->select('id, question');
+		$this->db->from('ex_questions');
+		$query = $this->db->get();
+		return $query->result();
+	}
+	// Get questions and answers separately... 
+	public function get_answers($id=null){
+		$this->db->select('ans_id, ans_name, q_id');
+		$this->db->from('ex_answers');
+		$this->db->where('q_id', 1);
+		$query = $this->db->get();
+		// echo $this->db->last_query(); exit();
+		return $query->result_array();
 	}
 }
 
