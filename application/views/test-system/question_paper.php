@@ -41,17 +41,17 @@
 	</div>
 </div>
 <script type="text/javascript">
-	$(document).ready(function(){
-		var curDiv = $('#tab_1');
-		curDiv.show();
-		$('#next').click(function(){
-			curDiv = curDiv.next();
-			curDiv.show().prev().hide();
-			$('#prev').show();
-		});
-		$('#prev').click(function(){
-			curDiv = curDiv.prev();
-			curDiv.next().hide();
-		});
-	});
+	// $(document).ready(function(){
+	// 	var curDiv = $('#tab_1');
+	// 	curDiv.show();
+	// 	$('#next').click(function(){
+	// 		curDiv = curDiv.next();
+	// 		curDiv.show().prev().hide();
+	// 		$('#prev').show();
+	// 	});
+	// 	$('#prev').click(function(){
+	// 		curDiv = curDiv.prev();
+	// 		curDiv.next().hide();
+	// 	});
+	// });
 </script>

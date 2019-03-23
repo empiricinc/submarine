@@ -74,7 +74,7 @@
         data:designation_id,
         dataType:"json",// Return type is expected as JSON ... 
         success: function(designation){
-           $.each(designation,function(key,val){
+           $.each(designation, function(key,val){
                 var opt = $('<option />'); 
                 opt.val(key);
                 opt.text(val);

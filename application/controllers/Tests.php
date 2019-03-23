@@ -33,6 +33,8 @@ class Tests extends MY_Controller{
 		}
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['path_url'] = 'test';
 		if(!empty($session)){
 			$data['subview'] = $this->load->view('test-system/test', $data, TRUE);
@@ -48,7 +50,9 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$this->form_validation->set_rules('question', "Question", 'required');
+		$this->form_validation->set_rules('project', 'Project', 'required');
+		$this->form_validation->set_rules('designation', 'Designation', 'required');
+		$this->form_validation->set_rules('question', 'Question', 'required');
 			if($this->form_validation->run() == FALSE){
 				$data['title'] = $this->Xin_model->site_title();
 				$data['breadcrumbs'] = $this->lang->line('xin_tests');
@@ -61,6 +65,8 @@ class Tests extends MY_Controller{
 				//$this->load->view('components/template', $data);
 			} else {
 			$data = array(
+				'project_id' => $this->input->post('project'),
+				'designation_id' => $this->input->post('designation'),
 				'question' => $this->input->post('question')
 			);
 			$this->Tests_model->create_questions($data);

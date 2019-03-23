@@ -33,7 +33,7 @@ class tests_model extends CI_Model{
 		$this->db->insert('ex_answers', $data);
 		$this->db->insert_id();
     }
-	// View single record ...  ---> It's buggy, do it later...
+	// View single record ...
 	public function get_single($id){
 		$this->db->select('ex_answers.q_id as que_id, 
 							ex_answers.ans_id, 
@@ -53,7 +53,7 @@ class tests_model extends CI_Model{
 		$this->db->delete('ex_questions');
 		return TRUE;
 	}
-	// Get random questions...
+	// Get all questions/answers with their respective IDs stored on the database.
 	public function test_questions(){
 		$this->db->select('ex_answers.q_id as ques_id, 
 								ex_answers.ans_id, 
@@ -123,13 +123,35 @@ class tests_model extends CI_Model{
 		return $query->result();
 	}
 	// Get questions and answers separately... 
-	public function get_answers($id=null){
+	public function get_answers(){
 		$this->db->select('ans_id, ans_name, q_id');
 		$this->db->from('ex_answers');
 		$this->db->where('q_id', 1);
 		$query = $this->db->get();
 		// echo $this->db->last_query(); exit();
 		return $query->result_array();
+	}
+	// Submit paper after attempting, send it to the database and display user a message
+	public function submit_paper($data){
+		$this->db->insert('applicants_tests', $data);
+		if($this->db->affected_rows() > 0 ){
+			return true;
+		} else {
+			return false;
+		}
+		return $this->db->insert_id();
+	}
+	// Get data from projects table to display them on the questions adding page and save it to DB.
+	public function get_projects(){
+		$this->db->select('company_id, name');
+		$this->db->from('xin_companies');
+		return $this->db->get()->result();
+	}
+	// Get data from designations table to display on the questions adding page and save it to DB.
+	public function get_designations(){
+		$this->db->select('designation_id, designation_name');
+		$this->db->from('xin_designations');
+		return $this->db->get()->result();
 	}
 }
 
