@@ -19,6 +19,10 @@ class tests_model extends CI_Model{
 		$query = $this->db->get();
 		return $query->result();
 	}
+	// Count all questions -- For pagination but still pagination doesn't work !
+	public function get_total(){
+		return $this->db->count_all('ex_questions');
+	}
 	// Creating new questions ...
 	public function create_questions($data){
 		$this->db->insert('ex_questions', $data);
@@ -87,15 +91,22 @@ class tests_model extends CI_Model{
 	}
 	// Count all columns in DB table. We'll use this function to count the score of an individual cadidate who take the test according to the correct answers ...
 	function count_uploads(){
-	  $this->db->select('COUNT(ans_name) as count');
-	  $this->db->from('ex_answers');
-	  $this->db->where(array('status' => 0));
-	  $query = $this->db->get();
-	  if ($query->num_rows() > 0 ){
-	    $row = $query->row();
-	    return $row->count;
-	  }
-	  return 0;
+		$this->db->select('ex_applicants.*, ex_answers.*');
+		$this->db->from('ex_answers');
+		$this->db->join('ex_applicants', 'ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1', 'right');
+		// $this->db->where(array('ex_anwers.status' => 1));
+		$query = $this->db->get();
+		// echo $this->db->last_query();
+		return $query->result();
+	//   $this->db->select('COUNT(ans_name) as count');
+	//   $this->db->from('ex_answers');
+	//   $this->db->where(array('status' => 1));
+	//   $query = $this->db->get();
+	//   if ($query->num_rows() > 0 ){
+	//     $row = $query->row();
+	//     return $row->count;
+	//   }
+	//   return 0;
 	}
 	// Add Options to questions ... 
 	public function add_choices($id){
@@ -133,7 +144,7 @@ class tests_model extends CI_Model{
 	}
 	// Submit paper after attempting, send it to the database and display user a message
 	public function submit_paper($data){
-		$this->db->insert('applicants_tests', $data);
+		$this->db->insert('ex_applicants', $data);
 		if($this->db->affected_rows() > 0 ){
 			return true;
 		} else {
@@ -152,6 +163,32 @@ class tests_model extends CI_Model{
 		$this->db->select('designation_id, designation_name');
 		$this->db->from('xin_designations');
 		return $this->db->get()->result();
+	}
+	// Get all answers and display them to the admin to perform actions.
+	public function get_all_answers(){
+		return $this->db->get('ex_answers')->result(); // No need to display all the answers at once.
+	}
+	// Edit answers.
+	public function get_ans_for_edit($id){
+		$this->db->where('ans_id', $id);
+		$edit = $this->db->get('ex_answers');
+		return $edit->row_array();
+	}
+	// Update answers.
+	public function update_answers($ans_id, $data){
+		$this->db->where('ans_id', $ans_id);
+		$modify = $this->db->update('ex_answers', $data);
+		if($this->db->affected_rows() > 0 ){
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	// Delete answers from database.
+	public function delete_answers($ans_id){
+		$this->db->where('ans_id', $and_id);
+		$this->db->delete('ex_answers');
+		return TRUE;
 	}
 }
 

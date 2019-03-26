@@ -14,27 +14,28 @@
 		<div class="col-md-8">
 			<div class="row">
 				<div class="col-md-8 text-left">
-					<h1>Back Home</h1><hr>
+					<!-- Added the timer here, JavaScript timer, initially set to 60 minutes. -->
+					<h1>Back Home. <small><span id="time"></span> minutes remaining.</small></h1><hr>
 				</div>
 				<div class="col-md-4 text-right">
 					<a href="<?php echo base_url('tests/all_questions'); ?>" class="btn btn-info btn-lg btn-block">Back To Home</a>
 				</div>
 			</div>
-			<form action="#" method="post">
+			<form action="<?php echo base_url('tests/applicants_test'); ?>" method="post">
 				<?php $counter = 1; $i = 'A';  ?>
 				<?php foreach($qdash as $que_rand) : ?>
+					<input type="hidden" name="question_id[]" value="<?php echo $que_rand->id; ?>">
 					<p><strong><?php echo $counter++; ?>. <?php echo $que_rand->question; ?></strong></p>
 					<?php foreach($questions_rand as $ans): ?>
-						<input type="hidden" name="question_id" value="<?php echo $que_rand->id; ?>">
 				<?php if($que_rand->id == $ans->ques_id): ?>
 				<strong style="color: red; font-weight: bold;"><?php echo $i++; ?> - </strong>
-				<input type="checkbox" name="option" value="<?=$ans->ans_id; ?>"> <?= $ans->ans_name; ?><br>
+				<input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> <?= $ans->ans_name; ?><br>
 				<?php endif; 
 					endforeach; ?>
 				<?php echo "<hr>";endforeach;  ?>
 				<br>
 				<button type="submit" class="btn btn-info" id="next">Submit Test</button>
-				<button type="reset" class="btn btn-warning" id="cancel">Cancel</button>
+				<a href="<?php echo base_url('tests/all_questions'); ?>" class="btn btn-warning">Cancel</a>
 			</form>
 			<?php //echo $this->pagination->create_links(); ?>
 		</div>
@@ -54,4 +55,37 @@
 	// 		curDiv.next().hide();
 	// 	});
 	// });
+
+// Countdown Timer for test paper. 
+function startTimer(duration, display) {
+    var start = Date.now(),
+        diff,
+        minutes,
+        seconds;
+    function timer() {
+        // get the number of seconds that have elapsed since 
+        // startTimer() was called
+        diff = duration - (((Date.now() - start) / 1000) | 0);
+        // does the same job as parseInt truncates the float
+        minutes = (diff / 60) | 0;
+        seconds = (diff % 60) | 0;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        display.textContent = minutes + ":" + seconds; 
+        if (diff <= 0) {
+            // add one second so that the count down starts at the full duration
+            // example 05:00 not 04:59
+            start = Date.now() + 1000;
+        }
+    };
+    // we don't want to wait a full second before the timer starts
+    timer();
+    setInterval(timer, 1000);
+}
+
+window.onload = function () {
+    var fiveMinutes = 60 * 60,
+        display = document.querySelector('#time');
+    startTimer(fiveMinutes, display);
+};
 </script>

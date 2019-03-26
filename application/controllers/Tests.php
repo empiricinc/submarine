@@ -75,17 +75,22 @@ class Tests extends MY_Controller{
 		}
 	}
 	// Display all questions...
-	public function all_questions(){
+	public function all_questions($offset = NULL){
 		$session = $this->session->userdata('username');
 		if(empty($session)){
 			redirect('');
 		}
-		// $this->load->library('pagination');
-		// $config['base_url'] = base_url(). 'tests/all_questions/index';
-		// $config['total_rows'] = count($this->Tests_model->get_questions());
-		// $config['per_page'] = 3;
-		// $this->pagination->initialize($config);
-		$data['questions'] = $this->Tests_model->get_questions();
+		$total_questions = $this->Tests_model->get_total();
+		$limit = 4;
+		if(!is_null($offset)){
+			$offset = $this->uri->segment(4);
+		}
+		$this->load->library('pagination');
+		$config['base_url'] = base_url(). 'tests/all_questions/index';
+		$config['total_rows'] = $total_questions;
+		$config['per_page'] = $limit;
+		$this->pagination->initialize($config);
+		$data['questions'] = $this->Tests_model->get_questions($limit, $offset);
 		$data['designations'] = $this->Tests_model->onchange();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
@@ -134,7 +139,7 @@ class Tests extends MY_Controller{
 			// if(isset($_POST['mark4'])){ $chkbox = 1; } else { $chkbox = 0; }
 			// echo "<pre>"; print_r($data); exit();
 			$this->Tests_model->create_answers($data);
-			}
+		}
 		$this->session->set_flashdata('success', '<strong>Good Job! </strong>  Options have been added successfully!');
 		return redirect('tests/all_questions');
 	}
@@ -192,8 +197,10 @@ class Tests extends MY_Controller{
 		// $config['num_tag_close'] = '</li>';
 		// $this->pagination->initialize($config);
 		// $data['questions_rand'] = $this->Tests_model->test_questions($config['per_page'], $this->uri->segment(3));
+		// Get answers with the question ID stored as FK in the answers table.
 		$data['questions_rand'] = $this->Tests_model->test_questions();
-		 $data['qdash'] = $this->Tests_model->quest_paper();
+		// Get without join, the questions only...
+		$data['qdash'] = $this->Tests_model->quest_paper();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'question_paper';
@@ -263,13 +270,80 @@ class Tests extends MY_Controller{
 	}
 	// Count the correct answers and return the total score.
 	public function applicant_result(){
-		$data = $this->Tests_model->count_uploads();
-		echo "You scored <strong style='color: red;'>" . $data . "</strong> out of <strong style='color: red;'> 50</strong>. So you're considered fail, better luck next time !";
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'result_card';
+		$data['calc_result'] = $this->Tests_model->count_uploads();
+		$data['subview'] = $this->load->view('test-system/result_card', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page Load ... 
+		// $data['calc_result'] = $this->Tests_model->count_uploads();
+		// echo "<br><br> You scored <strong style='color: red;'></strong> out of <strong style='color: red;'> 50</strong>. So you're considered fail, better luck next time !";
 	}
-	// Print the question paper for applicant ... 
-	// public function paper(){
-	// 	$data['results'] = $this->Tests_model->quest_paper();
-	// }
+	// Submit tests taken by applicants to the database. (tbl_name: ex_applicants). 
+	public function applicants_test(){
+		// echo "<pre>"; var_dump($_POST); exit();
+		$question_id = $_POST['question_id'];
+		$answers = $_POST['answer'];
+		$length = count($answers);
+		$length = count($question_id);
+		for($j = 0; $j < $length; $j++){
+			$data = array(
+			'question_id' => $_POST['question_id'][$j],
+			'answer_id'   => $_POST['answer'][$j]
+			);
+			// $alldata[] = $data;
+			$this->Tests_model->submit_paper($data);
+		}
+		// echo "<pre>"; var_dump($alldata); exit();
+		
+		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! click the buttons below to perform those actions !');
+		redirect('tests/test_submitted');
+	}
+	// Redirect the user to the test submitted page, where he can check his/her result, job criteria adn more...
+	public function test_submitted(){
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'test_submitted';
+		// $data['calc_result'] = $this->Tests_model->count_uploads();
+		$data['subview'] = $this->load->view('test-system/test_submitted', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load ...
+	}
+	// Modify answers / options for the questions. Display the data in the form...
+	public function edit_answer($id){
+		$data['title'] = $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_tests');
+		$data['path_url'] = 'edit_answer';
+		$data['answers_edit'] = $this->Tests_model->get_ans_for_edit($id);
+		$data['subview'] = $this->load->view('test-system/edit_answer', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page Load... 
+	}
+	// Update the answer.
+	public function update_answer(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$ans_id = $this->input->post('answer_id');
+		$data = array(
+			'q_id' => $this->input->post('question_id'),
+			'ans_name' => $this->input->post('answer'),
+			'status' => $this->input->post('status')
+		);
+		// echo "<pre>"; var_dump($data); exit();
+		$this->Tests_model->update_answers($ans_id, $data);
+		$this->session->set_flashdata('success', '<strong>Nice Job! </strong> Answer has been updated successfully!'); // Display a message on success.
+		return redirect('tests/all_questions'); // Page redirection.
+	}
+	// Delete the answer.
+	public function delete_answer($ans_id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$data['delete'] = $this->Tests_model->delete_answers($ans_id);
+		$this->session->set_flashdata('success', '<strong>Good Job! </strong> Answer has been deleted!');
+		return redirect('tests/all_questions');
+	}
 }
 
 ?>

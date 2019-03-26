@@ -4,7 +4,6 @@
 *	Location : views / test-system / test.php 
 */
 ?>
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
@@ -27,6 +26,7 @@
 								<?php foreach($projects as $project) : ?>
 								<option value="<?php echo $project->company_id; ?>"><?php echo $project->name; ?></option>
 							<?php endforeach; ?>
+							<span><?php echo form_error('project'); ?></span>
 							</select>
 						</div>
 					</div>
@@ -39,12 +39,14 @@
 									<option value="<?php echo $desg->designation_id; ?>"><?php echo $desg->designation_name; ?></option>
 								<?php endforeach; ?>
 							</select>
+							<span><?php echo form_error('designation'); ?></span>
 						</div>
 					</div>
 				</div>
 			  <div class="form-group">
 			    <label for="question">Type Question here:</label>
 			    <textarea name="question" class="form-control" rows="12" id="question" placeholder="Type your question here and save it..." required></textarea>
+			    <span><?php echo form_error('question'); ?></span>
 			  </div>
 			  <button type="submit" class="btn btn-primary">Save Question</button>
 			  <button type="reset" class="btn btn-warning">Clear Question</button>
