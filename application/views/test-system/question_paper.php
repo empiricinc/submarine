@@ -5,6 +5,12 @@
 * Author  : Saddam
 */
 ?>
+<style type="text/css">
+	ul li#alpha{
+		list-style-type: cjk-earthly-branch;
+		font-variant: initial;
+	}
+</style>
 <div class="container">
 	<div class="row">
 		<div class="col-md-4">
@@ -22,40 +28,27 @@
 				</div>
 			</div>
 			<form action="<?php echo base_url('tests/applicants_test'); ?>" method="post">
-				<?php $counter = 1; $i = 'A';  ?>
-				<?php foreach($qdash as $que_rand) : ?>
-					<input type="hidden" name="question_id[]" value="<?php echo $que_rand->id; ?>">
-					<p><strong><?php echo $counter++; ?>. <?php echo $que_rand->question; ?></strong></p>
-					<?php foreach($questions_rand as $ans): ?>
-				<?php if($que_rand->id == $ans->ques_id): ?>
-				<strong style="color: red; font-weight: bold;"><?php echo $i++; ?> - </strong>
-				<input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> <?= $ans->ans_name; ?><br>
-				<?php endif; 
-					endforeach; ?>
-				<?php echo "<hr>";endforeach;  ?>
+				<ul>
+					<?php $counter = 1; //$i = 'A';  ?>
+					<?php foreach($qdash as $que_rand) : ?>
+						<input type="hidden" name="question_id[]" value="<?php echo $que_rand->id; ?>">
+						<p><strong><?php echo $counter++; ?>. <?php echo $que_rand->question; ?></strong></p>
+						<?php foreach($questions_rand as $ans): ?>
+					<?php if($que_rand->id == $ans->ques_id): ?>
+						<li id="alpha"><input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> <?= $ans->ans_name; ?></li>
+					<br>
+					<?php endif; 
+						endforeach; ?>
+					<?php echo "<hr>";endforeach;  ?>
+				</ul>
 				<br>
 				<button type="submit" class="btn btn-info" id="next">Submit Test</button>
 				<a href="<?php echo base_url('tests/all_questions'); ?>" class="btn btn-warning">Cancel</a>
 			</form>
-			<?php //echo $this->pagination->create_links(); ?>
 		</div>
 	</div>
 </div>
 <script type="text/javascript">
-	// $(document).ready(function(){
-	// 	var curDiv = $('#tab_1');
-	// 	curDiv.show();
-	// 	$('#next').click(function(){
-	// 		curDiv = curDiv.next();
-	// 		curDiv.show().prev().hide();
-	// 		$('#prev').show();
-	// 	});
-	// 	$('#prev').click(function(){
-	// 		curDiv = curDiv.prev();
-	// 		curDiv.next().hide();
-	// 	});
-	// });
-
 // Countdown Timer for test paper. 
 function startTimer(duration, display) {
     var start = Date.now(),

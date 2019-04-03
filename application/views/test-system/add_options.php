@@ -2,6 +2,8 @@
 /* Filename: add_options.php
 *  Author: Saddam
 *  Location: Views/test-system/add_options.php
+*
+* Add options for questions that a candidate while taking test can see it and attempt the paper.
 */
 ?>
 

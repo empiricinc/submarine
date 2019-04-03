@@ -22,7 +22,7 @@
 				<?php $serial = 1; foreach($results as $res) : ?>
 				<tbody>
 					<td><?php echo $serial++; ?></td>
-					<td><?php echo $res->question; ?></td>
+					<td><a href="<?php echo base_url(); ?>tests/view_single/<?php echo $res->id; ?>"><?php echo $res->question; ?></a></td>
 					<td><a href="<?php echo base_url() ?>tests/view_single/<?php echo $res->id; ?>" class="btn btn-info">View</a>
 						<a href="<?php echo base_url() ?>tests/edit/<?php echo $res->id; ?>" class="btn btn-primary">Edit</a>
 						<a href="<?php echo base_url() ?>tests/delete/<?php echo $res->id; ?>" class="btn btn-danger" onclick="javascript: return confirm('Are you sure to delete this question?');">Delete</a>

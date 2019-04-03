@@ -2,6 +2,8 @@
 /* File name: Tests.php
 * Author: Saddam
 * Location: Controllers / Tests / Tests.php
+* -------------------------------------------------------------------------------------------------
+* All the code for the test system written here in this controller, add, edit, update, delete       * questions and answers, submit test, show result card, marks, failed or passed message to applicant.
 */
 if(! defined("BASEPATH")) exit ("No direct script access allowed!");
 
@@ -22,7 +24,7 @@ class Tests extends MY_Controller{
 		$this->load->helper('form');
 		$this->load->helper('url');
 		$this->load->helper('html');
-		// Load all models here to easily access them and their functions that you need...
+		// Load all models here to easily access them and their functions that are needed...
 		$this->load->model('Tests_model');
 		$this->load->model('Xin_model');
 	}
@@ -33,8 +35,8 @@ class Tests extends MY_Controller{
 		}
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
-		$data['projects'] = $this->Tests_model->get_projects();
-		$data['designations'] = $this->Tests_model->get_designations();
+		$data['projects'] = $this->Tests_model->get_projects(); // Get projects.
+		$data['designations'] = $this->Tests_model->get_designations(); // Get designations.
 		$data['path_url'] = 'test';
 		if(!empty($session)){
 			$data['subview'] = $this->load->view('test-system/test', $data, TRUE);
@@ -50,18 +52,20 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$this->form_validation->set_rules('project', 'Project', 'required');
-		$this->form_validation->set_rules('designation', 'Designation', 'required');
-		$this->form_validation->set_rules('question', 'Question', 'required');
+		$this->form_validation->set_rules('project', 'Project', 'trim|required');
+		$this->form_validation->set_rules('designation', 'Designation', 'trim|required');
+		$this->form_validation->set_rules('question', 'Question', 'trim|required');
 			if($this->form_validation->run() == FALSE){
 				$data['title'] = $this->Xin_model->site_title();
 				$data['breadcrumbs'] = $this->lang->line('xin_tests');
+				$data['projects'] = $this->Tests_model->get_projects(); // Get projects.
+				$data['designations'] = $this->Tests_model->get_designations(); // Get designations.
 				$data['path_url'] = 'test';
 				if(!empty($session)){
 					$data['subview'] = $this->load->view('test-system/test', $data, TRUE);
 					$this->load->view('layout_main', $data); // Page Load ...
 				}
-				echo "Nothing here !";
+				echo "<strong style='color: red; background: yellow;'>Aww snap! </strong> Looks like you missed the required fields, go back & fill them !";
 				//$this->load->view('components/template', $data);
 			} else {
 			$data = array(
@@ -69,9 +73,8 @@ class Tests extends MY_Controller{
 				'designation_id' => $this->input->post('designation'),
 				'question' => $this->input->post('question')
 			);
-			$this->Tests_model->create_questions($data);
-			$this->session->set_flashdata('success', '<strong>Good Job !</strong> Question has been uploaded successfully! Now you can add possible answers too.');
-			return redirect('tests/all_questions');
+			$save = $this->Tests_model->create_questions($data);
+			echo json_encode($save);
 		}
 	}
 	// Display all questions...
@@ -80,18 +83,19 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$total_questions = $this->Tests_model->get_total();
-		$limit = 4;
+		$total_questions = count($this->Tests_model->get_questions());
+		$limit = 5;
 		if(!is_null($offset)){
-			$offset = $this->uri->segment(4);
+			$offset = $this->uri->segment(3);
 		}
 		$this->load->library('pagination');
-		$config['base_url'] = base_url(). 'tests/all_questions/index';
+		$config['base_url'] = base_url(). 'tests/all_questions/';
 		$config['total_rows'] = $total_questions;
 		$config['per_page'] = $limit;
 		$this->pagination->initialize($config);
-		$data['questions'] = $this->Tests_model->get_questions($limit, $offset);
-		$data['designations'] = $this->Tests_model->onchange();
+		$data['questions'] = $this->Tests_model->get_questions($config['per_page'], $this->uri->segment(3));
+		$data['designations'] = $this->Tests_model->onchange(); // Get designations
+		$data['projects'] = $this->Tests_model->get_projects(); // Get projects
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'questions_list';
@@ -100,7 +104,7 @@ class Tests extends MY_Controller{
 			$this->load->view('layout_main', $data); // Page Load 
 		}
 	}
-	// Get the page that shows question with the form with it ...
+	// Get the page that shows question with the form with it to add options.
 	public function add_options($id){
 		$session = $this->session->userdata('username');
 		if(empty($session)){
@@ -150,7 +154,6 @@ class Tests extends MY_Controller{
 			redirect('');
 		}
 		$data['view_one'] = $this->Tests_model->get_single($id);
-		// echo "<pre>"; print_r($data); exit();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'single_record';
@@ -161,14 +164,12 @@ class Tests extends MY_Controller{
 	}
 	// Delete a record...
 	public function delete($id){
-		// var_dump($id); exit();
 		$session = $this->session->userdata('username');
 		if(empty($session)){
 			redirect('');
 		}
 		$data['delete'] = $this->Tests_model->delete_question($id);
 		$this->session->set_flashdata('success', '<strong>Good Job! </strong> Question has been deleted successfully!');
-		// return redirect('tests/all_questions');
 		return redirect('tests/all_questions');
 	}
 	// Random questions / data to display
@@ -177,26 +178,6 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		// $this->load->library('pagination');
-		// $config['base_url'] = base_url(). 'tests/questions_for_test/';
-		// $config['total_rows'] = count($this->Tests_model->quest_paper());
-		// $config['per_page'] = 3;
-		// $config['use_page_numbers'] = TRUE;
-		// $config['page_query_string'] = TRUE;
-		// $config['full_tag_open'] = '<ul class="pagination">';
-		// $config['full_tag_close'] = '</ul>';
-		// $config['prev_link'] = '&laquo;';
-		// $config['next_link'] = '&raquo;';
-		// $config['prev_tag_open'] = '<li>';
-		// $config['prev_tag_close'] = '</li>';
-		// $config['next_tag_open'] = '<li>';
-		// $config['next_tag_close'] = '</li>';
-		// $config['cur_tag_open'] = '<li class="active"><a href="javascript:void(0);">';
-		// $config['cur_tag_close'] = '<span class="sr-only"></span></a></li>';
-		// $config['num_tag_open'] = '<li>';
-		// $config['num_tag_close'] = '</li>';
-		// $this->pagination->initialize($config);
-		// $data['questions_rand'] = $this->Tests_model->test_questions($config['per_page'], $this->uri->segment(3));
 		// Get answers with the question ID stored as FK in the answers table.
 		$data['questions_rand'] = $this->Tests_model->test_questions();
 		// Get without join, the questions only...
@@ -216,7 +197,6 @@ class Tests extends MY_Controller{
 			redirect('');
 		}
 		$data['edit'] = $this->Tests_model->edit_question($id);
-		// echo "<pre>"; print_r($data); exit();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'edit_question';
@@ -245,9 +225,8 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$keyword = $this->input->get('keyword');
+		$keyword = $this->input->get('keyword'); // Keyword is the word that's been typed in box.
 		$data['results'] = $this->Tests_model->search_questions($keyword);
-		// echo "<pre>"; print_r($data); exit();
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'search_results';
@@ -268,20 +247,22 @@ class Tests extends MY_Controller{
 		$posts = $this->Tests_model->onchange();
 		echo "<pre>" . json_encode($posts);
 	}
+	// Change select option to change data in the HTML table.
+	public function changeData($designation_id){
+		$result= $this->Tests_model->desig_questions($designation_id);
+		echo json_encode($result);
+	}
 	// Count the correct answers and return the total score.
-	public function applicant_result(){
+	public function applicant_result($app_id){ // Send the applicant's ID to check result.
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'result_card';
-		$data['calc_result'] = $this->Tests_model->count_uploads();
+		$data['calc_result'] = $this->Tests_model->count_uploads($app_id); // Added ID Here ... 
 		$data['subview'] = $this->load->view('test-system/result_card', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page Load ... 
-		// $data['calc_result'] = $this->Tests_model->count_uploads();
-		// echo "<br><br> You scored <strong style='color: red;'></strong> out of <strong style='color: red;'> 50</strong>. So you're considered fail, better luck next time !";
 	}
-	// Submit tests taken by applicants to the database. (tbl_name: ex_applicants). 
-	public function applicants_test(){
-		// echo "<pre>"; var_dump($_POST); exit();
+	// Submit tests taken by applicants to the database. (tbl_name: ex_applicants).
+	public function applicants_test(){ // No need for ID, just send the test to the database.
 		$question_id = $_POST['question_id'];
 		$answers = $_POST['answer'];
 		$length = count($answers);
@@ -291,20 +272,16 @@ class Tests extends MY_Controller{
 			'question_id' => $_POST['question_id'][$j],
 			'answer_id'   => $_POST['answer'][$j]
 			);
-			// $alldata[] = $data;
 			$this->Tests_model->submit_paper($data);
 		}
-		// echo "<pre>"; var_dump($alldata); exit();
-		
 		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! click the buttons below to perform those actions !');
 		redirect('tests/test_submitted');
 	}
-	// Redirect the user to the test submitted page, where he can check his/her result, job criteria adn more...
+	// Redirect the user to the test submitted page, where he can check his/her result, marks, failed/passed and more...
 	public function test_submitted(){
 		$data['title'] = $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_tests');
 		$data['path_url'] = 'test_submitted';
-		// $data['calc_result'] = $this->Tests_model->count_uploads();
 		$data['subview'] = $this->load->view('test-system/test_submitted', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load ...
 	}
@@ -323,13 +300,12 @@ class Tests extends MY_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		$ans_id = $this->input->post('answer_id');
+		$ans_id = $this->input->post('answer_id'); // Send the ans_id in the hidden field.
 		$data = array(
 			'q_id' => $this->input->post('question_id'),
 			'ans_name' => $this->input->post('answer'),
 			'status' => $this->input->post('status')
 		);
-		// echo "<pre>"; var_dump($data); exit();
 		$this->Tests_model->update_answers($ans_id, $data);
 		$this->session->set_flashdata('success', '<strong>Nice Job! </strong> Answer has been updated successfully!'); // Display a message on success.
 		return redirect('tests/all_questions'); // Page redirection.
@@ -343,6 +319,29 @@ class Tests extends MY_Controller{
 		$data['delete'] = $this->Tests_model->delete_answers($ans_id);
 		$this->session->set_flashdata('success', '<strong>Good Job! </strong> Answer has been deleted!');
 		return redirect('tests/all_questions');
+	}
+	// AJAX instant search 
+	public function search_results(){
+		$keyword = $this->input->post('keyword');
+		if(!empty($keyword)){
+			$this->db->like('question', $keyword);
+		}
+		$this->db->select('*');
+		$this->db->from('ex_questions');
+		$search = $this->db->get();
+		$result = $search->result();
+		echo "<table class='table table-hover'>
+		<tr>
+			<th class='any'>Serial</th>
+			<th class='any'>Question</th>
+			<th class='any'>Action</th>
+		</tr>";
+		$serial = 1; foreach($result as $single) :
+		echo "<tr>
+				<td class='para'>'.$serial.'</td>
+				<td class='para'>'.$single->question'.</td></tr>";
+		$serial++; endforeach;
+		echo "<table>";
 	}
 }
 

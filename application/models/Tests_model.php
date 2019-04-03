@@ -21,7 +21,7 @@ class tests_model extends CI_Model{
 	}
 	// Count all questions -- For pagination but still pagination doesn't work !
 	public function get_total(){
-		return $this->db->count_all('ex_questions');
+		return $this->db->get('ex_questions')->num_rows();
 	}
 	// Creating new questions ...
 	public function create_questions($data){
@@ -90,23 +90,13 @@ class tests_model extends CI_Model{
 		}
 	}
 	// Count all columns in DB table. We'll use this function to count the score of an individual cadidate who take the test according to the correct answers ...
-	function count_uploads(){
+	function count_uploads($app_id){ // Passed $app_id as argument to search for result
 		$this->db->select('ex_applicants.*, ex_answers.*');
 		$this->db->from('ex_answers');
 		$this->db->join('ex_applicants', 'ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1', 'right');
-		// $this->db->where(array('ex_anwers.status' => 1));
+		$this->db->where(array('applicant_id' => $app_id, 'ex_answers.status' => 1)); // Added ID and status match here... (if status in the answers table is 1, it'll return value else not)
 		$query = $this->db->get();
-		// echo $this->db->last_query();
 		return $query->result();
-	//   $this->db->select('COUNT(ans_name) as count');
-	//   $this->db->from('ex_answers');
-	//   $this->db->where(array('status' => 1));
-	//   $query = $this->db->get();
-	//   if ($query->num_rows() > 0 ){
-	//     $row = $query->row();
-	//     return $row->count;
-	//   }
-	//   return 0;
 	}
 	// Add Options to questions ... 
 	public function add_choices($id){
@@ -122,9 +112,16 @@ class tests_model extends CI_Model{
 	}
 	// Get selected data from database... 
 	public function onchange(){
-		//$this->db->where('id', $id);
 		$query = $this->db->get('xin_designations');
 		return $query->result();
+	}
+	// Get data by join, table designation and table questions.
+	public function desig_questions($designation_id){
+		$this->db->select('id, question, designation_id, project_id');
+		$this->db->from('ex_questions');
+		$this->db->where('designation_id', $designation_id);
+		$res = $this->db->get();
+		return $res->result();
 	}
 	// Question paper, get questions and answers separately...
 	public function quest_paper(){

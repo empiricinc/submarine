@@ -29,8 +29,11 @@
 			</div><hr>
 			<?php endforeach; break; // END and BREAK the second "foreach". ?>
 			<?php endforeach; // END the first "foreach loop". ?>
-			<a class="btn btn-primary" href="<?php echo base_url('tests/all_questions'); ?>">Move &raquo;</a>
-			<a class="btn btn-warning" href="<?php echo base_url('tests/all_questions'); ?>">Back &laquo;</a>
+			<a class="btn btn-primary" href="<?php echo base_url('tests/view_single/'); ?><?php $count_id = $one['ques_id']+1; echo $count_id++; ?>">Move Forward &raquo;</a>
+
+			<a class="btn btn-warning" href="<?php echo base_url('tests/view_single/'); ?><?php $count_id = $one['ques_id']-1; echo $count_id--; ?>">Move Backward &laquo;</a>
+
+			<a class="btn btn-info" href="<?php echo base_url('tests/all_questions'); ?>">Home &laquo;</a>
 		</div>
 	</div>
 </div>
