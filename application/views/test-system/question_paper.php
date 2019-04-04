@@ -7,8 +7,7 @@
 ?>
 <style type="text/css">
 	ul li#alpha{
-		list-style-type: cjk-earthly-branch;
-		font-variant: initial;
+		list-style-type: none;
 	}
 </style>
 <div class="container">
@@ -29,17 +28,27 @@
 			</div>
 			<form action="<?php echo base_url('tests/applicants_test'); ?>" method="post">
 				<ul>
-					<?php $counter = 1; //$i = 'A';  ?>
+					<?php $counter = 1;  ?>
 					<?php foreach($qdash as $que_rand) : ?>
 						<input type="hidden" name="question_id[]" value="<?php echo $que_rand->id; ?>">
-						<p><strong><?php echo $counter++; ?>. <?php echo $que_rand->question; ?></strong></p>
-						<?php foreach($questions_rand as $ans): ?>
-					<?php if($que_rand->id == $ans->ques_id): ?>
-						<li id="alpha"><input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> <?= $ans->ans_name; ?></li>
-					<br>
-					<?php endif; 
+						<p>
+							<strong>
+								<?php echo $counter++; ?>. <?php echo $que_rand->question; ?>
+							</strong>
+						</p>
+						<?php $i = 'A'; // Initialize the variable.
+						foreach($questions_rand as $ans): ?>
+						<?php if($que_rand->id == $ans->ques_id): ?>
+						<li id="alpha">
+							<strong>
+							<?php echo $i++; // print alphabets A-D and then start from A again. ?>
+							-</strong>
+							<input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> 
+							<?= $ans->ans_name; ?>
+						</li>
+					<?php endif;
 						endforeach; ?>
-					<?php echo "<hr>";endforeach;  ?>
+					<?php echo "<hr>";  endforeach;  ?>
 				</ul>
 				<br>
 				<button type="submit" class="btn btn-info" id="next">Submit Test</button>

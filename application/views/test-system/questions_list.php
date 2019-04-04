@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<hr>
-		<div id="results"><p style="text-align: center; color: green;">Questions will be displayed here...</p></div>
+		<div id="results"><p style="text-align: center; color: green;">You'll be to see questions here according to the designation selected from the dropdown lists above...</p></div>
 	</div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -47,8 +47,8 @@ $(document).ready(function() {
   $("#designation").change(function() {
     var displayResources = $("#results");
     var des_id = $('#designation').val();
-    var serial = 1;
-    displayResources.text("Select an option to view data you're looking for !");
+    var serial = 1; // Initialize serial number to display before the question.
+    displayResources.text("Select an option to view the data you're looking for !");
     $.ajax({
       type: "POST",
       url: "<?php echo base_url(); ?>tests/changeData/" + des_id,
@@ -61,9 +61,11 @@ $(document).ready(function() {
         for (var i = 0; i < result.length; i++) {
           output +=
             "<tr><td>" +
-            serial++ + // result[i].id
+            serial++ + // The serial number will be increased by 1.
             "</td><td>" +
-            result[i].question + // Add links with IDs in the Action to perform actions.
+            result[i].question + // the question text is here, I'll make this link as well so that admin can click on it and redirect to the question detail page.
+
+            // Add links with IDs in the Action to perform actions.
             "</td><td><a class='btn btn-info' href='<?=base_url(); ?>tests/view_single/" + result[i].id + "'>View</a> <a class='btn btn-primary' href='<?=base_url(); ?>tests/edit/" + result[i].id + "'>Edit</a> <a class='btn btn-danger' href='<?=base_url(); ?>tests/delete/" + result[i].id + "'>Delete</a> <a class='btn btn-warning' href='<?=base_url(); ?>tests/add_options/" + result[i].id + "'>Add</a>" 
             "</td></tr>";
         }
@@ -73,5 +75,30 @@ $(document).ready(function() {
       }
     });
   });
+});
+
+// Select project and get the designations according to the ID stored in the database with project_id.
+$(document).ready(function(){
+	$('#project').on('change', function(){
+		// Get the value of the project.
+		var project = $('#project').val();
+		// alert(project);
+		// AJAX request.
+		$.ajax({
+			url: '<?php echo base_url(); ?>tests/changeData/' + project,
+			method: 'POST',
+			dataType: 'JSON',
+			data: { project: project },
+			success: function(response){
+				// Remove options
+				console.log(response);
+				$('#designation').find('option').not(':first').remove();
+				// Add options
+				$.each(response, function(index, data){
+					$('#designation').append('<option value="'+data['designation_id']+'">' +data['name']+'</option>');
+				});
+			}
+		});
+	});
 });
 </script>
