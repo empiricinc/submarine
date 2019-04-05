@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-md-7">
 			<h2>Fill out the form below!</h2>
-			<small>Fill out the form below and click the "Save Question" button, it'll be save in the database.</small><hr>
+			<small>Fill out the form below and click the <strong style="text-transform: uppercase;">"Save Question"</strong> button, it'll be saved on the database.</small><hr>
 			<form action="" method="post">
 				<div class="row">
 					<div class="col-md-6">
@@ -30,7 +30,9 @@
 							<select id="project" name="project" class="form-control" required>
 								<option value="">--Select Project--</option>
 								<?php foreach($projects as $project) : ?>
-								<option value="<?php echo $project->company_id; ?>"><?php echo $project->name; ?></option>
+								<option value="<?php echo $project->company_id; ?>">
+									<?php echo $project->name; ?>
+								</option>
 							<?php endforeach; ?>
 							</select>
 							<span><?php echo form_error('project'); ?></span>
@@ -62,6 +64,7 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
+// Upload questions without refreshing the page.
 	$(document).ready(function(){
 		$('#save').click(function(e){
 			e.preventDefault(); // Function to stop all the default actions on the page.
@@ -84,4 +87,23 @@
 			})
 		});
 	});
+//Onchange event on projects list, get all the designations associated with the project_id in que_tbl
+// $(document).ready(function(){
+// 	$('#project').on('change', function(){
+// 		var project = $('#project').val();
+// 		$.ajax({
+// 			url: '<?php echo base_url(); ?>tests/changeDesignation/' + project,
+// 			method: 'POST',
+// 			dataType: 'JSON',
+// 			data: { project: project },
+// 			success: function(result){
+// 				console.log(result);
+// 				$('#designation').find('option').not(':first').remove();
+// 				$.each(result, function(index, data){
+// 					$('#designation').append('<option value="'+data['designation_id']+'">' + data['designation_id']+ '</option>'); // in the 2nd output I need the name of designation, not the ID of the designation. for that I need to write join query.
+// 				});
+// 			}
+// 		});
+// 	});
+// });
 </script>

@@ -252,6 +252,11 @@ class Tests extends MY_Controller{
 		$result= $this->Tests_model->desig_questions($designation_id);
 		echo json_encode($result);
 	}
+	// Change designations with the changing of project in the list.
+	public function changeDesignation($project_id){
+		$projects = $this->Tests_model->project_questions($project_id);
+		echo json_encode($projects);
+	}
 	// Count the correct answers and return the total score.
 	public function applicant_result($app_id){ // Send the applicant's ID to check result.
 		$data['title'] = $this->Xin_model->site_title();

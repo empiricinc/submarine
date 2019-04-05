@@ -20,7 +20,7 @@
 			<div class="row">
 				<div class="col-md-8 text-left">
 					<!-- Added the timer here, JavaScript timer, initially set to 60 minutes. -->
-					<h1>Back Home. <small><span id="time"></span> minutes remaining.</small></h1><hr>
+					<h1>Back Home. <small><span id="time"></span> remaining.</small></h1><hr>
 				</div>
 				<div class="col-md-4 text-right">
 					<a href="<?php echo base_url('tests/all_questions'); ?>" class="btn btn-info btn-lg btn-block">Back To Home</a>
@@ -41,7 +41,7 @@
 						<?php if($que_rand->id == $ans->ques_id): ?>
 						<li id="alpha">
 							<strong>
-							<?php echo $i++; // print alphabets A-D and then start from A again. ?>
+							<?php echo $i++; // Print alphabetical numbers before the options. ?>
 							-</strong>
 							<input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> 
 							<?= $ans->ans_name; ?>
@@ -51,7 +51,7 @@
 					<?php echo "<hr>";  endforeach;  ?>
 				</ul>
 				<br>
-				<button type="submit" class="btn btn-info" id="next">Submit Test</button>
+				<button type="submit" class="btn btn-primary">Submit Test</button>
 				<a href="<?php echo base_url('tests/all_questions'); ?>" class="btn btn-warning">Cancel</a>
 			</form>
 		</div>

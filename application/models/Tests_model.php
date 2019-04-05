@@ -123,6 +123,14 @@ class tests_model extends CI_Model{
 		$res = $this->db->get();
 		return $res->result();
 	}
+	// Select project from the list, chagne in designations will occur.
+	public function project_questions($project_id){
+		$this->db->select('id, question, designation_id, project_id');
+		$this->db->from('ex_questions');
+		$this->db->where('project_id', $project_id);
+		$result = $this->db->get();
+		return $result->result();
+	}
 	// Question paper, get questions and answers separately...
 	public function quest_paper(){
 		$this->db->select('id, question');
