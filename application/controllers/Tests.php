@@ -36,7 +36,7 @@ class Tests extends MY_Controller{
 		$config['base_url'] = base_url('tests/index');
 		$config['total_rows'] = $this->Tests_model->count_all_records();
 		$config['per_page'] = $limit;
-		$config['num_links'] = 15;
+		$config['num_links'] = 4;
 		$config["full_tag_open"] = '<ul class="pagination">';
 	    $config["full_tag_close"] = '</ul>';
 	    $config["first_tag_open"] = '<li>';

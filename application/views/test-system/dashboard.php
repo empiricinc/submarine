@@ -73,15 +73,15 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-md-2">
 							
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-8">
 							<div class="tabelSideListing text-center">
 								<?php echo $this->pagination->create_links(); ?>
 							</div>
 						</div>
-						<div class="col-md-4">
+						<div class="col-md-2">
 							
 						</div>
 					</div>
