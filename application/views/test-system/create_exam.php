@@ -54,40 +54,40 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="tableMain">
-							<div class="table-responsive">
-								<table class="table table-hover">
-									<thead>
-										<tr>
-											<th>Serial No.</th>
-											<th>Question</th>
-											<th>In Project</th>
-											<th>For Designation</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php $serial = 1; foreach($recent_questions as $recent): ?>
-										<tr>
-											<td>
-												<?php echo $serial++; ?>
-											</td>
-											<td>
-												<a href="<?php echo base_url(); ?>tests/view_single/<?php echo $recent->id; ?>"><?php echo $recent->question; ?></a>
-											</td>
-											<td>
-												<a href="<?php echo base_url(); ?>tests/detail_project/<?php echo $recent->company_id; ?>"><?php echo $recent->name; ?></a>
-											</td>
-											<td>
-												<?php echo $recent->designation_name; ?>
-											</td>
-											<td>
-												
-											</td>
-										</tr>
-										<?php endforeach; ?>
-									</tbody>
-								</table>
-							</div>
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>Serial No.</th>
+										<th>Question</th>
+										<th>In Project</th>
+										<th>For Designation</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php $serial = 1; foreach($recent_questions as $recent): ?>
+									<tr>
+										<td>
+											<?php echo $serial++; ?>
+										</td>
+										<td>
+											<a href="<?php echo base_url(); ?>tests/view_single/<?php echo $recent->id; ?>"><?php echo $recent->question; ?></a>
+										</td>
+										<td>
+											<a href="<?php echo base_url(); ?>tests/detail_project/<?php echo $recent->company_id; ?>"><?php echo $recent->name; ?></a>
+										</td>
+										<td>
+											<?php echo $recent->designation_name; ?>
+										</td>
+										<td>
+											
+										</td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
 						</div>
+					</div>
 				</div>
 			</div>
 		</div>
