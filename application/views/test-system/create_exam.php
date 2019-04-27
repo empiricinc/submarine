@@ -74,7 +74,7 @@
 												<a href="<?php echo base_url(); ?>tests/view_single/<?php echo $recent->id; ?>"><?php echo $recent->question; ?></a>
 											</td>
 											<td>
-												<?php echo $recent->name; ?>
+												<a href="<?php echo base_url(); ?>tests/detail_project/<?php echo $recent->company_id; ?>"><?php echo $recent->name; ?></a>
 											</td>
 											<td>
 												<?php echo $recent->designation_name; ?>
