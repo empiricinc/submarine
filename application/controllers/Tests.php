@@ -320,29 +320,6 @@ class Tests extends MY_Controller{
 		$this->session->set_flashdata('success', '<strong>Good Job! </strong> Answer has been deleted!');
 		return redirect('tests/all_questions');
 	}
-	// AJAX instant search 
-	public function search_results(){
-		$keyword = $this->input->post('keyword');
-		if(!empty($keyword)){
-			$this->db->like('question', $keyword);
-		}
-		$this->db->select('*');
-		$this->db->from('ex_questions');
-		$search = $this->db->get();
-		$result = $search->result();
-		echo "<table class='table table-hover'>
-		<tr>
-			<th class='any'>Serial</th>
-			<th class='any'>Question</th>
-			<th class='any'>Action</th>
-		</tr>";
-		$serial = 1; foreach($result as $single) :
-		echo "<tr>
-				<td class='para'>'.$serial.'</td>
-				<td class='para'>'.$single->question'.</td></tr>";
-		$serial++; endforeach;
-		echo "<table>";
-	}
 	// View applicants' results.
 	public function results(){
 		// $session = $this->session->userdata('username');
