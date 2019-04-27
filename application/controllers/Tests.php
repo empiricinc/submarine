@@ -2,8 +2,6 @@
 /* File name: Tests.php
 * Author: Saddam
 * Location: Controllers / Tests / Tests.php
-* -------------------------------------------------------------------------------------------------
-* All the code for the test system written here in this controller, add, edit, update, delete       * questions and answers, submit test, show result card, marks, failed or passed message to applicant.
 */
 if(! defined("BASEPATH")) exit ("No direct script access allowed!");
 
