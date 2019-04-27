@@ -14,8 +14,13 @@
   font-family: 'ralewayB';
   src: url('../fonts/Raleway/Raleway-Bold.ttf');
 }
+@font-face {
+  font-family: 'openSans';
+  src: url('../fonts/Open_Sans/OpenSans-Regular.ttf');
+}
 body {
   font-family: 'roboto';
+  background-color: #f1f3f5;
 }
 ::selection {
   background-color: #42324e;
@@ -74,5 +79,25 @@ button {
 .heading-all img {
   width: 23px;
   display: none;
+}
+.anchor {
+  display: block;
+}
+.margint-top-0 {
+  margin-top: 0px !important;
+}
+.tabelHeading {
+  margin: 15px 0px;
+}
+.tabelHeading h3 {
+  margin: 0px;
+  padding: 0px 15px;
+  font-weight: bold;
+  text-transform: capitalize;
+  color: #3a3b3c;
+  font-size: 20px;
+}
+.tabelHeading h3 span {
+  font-weight: lighter;
 }
 /*# sourceMappingURL=extra.css.map */
