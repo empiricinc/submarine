@@ -117,7 +117,7 @@ $(document).ready(function(){
 				// Add options
 				$.each(response, function(index, data){ // Get the data retrieved in a loop.
 					//var designation = data['designation_name'];
-					$('#designation').append('<option value="'+data['designation_id']+'">' +data['designation_name']+'</option>'); // append the retrieved data in target list.
+					$('#designation').append('<option value="'+data['desig_id']+'">' +data['designation_name']+'</option>'); // append the retrieved data in target list.
 				});
 			}
 		});

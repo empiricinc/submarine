@@ -1,7 +1,7 @@
 <?php 
-/*  Filename : test.php
+/*  Filename : create_exam.php
 *	Author: Saddam
-*	Location : views / test-system / test.php 
+*	Location : views / test-system / create_exam.php 
 */
 ?>
 <section class="secMainWidth">
@@ -30,9 +30,7 @@
 						<div class="inputFormMain">
 							<select name="designation" id="designation" class="form-control" style="color: #aeafaf;" required="">
 								<option value="" >Select Designation</option>
-								<?php foreach ($designations as $desg) : ?>
-									<option value="<?php echo $desg->designation_id; ?>"><?php echo $desg->designation_name; ?></option>
-								<?php endforeach; ?>
+								
 							</select>
 						</div>
 					</div>
@@ -118,4 +116,29 @@
 			})
 		});
 	});
+	// select project from the list and get the designations associated with the project_id.
+$(document).ready(function(){
+	$('#project').on('change', function(){
+		// Get the value of the project.
+		var project = $('#project').val(); // Get the project's list value i.e project_id.
+		// AJAX request.
+		$.ajax({ 
+			// send the project_id in the url with the request.
+			url: '<?php echo base_url(); ?>tests/create_exam_form/' + project,
+			method: 'POST', // method of the request.
+			dataType: 'JSON', // type of the data to be retrieved.
+			data: { project: project },
+			success: function(response){ // function to get the response of.
+				// Remove options
+				console.log(response); // Log the response to the console.
+				$('#designation').find('option').not(':first').remove();
+				// Add options
+				$.each(response, function(index, data){ // Get the data retrieved in a loop.
+					//var designation = data['designation_name'];
+					$('#designation').append('<option value="'+data['designation_id']+'">'+data['designation_name']+'</option>'); // append the retrieved data in target list.
+				});
+			}
+		});
+	});
+});
 </script>

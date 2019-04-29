@@ -167,11 +167,28 @@ class tests_model extends CI_Model{
 		$res = $this->db->get();
 		return $res->result();
 	}
+	// Change data for creating exams, get designations for project.
+	public function get_pro_designations($proj_id){
+		$this->db->select('xin_companies.*,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('xin_companies');
+		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id');
+		$this->db->where('xin_companies.company_id', $proj_id);
+		return $this->db->get()->result();
+	}
 	// Select project from the list, chagne in designations will occur.
 	public function project_questions($project_id){
-		$this->db->select('id, question, designation_id, project_id');
+		$this->db->select('ex_questions.id,
+							ex_questions.question,
+							ex_questions.designation_id,
+							ex_questions.project_id,
+							xin_designations.designation_id as desig_id,
+							xin_designations.designation_name');
 		$this->db->from('ex_questions');
-		$this->db->where('project_id', $project_id);
+		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id');
+		$this->db->where('ex_questions.project_id', $project_id);
+		$this->db->group_by('designation_id'); // To view the desig_id once in the DD.
 		$result = $this->db->get();
 		return $result->result();
 	}

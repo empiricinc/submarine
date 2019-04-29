@@ -242,6 +242,11 @@ class Tests extends MY_Controller{
 		$projects = $this->Tests_model->project_questions($project_id);
 		echo json_encode($projects);
 	}
+	// Get project's designations for creating exam.
+	public function create_exam_form($proj_id){
+		$desig_list = $this->Tests_model->get_pro_designations($proj_id);
+		echo json_encode($desig_list);
+	}
 	// Count the correct answers and return the total score.
 	public function applicant_result(){ // Send the applicant's ID to check result.
 		$appli_id = $this->input->post('roll');
