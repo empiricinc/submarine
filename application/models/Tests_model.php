@@ -315,6 +315,25 @@ class tests_model extends CI_Model{
 		$jobs = $this->db->get();
 		return $jobs->result();
 	}
+	// Jobs list for dashboard.
+	public function jobs_list_dashboard(){
+		$this->db->select('xin_jobs.*,
+							xin_job_type.job_type_id,
+							xin_job_type.type,
+							provinces.id,
+							provinces.name as prov_name,
+							xin_companies.company_id,
+							xin_companies.name as comp_name');
+		$this->db->from('xin_jobs');
+		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id');
+		$this->db->join('provinces', 'provinces.id = xin_jobs.province');
+		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company');
+		$this->db->where(array('xin_jobs.status' => 1));
+		$this->db->order_by('xin_jobs.created_at', 'DESC');
+		$this->db->limit(10);
+		$jobs = $this->db->get();
+		return $jobs->result();
+	}
 	// count all projects so that it'd be easy to create pagination
 	public function count_all_projects(){
 		return $this->db->count_all('xin_companies');
@@ -437,7 +456,7 @@ class tests_model extends CI_Model{
 		$this->db->join('xin_job_applications', 'ex_applicants.applicant_id = xin_job_applications.application_id');
 		$this->db->group_by('ex_applicants.applicant_id');
 		$this->db->order_by('xin_job_applications.exam_date', 'DESC');
-		$this->db->limit(7);
+		$this->db->limit(10);
 		return $this->db->get()->result();
 	}
 	// count all appeared

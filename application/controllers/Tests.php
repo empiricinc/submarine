@@ -27,7 +27,7 @@ class Tests extends MY_Controller{
 		$this->load->model('Xin_model');
 	}
 	public function index($offset = NULL){
-		$limit = 7;
+		$limit = 10;
 		if(!is_null($offset)){
 			$this->uri->segment(3);
 		}
@@ -55,7 +55,7 @@ class Tests extends MY_Controller{
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		$data['applicants'] = $this->Tests_model->total_applicants($limit, $offset);
-		$data['jobs'] = $this->Tests_model->jobs_list();
+		$data['jobs'] = $this->Tests_model->jobs_list_dashboard();
 		$data['appeared'] = $this->Tests_model->appeared_applicants();
 		$data['title'] = 'Test System | Dashboard';
 		$data['content'] = 'test-system/dashboard';

@@ -221,8 +221,7 @@
 											<?php echo $job->job_vacancy; ?>
 										</td>
 									</tr>
-									<?php if($job->job_id > 10) { break; }
-									endforeach; ?>
+									<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
