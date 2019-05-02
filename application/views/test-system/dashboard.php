@@ -124,7 +124,7 @@
 													<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $app->application_id; ?>"><?php echo $app->fullname; ?></a>
 												</td>
 												<td>
-													UNICEF
+													... <!-- Do it later... -->
 												</td>
 												<td>
 													<a href="mailto:<?php echo $app->email; ?>">
