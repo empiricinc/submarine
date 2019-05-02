@@ -473,9 +473,6 @@ class Tests extends MY_Controller{
 		$config['total_rows'] = $this->Tests_model->count_all_appeared();
 		$config['per_page'] = $limit;
 		$config['num_links'] = 3;
-		$config['page_query_string'] = TRUE;
-		$config['query_string_segment'] = 'page';
-		$config['use_page_numbers'] = TRUE;
 		$config["full_tag_open"] = '<ul class="pagination">';
 	    $config["full_tag_close"] = '</ul>';
 	    $config["first_tag_open"] = '<li>';
