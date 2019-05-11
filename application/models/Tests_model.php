@@ -451,9 +451,15 @@ class tests_model extends CI_Model{
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							xin_job_applications.exam_date');
+							xin_job_applications.exam_date,
+							xin_jobs.job_id,
+							xin_jobs.job_title,
+							xin_companies.company_id,
+							xin_companies.name as compName');
 		$this->db->from('ex_applicants');
 		$this->db->join('xin_job_applications', 'ex_applicants.applicant_id = xin_job_applications.application_id');
+		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
 		$this->db->group_by('ex_applicants.applicant_id');
 		$this->db->order_by('xin_job_applications.exam_date', 'DESC');
 		$this->db->limit(10);

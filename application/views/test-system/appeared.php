@@ -69,7 +69,7 @@
 												<a href="<?php echo base_url(); ?>tests/detail_project/<?php echo $applicant->company_id; ?>"><?php echo $applicant->compName; ?></a>
 											</td>
 											<td>
-												<?php echo $applicant->job_title; ?>
+												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?php echo $applicant->job_title; ?></a>
 											</td>
 											<td>
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>

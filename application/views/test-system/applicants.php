@@ -66,7 +66,7 @@
 												<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $applicant->application_id; ?>"><?=$applicant->fullname; ?></a>
 											</td>
 											<td>
-												<?=$applicant->job_title; ?>
+												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?=$applicant->job_title; ?></a>
 											</td>
 											<td>
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>

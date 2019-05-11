@@ -124,7 +124,8 @@
 													<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $app->application_id; ?>"><?php echo $app->fullname; ?></a>
 												</td>
 												<td>
-													... <!-- Do it later... -->
+													<a href="<?php echo base_url(); ?>tests/detail_project/<?php echo $app->company_id; ?>">
+														<?php echo $app->compName; ?></a>
 												</td>
 												<td>
 													<a href="mailto:<?php echo $app->email; ?>">
