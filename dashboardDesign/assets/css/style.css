@@ -420,6 +420,22 @@ section.secFormLayout .mainInputBg .submitBtn .btnSubmit {
 section.secFormLayout .mainInputBg .submitBtn .btnSubmit {
   padding: 10px 30px !important;
 }
+
+
+
+section.secMainWidthFilter .submitBtn .btnSubmit {
+  background-color: #3e8df7;
+  padding: 10px 90px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 0;
+  border: 0px;
+  color: #fff;
+}
+section.secMainWidthFilter .submitBtn .btnSubmit {
+  padding: 10px 30px !important;
+}
+
+
 section.secFormLayout .mainInputBg .solidLine {
   border-top: 1px solid #e1e4e7;
   margin-top: 20px;
