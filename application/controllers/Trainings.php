@@ -65,6 +65,7 @@ class Trainings extends CI_Controller{
 			}
 		}
 		$data = array(
+					'location' => $this->input->post('location'),
 					'project' => $this->input->post('project'),
 					'trg_type' => $this->input->post('trg_type'),
 					'trainer_one' => $this->input->post('trainer_1'),
@@ -133,11 +134,23 @@ class Trainings extends CI_Controller{
 		// Get trainees registered in the training.
 		$data['training_detail'] = $detail_row = $this->Trainings_model->training_detail($trg_id);
 		$employee_detail = explode(',', $detail_row['trainee_employees']);
+		$serial = 1;
 		$employee_names = '';
 		for ($i = 0; $i < count($employee_detail); $i++) {
-			$this->db->select('first_name, last_name, designation_id, company_id');
+			$this->db->select('xin_employees.first_name,
+								xin_employees.last_name,
+								xin_employees.designation_id,
+								xin_employees.company_id,
+								xin_employees.address,
+								xin_companies.company_id,
+								xin_companies.name,
+								xin_designations.designation_id,
+								xin_designations.designation_name');
+			$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
 			$row = $this->db->get_where('xin_employees', array('user_id' => $employee_detail[$i]))->row();
-			$employee_names .= ucfirst($row->first_name) . " " . ucfirst($row->last_name) . " | ";
+			// Print the data in HTML view.
+			$employee_names .= "<div class='row'><div class='col-lg-4'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-4'> ".$row->designation_name. "</div><div class='col-lg-4'>".$row->name."<br></div></div>";
 		}
 		$data['employee_names'] = rtrim($employee_names, ' | ');
 		$this->load->view('training-files/components/template', $data);
@@ -398,6 +411,10 @@ class Trainings extends CI_Controller{
 		$employees = $this->Trainings_model->get_employees_for_training($comp_id);
 		echo json_encode($employees);
 		// $data['employees'] = $this->Trainings_model->get_employees_for_training($comp_id);
+	}
+	// Employees' attendance in training.
+	public function attendance(){
+		var_dump("This is attendance system for employees attending training.");
 	}
 }
 

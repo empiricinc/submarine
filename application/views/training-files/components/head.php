@@ -51,7 +51,7 @@
           <li><a href="<?php echo base_url('trainings/add_allowances'); ?>">allowances</a></li>
           <li id="appeared"><a href="<?php echo base_url('trainings/locations'); ?>">locations</a></li>
           <li><a href="<?php echo base_url('trainings/stay_hotels'); ?>">stay hotels</a></li>
-          <li><a href="<?php echo base_url('trainings/'); ?>">...</a></li>
+          <li><a href="<?php echo base_url('trainings/attendance'); ?>">attendance</a></li>
           <li><a href="<?php echo base_url('trainings/'); ?>">...</a></li>
           <li>
             <a href="#">

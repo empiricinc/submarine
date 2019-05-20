@@ -52,6 +52,7 @@
 									<thead>
 										<tr <?php if(!empty($training_detail)): ?> style="display: none;"<?php endif; ?>>
 											<th>training type</th>
+											<th>location</th>
 											<th>trainer one</th>
 											<th>trainer two</th>
 											<th>facilitator name</th>
@@ -71,10 +72,13 @@
 												<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>"><?=$training->type; ?></a>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trg_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
+												<?= $training->prov_name; ?>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trg_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
+												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
+											</td>
+											<td>
+												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
 											</td>
 											<td>
 												<?=$training->facilitator_name; ?>
@@ -160,35 +164,50 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<th>employee name</th>
 											<th>training type</th>
+											<th>location</th>
 											<th>trainer</th>
-											<th>training cost</th>
+											<th>facilitator name</th>
 											<th>starts on</th>
 											<th>ends on</th>
+											<th>venue</th>
+											<th>hall detail</th>
+											<th>session</th>
+											<th>approval type</th>
 										</tr>
 									</thead>
 									<tbody>
 										<?php foreach($results as $result): ?>
 										<tr>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $result->training_id; ?>">
-													<?=$result->efirst_name." ".$result->elast_name; ?></a>
+												<?=$result->type; ?>
 											</td>
 											<td>
-												<?=$result->type; ?>
+												<?= $result->prov_name; ?>
 											</td>
 											<td>
 												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $result->trainer_id; ?>"><?=$result->first_name." ".$result->last_name; ?></a>
 											</td>
 											<td>
-												<?=$result->training_cost; ?>
+												<?=$result->facilitator_name; ?>
 											</td>
 											<td>
 												<?=date('M d, Y', strtotime($result->start_date)); ?>
 											</td>
 											<td>
-												<?=date('M d, Y', strtotime($result->finish_date)); ?>
+												<?=date('M d, Y', strtotime($result->end_date)); ?>
+											</td>
+											<td>
+												<?= $result->location; ?>
+											</td>
+											<td>
+												<?= $result->hall_detail; ?>
+											</td>
+											<td>
+												<?= date('Y', strtotime($result->session)); ?>
+											</td>
+											<td>
+												<?= $result->approval_type; ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
@@ -204,18 +223,25 @@
 </section>
 <?php endif; ?>
 <?php if(isset($training_detail)): ?>
-<div class="col-lg-8 col-lg-offset-1">
+<div class="col-lg-10">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h3>
 				<div class="row">
-					<div class="col-lg-6">
-						<small><strong>Training Type:</strong></small><?php echo $training_detail['type']; ?>
-					</div>
-					<div class="col-lg-6 text-right">
+					<div class="col-lg-4">
 						<small>
-							<strong>Venue:</strong> <?php echo $training_detail['location']; ?><br> 
-							<strong>Hall Detail:</strong> <?php echo $training_detail['hall_detail']; ?>
+							<h3>Training Information</h3>
+						</small>
+					</div>
+					<div class="col-lg-4 text-right">
+						<small><strong>Training Type: </strong><?php echo $training_detail['type']; ?></small><br>
+						<small><strong>Project Name: </strong><?php echo $training_detail['name']; ?></small>
+					</div>
+					<div class="col-lg-4 text-right">
+						<small>
+							<strong>Location/ Province: </strong><?php echo $training_detail['provName']; ?><br>
+							<strong>Venue: </strong><?php echo $training_detail['location']; ?><br> 
+							<strong>Hall Detail: </strong><?php echo $training_detail['hall_detail']; ?>
 						</small>
 					</div>
 				</div>
@@ -224,10 +250,13 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-lg-12">
-					<p>
-						<strong>Who's coming: </strong><?php echo $employee_names; ?>
-						<strong>Designation: </strong> <?php //echo $training_detail['desination_name']; ?>
-						<strong>Project: </strong><?php echo $training_detail['name']; ?>
+					<div class="row">
+						<div class="col-lg-4"><strong>&nbsp;&nbsp;&nbsp; Employee Name</strong></div>
+						<div class="col-lg-4"><strong>Designation</strong></div>
+						<div class="col-lg-4"><strong>Project</strong></div>
+					</div>
+					<p class="lead">
+						<?php echo $employee_names; ?>
 					</p>
 				</div>
 			</div>
