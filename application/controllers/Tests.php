@@ -274,7 +274,7 @@ class Tests extends MY_Controller{
 		for($j = 0; $j < $length; $j++){
 			$data = array(
 			'question_id' => $_POST['question_id'][$j],
-			'answer_id'   => $_POST['answer'][$j],
+			'answer_id'   => $_POST['answer'][$j]
 			// 'applicant_id' => $applicant_id
 			);
 			$this->Tests_model->submit_paper($data);

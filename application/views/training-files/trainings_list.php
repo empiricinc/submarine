@@ -180,7 +180,7 @@
 										<?php foreach($results as $result): ?>
 										<tr>
 											<td>
-												<?=$result->type; ?>
+												<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $result->trg_id; ?>"><?=$result->type; ?></a>
 											</td>
 											<td>
 												<?= $result->prov_name; ?>
@@ -223,7 +223,7 @@
 </section>
 <?php endif; ?>
 <?php if(isset($training_detail)): ?>
-<div class="col-lg-10">
+<div class="col-lg-12">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h3>
@@ -251,9 +251,11 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="row">
-						<div class="col-lg-4"><strong>&nbsp;&nbsp;&nbsp; Employee Name</strong></div>
-						<div class="col-lg-4"><strong>Designation</strong></div>
-						<div class="col-lg-4"><strong>Project</strong></div>
+						<div class="col-lg-2"><strong>Employee Name</strong></div>
+						<div class="col-lg-3"><strong>Designation</strong></div>
+						<div class="col-lg-2"><strong>Project</strong></div>
+						<div class="col-lg-2"><strong>Contact</strong></div>
+						<div class="col-lg-3"><strong>Address</strong></div>
 					</div>
 					<p class="lead">
 						<?php echo $employee_names; ?>

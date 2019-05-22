@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed!');
-/*  Filename : create_training.php
+/*  Filename : create_trainer.php
 *	Author: Saddam
-*	Filepath: views / training-files / create_training.php 
+*	Filepath: views / training-files / create_trainer.php 
 */
 ?>
 <section class="secMainWidth">

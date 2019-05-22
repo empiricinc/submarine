@@ -142,6 +142,7 @@ class Trainings extends CI_Controller{
 								xin_employees.designation_id,
 								xin_employees.company_id,
 								xin_employees.address,
+								xin_employees.contact_no,
 								xin_companies.company_id,
 								xin_companies.name,
 								xin_designations.designation_id,
@@ -150,9 +151,9 @@ class Trainings extends CI_Controller{
 			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
 			$row = $this->db->get_where('xin_employees', array('user_id' => $employee_detail[$i]))->row();
 			// Print the data in HTML view.
-			$employee_names .= "<div class='row'><div class='col-lg-4'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-4'> ".$row->designation_name. "</div><div class='col-lg-4'>".$row->name."<br></div></div>";
+			$employee_names .= "<div class='row'><div class='col-lg-2'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-2'>".$row->name."</div><div class='col-lg-2'>".$row->contact_no."</div><div class='col-lg-3'>".$row->address."</div><hr></div>";
 		}
-		$data['employee_names'] = rtrim($employee_names, ' | ');
+		$data['employee_names'] = $employee_names;
 		$this->load->view('training-files/components/template', $data);
 	}
 	// List of all trainers.
@@ -412,9 +413,52 @@ class Trainings extends CI_Controller{
 		echo json_encode($employees);
 		// $data['employees'] = $this->Trainings_model->get_employees_for_training($comp_id);
 	}
+	// Load the attencance view
+	public function attendance_view(){
+		$data['trainings'] = $this->Trainings_model->get_trainings_list();
+		$data['title'] = 'Trainings | Employees Attendance';
+		$data['content'] = 'training-files/attendance_view';
+		$this->load->view('training-files/components/template', $data);
+	}
 	// Employees' attendance in training.
 	public function attendance(){
-		var_dump("This is attendance system for employees attending training.");
+		$trg_id = $_POST['training'];
+		$data['trainee_employees'] = $row = $this->Trainings_model->get_trainees($trg_id);
+		$ids = array();
+		$names = array();
+		$ids = explode(',', $row->trainee_employees);
+		for ($i = 0; $i < count($ids); $i++) {
+			$names[$i] = $this->db->query("SELECT employee_id, first_name, last_name FROM xin_employees WHERE employee_id = " . $ids[$i])->row();
+		}
+		$data['names'] = $names;
+		$data['title'] = 'Trainings | Attendance';
+		$data['content'] = 'training-files/attendance';
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Save attendance to the database.
+	public function save_attendance(){ // This is a multi-insert function. (batch_insert)
+		$status = $_POST['status'];
+		$training_id = $_POST['trg_id'];
+		$emp_id = $_POST['employee_id'];
+		$project = $_POST['project'];
+		// Count all the options and dump into the database.
+		$length = count($status); 
+		$length = count($training_id);
+		$length = count($emp_id);
+		$length = count($project);
+		// Take all the data in a loop to get the data and insert into database.
+		for($j = 0; $j < $length; $j++) {
+			$data = array(
+					'status' => $_POST['status'][$j],
+					'training_id' => $_POST['trg_id'][$j],
+					'emp_id' => $_POST['employee_id'][$j],
+					'project_id' => $_POST['project'][$j]
+					);
+			$this->Trainings_model->store_attendance($data); // Send the data to the DB.
+		}
+		// Print a success message on the screen on successful submission of data.
+		$this->session->set_flashdata('success', 'Attendance submitted successfully!');
+		return redirect('Trainings/attendance_view');
 	}
 }
 

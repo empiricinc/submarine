@@ -391,6 +391,29 @@ class Trainings_model extends CI_Model{
 		$query = $this->db->get();
 		return $query->result();
 	}
+	// Get trainee employees for attendance sheet with the training they're registered in.
+	public function get_trainees($trg_id){
+		return $this->db->query("SELECT xin_trainings.trainee_employees, trg_id, project FROM xin_trainings WHERE trg_id = $trg_id")->row();
+	}
+	// Get trainings to show them in the dropdown list.
+	public function get_trainings_list(){
+		$this->db->select('xin_trainings.trg_id,
+							xin_trainings.trg_type,
+							xin_training_types.training_type_id,
+							xin_training_types.type');
+		$this->db->from('xin_trainings');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		return $this->db->get()->result();
+	}
+	// Save employees' attendance to the database now.
+	public function store_attendance($data){
+		$this->db->insert('training_attendance', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
 
 ?>
