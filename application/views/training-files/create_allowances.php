@@ -84,6 +84,7 @@
 						<th>DSA</th>
 						<th>Travel</th>
 						<th>Stay</th>
+						<th>Total</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -102,6 +103,11 @@
 						<td><?php echo "Rs. ".$allowance->travel; ?></td>
 						<td>
 							<?php if($allowance->stay_allowance == NULL) { echo "<strong style='color: red;'>N/A</strong>"; } else{ echo "Rs. ".$allowance->stay_allowance; } ?>
+						</td>
+						<td>
+							<?php $total = $allowance->dsa + $allowance->travel + $allowance->stay_allowance; 
+								echo "Rs. ". $total;
+							?>
 						</td>
 					</tr>
 					<?php endforeach; ?>
@@ -150,38 +156,4 @@ $(document).ready(function(){
 		}
 	})
 });
-
-// Insert into database without page reload.
-// $(document).ready(function(){
-// 	$('#save').click(function(e){
-// 		e.preventDefault();
-// 		var project = $('#project').val();
-// 		var designation = $('#designation').val();
-// 		var behavior = $('#behavior').val();
-// 		var dsa = $('#dsa').val();
-// 		var travel = $('#travel').val();
-// 		var stay = $('#stay').val();
-// 		if(project == '' || designation = '' || behavior =''){
-// 			alert('Please fill up the required fields');
-// 			return false;
-// 		}else{
-// 			$.ajax({
-// 				type: "post",
-// 				url: "<?php echo base_url('trainings/create_allowances'); ?>",
-// 				data: {project: project, designation: designation, behavior: behavior, dsa: dsa, travel: travel, stay: stay },
-// 				dataType: "json",
-// 				cache: false,
-// 				success: function(res){
-// 					alert('Allowance has been added successfully, now you can add more...');
-// 					$('#designation').val(''); // Clear the submitted input.
-// 					$('#behavior').val('');
-// 					$('#dsa').val('');
-// 					$('#travel').val('');
-// 					$('#stay').val('');
-// 					console.log(res);
-// 				}
-// 			});
-// 		}
-// 	});
-// });
 </script>

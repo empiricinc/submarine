@@ -414,6 +414,98 @@ class Trainings_model extends CI_Model{
 			return false;
 		}
 	}
+	// List the completed trainings.
+	public function trainings_completed(){
+		$this->db->select('COUNT(training_attendance.emp_id) as attendees,
+							training_attendance.attendance_id,
+							training_attendance.status,
+							training_attendance.training_id,
+							training_attendance.project_id,
+							xin_trainings.trg_id,
+							xin_trainings.trg_type,
+							xin_trainings.trainer_one,
+							xin_trainings.start_date,
+							xin_trainings.end_date,
+							xin_trainings.session,
+							xin_trainings.target_group,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							xin_trainers.trainer_id,
+							xin_trainers.first_name,
+							xin_trainers.last_name,
+							xin_training_locations.location_id,
+							xin_training_locations.province,
+							xin_training_locations.city,
+							xin_training_locations.location,
+							provinces.id,
+							provinces.name,
+							city.id as city_id,
+							city.name as city_name');
+		$this->db->from('training_attendance');
+		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id AND xin_trainers.trainer_id = xin_trainings.trainer_two', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_training_locations.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_locations.city = city.id', 'left');
+		$this->db->where('xin_trainings.project = training_attendance.project_id');
+		$this->db->group_by('training_attendance.training_id');
+		$this->db->where('xin_trainings.trg_id = training_attendance.training_id');
+		$this->db->order_by('training_attendance.attendance_id', 'DESC');
+		$this->db->limit(10);
+		return $this->db->get()->result();
+	}
+	// Get training's expenses for each trainee
+	public function training_expenses($trg_id=''){
+		$this->db->select('xin_training_allowances.*,
+							xin_employees.user_id,
+							xin_employees.first_name,
+							xin_employees.last_name,
+							xin_employees.company_id,
+							xin_employees.designation_id,
+							training_attendance.emp_id,
+							training_attendance.project_id,
+							training_attendance.status,
+							xin_trainings.trg_id,
+							xin_trainings.trg_type,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('xin_employees');
+		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_training_allowances', 'xin_companies.company_id = xin_training_allowances.project', 'left');
+		$this->db->join('training_attendance', 'xin_employees.user_id = training_attendance.emp_id', 'left');
+		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		// $this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
+		$this->db->group_by('training_attendance.emp_id');
+		$this->db->where('xin_employees.user_id = training_attendance.emp_id');
+		// $this->db->where('xin_employees.company_id = training_attendance.project_id');
+		$this->db->where('xin_trainings.trg_id', $trg_id);
+		return $this->db->get()->result();
+	}
+	// Get attendance report
+	public function training_report(){
+		$this->db->select('training_attendance.*,
+							xin_trainings.trg_id,
+							xin_employees.employee_id,
+							xin_employees.first_name,
+							xin_employees.last_name,
+							xin_companies.company_id,
+							xin_companies.name');
+		$this->db->from('training_attendance');
+		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id');
+		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id');
+		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id');
+		$this->db->where('training_attendance.training_id', 1);
+		$report = $this->db->get();
+		echo $this->db->last_query();
+		return $report->result();
+	}
 }
 
 ?>

@@ -10,7 +10,7 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="tabelHeading">
-						<h3>attendance <span style="text-transform: lowercase;">(select an option from the list to get to attendance)</span></h3><br>
+						<h3>attendance <span style="text-transform: lowercase;">(select an option from the list to get to attendance page)</span></h3><br>
 						<?php if($success = $this->session->flashdata('success')): ?>
 							<div class="alert alert-success">
 								<p><?php echo $success; ?></p>
@@ -33,7 +33,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="submitBtn">
-							<button type="submit" class="btn btnSubmit">Move On</button>
+							<button type="submit" class="btn btnSubmit">Take Attendance</button>
 						</div>
 					</div>
 				</form>

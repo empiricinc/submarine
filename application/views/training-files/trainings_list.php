@@ -23,7 +23,7 @@
 									</small>
 							</h3>
 							<?php else: ?> 
-								<h3>training detail <span>(see training's detail)</span></h3>
+								<h3>training detail <span>(see training's detail & move to attendance)</span></h3>
 							<?php endif; ?>
 						</div>
 					</div>
@@ -231,6 +231,7 @@
 					<div class="col-lg-4">
 						<small>
 							<h3>Training Information</h3>
+							<a href="<?php echo base_url(); ?>trainings/attendance/<?= $training_detail['trg_id']; ?>"><i class="fa fa-plus"></i> Attendance</a>
 						</small>
 					</div>
 					<div class="col-lg-4 text-right">
@@ -251,11 +252,11 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="row">
-						<div class="col-lg-2"><strong>Employee Name</strong></div>
-						<div class="col-lg-3"><strong>Designation</strong></div>
-						<div class="col-lg-2"><strong>Project</strong></div>
-						<div class="col-lg-2"><strong>Contact</strong></div>
-						<div class="col-lg-3"><strong>Address</strong></div>
+						<div class="col-lg-2"><h3>Employee Name</h3></div>
+						<div class="col-lg-3"><h3>Designation</h3></div>
+						<div class="col-lg-2"><h3>Project</h3></div>
+						<div class="col-lg-2"><h3>Contact</h3></div>
+						<div class="col-lg-3"><h3>Address</h3></div>
 					</div>
 					<p class="lead">
 						<?php echo $employee_names; ?>

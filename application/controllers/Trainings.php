@@ -42,6 +42,7 @@ class Trainings extends CI_Controller{
 		$data['title'] = 'Trainings | Dashboard';
 		$data['content'] = 'training-files/dashboard';
 		$data['trainings_list'] = $this->Trainings_model->get_trainings($limit, $offset);
+		$data['completed_trainings'] = $this->Trainings_model->trainings_completed();
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Load the create trainings page first.
@@ -421,8 +422,9 @@ class Trainings extends CI_Controller{
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Employees' attendance in training.
-	public function attendance(){
-		$trg_id = $_POST['training'];
+	public function attendance($trg_id=''){
+		if($trg_id == "") // If $trg_id is empty, load the page from the post form.
+			$trg_id = $_POST['training'];
 		$data['trainee_employees'] = $row = $this->Trainings_model->get_trainees($trg_id);
 		$ids = array();
 		$names = array();
@@ -459,6 +461,18 @@ class Trainings extends CI_Controller{
 		// Print a success message on the screen on successful submission of data.
 		$this->session->set_flashdata('success', 'Attendance submitted successfully!');
 		return redirect('Trainings/attendance_view');
+	}
+	// Training expenses
+	public function expenses($trg_id = ''){
+		$data['title'] = 'Trainings | Expenses Detail';
+		$data['content'] = 'training-files/training_expenses';
+		$data['expenses'] = $this->Trainings_model->training_expenses($trg_id); 
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Training reports.
+	public function training_reports(){
+		$data['reports'] = $this->Trainings_model->training_report();
+		var_dump($data);
 	}
 }
 

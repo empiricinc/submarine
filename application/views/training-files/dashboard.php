@@ -24,8 +24,11 @@
 					<div class="row">
 						<div class="col-md-8">
 							<div class="tabelHeading">
-								<h3>Upcoming trainings <small>(trainings to be held)</small>
-								<small>click the training type to view training detail</small></h3>
+								<h3>induction trainings 
+									<small>trainings to be held <br>
+										click the training type to view training detail
+									</small>
+								</h3>
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -61,7 +64,7 @@
 													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trainer_one; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
 												</td>
 												<td>
-													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trainer_one; ?>">
+													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>">
 													<?php echo $training->type; ?></a>
 												</td>
 												<td>
@@ -98,7 +101,7 @@
 					<div class="row">
 						<div class="col-md-9">
 							<div class="tabelHeading">
-								<h3>refreshers <small>(two trainings in a year are compulsory)</small></h3>
+								<h3>refreshers <small>two trainings in a year are compulsory</small></h3>
 							</div>
 						</div>
 						<div class="col-md-3">
@@ -170,12 +173,12 @@
 	<section class="secIndexTable">
 		<div class="mainTableWhite">
 			<div class="row">
-				<div class="col-md-6">
+				<div class="col-md-8">
 					<div class="tabelHeading">
-						<h3>decision pending... <small>(decision pending ...)</small></h3>
+						<h3>trainings completed <small>click on the training type to view detail, i.e, expenses, employees' names etc...</small></h3>
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-4">
 					<div class="tabelTopBtn">
 						<a class="btn" href="<?php echo base_url('tests/pending'); ?>">
 							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
@@ -191,40 +194,53 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th>decision pending...</th>
-										<th>decision pending...</th>
-										<th>decision pending...</th>
-										<th>decision pending...</th>
-										<th>decision pending...</th>
-										<th>decision pending...</th>
-										<th>decision pending...</th>
+										<th>training type</th>
+										<th>province</th>
+										<th>city</th>
+										<th>trainers</th>
+										<th>target group</th>
+										<th>started on</th>
+										<th>ended on</th>
+										<th>venue</th>
+										<th>session</th>
+										<th>participants</th>
 									</tr>
 								</thead>
 								<tbody>
+									<?php foreach($completed_trainings as $completed): ?>
 									<tr>
 										<td>
-											
+											<a href="<?= base_url(); ?>trainings/expenses/<?= $completed->trg_id; ?>"><?= $completed->type; ?></a>
 										</td>
 										<td>
-											
+											<?= $completed->name; ?>
 										</td>
 										<td>
-											
+											<?= $completed->city_name; ?>
 										</td>
 										<td>
-											
+											<?= $completed->first_name." ".$completed->last_name; ?>
 										</td>
 										<td>
-											
+											<?= $completed->target_group; ?>
 										</td>
 										<td>
-											
+											<?= date('M d, Y', strtotime($completed->start_date)); ?>
 										</td>
 										<td>
-											
+											<?= date('M d, Y', strtotime($completed->end_date)); ?>
+										</td>
+										<td>
+											<?= $completed->location; ?>
+										</td>
+										<td>
+											<?= date('Y', strtotime($completed->session)); ?>
+										</td>
+										<td>
+											<?= $completed->attendees; ?>
 										</td>
 									</tr>
-									
+									<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>
