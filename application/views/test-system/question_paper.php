@@ -74,7 +74,9 @@
 							endforeach; ?>
 						<?php echo "<hr>"; endforeach;  ?>
 					</ul>
+					<?php $data = $this->Tests_model->get_applicant_id(); ?>
 					<br>
+					<input type="hidden" name="applicant_id" value="<?php echo $data['rollnumber']; ?>">
 					<div class="submitBtn">
 						<button type="submit" class="btn btnSubmit" onclick="javascript: return confirm('Are you sure to submit the test? Make sure you have attempted all the questions.');">Submit Test</button>
 						<button type="reset" class="btnSubmit">Clear</button>

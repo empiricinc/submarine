@@ -61,7 +61,7 @@
 													<?php echo $serial++; ?>
 												</td>
 												<td>
-													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trainer_one; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
+													<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_one; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
 												</td>
 												<td>
 													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>">
@@ -180,7 +180,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="tabelTopBtn">
-						<a class="btn" href="<?php echo base_url('tests/pending'); ?>">
+						<a class="btn" href="<?php echo base_url('tests/all_completed'); ?>">
 							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
 							View All
 						</a>

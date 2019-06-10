@@ -209,10 +209,14 @@ class Trainings_model extends CI_Model{
 		$this->db->from('xin_employees');
 		return $this->db->get()->result();
 	}
-	// Get designations to show them in the dropdown list.
+	// Get designations to show them in the dropdown list, 	and count them
 	public function get_designations(){
-		$this->db->select('designation_id, designation_name');
-		$this->db->from('xin_designations');
+		$this->db->select('COUNT(xin_employees.designation_id) as applied, 								xin_designations.designation_id,
+							xin_designations.designation_name,
+							xin_employees.designation_id');
+		$this->db->from('xin_employees');
+		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+		$this->db->group_by('xin_employees.designation_id');
 		return $this->db->get()->result();
 	}
 	// Get all projects to display in the dropdown list.
@@ -421,6 +425,7 @@ class Trainings_model extends CI_Model{
 							training_attendance.status,
 							training_attendance.training_id,
 							training_attendance.project_id,
+							training_attendance.attendance_date,
 							xin_trainings.trg_id,
 							xin_trainings.trg_type,
 							xin_trainings.trainer_one,
@@ -440,7 +445,9 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name,
 							city.id as city_id,
-							city.name as city_name');
+							city.name as city_name,
+							xin_employees.user_id,
+							xin_employees.address');
 		$this->db->from('training_attendance');
 		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
 		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
@@ -448,6 +455,7 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
 		$this->db->join('provinces', 'xin_training_locations.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_training_locations.city = city.id', 'left');
+		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.user_id', 'left');
 		$this->db->where('xin_trainings.project = training_attendance.project_id');
 		$this->db->group_by('training_attendance.training_id');
 		$this->db->where('xin_trainings.trg_id = training_attendance.training_id');
@@ -505,6 +513,21 @@ class Trainings_model extends CI_Model{
 		$report = $this->db->get();
 		echo $this->db->last_query();
 		return $report->result();
+	}
+	// Get employees by designation
+	public function get_designation_employees($desig_id){
+		$this->db->select('xin_employees.employee_id,
+							xin_employees.first_name,
+							xin_employees.last_name,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('xin_employees');
+		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
+		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+		$this->db->where(array('xin_employees.designation_id' => $desig_id));
+		return $this->db->get()->result();
 	}
 }
 

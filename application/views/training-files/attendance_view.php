@@ -21,7 +21,7 @@
 				<form method="post" action="<?php echo base_url('trainings/attendance'); ?>">
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<select name="training" class="form-control" style="color: #aeafaf;">
+							<select name="training" class="form-control" style="color: #aeafaf;" required="">
 								<option value="">Select Training</option>
 								<?php foreach($trainings as $training): ?>
 									<option value="<?= $training->trg_id; ?>">
@@ -33,7 +33,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="submitBtn">
-							<button type="submit" class="btn btnSubmit">Take Attendance</button>
+							<button type="submit" class="btn btnSubmit">Go to Attendance</button>
 						</div>
 					</div>
 				</form>

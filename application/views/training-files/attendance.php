@@ -16,22 +16,6 @@
 							</h3>
 						</div>
 					</div>
-					<div class="col-md-4">
-						<div class="tabelTopBtn">
-							<form class="form-inline" action="<?php echo base_url('trainings/trainer_search'); ?>" method="get">
-								<div class="inputFormMain">
-									<div class="input-group">
-										<input type="text" name="search_trainer" class="form-control" placeholder="Search trainers..." required="" autocomplete="off">
-										<div class="input-group-btn">
-											<button type="submit" class="btn btnSubmit">
-												<i class="fa fa-search"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
@@ -49,27 +33,23 @@
 										<?php for ($i = 0; $i < count($names); $i++): ?>
 											<tr>
 												<td>
-													<div class="col-lg-3">
-														<?php echo $names[$i]->first_name . " " . $names[$i]->last_name; ?>
-													</div>
+													<?php echo $names[$i]->first_name . " " . $names[$i]->last_name; ?>
 												</td>
 												<td>
-													<div class="col-lg-5">
-														<select name="status[]" class="form-control" style="color: #aeafaf;">
-															<option value="">
-																Select Status
-															</option>
-															<option value="Present">
-																Present
-															</option>
-															<option value="Absent">
-																Absent
-															</option>
-														</select>
-														<input type="hidden" name="project[]" value="<?= $trainee_employees->project; ?>">
-														<input type="hidden" name="trg_id[]" value="<?= $trainee_employees->trg_id; ?>">
-														<input type="hidden" name="employee_id[]" value="<?= $names[$i]->employee_id; ?>">
-													</div>
+													<select name="status[]" class="form-control" style="color: #aeafaf;">
+														<option value="">
+															Select Status
+														</option>
+														<option value="Present">
+															Present
+														</option>
+														<option value="Absent">
+															Absent
+														</option>
+													</select>
+													<input type="hidden" name="project[]" value="<?= $trainee_employees->project; ?>">
+													<input type="hidden" name="trg_id[]" value="<?= $trainee_employees->trg_id; ?>">
+													<input type="hidden" name="employee_id[]" value="<?= $names[$i]->employee_id; ?>">
 												</td>
 											</tr>
 											<?php endfor; ?>

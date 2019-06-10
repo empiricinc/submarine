@@ -54,6 +54,7 @@ class Trainings extends CI_Controller{
 		$data['trainers'] = $this->Trainings_model->get_trainers();
 		$data['venues'] = $this->Trainings_model->get_venues();
 		$data['locations'] = $this->Trainings_model->get_locations();
+		$data['designations'] = $this->Trainings_model->get_designations();
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Perform the insert action here in this function, set the form action on this method.
@@ -412,7 +413,6 @@ class Trainings extends CI_Controller{
 	public function training_employees($comp_id = ''){
 		$employees = $this->Trainings_model->get_employees_for_training($comp_id);
 		echo json_encode($employees);
-		// $data['employees'] = $this->Trainings_model->get_employees_for_training($comp_id);
 	}
 	// Load the attencance view
 	public function attendance_view(){
@@ -473,6 +473,11 @@ class Trainings extends CI_Controller{
 	public function training_reports(){
 		$data['reports'] = $this->Trainings_model->training_report();
 		var_dump($data);
+	}
+	// Get the data you wish to show on the page.
+	public function get_count_desig($desig_id = ''){
+		$data = $this->Trainings_model->get_designation_employees($desig_id);
+		echo json_encode($data);
 	}
 }
 

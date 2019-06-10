@@ -20,6 +20,49 @@
 						</div>
 					</div>
 				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-warning">
+						<div class="panel-heading">
+							<h3 class="text-right">Training Information</h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<!-- Retrieved data directy from Model. -->
+									<?php $data = $this->Trainings_model->training_detail($this->uri->segment(3)); ?>
+									<strong>Training Type: </strong>
+										<?php echo $data['type']; ?><br>
+									<strong>Project Name: </strong>
+										<?php echo $data['name']; ?><br>
+									<strong>Training Location: </strong>
+										<?php echo $data['provName']; ?>
+								</div>
+								<div class="col-md-6 text-right">
+									<strong>Venue: </strong>
+										<?php echo $data['location']; ?><br>
+									<strong>Hall Detail: </strong>
+										<?php echo $data['hall_detail']; ?><br>
+									<strong>Training lasted for: </strong>
+										<?php $date1 = date_create(date('Y-m-d', strtotime($data['start_date'])));
+											  $date2 = date_create(date('Y-m-d', strtotime($data['end_date'])));
+											  $diff = date_diff($date1, $date2);
+											  echo $diff->format("%a days");
+										?> 
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-warning">
+						<div class="panel-heading">
+							<h3>Training Objective</h3>
+						</div>
+						<div class="panel-body">
+							<p>The objective of the training was to train the new employees joined the company. Aware them with the company culture, duty timing, and other rules and regulations. Things to do and things not to do. </p>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="tableMain">
@@ -53,27 +96,37 @@
 											<td>
 												<?= $expense->designation_name; ?>
 											</td>
-											<td><?php if($expense->behavior == 'local'){
-												echo "Local";
-											}elseif($expense->behavior == 'out'){ echo "Non Local"; } ?>
+											<td>
+												<?php if($expense->designation AND $expense->behavior == 'local'): echo "Local";
+												else: echo "Non Local"; endif;
+											 ?>
 											</td>
 											<td>
-												<?php if($expense->dsa == NULL): ?>N/A
-												<?php else: ?>
+												<?php if($expense->dsa == NULL): echo "..."; ?>
+												<?php elseif($expense->status == 'Absent'): echo "..."; else: ?>
 													<?= $expense->dsa; ?>
 												<?php endif; ?>
 											</td>
 											<td>
-												<?= $expense->travel; ?>
+												<?php if($expense->status == 'Absent'):
+														echo "..."; else:
+												?>
+												<?= $expense->travel; 
+													endif;
+												?>
 											</td>
 											<td>
-												<?php if($expense->stay_allowance == NULL): ?>N/A
+												<?php if($expense->stay_allowance == NULL): echo "..."; ?>
 												<?php else: ?>
 													<?= $expense->stay_allowance; ?>
 												<?php endif; ?>
 											</td>
 											<td>
-												<?php echo $expense->dsa + $expense->travel + $expense->stay_allowance; ?>
+												<?php if($expense->status == 'Absent'):
+													echo "..."; else:
+												echo $expense->dsa + $expense->travel + $expense->stay_allowance;
+												endif; 
+												?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
