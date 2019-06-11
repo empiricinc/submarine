@@ -65,7 +65,7 @@
           <li>
             <a href="#">
               <img src="<?php echo base_url('dashboardDesign/assets/img/profile.png'); ?>" alt="">
-              Hasseb Khattak
+              Haseeb Khattak
               <span class="caret"></span>    
             </a>
           </li>

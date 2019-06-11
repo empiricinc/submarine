@@ -42,6 +42,7 @@ class Trainings extends CI_Controller{
 		$data['title'] = 'Trainings | Dashboard';
 		$data['content'] = 'training-files/dashboard';
 		$data['trainings_list'] = $this->Trainings_model->get_trainings($limit, $offset);
+		$data['refreshers'] = $this->Trainings_model->refresher_training();
 		$data['completed_trainings'] = $this->Trainings_model->trainings_completed();
 		$this->load->view('training-files/components/template', $data);
 	}
@@ -84,6 +85,11 @@ class Trainings extends CI_Controller{
 					'created_at' => $this->input->post('created_at')
 					); // insert data in array into database.
 		$this->Trainings_model->create_training($data);
+		for($i = 0; $i < count($tEmployees); $i++){ 
+			$this->db->where('user_id', $tEmployees[$i]);
+			$this->db->update('xin_employees', array('training_status' => '2'));
+		} // Update training_status for employees when added to the training.
+
 		$this->session->set_flashdata('success', '<strong>Great Job! </strong> Your data has been added successfully. Now you can add more...');
 		return redirect('trainings/add_trainings');
 	}

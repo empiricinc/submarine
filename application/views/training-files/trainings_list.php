@@ -204,7 +204,7 @@
 												<?= $result->hall_detail; ?>
 											</td>
 											<td>
-												<?= date('Y', strtotime($result->session)); ?>
+												<?= $result->session; ?>
 											</td>
 											<td>
 												<?= $result->approval_type; ?>

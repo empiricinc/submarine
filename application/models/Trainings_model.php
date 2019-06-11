@@ -30,7 +30,27 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
 		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
 		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		// $this->db->join('xin_employees', 'xin_trainings.trainee_employees = xin_employees.employee_id');
+		// $this->db->where(array('xin_trainings.trg_type' => 1));
 		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
+	}
+	// Refreshers' training
+	public function refresher_training(){
+		$this->db->select('xin_trainings.*,
+							xin_trainers.trainer_id,
+							xin_trainers.first_name,
+							xin_trainers.last_name,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							xin_training_locations.location_id,
+							xin_training_locations.location');
+		$this->db->from('xin_trainings');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
+		$this->db->where(array('xin_trainings.trg_type' => 2));
+		$this->db->limit(10);
 		return $this->db->get()->result();
 	}
 	// Search trainigs.
@@ -56,7 +76,7 @@ class Trainings_model extends CI_Model{
 		$this->db->from('xin_trainings');
 		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
 		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
 		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
 		$this->db->like('xin_trainings.facilitator_name', $training);
 		$this->db->or_like('xin_trainings.approval_type', $training);
@@ -64,6 +84,7 @@ class Trainings_model extends CI_Model{
 		$this->db->or_like('xin_training_types.type', $training);
 		$this->db->or_like('xin_training_locations.location', $training);
 		$this->db->or_like('provinces.name', $training);
+		$this->db->or_like('xin_trainings.session', $training);
 		return $this->db->get()->result();
 	}
 	// Training detail, view single training by training ID.
@@ -211,7 +232,8 @@ class Trainings_model extends CI_Model{
 	}
 	// Get designations to show them in the dropdown list, 	and count them
 	public function get_designations(){
-		$this->db->select('COUNT(xin_employees.designation_id) as applied, 								xin_designations.designation_id,
+		$this->db->select('COUNT(if(xin_employees.training_status = "1", 1, NULL)) as applied,
+		 					xin_designations.designation_id,
 							xin_designations.designation_name,
 							xin_employees.designation_id');
 		$this->db->from('xin_employees');
@@ -510,6 +532,7 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id');
 		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id');
 		$this->db->where('training_attendance.training_id', 1);
+		$this->db->group_by('training_attendance.emp_id');
 		$report = $this->db->get();
 		echo $this->db->last_query();
 		return $report->result();
@@ -526,7 +549,7 @@ class Trainings_model extends CI_Model{
 		$this->db->from('xin_employees');
 		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
-		$this->db->where(array('xin_employees.designation_id' => $desig_id));
+		$this->db->where(array('xin_employees.designation_id' => $desig_id, 'xin_employees.training_status' => 1));
 		return $this->db->get()->result();
 	}
 }

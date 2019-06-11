@@ -82,12 +82,12 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="facilitator" class="form-control" required="" placeholder="Facilitator name...">
+							<input type="text" name="facilitator" class="form-control" required="" style="color: #aeafaf;" placeholder="Facilitator name...">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="target" class="form-control" required="" placeholder="Target group i.e, CHW, AS or FCM ...">
+							<input type="text" name="target" class="form-control" required="" style="color: #aeafaf;" placeholder="Target group i.e, CHW, AS or FCM ...">
 						</div>
 					</div>
 					<div class="col-lg-3">
@@ -114,7 +114,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="hall" class="form-control" required="" placeholder="Hall detail...">
+							<input type="text" name="hall" class="form-control" required="" style="color: #aeafaf;" placeholder="Hall detail...">
 						</div>
 					</div>
 					<div class="col-lg-6">
@@ -197,41 +197,42 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 // Get employees list on selecting project and designation.
-$(document).ready(function() { // call the function when the document gets ready.
-  $("#project").change(function() {
-    var displayResources = $("#results");
-    var project = $('#project').val();
-    displayResources.text("Select an option to fetch employees.");
-    $.ajax({
-      type: "POST",
-      url: "<?php echo base_url(); ?>trainings/training_employees/" + project,
-      // data: { project: project },
-      dataType: 'JSON',
-      success: function(result) {
-        console.log(result);
-        var serialNo = 1;
-        var output =
-          "<div class='tableMain'><table class='table'><thead><tr><th>Serial #</th><th>Employee</th><th>Training Type</th><th>Designation</th><th>Assign To Training</th></thead><tbody>"; // create table head.
-        for (var i = 0; i < result.length; i++) {
-          output +=
-            "<tr><td>"+ serialNo++ +"</td><td>" +
-            result[i].first_name + " " + result[i].last_name + // First & last name.
-            "</td><td>" +
-            result[i].name + "<td>" + result[i].designation_name +
-            "</td><td><input class='select_max' type='checkbox' name='employee[]' value='"+ result[i].employee_id +"> Mark as trainee" 
-            "</td></tr>";
-        }
-        output += "</tbody></table></div>"; // closing tags of tbody and table.
-        displayResources.html(output);
-        $("table").addClass("table"); // added a class and named it table.
-      }
-    });
-  });
-});
+// $(document).ready(function() { // call the function when the document gets ready.
+//   $("#project").change(function() {
+//     var displayResources = $("#results");
+//     var project = $('#project').val();
+//     displayResources.text("Select an option to fetch employees.");
+//     $.ajax({
+//       type: "POST",
+//       url: "<?php echo base_url(); ?>trainings/training_employees/" + project,
+//       // data: { project: project },
+//       dataType: 'JSON',
+//       success: function(result) {
+//         console.log(result);
+//         var serialNo = 1;
+//         var output =
+//           "<div class='tableMain'><table class='table'><thead><tr><th>Serial #</th><th>Employee</th><th>Training Type</th><th>Designation</th><th>Assign To Training</th></thead><tbody>"; // create table head.
+//         for (var i = 0; i < result.length; i++) {
+//           output +=
+//             "<tr><td>"+ serialNo++ +"</td><td>" +
+//             result[i].first_name + " " + result[i].last_name + // First & last name.
+//             "</td><td>" +
+//             result[i].name + "<td>" + result[i].designation_name +
+//             "</td><td><input class='select_max' type='checkbox' name='employee[]' value='"+ result[i].employee_id +"> Mark as trainee" 
+//             "</td></tr>";
+//         }
+//         output += "</tbody></table></div>"; // closing tags of tbody and table.
+//         displayResources.html(output);
+//         $("table").addClass("table"); // added a class and named it table.
+//       }
+//     });
+//   });
+// });
+// Comment this out for now, will un-comment this later if needed !
 
 // Put limit on the checkboxes for employees.
 $(document).ready(function(){
-	var limit = 5;
+	var limit = 25;
 	$('#results2').on('change', '.select_max', function(evt){
 		var counCheckbox = $(":checkbox:checked").length;
 		var desg = parseInt($(this).data('desg'));
@@ -262,7 +263,7 @@ $(document).ready(function(){
 });
 // Load data by clicking on the links in the sidebar with Ajax request.
 var counter = 1; // variable to print the serial number.
-var checkedLimit = 5; // set limit for the already checked checkboxes.
+var checkedLimit = 25; // set limit for the already checked checkboxes.
 var checked = 'checked'; // declare a variable to check if the checkbox is checked.
 total = [];
 var checkboxCounter = 0;

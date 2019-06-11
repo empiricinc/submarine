@@ -25,9 +25,7 @@
 						<div class="col-md-8">
 							<div class="tabelHeading">
 								<h3>induction trainings 
-									<small>trainings to be held <br>
-										click the training type to view training detail
-									</small>
+									<small>trainings to be held</small>
 								</h3>
 							</div>
 						</div>
@@ -120,32 +118,32 @@
 										<thead>
 											<tr>
 												<th>serial</th>
-												<th>employee</th>
 												<th>training type</th>
 												<th>trainer</th>
-												<th>starting date</th>
+												<th>starts on</th>
+												<th>ends on</th>
 											</tr>
 										</thead>
 										<tbody>
-											
+											<?php $sno =1; foreach($refreshers as $refresh): ?>
 											<tr>
 												<td>
-													
+													<?php echo $sno++; ?>
 												</td>
 												<td>
-													
+													<?php echo $refresh->type; ?>
 												</td>
 												<td>
-													
-													</a>
+													<?php echo $refresh->first_name." ".$refresh->last_name; ?>
 												</td>
 												<td>
-													
+													<?php echo date('M d, Y', strtotime($refresh->start_date)); ?>
 												</td>
 												<td>
-													
+													<?php echo date('M d, Y', strtotime($refresh->end_date)); ?>
 												</td>
 											</tr>
+											<?php endforeach; ?>
 										</tbody>
 									</table>
 								</div>
@@ -234,7 +232,7 @@
 											<?= $completed->location; ?>
 										</td>
 										<td>
-											<?= date('Y', strtotime($completed->session)); ?>
+											<?= $completed->session; ?>
 										</td>
 										<td>
 											<?= $completed->attendees; ?>
