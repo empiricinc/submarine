@@ -109,7 +109,7 @@
 											<td><?php echo $result->name; ?></td>
 											<td><?php echo $result->designation_name; ?></td>
 											<td><?php echo $result->job_title; ?></td>
-											<td>CTC-2019-00<?php echo $result->applicant_id; ?></td>
+											<td>CTC-2019-0<?php echo $result->applicant_id; ?></td>
 											<td><?php echo date('M d, Y', strtotime($result->exam_date)); ?></td>
 											<td><?php echo $result->marks; ?></td>
 											<td>

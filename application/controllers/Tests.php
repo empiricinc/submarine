@@ -279,7 +279,7 @@ class Tests extends MY_Controller{
 			);
 			$this->Tests_model->submit_paper($data);
 		}
-		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! click the buttons below to perform those actions !');
+		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will informed about the result shortly !');
 		redirect('tests/test_submitted');
 	}
 	// Redirect the user to the test submitted page, where he can check his/her result, marks, failed/passed and more...

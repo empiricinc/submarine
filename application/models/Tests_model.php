@@ -121,9 +121,9 @@ class tests_model extends CI_Model{
 		$this->db->where(array('ex_answers.status' => 1, 'applicant_id' => $appli_id));
 		$this->db->or_where('ex_applicants.exam_date >=', $date_from);
 		$this->db->where('ex_applicants.exam_date <=', $date_to);
-		$this->db->or_where('xin_designations.designation_id', $designation);
+		$this->db->or_where('ex_questions.designation_id', $designation);
 		$this->db->or_where('xin_job_applications.fullname', $name);
-		$this->db->or_where('ex_questions.project_id', $project);
+		$this->db->or_where(array('ex_questions.project_id' => $project));
 		$this->db->or_where('xin_job_applications.job_id', $job_id);
 		$this->db->group_by('ex_applicants.applicant_id');
 		$query = $this->db->get();
@@ -177,7 +177,7 @@ class tests_model extends CI_Model{
 		$this->db->where('xin_companies.company_id', $proj_id);
 		return $this->db->get()->result();
 	}
-	// Select project from the list, chagne in designations will occur.
+	// Select project from the list, change in designations will occur.
 	public function project_questions($project_id){
 		$this->db->select('ex_questions.id,
 							ex_questions.question,

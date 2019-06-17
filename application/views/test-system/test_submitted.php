@@ -35,7 +35,7 @@
 			<div class="mainInputBg">
 				<div class="col-lg-12">
 					<div class="tabelHeading">
-						<h3 class="text-center" style="color: lightgreen;">Congratulations! <span>You've successfully attempted the exam, we'll soon be in touch !</span></h3>
+						<h3 class="text-center" style="color: lightgreen;">Congratulations! <span>You've successfully taken the exam, we'll soon be in touch !</span></h3>
 						<div class="solidLine"></div>
 					</div>
 				</div>

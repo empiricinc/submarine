@@ -46,7 +46,7 @@
 							<select name="behavior" id="behavior" class="form-control" style="color: #aeafaf;">
 								<option value="">Select Behavior</option>
 								<option value="local">Local</option>
-								<option value="out">Out of City</option>
+								<option value="out">Non Local</option>
 							</select>
 						</div>
 					</div>

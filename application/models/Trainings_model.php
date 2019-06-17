@@ -13,7 +13,7 @@ class Trainings_model extends CI_Model{
 	public function count_trainings(){
 		return $this->db->count_all('xin_trainings');
 	}
-	// Get data from database and list them on the dashboard.
+	// Get data from database and list them on the dashboard (Induction trainings only)
 	public function get_trainings($limit = '', $offset = ''){
 		$this->db->select('xin_trainings.*,
 							xin_trainers.trainer_id,
@@ -30,12 +30,35 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
 		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
 		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
-		// $this->db->join('xin_employees', 'xin_trainings.trainee_employees = xin_employees.employee_id');
-		// $this->db->where(array('xin_trainings.trg_type' => 1));
+		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
-	// Refreshers' training
+	// All trainings, both Induction and Refreshers.
+	public function get_all_trainings($limit = '', $offset = ''){
+		$this->db->select('xin_trainings.*,
+							xin_trainers.trainer_id,
+							xin_trainers.first_name,
+							xin_trainers.last_name,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							xin_training_locations.location_id,
+							xin_training_locations.location,
+							provinces.id,
+							provinces.name as prov_name,
+							training_attendance.training_id');
+		$this->db->from('xin_trainings');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('training_attendance', 'xin_trainings.trg_id = training_attendance.training_id', 'left');
+		$this->db->group_by('xin_trainings.trg_id');
+		$this->db->order_by('xin_trainings.start_date', 'ASC');
+		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
+	}
+	// Get trainings to display on the dashboard (Refresher trainings only)
 	public function refresher_training(){
 		$this->db->select('xin_trainings.*,
 							xin_trainers.trainer_id,
@@ -49,8 +72,36 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
 		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
 		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
-		$this->db->where(array('xin_trainings.trg_type' => 2));
+		$this->db->where(array('xin_trainings.trg_type' => 2, 'xin_trainings.status' => 2));
 		$this->db->limit(10);
+		return $this->db->get()->result();
+	}
+	// Count refresher trainings
+	public function count_refresher(){
+		$this->db->where('trg_type', 2);
+		return $this->db->count_all_results('xin_trainings');
+	}
+	// All refresher trainings.
+	public function all_refresher_trainings($limit = '', $offset = ''){
+		$this->db->select('xin_trainings.*,
+							xin_trainers.trainer_id,
+							xin_trainers.first_name,
+							xin_trainers.last_name,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							xin_training_locations.location_id,
+							xin_training_locations.location,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							provinces.id,
+							provinces.name as prov_name');
+		$this->db->from('xin_trainings');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->where(array('xin_trainings.trg_type' => 2));
+		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
 	// Search trainigs.
@@ -232,7 +283,7 @@ class Trainings_model extends CI_Model{
 	}
 	// Get designations to show them in the dropdown list, 	and count them
 	public function get_designations(){
-		$this->db->select('COUNT(if(xin_employees.training_status = "1", 1, NULL)) as applied,
+		$this->db->select('COUNT(if(xin_employees.status = "1", 1, NULL)) as applied,
 		 					xin_designations.designation_id,
 							xin_designations.designation_name,
 							xin_employees.designation_id');
@@ -481,7 +532,7 @@ class Trainings_model extends CI_Model{
 		$this->db->where('xin_trainings.project = training_attendance.project_id');
 		$this->db->group_by('training_attendance.training_id');
 		$this->db->where('xin_trainings.trg_id = training_attendance.training_id');
-		$this->db->order_by('training_attendance.attendance_id', 'DESC');
+		$this->db->order_by('training_attendance.attendance_date', 'DESC');
 		$this->db->limit(10);
 		return $this->db->get()->result();
 	}
@@ -537,8 +588,8 @@ class Trainings_model extends CI_Model{
 		echo $this->db->last_query();
 		return $report->result();
 	}
-	// Get employees by designation
-	public function get_designation_employees($desig_id){
+	// Get employees by designation, induction training.
+	public function get_designation_employees($desig_id, $status){
 		$this->db->select('xin_employees.employee_id,
 							xin_employees.first_name,
 							xin_employees.last_name,
@@ -549,7 +600,10 @@ class Trainings_model extends CI_Model{
 		$this->db->from('xin_employees');
 		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
-		$this->db->where(array('xin_employees.designation_id' => $desig_id, 'xin_employees.training_status' => 1));
+		if($desig_id != 0){
+			$this->db->where('xin_employees.designation_id', $desig_id);
+		}
+		$this->db->where('xin_employees.status', $status);
 		return $this->db->get()->result();
 	}
 }

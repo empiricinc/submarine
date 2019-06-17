@@ -136,7 +136,7 @@
 					<div class="row">
 						<div class="col-lg-3">
 							<div class="panel panel-default">
-								<div class="panel-body">
+								<div class="panel-body" id="designationsBox">
 									<div class="row">
 										<?php foreach($designations as $des): ?>
 										<div class="col-md-9">
@@ -144,7 +144,6 @@
 										</div>
 										<div class="col-md-3" id="total_<?= $des->designation_id; ?>">
 											<?= $des->applied; ?>
-											
 										</div>
 										<?php endforeach; ?>
 									</div>
@@ -177,7 +176,7 @@
 							<small>Selected ...</small>
 							<div class="panel panel-default">
 								<div class="panel-body">
-									<strong><span id="countcheckboxes"></span></strong>
+									<span id="countcheckboxes"></span>
 								</div>
 							</div>
 						</div>
@@ -261,6 +260,8 @@ $(document).ready(function(){
 		$('#total_'+desg).text(new_val);
 	});
 });
+
+var STATUS = 1;
 // Load data by clicking on the links in the sidebar with Ajax request.
 var counter = 1; // variable to print the serial number.
 var checkedLimit = 25; // set limit for the already checked checkboxes.
@@ -276,7 +277,7 @@ $(document).ready(function(){
 		var data = $(this).attr('id');
 		$.ajax({
 			type: 'get',
-			url: '<?php echo base_url() ?>trainings/get_count_desig/' + data,
+			url: '<?php echo base_url() ?>trainings/get_count_desig/' + data + '/'+STATUS,
 			dataType: 'JSON',
 			success: function(res){
 				console.log(res);
@@ -306,6 +307,33 @@ $(document).ready(function(){
         		$('#countcheckboxes').text(checkboxCounter);
         		$('#total_'+data).text(total-desg_checked);
         		
+			}
+		});
+	});
+});
+$(document).ready(function(){
+	$('#trg_type').on('change', function(){
+		var d_id = $(this).val();
+		
+		if($.trim($('#trg_type option:selected').text()) == 'Induction')
+			STATUS = 1;
+		else if($.trim($('#trg_type option:selected').text()) == 'Refresher')
+			STATUS = 2;
+		else
+			STATUS = 3;
+
+		$.ajax({
+			type: 'get',
+			url: '<?php echo base_url() ?>trainings/get_count_desig/0/'+STATUS,
+			dataType: 'JSON',
+			success: function(resp){
+				if(resp == ''){
+					alert("There are currently NO employees for Induction training !");
+					console.log(resp);
+				}else{
+					alert("You're having employees who are available for Refresher training, you can select them from the list !");
+					console.log(resp);
+				}
 			}
 		});
 	});

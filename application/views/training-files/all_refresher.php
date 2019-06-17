@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed!');
-/* Filename: trainings_list.php
+/* Filename: all_refresher.php
 *  Author: Saddam
-*  Filepath: views / training-files / trainings_list.php
+*  Filepath: views / training-files / all_refresher.php
 */
 ?>
 <?php if(empty($results)): ?>
@@ -14,19 +14,16 @@
 						<div class="tabelHeading">
 							<?php if(empty($training_detail)): ?>
 							<h3>
-									all trainings
+									all refresher trainings
 									<span>
-										(list of trainings to be held & done) 
+										(list of refresher trainings to be held & done) 
 									</span> |
 									<small>
 										<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
 									</small><br>
 									<small>
-										<span class="label label-danger">
-											nothing done yet, fresh recruits.
-										</span> &nbsp;
 										<span class="label label-warning">
-											induction done.
+											no refresher.
 										</span> &nbsp;
 										<span class="label label-success">
 											refresher done - once.
@@ -82,11 +79,7 @@
 										foreach($list_trainings as $training): ?>
 										<tr>
 											<td>
-												<?php if($training->training_id != $training->trg_id): ?>
-													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>"><?=$training->type; ?></a>
-												<?php else: ?>
-													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>"><?=$training->type; ?></a>
-												<?php endif; ?>
+												<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>"><?=$training->type; ?></a>
 											</td>
 											<td>
 												<?= $training->prov_name; ?>
@@ -113,26 +106,19 @@
 												<?=$training->hall_detail; ?>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/activity_report/<?php echo $training->trg_id; ?>">
-													<span class="label label-warning">
-														Acty Rpt
-													</span>&nbsp;
-												</a>
-												<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
-													<span class="label label-success">
-														Attendance
-													</span> &nbsp;
-												</a>
-												<a href="">
-													<span class="label label-success">
-														Trg Mtrl
-													</span> &nbsp;
-												</a>
-												<a href="">
-													<span class="label label-primary">
-														Comp
-													</span>
-												</a>
+												<?php if($training->status == 2): ?>
+													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>">
+														<span class="label label-warning">Complete</span>
+													</a>
+												<?php elseif($training->status == 3): ?>
+													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $training->trg_id; ?>">
+														<span class="label label-success">Complete</span>
+													</a>
+												<?php elseif($training->status == 4): ?>
+													<a href="<?php echo base_url(); ?>trainings/expenses/<?php echo $training->trg_id; ?>">
+														<span class="label label-primary">Completed</span>
+													</a>
+												<?php endif; ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
@@ -205,6 +191,8 @@
 											<th>ends on</th>
 											<th>venue</th>
 											<th>hall detail</th>
+											<th>session</th>
+											<th>approval type</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -233,6 +221,12 @@
 											</td>
 											<td>
 												<?= $result->hall_detail; ?>
+											</td>
+											<td>
+												<?= $result->session; ?>
+											</td>
+											<td>
+												<?= $result->approval_type; ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>

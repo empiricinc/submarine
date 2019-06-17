@@ -15,7 +15,7 @@
 								training expenses detail
 								<span>
 									(list of employees participated in the training and expenses detail) 
-								</span>
+								</span> | <small><a href="javascript:history.go(-1)">Go Back &laquo;</a></small>
 							</h3>
 						</div>
 					</div>
@@ -23,13 +23,41 @@
 				<div class="col-lg-6">
 					<div class="panel panel-warning">
 						<div class="panel-heading">
-							<h3 class="text-right">Training Information</h3>
+						<!-- Retrieved data directy from Model. -->
+						<?php $data = $this->Trainings_model->training_detail($this->uri->segment(3)); ?>
+							<div class="row">
+								<div class="col-lg-6">
+									<h3>Training Information</h3>
+								</div>
+								<div class="col-lg-6 text-right">
+									<small>
+									Started: 
+									<strong>
+										<?php echo date('M d, Y', strtotime($data['start_date'])); ?>
+									</strong>
+									</small><br>
+									<small>
+									Ended: 
+									<strong>
+										<?php echo date('M d, Y', strtotime($data['end_date'])); ?>
+									</strong>
+									</small><br>
+									<small>
+									Total Days: 
+									<strong>
+										<?php $date1 = date_create(date('Y-m-d', strtotime($data['start_date'])));
+											  $date2 = date_create(date('Y-m-d', strtotime($data['end_date'])));
+											  $diff = date_diff($date1, $date2);
+											  echo $diff->format("%a") + 1;
+										?>
+									</strong>
+									</small>
+								</div>
+							</div>
 						</div>
 						<div class="panel-body">
 							<div class="row">
 								<div class="col-md-6">
-									<!-- Retrieved data directy from Model. -->
-									<?php $data = $this->Trainings_model->training_detail($this->uri->segment(3)); ?>
 									<strong>Training Type: </strong>
 										<?php echo $data['type']; ?><br>
 									<strong>Project Name: </strong>
@@ -46,7 +74,7 @@
 										<?php $date1 = date_create(date('Y-m-d', strtotime($data['start_date'])));
 											  $date2 = date_create(date('Y-m-d', strtotime($data['end_date'])));
 											  $diff = date_diff($date1, $date2);
-											  echo $diff->format("%a days");
+											  echo $diff->format("%a") + 1;
 										?> 
 								</div>
 							</div>
@@ -123,7 +151,7 @@
 											</td>
 											<td>
 												<?php if($expense->status == 'Absent'):
-													echo "..."; else:
+													echo $expense->travel - $expense->travel; else:
 												echo $expense->dsa + $expense->travel + $expense->stay_allowance;
 												endif; 
 												?>

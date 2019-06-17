@@ -104,7 +104,7 @@
 						</div>
 						<div class="col-md-3">
 							<div class="tabelTopBtn">
-								<a class="btn" href="<?php echo base_url('tests/total_trainings'); ?>">
+								<a class="btn" href="<?php echo base_url('trainings/all_refresher'); ?>">
 									View All
 								</a>
 							</div>
@@ -131,10 +131,11 @@
 													<?php echo $sno++; ?>
 												</td>
 												<td>
-													<?php echo $refresh->type; ?>
+													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $refresh->trg_id; ?>">
+													<?php echo $refresh->type; ?></a>
 												</td>
 												<td>
-													<?php echo $refresh->first_name." ".$refresh->last_name; ?>
+													<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $refresh->trainer_one; ?>"><?=$refresh->first_name." ".$refresh->last_name; ?></a>
 												</td>
 												<td>
 													<?php echo date('M d, Y', strtotime($refresh->start_date)); ?>
@@ -178,7 +179,7 @@
 				</div>
 				<div class="col-md-4">
 					<div class="tabelTopBtn">
-						<a class="btn" href="<?php echo base_url('tests/all_completed'); ?>">
+						<a class="btn" href="<?php echo base_url('trainings/all_completed'); ?>">
 							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
 							View All
 						</a>
@@ -200,7 +201,7 @@
 										<th>started on</th>
 										<th>ended on</th>
 										<th>venue</th>
-										<th>session</th>
+										<th>sessions</th>
 										<th>participants</th>
 									</tr>
 								</thead>

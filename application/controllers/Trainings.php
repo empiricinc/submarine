@@ -87,7 +87,13 @@ class Trainings extends CI_Controller{
 		$this->Trainings_model->create_training($data);
 		for($i = 0; $i < count($tEmployees); $i++){ 
 			$this->db->where('user_id', $tEmployees[$i]);
-			$this->db->update('xin_employees', array('training_status' => '2'));
+			$status = $this->db->select('status')->from('xin_employees')->get()->row();
+			if($status->status == 1)
+			$this->db->update('xin_employees', array('status' => '2'));
+			elseif($status->status == 2)
+			$this->db->update('xin_employees', array('status' => '3'));
+			else
+			$this->db->update('xin_employees', array('status' => '2'));
 		} // Update training_status for employees when added to the training.
 
 		$this->session->set_flashdata('success', '<strong>Great Job! </strong> Your data has been added successfully. Now you can add more...');
@@ -114,7 +120,7 @@ class Trainings extends CI_Controller{
 	    $config['next_link'] = 'next &raquo;';
 	    $config["next_tag_open"] = '<li>';
 	    $config["next_tag_close"] = '</li>';
-	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_link"] = "&laquo; prev";
 	    $config["prev_tag_open"] = "<li>";
 	    $config["prev_tag_close"] = "</li>";
 	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
@@ -124,8 +130,42 @@ class Trainings extends CI_Controller{
 		$this->pagination->initialize($config);
 		$data['title'] = 'Trainings | Trainings List';
 		$data['content'] = 'training-files/trainings_list';
-		$data['list_trainings'] = $this->Trainings_model->get_trainings($limit, $offset);
+		$data['list_trainings'] = $this->Trainings_model->get_all_trainings($limit, $offset);
 		$this->load->view('training-files/components/template', $data);
+	}
+	// All refresher trainings' list.
+	public function all_refresher($offset = null){
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('trainings/all_refresher');
+		$config['total_rows'] = $this->Trainings_model->count_refresher();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['title'] = 'Trainings | All Refreshers';
+		$data['content'] = 'training-files/all_refresher';
+		$data['list_trainings'] = $this->Trainings_model->all_refresher_trainings($limit, $offset); // Load the function and pass the vars to create pagination.
+		$this->load->view('training-files/components/template', $data); // Load view
 	}
 	// Search trainings.
 	public function training_search(){
@@ -178,7 +218,7 @@ class Trainings extends CI_Controller{
 		$data['designations'] = $this->Trainings_model->get_designations();
 		$this->load->view('training-files/components/template', $data);
 	}
-	// Add trainer into database.
+	// Add new trainers, it's not important by the time.
 	public function add_new_trainer(){
 		$data = array(
 					'first_name' => $this->input->post('first_name'),
@@ -464,6 +504,16 @@ class Trainings extends CI_Controller{
 					);
 			$this->Trainings_model->store_attendance($data); // Send the data to the DB.
 		}
+			$status = $this->db->select('status')->from('xin_trainings');
+			$this->db->where('trg_id', $training_id[0]);
+			if($status == 1)
+				$this->db->update('xin_trainings', array('status' => '2'));
+			elseif($status == 2)
+				$this->db->update('xin_trainings', array('status' => '3'));
+			elseif($status == 3)
+				$this->db->update('xin_trainings', array('status' => '4'));
+			else
+				$this->db->update('xin_trainings', array('status' => '2'));
 		// Print a success message on the screen on successful submission of data.
 		$this->session->set_flashdata('success', 'Attendance submitted successfully!');
 		return redirect('Trainings/attendance_view');
@@ -481,8 +531,8 @@ class Trainings extends CI_Controller{
 		var_dump($data);
 	}
 	// Get the data you wish to show on the page.
-	public function get_count_desig($desig_id = ''){
-		$data = $this->Trainings_model->get_designation_employees($desig_id);
+	public function get_count_desig($desig_id = '', $status = ''){
+		$data = $this->Trainings_model->get_designation_employees($desig_id, $status);
 		echo json_encode($data);
 	}
 }
