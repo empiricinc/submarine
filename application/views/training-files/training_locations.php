@@ -35,13 +35,18 @@
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<select name="city" id="city" class="form-control" style="color: #aeafaf;">
-								<option value="">Select City</option>
+								<option value="">Select District</option>
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<input type="text" name="venue" id="venue" class="form-control" placeholder="Location name ... ">
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<textarea name="description" id="description" class="form-control" rows="2" placeholder="Description..."></textarea>
 						</div>
 					</div>
 					<div class="col-lg-12">
@@ -59,8 +64,9 @@
 				<thead>
 					<tr>
 						<th>Province</th>
-						<th>City</th>
+						<th>District</th>
 						<th>Location/Venue</th>
+						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -69,6 +75,7 @@
 						<td><?php echo $location->name; ?></td>
 						<td><?php echo $location->city_name; ?></td>
 						<td><?php echo $location->location; ?></td>
+						<td><?php echo $location->description; ?></td>
 					</tr>
 					<?php endforeach; ?>
 				</tbody>
@@ -94,7 +101,8 @@
 			var location = $('#location').val();
 			var city = $('#city').val();
 			var venue = $('#venue').val();
-			if(location == '' || city== '' || venue == ''){
+			var description = $('#description').val();
+			if(location == '' || city== '' || venue == '' || description == ''){
 				alert('Please fill up the required fields');
 				return false;
 			}else{
@@ -102,12 +110,13 @@
 			$.ajax({
 				type: "post",
 				url: "<?php echo base_url('trainings/create_locations'); ?>", // URL to submit data to DB.
-				data: {location: location, city: city, venue: venue},
+				data: {location: location, city: city, venue: venue, description: description},
 				dataType: 'json', // dataType should be 'json' or it won't work.
 				cache: false,
 				success: function(res){ // Alert something to let the user know something happened.
 					alert('Location has been added successfully !');
 					$('#venue').val(''); // Clear the textarea to add new data.
+					$('#description').val('');
 					
 					console.log(res); // Log 'true' to the console as well.
 				}

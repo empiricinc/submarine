@@ -69,6 +69,7 @@ class Trainings extends CI_Controller{
 		}
 		$data = array(
 					'location' => $this->input->post('location'),
+					'district' => $this->input->post('city'),
 					'project' => $this->input->post('project'),
 					'trg_type' => $this->input->post('trg_type'),
 					'trainer_one' => $this->input->post('trainer_1'),
@@ -132,6 +133,11 @@ class Trainings extends CI_Controller{
 		$data['content'] = 'training-files/trainings_list';
 		$data['list_trainings'] = $this->Trainings_model->get_all_trainings($limit, $offset);
 		$this->load->view('training-files/components/template', $data);
+	}
+	// Get by training's status.
+	public function get_by_trg_status($status = ''){
+		$data = $this->Trainings_model->get_by_status($status);
+		echo json_encode($data);
 	}
 	// All refresher trainings' list.
 	public function all_refresher($offset = null){
@@ -205,10 +211,37 @@ class Trainings extends CI_Controller{
 		$this->load->view('training-files/components/template', $data);
 	}
 	// List of all trainers.
-	public function trainers(){
+	public function trainers($offset = NULL){
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('trainings/trainers');
+		$config['total_rows'] = $this->Trainings_model->count_trainers();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
 		$data['title'] = 'Trainings | Trainers List';
 		$data['content'] = 'training-files/trainers_list';
-		$data['trainers_list'] = $this->Trainings_model->get_trainers();
+		$data['trainers_list'] = $this->Trainings_model->get_all_trainers($limit, $offset);
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Add new trainers.
@@ -229,7 +262,20 @@ class Trainings extends CI_Controller{
 					'address' => $this->input->post('address'),
 					'created_at' => $this->input->post('created_at')
 					);
-		var_dump($data);
+		$data = $this->Trainings_model->add_trainer($data);
+		echo json_encode($data);
+	}
+	// Activate or Deactivate a trainer.
+	public function trainer_status($trainer_id){
+		$tr_status = $this->db->select('status')->get_where('xin_trainers', array('trainer_id' => $trainer_id))->row();
+		if($tr_status->status == '1'){
+			$this->db->where('trainer_id', $trainer_id);
+			$this->db->update('xin_trainers', array('status' => '0'));
+		}else{
+			$this->db->where('trainer_id', $trainer_id);
+			$this->db->update('xin_trainers', array('status' => '1'));
+		}
+		redirect('trainings/trainers');
 	}
 	// Search trainers.
 	public function trainer_search(){
@@ -279,6 +325,16 @@ class Trainings extends CI_Controller{
 		$prov_list = $this->Trainings_model->provinces_data($id);
 		echo json_encode($prov_list);
 	}
+	// Get tehsil name by city id
+	public function get_districts($id){
+		$dist_list = $this->Trainings_model->districts_data($id);
+		echo json_encode($dist_list);
+	}
+	// Get union coucil name by tehsil id
+	public function get_tehsils($id){
+		$teh_list = $this->Trainings_model->tehsils_data($id);
+		echo json_encode($teh_list);
+	}
 	// Training locations setup.
 	public function locations($offset = NULL){
 		$limit = 5;
@@ -319,7 +375,8 @@ class Trainings extends CI_Controller{
 		$data = array(
 			'province' => $this->input->post('location'),
 			'city' => $this->input->post('city'),
-			'location' => $this->input->post('venue')
+			'location' => $this->input->post('venue'),
+			'description' => $this->input->post('description')
 		);
 		$save = $this->Trainings_model->add_locations($data);
 		echo json_encode($save);
@@ -419,6 +476,20 @@ class Trainings extends CI_Controller{
 			);
 		$save_data = $this->Trainings_model->create_stay_hotels($data);
 		echo json_encode($save_data);
+	}
+	// Store the updated hotel into the database.
+	public function modify_hotel(){
+		$hotel_id = $this->input->post('hotel_id');
+		$data = array(
+			'hotel_name' => $this->input->post('hotel_name')
+		);
+		$this->Trainings_model->update_hotel($hotel_id, $data);
+		return redirect('trainings/stay_hotels');
+	}
+	// Delete a hotel from database.
+	public function delete_hotel($hotel_id){
+		$this->Trainings_model->delete_hotel($hotel_id);
+		return redirect('trainings/stay_hotels');
 	}
 	// Add hotel amenities.
 	public function add_amenities(){
@@ -535,6 +606,166 @@ class Trainings extends CI_Controller{
 		$data = $this->Trainings_model->get_designation_employees($desig_id, $status);
 		echo json_encode($data);
 	}
+	// Training activity reporting.
+	public function activity_reporting($trg_id){
+		$data['title'] = 'Trainings | Activity Reporting';
+		$data['content'] = 'training-files/activity_report';
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Save activity report to database.
+	public function store_activity_report(){
+		$checks = ''; // make a variable and cast an array to it.
+		if(isset($_POST['checklist'])){
+			$listChecked = $_POST['checklist'];
+			for($i = 1; $i <= count($listChecked); $i++){
+				$checks .= $listChecked[$i]. ',';
+			}
+		}
+		$data = array(
+			'trg_id' => $this->input->post('trg_id'),
+			'trg_type' => $this->input->post('res_trg'),
+			'staff_travel' => $this->input->post('staff'),
+			'rooms' => $this->input->post('rooms'),
+			'budget_amount' => $this->input->post('budget'),
+			'actual_expenses' => $this->input->post('expenses'),
+			'checklist' => rtrim($checks, ','),
+			'chip_rep' => $this->input->post('chip_rep'),
+			'unicef_rep' => $this->input->post('unicef_rep')
+		);
+		$this->Trainings_model->trg_activity_reporting($data);
+		$this->session->set_flashdata('success', '<strong>Hooray! </strong>Activity report has been saved, you can view it at any time you want!');
+		return redirect('Trainings/all_trainings');
+	}
+	// Get activity reports.
+	public function get_activity_reporting($activity_id = ''){
+		$data['reports'] = $employees = $this->Trainings_model->get_activity_report($activity_id);
+		$trainees = explode(',', $employees['trainee_employees']);
+		// $checklist = explode(',', $employees['checklist']);
+		$trainee_names = '';
+		// $chklist = '';
+		$male = 0;
+		$female = 0;
+		for ($j = 0; $j < count($trainees); $j++ ) {
+		 	$this->db->select('xin_employees.employee_id,
+		 						xin_employees.gender,
+		 						xin_employees.first_name,
+		 						xin_employees.last_name,
+		 						xin_employees.designation_id,
+		 						xin_employees.company_id,
+		 						xin_designations.designation_id,
+		 						xin_designations.designation_name,
+		 						xin_companies.company_id,
+		 						xin_companies.name,
+								xin_trainings.trg_id');
+			$this->db->join('xin_trainings', 'xin_employees.employee_id = xin_trainings.trainee_employees', 'left');
+			$this->db->join('xin_activity_reporting', 'xin_trainings.trg_id = xin_activity_reporting.trg_id', 'left');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
+			$this->db->join('xin_companies', 'xin_employees.company_id = xin_employees.company_id', 'left');
+			$rows = $this->db->get_where('xin_employees', array('xin_employees.employee_id' => $trainees[$j]))->row();
+
+			if(@$rows->gender == "Male"){ $male++; }
+			elseif(@$rows->gender == "Female"){ $female++; }
+			@$trainee_names .= "<p>".$rows->designation_name."</p>";
+		}
+		// for($k = 0; $k < count($checklist); $k++){
+		// 	$this->db->select('id, checklist_text');
+		// 	$res = $this->db->get_where('activity_checklist', array('id' => $checklist[$k]))->row();
+		// 	@$chklist .= "<p>".$res->checklist_text.".</p>";
+		// }
+		$data['male'] = $male;
+		$data['female'] = $female;
+		$data['trainee_names'] = $trainee_names;
+		$data['title'] = 'Trainings | Activity Reporting';
+		$data['content'] = 'training-files/activity_reporting';
+
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Events calendar, tentative six months trainings calendar. (Setup form)
+	public function events_calendar($offset = NULL){
+		$limit = 1;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('trainings/events_calendar');
+		$config['total_rows'] = $this->Trainings_model->count_events();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 5;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['title'] = 'Trainings | Events Calendar';
+		$data['content'] = 'training-files/events_calendar';
+		$data['projects'] = $this->Trainings_model->get_projects();
+		$data['training_types'] = $this->Trainings_model->get_training_types();
+		$data['locations'] = $this->Trainings_model->get_locations();
+		$data['designations'] = $this->Trainings_model->get_designations();
+		$data['events_list'] = $this->Trainings_model->get_events($limit, $offset);
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Save events on the database.
+	public function create_calendar(){
+		$data = array(
+			'title'	   => $this->input->post('title'),
+			'province' => $this->input->post('province'),
+			'district' => $this->input->post('district'),
+			'project'  => $this->input->post('project'),
+			'designation' => $this->input->post('designation'),
+			'trg_type' => $this->input->post('trg_type'),
+			'start_date' => $this->input->post('start_date'),
+			'end_date' => $this->input->post('end_date')
+		);
+		$this->Trainings_model->store_calendar($data);
+		$this->session->set_flashdata('success', '<strong>Hooray !</strong> Calendar has been added successfully, now you can view it at any time !');
+		return redirect('trainings/events_calendar');
+	}
+	// Get calendar.
+	public function get_calendar()
+    {
+        $data = $this->db->get("events_calendar")->result();
+        foreach ($data as $key => $value) {
+            $data['data'][$key]['title'] = $value->title;
+            $data['data'][$key]['province'] = $value->province;
+            $data['data'][$key]['district'] = $value->district;
+            $data['data'][$key]['project'] = $value->project;
+            $data['data'][$key]['designation'] = $value->designation;
+            $data['data'][$key]['trg_type'] = $value->trg_type;
+            $data['data'][$key]['start'] = $value->start_date;
+            $data['data'][$key]['end'] = $value->end_date;
+            $data['data'][$key]['backgroundColor'] = "#00a65a";
+            $data['data'][$key]['url'] = base_url('trainings/event_detail/').$value->event_id;
+        }
+        $data['title'] = 'Trainings | Events Calendar';
+        $data['content'] = 'training-files/events_calendar_view';
+        $this->load->view('training-files/components/template', $data);
+    }
+    // Delete an event.
+    public function delete_event($event_id){
+    	$this->Trainings_model->delete_event($event_id);
+    	redirect('trainings/get_calendar');
+    }
+    // Event detail.
+    public function event_detail($event_id){
+    	$data['title'] = 'Trainings | Event Detail';
+    	$data['content'] = 'training-files/events_calendar_view';
+    	$data['event_detail'] = $this->Trainings_model->detail_event($event_id);
+    	$this->load->view('training-files/components/template', $data);
+    }
 }
 
 ?>

@@ -18,7 +18,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-4 col-lg-offset-4">
 						<div class="tableMain">
 							<div class="table-responsive">
 								<table class="table">
@@ -36,17 +36,19 @@
 													<?php echo $names[$i]->first_name . " " . $names[$i]->last_name; ?>
 												</td>
 												<td>
-													<select name="status[]" class="form-control" style="color: #aeafaf;">
-														<option value="">
-															Select Status
-														</option>
-														<option value="Present">
-															Present
-														</option>
-														<option value="Absent">
-															Absent
-														</option>
-													</select>
+													<div class="inputFormMain">
+														<select name="status[]" class="form-control input-sm" style="color: #aeafaf;">
+															<option value="">
+																Select Status
+															</option>
+															<option value="Present">
+																Present
+															</option>
+															<option value="Absent">
+																Absent
+															</option>
+														</select>
+													</div>
 													<input type="hidden" name="project[]" value="<?= $trainee_employees->project; ?>">
 													<input type="hidden" name="trg_id[]" value="<?= $trainee_employees->trg_id; ?>">
 													<input type="hidden" name="employee_id[]" value="<?= $names[$i]->employee_id; ?>">

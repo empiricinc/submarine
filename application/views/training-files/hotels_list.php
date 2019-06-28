@@ -47,8 +47,9 @@
 										<tr <?php if(!empty($hotel_detail)): ?> style="display: none;" <?php endif; ?>>
 											<th>hotel name</th>
 											<th>province</th>
-											<th>city</th>
-											<th>amenities & prices</th>
+											<th>district</th>
+											<th>actions | add amenities & prices</th>
+											<th>more actions | edit | delete</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -60,10 +61,18 @@
 											<td><?=$hotel->city_name; ?></td>
 											<td>
 												<div class="submitBtn">
-													<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>">Amenities</a>
-													<a href="" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit">Prices</a>
-													<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit">View Prices</a>
+													<a href="" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit"><i class="fa fa-plus"></i> Room Charges</a>
+													<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>"><i class="fa fa-plus"></i> Amenities</a>
+													<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit"><i class="fa fa-eye"></i> View Prices</a>
 												</div>
+											</td>
+											<td>
+												<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>">
+													<div class="label label-primary">Modify</div>
+												</a>
+												<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');">
+													<div class="label label-danger">Delete</div>
+												</a>
 											</td>
 										</tr>
 										<div id="myModal<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
@@ -168,6 +177,41 @@
 					  </div>
 					</div>
 					<!-- Prices modal ends here... -->
+					<!-- Modifying rooms and charges in hotels... -->
+					<div id="modify<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
+					  <div class="modal-dialog">
+					    <!-- Modal content-->
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal">&times;</button>
+					        <h4 class="modal-title">Modify room prices or type here</h4>
+					      </div>
+					      <div class="modal-body">
+					      	<div class="row">
+					      		<form action="<?php echo base_url('trainings/modify_hotel'); ?>" method="post">
+					      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
+					      		<div class="col-lg-12">
+									<div class="inputFormMain">
+										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
+									</div>
+								</div><br><br><br>
+								<div class="col-lg-12">
+									<div class="submitBtn">
+										<button id="save" type="submit" class="btn btnSubmit">Update</button>
+										<button type="reset" class="btn btnSubmit">Reset</button>
+									</div>
+								</div>
+					      	</form>
+					      	</div>
+					      </div>
+					      <div class="modal-footer">
+					      	<div class="submitBtn">
+					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					      	</div>
+					      </div>
+					    </div>
+					  </div>
+					</div>
 										<?php endforeach; ?>
 									</tbody>
 								</table>

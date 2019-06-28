@@ -20,15 +20,36 @@
 						<?php endif; ?>
 					</div>
 				<form method="post" action="<?php echo base_url('trainings/create_training'); ?>">
-					<div class="col-lg-6">
+					<div class="col-lg-3">
 						<div class="inputFormMain">
 							<select name="location" id="location" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select Location</option>
+								<option value="" >Select Province</option>
 								<?php foreach($locations as $location): ?>
 									<option value="<?php echo $location->id; ?>">
 										<?php echo $location->name; ?>
 									</option>
 								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<select name="city" id="city" class="form-control" style="color: #aeafaf;" required="">
+								<option value="" >Select District</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<select name="tehsil" id="tehsil" class="form-control" style="color: #aeafaf;">
+								<option value="" >Select Tehsil</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<select name="uc" id="uc" class="form-control" style="color: #aeafaf;">
+								<option value="" >Select UC</option>
 							</select>
 						</div>
 					</div>
@@ -196,6 +217,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript">
 // Get employees list on selecting project and designation.
+
 // $(document).ready(function() { // call the function when the document gets ready.
 //   $("#project").change(function() {
 //     var displayResources = $("#results");
@@ -334,6 +356,64 @@ $(document).ready(function(){
 					alert("You're having employees who are available for Refresher training, you can select them from the list !");
 					console.log(resp);
 				}
+			}
+		});
+	});
+});
+// Dependent dropdowns.
+// Provinces and districts data.
+$(document).ready(function(){
+	$('#location').on('change', function(){
+		var location = $('#location').val(); 
+		$.ajax({
+			url: '<?php echo base_url(); ?>trainings/get_provinces/' + location,
+			method: 'POST',
+			dataType: 'JSON',
+			data: { project: location },
+			success: function(response){
+				console.log(response);
+				$('#city').find('option').not(':first').remove();
+				$.each(response, function(index, data){
+					$('#city').append('<option value="'+data['city_id']+'">'+data['city_name']+'</option>');
+				});
+			}
+		});
+	});
+});
+// District and tehsil data.
+$(document).ready(function(){
+	$('#city').on('change', function(){
+		var city = $('#city').val();
+		$.ajax({
+			url: '<?php echo base_url(); ?>trainings/get_districts/' + city,
+			method: 'POST',
+			dataType: 'JSON',
+			data: {city: city},
+			success: function(resp){
+				console.log(resp);
+				$('#tehsil').find('option').not(':first').remove();
+				$.each(resp, function(index, data){
+					$('#tehsil').append('<option value="'+data['id']+'">' +data['teh_name']+'</option>');
+				});
+			}
+		});
+	});
+});
+// Tehsil and Union coucil data
+$(document).ready(function(){
+	$('#tehsil').on('change', function(){
+		var tehsil = $('#tehsil').val();
+		$.ajax({
+			url: '<?php echo base_url(); ?>trainings/get_tehsils/' + tehsil,
+			method: 'POST',
+			dataType: 'JSON',
+			data: {tehsil: tehsil},
+			success: function(res){
+				console.log(res);
+				$('#uc').find('option').not(':first').remove();
+				$.each(res, function(index, data){
+					$('#uc').append('<option value="'+data['id']+'">'+data['uc_name']+'</option>');
+				});
 			}
 		});
 	});

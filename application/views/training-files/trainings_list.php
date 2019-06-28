@@ -4,6 +4,11 @@
 *  Filepath: views / training-files / trainings_list.php
 */
 ?>
+<style type="text/css">
+	.label{
+		cursor: pointer;
+	}
+</style>
 <?php if(empty($results)): ?>
 <section class="secMainWidthFilter">
 	<div class="row marg">
@@ -21,18 +26,23 @@
 									<small>
 										<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
 									</small><br>
-									<small>
-										<span class="label label-danger">
-											nothing done yet, fresh recruits.
+									<small id="status-btns">
+										<a href="<?= base_url('trainings/all_trainings'); ?>">
+											<span class="label label-danger">
+												All Trainings
+											</span> &nbsp;
+										</a>
+										<span id="progress" class="label label-info">
+											In Progress
 										</span> &nbsp;
-										<span class="label label-warning">
-											induction done.
+										<span id="induction" class="label label-warning">
+											Induction
 										</span> &nbsp;
-										<span class="label label-success">
-											refresher done - once.
+										<span id="refresher" class="label label-success">
+											Refresher
 										</span> &nbsp;
-										<span class="label label-primary">
-											refresher done - twice.
+										<span id="complete" class="label label-primary">
+											Completed
 										</span>
 									</small>
 							</h3>
@@ -59,6 +69,14 @@
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-lg-8 col-lg-offset-2">
+						<?php if($success = $this->session->flashdata('success')): ?>
+						<div class="alert alert-success alert-dismissable text-center">
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+							<p><?php echo $success; ?></p>
+						</div>
+						<?php endif; ?>
+					</div>
 					<div class="col-md-12">
 						<div class="tableMain">
 							<div class="table-responsive">
@@ -74,10 +92,10 @@
 											<th>ends on</th>
 											<th>venue</th>
 											<th>hall detail</th>
-											<th>status</th>
+											<th>status - progress | completed</th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody id ='filter_results'>
 										<?php if(!empty($list_trainings)):
 										foreach($list_trainings as $training): ?>
 										<tr>
@@ -113,18 +131,23 @@
 												<?=$training->hall_detail; ?>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/activity_report/<?php echo $training->trg_id; ?>">
+												<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->trg_id; ?>">
 													<span class="label label-warning">
 														Acty Rpt
 													</span>&nbsp;
 												</a>
+												<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->trg_id; ?>">
+													<span class="label label-danger">
+														View
+													</span> &nbsp;
+												</a>
 												<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
 													<span class="label label-success">
-														Attendance
+														Atdnc
 													</span> &nbsp;
 												</a>
 												<a href="">
-													<span class="label label-success">
+													<span class="label label-info">
 														Trg Mtrl
 													</span> &nbsp;
 												</a>
@@ -261,13 +284,16 @@
 					</div>
 					<div class="col-lg-4 text-right">
 						<small><strong>Training Type: </strong><?php echo $training_detail['type']; ?></small><br>
-						<small><strong>Project Name: </strong><?php echo $training_detail['name']; ?></small>
+						<small><strong>Project Name: </strong><?php echo $training_detail['name']; ?></small><br>
+						<small><strong>District: </strong><?php echo $training_detail['cityName']; ?></small><br>
+						<small><strong>Tehsil: </strong><?php if($training_detail['teh_name'] == NULL){ echo "N/A"; }else{ echo $training_detail['teh_name']; } ?></small>
 					</div>
 					<div class="col-lg-4 text-right">
 						<small>
 							<strong>Location/ Province: </strong><?php echo $training_detail['provName']; ?><br>
 							<strong>Venue: </strong><?php echo $training_detail['location']; ?><br> 
-							<strong>Hall Detail: </strong><?php echo $training_detail['hall_detail']; ?>
+							<strong>Hall Detail: </strong><?php echo $training_detail['hall_detail']; ?><br>
+							<strong>Union Council: </strong><?php if($training_detail['uc_name'] == NULL){ echo "N/A"; }else{ echo $training_detail['uc_name']; } ?>
 						</small>
 					</div>
 				</div>
@@ -295,3 +321,78 @@
 	</div>
 </div>
 <?php endif; ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var status = 0;
+		$('#status-btns>.label').on('click', function(){
+			$('#filter_results').html('');
+			status = $(this).attr('id');
+			if(status == 'progress')
+				status = 0;
+			else if(status == 'induction')
+				status = 1;
+			else if(status == 'refresher')
+				status = 2;
+			else if(status == 'complete')
+				status = 3;
+			else
+				status = 4;
+			
+			$.ajax({
+				url: '<?= base_url(); ?>trainings/get_by_trg_status/' + status,
+				type: 'post',
+				dataType: 'json',
+				data: {status: status},
+				success: function(res)
+				{
+					result = "";
+					$.each(res, function(key, val) {
+						result += `
+							<tr>
+								<td>
+									<a href='<?= base_url(); ?>trainings/detail_training/${val.trg_id}'>${val.type}</a>
+								</td>
+								<td>${val.prov_name}</td>
+								<td>${val.first_name} ${val.last_name}</td>
+								<td>${val.first_name} ${val.last_name}</td>
+								<td>${val.facilitator_name}</td>
+								<td>${val.start_date}</td>
+								<td>${val.end_date}</td>
+								<td>${val.location}</td>
+								<td>${val.hall_detail}</td>
+								<td>
+									<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->trg_id; ?>">
+										<span class="label label-warning">
+											Acty Rpt
+										</span>&nbsp;
+									</a>
+									<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->trg_id; ?>">
+										<span class="label label-danger">
+											View
+										</span> &nbsp;
+									</a>
+									<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
+										<span class="label label-success">
+											Attendance
+										</span> &nbsp;
+									</a>
+									<a href="">
+										<span class="label label-info">
+											Trg Mtrl
+										</span> &nbsp;
+									</a>
+									<a href="">
+										<span class="label label-primary">
+											Comp
+										</span>
+									</a>
+								</td>
+							</tr>
+						`;
+					});
+					$('#filter_results').append(result);
+				}
+			});
+		});
+	});
+</script>

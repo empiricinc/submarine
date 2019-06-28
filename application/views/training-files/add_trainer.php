@@ -50,7 +50,7 @@
 							<textarea name="address" id="address" rows="3" class="form-control"  placeholder="Address..."></textarea>
 						</div>
 					</div>
-					<input type="hidden" name="created_at" value="<?php echo date('d-m-Y'); ?>">
+					<input type="hidden" id="created_at" name="created_at" value="<?php echo date('d-m-Y'); ?>">
 					<div class="col-lg-12">
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
@@ -76,6 +76,7 @@
 			var email = $('#email').val();
 			var expertise = $('#expertise').val();
 			var address = $('#address').val();
+			var created_at = $('#created_at').val();
 			if(first_name == '' || last_name =='' || contact == '' || email == ''|| expertise == '' || address == ''){
 				alert('Please fill out the required fields');
 				return false;
@@ -84,7 +85,7 @@
 				$.ajax({
 					type: "post",
 					url: "<?php echo base_url('trainings/add_new_trainer'); ?>", // URL to submit data to DB.
-					data: {first_name: first_name, last_name: last_name, contact: contact, email: email, expertise: expertise, address: address},
+					data: {first_name: first_name, last_name: last_name, contact: contact, email: email, expertise: expertise, address: address, created_at: created_at},
 					dataType: 'json', // dataType should be 'json' or it won't work.
 					cache: false,
 					success: function(res){ // Alert something to let the user know something happened.

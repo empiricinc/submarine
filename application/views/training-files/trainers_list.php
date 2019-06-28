@@ -51,6 +51,7 @@
 											<th>expertise</th>
 											<th>address</th>
 											<th>joined on</th>
+											<th>status</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -69,6 +70,21 @@
 											<td>
 												<?=date('M d, Y', strtotime($trainer->created_at)); ?>
 											</td>
+											<td>
+												<?php if($trainer->status == 1): ?>
+													<a href="<?php echo base_url(); ?>trainings/trainer_status/<?php echo $trainer->trainer_id; ?>">
+														<div class="label label-warning">
+															Deactivate
+														</div>
+													</a>
+												<?php else: ?>
+													<a href="<?php echo base_url(); ?>trainings/trainer_status/<?php echo $trainer->trainer_id; ?>">
+														<div class="label label-primary">
+															Activate
+														</div>
+													</a>
+												<?php endif; ?>
+											</td>
 										</tr>
 										<?php endforeach; ?>
 									</tbody>
@@ -81,7 +97,7 @@
 					<div class="col-md-1"></div>
 					<div class="col-md-10">
 						<div class="tabelSideListing text-center">
-							<span><?php //echo $this->pagination->create_links(); 
+							<span><?php echo $this->pagination->create_links(); 
 							endif; ?></span>
 						</div>
 					</div>

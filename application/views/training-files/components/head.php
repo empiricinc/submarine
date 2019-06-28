@@ -52,6 +52,7 @@
           <li id="appeared"><a href="<?php echo base_url('trainings/locations'); ?>">locations</a></li>
           <li><a href="<?php echo base_url('trainings/stay_hotels'); ?>">stay hotels</a></li>
           <li><a href="<?php echo base_url('trainings/attendance_view'); ?>">attendance</a></li>
+          <li><a href="<?php echo base_url('trainings/get_calendar'); ?>">evts calendar</a></li>
           <li><a href="<?php echo base_url('trainings/training_reports'); ?>">reports</a></li>
           <li>
             <a href="#">

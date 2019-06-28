@@ -195,7 +195,7 @@
 									<tr>
 										<th>training type</th>
 										<th>province</th>
-										<th>city</th>
+										<th>district</th>
 										<th>trainers</th>
 										<th>target group</th>
 										<th>started on</th>
