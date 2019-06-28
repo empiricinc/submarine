@@ -399,7 +399,7 @@ $(document).ready(function(){
 		});
 	});
 });
-// Tehsil and Union coucil data
+// Tehsil and Union council data
 $(document).ready(function(){
 	$('#tehsil').on('change', function(){
 		var tehsil = $('#tehsil').val();
