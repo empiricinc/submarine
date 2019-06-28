@@ -682,7 +682,7 @@ class Trainings extends CI_Controller{
 	}
 	// Events calendar, tentative six months trainings calendar. (Setup form)
 	public function events_calendar($offset = NULL){
-		$limit = 1;
+		$limit = 7;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
