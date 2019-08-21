@@ -44,7 +44,7 @@
 										<thead>
 											<tr>
 												<th>Name</th>
-												<th>Project</th>
+												<th>job title</th>
 												<th>email</th>
 												<th>exam date</th>
 											</tr>

@@ -55,7 +55,6 @@
 											<th>job title</th>
 											<th>email</th>
 											<th>date applied</th>
-											<th>exam date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -73,9 +72,6 @@
 											</td>
 											<td>
 												<?=date('M d, Y', strtotime($applicant->created_at)); ?>
-											</td>
-											<td>
-												<?=date('M d, Y', strtotime($applicant->exam_date)); ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
@@ -144,7 +140,6 @@
 											<th>job title</th>
 											<th>email</th>
 											<th>date applied</th>
-											<th>exam date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -161,9 +156,6 @@
 											</td>
 											<td>
 												<?=date('M d, Y', strtotime($applicant->created_at)); ?>
-											</td>
-											<td>
-												<?=date('M d, Y', strtotime($applicant->exam_date)); ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
@@ -210,9 +202,6 @@
 					</p>
 					<p>
 						<strong>Date Applied: </strong><?php echo date('M d, Y', strtotime( $applicant_detail['created_at'])); ?>
-					</p>
-					<p>
-						<strong>Exam Date: </strong><?php echo date('M d, Y', strtotime($applicant_detail['exam_date'])); ?>
 					</p>
 				</div>
 				<div class="col-lg-6">

@@ -12,6 +12,10 @@ class Trainings extends CI_Controller{
 	}
 	// The default function to be loaded when one opens the application.
 	public function index($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
