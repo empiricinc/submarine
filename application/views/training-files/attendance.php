@@ -41,7 +41,7 @@
 															<option value="">
 																Select Status
 															</option>
-															<option value="Present">
+															<option value="Present" selected>
 																Present
 															</option>
 															<option value="Absent">
