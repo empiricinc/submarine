@@ -22,9 +22,9 @@
 	<meta name="og:title" content="" />
 	<meta name="og:image" content="" />
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700,800|Roboto:400,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/font-awesome.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/bootstrap.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/style.css'); ?>">
 	<script src="<?php echo base_url('assets/js/jquery.js'); ?>"></script>
 </head>
 <body>
@@ -35,9 +35,9 @@
 				<div class="col-md-6">
 					<div class="mainLeftImg">
 						<div class="loginLogo">
-							<img src="<?php echo base_url('assets/img/loginLogo.png'); ?>" alt="">
+							<img src="<?php echo base_url('dashboardDesign/assets/img/loginLogo.png'); ?>" alt="">
 						</div>
-						<img src="<?php echo base_url('assets/img/login.png'); ?>" alt="">
+						<img src="<?php echo base_url('dashboardDesign/assets/img/login.png'); ?>" alt="">
 						<p>
 							Hiring staff for Civil Society Human and Institutional development Program (CHIP) in Pakistan.
 						</p>
@@ -72,7 +72,7 @@
 		</div>
 	</div>
 </section>
-<script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/js/custom.js'); ?>"></script>
+<script src="<?php echo base_url('dashboardDesign/assets/js/bootstrap.min.js'); ?>"></script>
+<script src="<?php echo base_url('dashboardDesign/assets/js/custom.js'); ?>"></script>
 </body>
 </html>
