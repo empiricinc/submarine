@@ -165,7 +165,7 @@ class Tests extends MY_Controller{
 		$post_data = $this->input->post();
 		$validate = $this->Tests_model->validate_applicant($post_data);
 		if($validate){
-			redirect('tests/questions_for_test');
+			redirect("tests/questions_for_test/{$post_data['roll_no']}");
 		} elseif($validate['test_date'] > date('Y-m-d', strtotime($post_data['test_date']))) {
 			$this->session->set_flashdata('failed', '<strong>Aww Snap !</strong> Your exam date is over, you are not allowed to take the exam.');
 			redirect('tests/exam_login');
@@ -265,17 +265,17 @@ class Tests extends MY_Controller{
 		$this->load->view('test-system/components/template', $data);
 	}
 	// Submit tests taken by applicants to the database. (tbl_name: ex_applicants).
-	public function applicants_test(){ // No need for ID, just send the test to the database.
+	public function applicants_test(){
 		$question_id = $_POST['question_id'];
 		$answers = $_POST['answer'];
-		// $applicant_id = $_POST['applicant_id']; // Send the applicant ID with the exam.
+		$applicant_id = $_POST['applicant_id']; // Send the applicant ID with the exam.
 		$length = count($answers);
 		$length = count($question_id);
 		for($j = 0; $j < $length; $j++){
 			$data = array(
 			'question_id' => $_POST['question_id'][$j],
-			'answer_id'   => $_POST['answer'][$j]
-			// 'applicant_id' => $applicant_id
+			'answer_id'   => $_POST['answer'][$j],
+			'applicant_id' => $_POST['applicant_id']
 			);
 			$this->Tests_model->submit_paper($data);
 		}

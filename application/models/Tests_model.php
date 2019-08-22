@@ -262,19 +262,13 @@ class tests_model extends CI_Model{
 	public function validate_applicant($post_data){
 		$this->db->select('id, rollnumber, test_date, sdt, status');
 		$this->db->where('rollnumber', $post_data['roll_no']);
-		$this->db->where('test_date >', date('Y-m-d', strtotime($post_data['test_date'])));
+		$this->db->where('test_date >=', date('Y-m-d', strtotime($post_data['test_date'])));
 		$this->db->from('assign_test');
 		$query = $this->db->get();
 		if($query->num_rows() == 0)
 			return false;
 		else
 			return $query->result();
-	}
-	// Get rollnumber from assign_test so that we can submit it with Paper.
-	public function get_applicant_id(){
-		$this->db->select('id, rollnumber, test_date, sdt, status');
-		$this->db->from('assign_test');
-		return $this->db->get()->row_array();
 	}
 	// count all applicants...
 	public function count_all_records(){
