@@ -279,7 +279,6 @@ class tests_model extends CI_Model{
 		$this->db->select('xin_job_applications.user_id,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
-							xin_job_applications.exam_date,
 							xin_job_applications.created_at,
 							xin_job_applications.job_id,
 							xin_job_applications.email,
@@ -288,6 +287,7 @@ class tests_model extends CI_Model{
 		$this->db->from('xin_job_applications');
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
 		$this->db->order_by('xin_job_applications.created_at', 'DESC');
+		$this->db->where('application_id NOT IN (SELECT applicant_id FROM ex_applicants)');
 		$this->db->limit($limit, $offset);
 		$exams = $this->db->get();
 		return $exams->result();
@@ -451,7 +451,6 @@ class tests_model extends CI_Model{
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							xin_job_applications.exam_date,
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
