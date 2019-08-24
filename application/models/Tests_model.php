@@ -262,13 +262,19 @@ class tests_model extends CI_Model{
 	public function validate_applicant($post_data){
 		$this->db->select('id, rollnumber, test_date, sdt, status');
 		$this->db->where('rollnumber', $post_data['roll_no']);
-		$this->db->where('test_date >=', date('Y-m-d', strtotime($post_data['test_date'])));
+		$this->db->where('test_date >', date('Y-m-d', strtotime($post_data['test_date'])));
 		$this->db->from('assign_test');
 		$query = $this->db->get();
 		if($query->num_rows() == 0)
 			return false;
 		else
 			return $query->result();
+	}
+	// Get rollnumber from assign_test so that we can submit it with Paper.
+	public function get_applicant_id(){
+		$this->db->select('id, rollnumber, test_date, sdt, status');
+		$this->db->from('assign_test');
+		return $this->db->get()->row_array();
 	}
 	// count all applicants...
 	public function count_all_records(){
@@ -388,7 +394,7 @@ class tests_model extends CI_Model{
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							xin_job_applications.exam_date,
+							 
 							xin_jobs.job_id,
 							xin_jobs.job_title');
 		$this->db->from('xin_job_applications');
@@ -428,7 +434,7 @@ class tests_model extends CI_Model{
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							xin_job_applications.exam_date,
+							ex_applicants.exam_date,
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
@@ -447,6 +453,7 @@ class tests_model extends CI_Model{
 	// applicants appeared in exam .
 	public function appeared_applicants(){
 		$this->db->select('ex_applicants.applicant_id,
+							ex_applicants.exam_date,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -460,7 +467,7 @@ class tests_model extends CI_Model{
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
 		$this->db->group_by('ex_applicants.applicant_id');
-		$this->db->order_by('xin_job_applications.exam_date', 'DESC');
+		//$this->db->order_by('xin_job_applications.exam_date', 'DESC');
 		$this->db->limit(10);
 		return $this->db->get()->result();
 	}
@@ -471,11 +478,11 @@ class tests_model extends CI_Model{
 	// all appeared applicants
 	public function all_appeared($limit='', $offset=''){
 		$this->db->select('ex_applicants.applicant_id,
+							ex_applicants.exam_date,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							xin_job_applications.exam_date,
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
@@ -485,7 +492,7 @@ class tests_model extends CI_Model{
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
 		$this->db->group_by('ex_applicants.applicant_id');
-		$this->db->order_by('xin_job_applications.exam_date', 'DESC');
+		//$this->db->order_by('xin_job_applications.exam_date', 'DESC');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}

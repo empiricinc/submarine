@@ -55,6 +55,7 @@
 											<th>job title</th>
 											<th>email</th>
 											<th>date applied</th>
+											<th>exam date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -75,6 +76,9 @@
 											</td>
 											<td>
 												<?=date('M d, Y', strtotime($applicant->created_at)); ?>
+											</td>
+											<td>
+												<?=date('M d, Y', strtotime($applicant->exam_date)); ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
