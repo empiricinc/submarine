@@ -75,7 +75,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if(!empty($list_trainings)):
+										<?php if($sl3['accessLevel3']): // Check Access Level.
+										if(!empty($list_trainings)):
 										foreach($list_trainings as $training): ?>
 										<tr>
 											<td>
@@ -133,7 +134,7 @@
 					<div class="col-md-10">
 						<div class="tabelSideListing text-center">
 							<span>
-								<?php echo $this->pagination->create_links(); endif; ?>
+								<?php echo $this->pagination->create_links(); endif; endif; ?>
 							</span>
 						</div>
 					</div>
@@ -196,7 +197,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach($results as $result): ?>
+										<?php if($sl3['accessLevel3']): # Check Access Level.
+										foreach($results as $result): ?>
 										<tr>
 											<td>
 												<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $result->trg_id; ?>"><?=$result->type; ?></a>
@@ -229,7 +231,7 @@
 												<?= $result->approval_type; ?>
 											</td>
 										</tr>
-										<?php endforeach; ?>
+										<?php endforeach; endif; ?>
 									</tbody>
 								</table>
 							</div>
