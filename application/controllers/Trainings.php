@@ -4,6 +4,9 @@
 *  Author: Saddam
 *  Filepath: application / controllers / Trainings.php
 */
+use PhpOffice\PhpSpreadsheet\Spreadsheet; // use the phpspreadsheet libraries.
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Trainings extends CI_Controller{
 	function __construct(){
 		parent::__construct();
@@ -21,12 +24,14 @@ class Trainings extends CI_Controller{
 			$this->uri->segment(3);
 		}
 
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+	    $departmentLevel5 = $session['department_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
         $data['sl2'] = $this->session->userdata('accessLevel');
+        //$data['slt'] = $this->session->userdata('department_id'); // un-comment later.
 
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -136,8 +141,8 @@ class Trainings extends CI_Controller{
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -191,8 +196,8 @@ class Trainings extends CI_Controller{
 			$this->uri->segment(3);
 		}
 
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -237,8 +242,8 @@ class Trainings extends CI_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -260,8 +265,8 @@ class Trainings extends CI_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -434,8 +439,8 @@ class Trainings extends CI_Controller{
 			$this->uri->segment(3);
 		}
 
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -496,8 +501,8 @@ class Trainings extends CI_Controller{
 			$this->uri->segment(3);
 		}
 
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -548,8 +553,8 @@ class Trainings extends CI_Controller{
 			$this->uri->segment(3);
 		}
 
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -594,8 +599,8 @@ class Trainings extends CI_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -617,8 +622,8 @@ class Trainings extends CI_Controller{
 		if(empty($session)){
 			redirect('');
 		}
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -856,8 +861,8 @@ class Trainings extends CI_Controller{
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		@$projid = $session['project_id'];
-	    @$provid = $session['provience_id'];
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
@@ -946,6 +951,79 @@ class Trainings extends CI_Controller{
     	$data['content'] = 'training-files/events_calendar_view';
     	$data['event_detail'] = $this->Trainings_model->detail_event($event_id);
     	$this->load->view('training-files/components/template', $data);
+    }
+    // --------------------------------------------------------------------------------
+    // Export to excel.
+    // --------------------------------------------------------------------------------
+    // Exporting Events.
+    public function exportExcel() {
+		$fileName = 'Events Report.xlsx';  
+		$ucpos_data = $this->Trainings_model->get_events_report();
+		$spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+       	$sheet->setCellValue('A1', 'Title');
+        $sheet->setCellValue('B1', 'Province');
+        $sheet->setCellValue('C1', 'District');
+        $sheet->setCellValue('D1', 'Project');
+		$sheet->setCellValue('E1', 'Designation');
+        $sheet->setCellValue('F1', 'Training Type');      
+        $sheet->setCellValue('G1', 'Start Date');      
+        $sheet->setCellValue('H1', 'End Date');      
+        $rows = 2;
+        foreach ($ucpos_data as $val){
+            $sheet->setCellValue('A' . $rows, $val['title']);
+            $sheet->setCellValue('B' . $rows, $val['provName']);
+            $sheet->setCellValue('C' . $rows, $val['cityName']);
+            $sheet->setCellValue('D' . $rows, $val['compName']);
+            $sheet->setCellValue('E' . $rows, $val['designation_name']);
+	    	$sheet->setCellValue('F' . $rows, $val['type']);
+            $sheet->setCellValue('G' . $rows, $val['start_date']);
+            $sheet->setCellValue('H' . $rows, $val['end_date']);
+            $rows++;
+        } 
+        $writer = new Xlsx($spreadsheet);
+		$writer->save("uploads/".$fileName);
+		header("Content-Type: application/vnd.ms-excel");
+        redirect(base_url()."/uploads/".$fileName);              
+    }
+    // Exporting Trainings.
+    public function export_trainings() {
+		$fileName = 'Induction Trainings.xlsx';  
+		$ucpos_data = $this->Trainings_model->get_trainings_report();
+		$spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+       	$sheet->setCellValue('A1', 'Trg Type');
+        $sheet->setCellValue('B1', 'Location');
+        $sheet->setCellValue('C1', 'Trainers');
+        $sheet->setCellValue('D1', 'Facilitator');
+		$sheet->setCellValue('E1', 'Started On');
+        $sheet->setCellValue('F1', 'Ended On');      
+        $sheet->setCellValue('G1', 'Venue');      
+        $sheet->setCellValue('H1', 'Hall Detail');      
+        $sheet->setCellValue('I1', 'Sessions');     
+        $sheet->setCellValue('J1', 'Approval Type');     
+        $sheet->setCellValue('K1', 'Announcement');
+        $sheet->setCellValue('L1', 'No. of Trainees');
+        $rows = 2;
+        foreach ($ucpos_data as $val){
+            $sheet->setCellValue('A' . $rows, $val['type']);
+            $sheet->setCellValue('B' . $rows, $val['prov_name']);
+            $sheet->setCellValue('C' . $rows, $val['first_name'].' '.$val['last_name']);
+            $sheet->setCellValue('D' . $rows, $val['facilitator_name']);
+            $sheet->setCellValue('E' . $rows, $val['start_date']);
+	    	$sheet->setCellValue('F' . $rows, $val['end_date']);
+            $sheet->setCellValue('G' . $rows, $val['venue']);
+            $sheet->setCellValue('H' . $rows, $val['hall_detail']);
+            $sheet->setCellValue('I' . $rows, $val['session']);
+            $sheet->setCellValue('J' . $rows, $val['approval_type']);
+            $sheet->setCellValue('K' . $rows, $val['created_at']);
+            $sheet->setCellValue('L' . $rows, $val['trainees']);
+            $rows++;
+        } 
+        $writer = new Xlsx($spreadsheet);
+		$writer->save("uploads/".$fileName);
+		header("Content-Type: application/vnd.ms-excel");
+        redirect(base_url()."/uploads/".$fileName);              
     }
 }
 

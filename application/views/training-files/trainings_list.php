@@ -25,6 +25,7 @@
 									</span> |
 									<small>
 										<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
+										<a href="<?php echo base_url('trainings/export_trainings'); ?>" class="btn btn-success btn-xs">Export Excel</a>
 									</small><br>
 									<small id="status-btns">
 										<a href="<?= base_url('trainings/all_trainings'); ?>">

@@ -15,7 +15,8 @@ class Trainings_model extends CI_Model{
 	}
 	// Get data from database and list them on the dashboard (Induction trainings only)
 	public function get_trainings($limit = '', $offset = ''){
-		$this->db->select('xin_trainings.*,
+		$this->db->select('SUM(LENGTH(trainee_employees) - LENGTH(REPLACE(trainee_employees, ",", ""))+1) as no_of_employees,
+							xin_trainings.*,
 							xin_trainers.trainer_id,
 							xin_trainers.first_name,
 							xin_trainers.last_name,
@@ -32,7 +33,9 @@ class Trainings_model extends CI_Model{
 		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
 		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
 		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
+		$query = $this->db->get();
+		echo $this->db->last_query();
+		return $query->result();
 	}
 	// Get trainings -- Manager.
 	public function get_trainings_manager($provid, $limit = '', $offset = ''){
@@ -1226,6 +1229,64 @@ class Trainings_model extends CI_Model{
 		$this->db->where('event_id', $event_id);
 		$this->db->delete('events_calendar');
 		return true;
+	}
+
+	// -----------------------------------------------------------------------------
+	// Training report, export to excel.
+	//------------------------------------------------------------------------------
+	// Events calendar report.
+	public function get_events_report(){
+    	$this->db->select('events_calendar.event_id,
+    						events_calendar.title,
+    						events_calendar.province,
+    						events_calendar.district,
+    						events_calendar.project,
+    						events_calendar.designation,
+    						events_calendar.trg_type,
+    						events_calendar.start_date,
+    						events_calendar.end_date,
+    						provinces.id,
+    						provinces.name as provName,
+    						city.id,
+    						city.name as cityName,
+    						xin_companies.company_id,
+    						xin_companies.name as compName,
+    						xin_designations.designation_id,
+    						xin_designations.designation_name,
+    						xin_training_types.training_type_id,
+    						xin_training_types.type');
+    	$this->db->from('events_calendar');
+    	$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
+    	$this->db->join('city', 'events_calendar.district = city.id', 'left');
+    	$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
+    	$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
+    	$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
+    	$this->db->order_by('events_calendar.event_id', 'DESC');
+    	$this->db->limit(20);
+    	return $this->db->get()->result_array(); 	
+    }
+    // Induction trainings.
+    public function get_trainings_report(){
+		$this->db->select('length(trainee_employees) - length(replace(trainee_employees,",","") + 1) as trainees,
+							xin_trainings.*,
+							xin_trainers.trainer_id,
+							xin_trainers.first_name,
+							xin_trainers.last_name,
+							xin_training_types.training_type_id,
+							xin_training_types.type,
+							xin_training_locations.location_id,
+							xin_training_locations.location,
+							provinces.id,
+							provinces.name as prov_name');
+		$this->db->from('xin_trainings');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
+		$query = $this->db->get();
+		echo $this->db->last_query();
+		return $query->result_array();
 	}
 }
 

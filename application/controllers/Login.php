@@ -34,9 +34,9 @@
 
  *
 
- * @package  Workable Zone - Login
+ * @package  Ayat Ullah Khan@CTC - Login
 
- * @copyright  Copyright © workablezone.com. All Rights Reserved
+ * @copyright  Copyright © ctc.org.pk. All Rights Reserved
 
  */
 
@@ -160,9 +160,27 @@ class Login extends MY_Controller
 
 				'user_id' => $result[0]->user_id,
 
+				'employee_id' => $result[0]->employee_id,
+
 				'username' => $result[0]->username,
 
 				'email' => $result[0]->email,
+
+				'user_role' => $result[0]->user_role_id,
+
+				'designation_id' => $result[0]->designation_id,
+
+				'department_id' => $result[0]->department_id,
+
+				'project_id' => $result[0]->company_id,
+
+				'provience_id' => $result[0]->provience_id,
+                                'province_id' => $result[0]->provience_id,
+
+				'city_id' => $result[0]->city_id,
+
+				//'company_id' => $result[0]->company_id,
+
 
 				);
 
