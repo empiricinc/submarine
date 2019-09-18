@@ -55,7 +55,7 @@
 						<?php $counter = 1;  ?>
 						<?php foreach($qdash as $que_rand) : ?>
 							<input type="hidden" name="question_id[]" value="<?php echo $que_rand->id; ?>">
-							<input type="hidden" name="applicant_id[]" value="<?php echo $this->uri->segment(3); ?>">
+							<input type="hidden" name="applicant_id" value="<?php echo $this->uri->segment(3); ?>">
 							<p>
 								<strong>
 									<?php echo $counter++; ?>. <?php echo $que_rand->question; ?>

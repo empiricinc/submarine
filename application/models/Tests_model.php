@@ -129,6 +129,12 @@ class tests_model extends CI_Model{
 		$query = $this->db->get();
 		return $query->result();
 	}
+	// Insert the applicant's total marks into another table.
+	// public function save_test_result(){
+	// 	$query = $this->db->query('SELECT COUNT(ex_applicants.applicant_id) AS marks FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = 1');
+	// 	echo $this->db->last_query();
+	// 	return $query->row_array();
+	// }
 	// Calculate the applicant's marks and show it on the page to the applicant or admin.
 	function applicant_result_search($appli_id){ // Passed $app_id as argument to search for result
 		$this->db->select('ex_applicants.applicant_id');

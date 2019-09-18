@@ -279,6 +279,7 @@ class Tests extends MY_Controller{
 			);
 			$this->Tests_model->submit_paper($data);
 		}
+		$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
 		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will informed about the result shortly !');
 		redirect('tests/test_submitted');
 	}
@@ -576,6 +577,11 @@ class Tests extends MY_Controller{
 		$data['content'] = 'test-system/reports';
 		$this->load->view('test-system/components/template', $data);
 	}
+
+	// public function get_result(){
+	// 	$data = $this->Tests_model->save_test_result();
+	// 	var_dump($data);
+	// }
 }
 
 ?>
