@@ -30,7 +30,7 @@
 						<div class="col-md-5">
 							<div class="tabelTopBtn">
 								<a class="btn" href="<?php echo base_url('tests/add_questions'); ?>">
-									<img src="<?php echo base_url('assets/img/plus.png'); ?>" alt=""> 
+									<img src="<?php echo base_url('dashboardDesign/assets/img/plus.png'); ?>" alt=""> 
 									Create Exam
 								</a>
 							</div>
@@ -44,9 +44,9 @@
 										<thead>
 											<tr>
 												<th>Name</th>
-												<th>Project</th>
+												<th>job title</th>
 												<th>email</th>
-												<th>exam date</th>
+												<th>date applied</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -62,7 +62,7 @@
 													<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
 												</td>
 												<td>
-													<?php echo date('M d, Y - h:i a', strtotime($applicant->exam_date)); ?>
+													<?php echo date('M d, Y - h:i a', strtotime($applicant->created_at)); ?>
 												</td>
 											</tr>
 											<?php endforeach; ?>
@@ -175,7 +175,7 @@
 				<div class="col-md-6">
 					<div class="tabelTopBtn">
 						<a class="btn" href="<?php echo base_url('tests/jobs'); ?>">
-							<img src="<?php echo base_url('assets/img/icon2.png'); ?>" alt=""> 
+							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
 							View All
 						</a>
 					</div>

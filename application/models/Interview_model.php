@@ -46,6 +46,7 @@ class Interview_model extends CI_Model {
 							xin_jobs.company,
 							xin_jobs.job_title,
 							xin_jobs.designation_id,
+							xin_jobs.province,
 							xin_companies.company_id,
 							xin_companies.name as compName,
 							xin_designations.designation_id,
@@ -59,9 +60,11 @@ class Interview_model extends CI_Model {
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->where('assign_interview.interview_date >= ', $due_date);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		$query = $this->db->get();
 		$this->db->limit(10);
 		// echo $this->db->last_query();
@@ -78,6 +81,7 @@ class Interview_model extends CI_Model {
 							xin_jobs.job_title,
 							xin_jobs.company,
 							xin_jobs.designation_id,
+							xin_jobs.province,
 							xin_companies.company_id,
 							xin_companies.name as compName,
 							xin_designations.designation_id,
@@ -91,7 +95,7 @@ class Interview_model extends CI_Model {
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->where('assign_interview.rollnumber', $rollno);
 		$this->db->where('assign_interview.interview_date >=', $int_date);
@@ -105,12 +109,19 @@ class Interview_model extends CI_Model {
 		$this->db->where('assign_interview.interview_date >=', $int_date);
 		$this->db->or_where('city.name', $district);
 		$this->db->where('assign_interview.interview_date >=', $int_date);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		return $this->db->get()->result();
 	}
 	// Count scheduled interviews.
 	public function count_scheduled(){
 		$date_range = date('Y-m-d h:i:s');
-		return $this->db->where('interview_date >=', $date_range)->count_all_results('assign_interview');
+		$this->db->select('*');
+		$this->db->from('assign_interview');
+		$this->db->where('interview_date >=', $date_range);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
+		return $this->db->get()->num_rows();
 	}
 	// Get all scheduled interviews.
 	public function all_scheduled($limit, $offset){
@@ -123,6 +134,7 @@ class Interview_model extends CI_Model {
 							xin_jobs.company,
 							xin_jobs.job_title,
 							xin_jobs.designation_id,
+							xin_jobs.province,
 							xin_companies.company_id,
 							xin_companies.name as compName,
 							xin_designations.designation_id,
@@ -136,9 +148,11 @@ class Interview_model extends CI_Model {
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->where('assign_interview.interview_date >= ', $due_date);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		$query = $this->db->get();
 		$this->db->limit($limit, $offset);
 		// echo $this->db->last_query();
@@ -165,6 +179,7 @@ function applicantdetails($id){
     					xin_jobs.job_title,
     					xin_jobs.company,
     					xin_jobs.designation_id,
+    					xin_jobs.province,
     					xin_companies.company_id,
     					xin_companies.name as comp_name,
     					xin_designations.designation_id,
@@ -182,9 +197,9 @@ function applicantdetails($id){
     $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
     $this->db->join('age', 'xin_job_applications.age = age.id', 'left');
     $this->db->join('education', 'xin_job_applications.education = education.id', 'left');
-    $this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
-    $this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
     $this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+    $this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
+    $this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
     $this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
     $this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
     $this->db->join('interview_result', 'xin_job_applications.application_id = interview_result.rollnumber', 'left');
@@ -226,6 +241,7 @@ function applicantdetails($id){
     						xin_jobs.job_id,
     						xin_jobs.company,
     						xin_jobs.designation_id,
+    						xin_jobs.province,
     						xin_companies.company_id,
     						xin_companies.name as comp_name,
     						xin_designations.designation_id,
@@ -239,7 +255,7 @@ function applicantdetails($id){
     	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
     	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
     	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-    	$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+    	$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
     	$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
     	$this->db->limit($limit, $offset);
     	return $this->db->get()->result();
@@ -259,6 +275,7 @@ function applicantdetails($id){
     						xin_jobs.job_id,
     						xin_jobs.company,
     						xin_jobs.designation_id,
+    						xin_jobs.province,
     						xin_companies.company_id,
     						xin_companies.name as comp_name,
     						xin_designations.designation_id,
@@ -272,7 +289,7 @@ function applicantdetails($id){
     	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
     	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
     	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-    	$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+    	$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
     	$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
     	$this->db->where('interview_result.rollnumber', $rollno);
     	$this->db->or_where('xin_job_applications.fullname', $name);
@@ -294,6 +311,7 @@ function applicantdetails($id){
 							xin_jobs.company,
 							xin_jobs.job_title,
 							xin_jobs.designation_id,
+							xin_jobs.province,
 							xin_companies.company_id,
 							xin_companies.name as compName,
 							xin_designations.designation_id,
@@ -307,9 +325,10 @@ function applicantdetails($id){
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->where('assign_interview.interview_date < ', $range);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		$this->db->limit(10);
 		$query = $this->db->get();
@@ -337,6 +356,7 @@ function applicantdetails($id){
 							xin_jobs.company,
 							xin_jobs.job_title,
 							xin_jobs.designation_id,
+							xin_jobs.province,
 							xin_companies.company_id,
 							xin_companies.name as compName,
 							xin_designations.designation_id,
@@ -350,9 +370,10 @@ function applicantdetails($id){
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->where('assign_interview.interview_date < ', $range);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
@@ -370,6 +391,7 @@ function applicantdetails($id){
 							xin_jobs.company,
 							xin_jobs.job_title,
 							xin_jobs.designation_id,
+							xin_jobs.province,
 							xin_companies.company_id,
 							xin_companies.name as compName,
 							xin_designations.designation_id,
@@ -383,10 +405,12 @@ function applicantdetails($id){
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
-		$this->db->where(array('assign_interview.rollnumber' => $rollno, 'assign_interview.interview_date < ' => $overdue_date));
+		$this->db->where('assign_interview.rollnumber', $rollno);
+		$this->db->where('assign_interview.interview_date < ', $overdue_date);
 		$this->db->or_where('xin_job_applications.fullname', $name);
+		$this->db->where('assign_interview.interview_date < ', $overdue_date);
 		$this->db->or_where('xin_companies.name', $project);
 		$this->db->where('assign_interview.interview_date <', $overdue_date);
 		$this->db->or_where('xin_designations.designation_name', $designation);
@@ -395,6 +419,8 @@ function applicantdetails($id){
 		$this->db->where('assign_interview.interview_date <', $overdue_date);
 		$this->db->or_where('city.name', $district);
 		$this->db->where('assign_interview.interview_date < ', $overdue_date);
+		// Make sure that the rollnumber doesn't exist in the interview_result table.
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		return $this->db->get()->result();
 	}
 

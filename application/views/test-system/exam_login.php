@@ -25,7 +25,7 @@
 	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/font-awesome.min.css'); ?>">
 	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/bootstrap.min.css'); ?>">
 	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/style.css'); ?>">
-	<script src="<?php echo base_url('dashboardDesign/assets/js/jquery.js'); ?>"></script>
+	<script src="<?php echo base_url('assets/js/jquery.js'); ?>"></script>
 </head>
 <body>
 	<section class="secLogin">
@@ -48,7 +48,7 @@
 						<div class="rightLoginMain">
 							<div class="aligmentWrap">
 								<h3 style="margin-bottom: 4px;">Applicant's Login</h3>
-								<small>Enter the roll that you have got while applying.</small>
+								<small>Enter the roll number you've got while applying for the job.</small>
 								<div class="loginInput">
 									<input type="hidden" name="test_date" value="<?php echo date('Y-m-d'); ?>">
 									<input name="roll_no" type="text" class="form-control" placeholder="Enter your roll number here..." required>

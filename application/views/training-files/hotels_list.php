@@ -53,7 +53,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if(!empty($hotels_list)):
+										<?php if($sl3['accessLevel3']): // Check Access Level.
+										if(!empty($hotels_list)):
 										foreach($hotels_list as $hotel): ?>
 										<tr>
 											<td><a href="<?php echo base_url(); ?>trainings/detail_hotel/<?php echo $hotel->hotel_id; ?>"><?=$hotel->hotel_name; ?></a></td>
@@ -212,7 +213,7 @@
 					    </div>
 					  </div>
 					</div>
-										<?php endforeach; ?>
+										<?php endforeach; endif; ?>
 									</tbody>
 								</table>
 							</div>
@@ -276,7 +277,8 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php foreach($results as $result): ?>
+										<?php if($sl3['accessLevel3']): // Check Acccess Level.
+										foreach($results as $result): ?>
 										<tr>
 											<td><a href="<?php echo base_url(); ?>trainings/detail_hotel/<?php echo $result->hotel_id; ?>"><?=$result->hotel_name; ?></a></td>
 											<td><?=$result->name; ?></td>
@@ -287,7 +289,7 @@
 												</div>
 											</td>
 										</tr>
-										<?php endforeach; ?>
+										<?php endforeach; endif; ?>
 									</tbody>
 								</table>
 							</div>

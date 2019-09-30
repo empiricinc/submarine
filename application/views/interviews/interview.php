@@ -78,7 +78,6 @@ if ($interviewResult) {
             <div class="col-md-4">
               <div class="tabelTopBtn">
                   <a href="<?= base_url('interview/list_scheduled'); ?>" class="btn">
-                    <i class="fa fa-eye"></i>
                     View All
                   </a>
               </div>
@@ -369,23 +368,6 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
               </div>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-4">
-              
-            </div>
-            <div class="col-md-4">
-              <div class="tabelSideListing text-center">
-                <a href="#"><img src="assets/img/single-arrow-left.png" alt=""></a>
-                <span>1</span>
-                to
-                <span>7</span>
-                <a href="#"><img src="assets/img/single-arrow-right.png" alt=""></a>
-              </div>
-            </div>
-            <div class="col-md-4">
-              
-            </div>
-          </div> -->
         </div>
       </div>
       <div class="col-md-6">
@@ -399,7 +381,6 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
             <div class="col-md-5">
               <div class="tabelTopBtn">
                 <a href="<?= base_url('interview/list_completed'); ?>" class="btn">
-                  <i class="fa fa-eye"></i> 
                   View All
                 </a>
               </div>
@@ -558,7 +539,6 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
         <div class="col-md-6">
           <div class="tabelTopBtn">
             <a href="<?= base_url('interview/list_overdue'); ?>" class="btn">
-              <i class="fa fa-eye"></i> 
               View All
             </a>
           </div>
@@ -650,7 +630,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                                         $date2=date_create(date('Y-m-d', strtotime($row->assigned_date)));
                                         $diff=date_diff($date1, $date2); ?>
                                     <td>Interview Date</td>
-                                    <td><?= date('M d, Y', strtotime($row->assigned_date)) .', '.$diff->format('%a days passed.'); ?>
+                                    <td><?= date('M d, Y', strtotime($row->assigned_date)) .', scheduled '.$diff->format('%a days ago.'); ?>
                                     </td>
                                   </tr>
                                   <tr>
@@ -683,32 +663,6 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
           </div>
         </div>
       </div>
-      <!-- <div class="row">
-        <div class="col-md-4">
-          <div class="tabelSideListing">
-            <a href="#"><img src="assets/img/single-arrow-left.png" alt=""></a>
-            <span>1</span>
-            to
-            <span>6</span>
-            <a href="#"><img src="assets/img/single-arrow-right.png" alt=""></a>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="tabelCenterListing">
-            <a href="#" class="arrowIcons">
-              <img src="assets/img/arrow-left.png" alt="">
-            </a>
-            <a href="#">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">4</a>
-            <a href="#">5</a>
-            <a href="#" class="arrowIcons">
-              <img src="assets/img/arrow-right.png" alt="">
-            </a>
-          </div>
-        </div>
-      </div> -->
     </div>
   </section>
 </section>

@@ -105,22 +105,23 @@ h4 {
                                 <thead>
                                     <tr>
                                         <th>sr #</th>
-				                        <th>manager</th>
-				                        <th>type</th>
-				                        <th>days left</th>
-				                        <th>status</th>
-				                        <th>actions</th>
+        				                        <th>manager</th>
+        				                        <th>type</th>
+        				                        <th>days left</th>
+        				                        <th>status</th>
+        				                        <th>actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-			                        <?php $serial = 1; foreach($expired_contracts as $exp_cont): ?>
+			                        <?php foreach($expired_contracts as $exp_cont): ?>
 			                        <?php
+                                if($exp_cont->contract_type != 1):
 			                          $date1=date_create(date('Y-m-d'));
 			                          $date2=date_create(date('Y-m-d', strtotime($exp_cont->to_date)));
 			                          $diff=date_diff($date1, $date2);
 			                        ?>
 			                        <tr>
-			                          <td><?= $serial++; ?></td>
+			                          <td>CTC-0<?= $exp_cont->user_id; ?></td>
 			                          <td><?= $exp_cont->contract_manager; ?></td>
 			                          <td><?= $exp_cont->name; ?></td>
 			                          <td>
@@ -135,14 +136,43 @@ h4 {
 				                              Extend
 				                            </div> &nbsp;
 			                            </a>
-			                            <a href="<?= base_url(); ?>contract/finish/<?= $exp_cont->id; ?>">
+			                            <a href="#finishContract" data-toggle="modal" data-target="#finishModal<?= $exp_cont->id; ?>">
 			                            <div class="label label-danger">
 			                              &nbsp;Finish
 			                            </div>
 			                            </a>
+                                  <!-- Finish contract modal starts. -->
+                              <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <!--Header-->
+                                    <div class="modal-header">
+                                      <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                      </button>
+                                    </div>
+                                    <!--Body-->
+                                    <div class="modal-body">
+                                      <form action="<?= base_url('contract/finish'); ?>" method="post">
+                                        <input type="hidden" name="id" value="<?= $exp_cont->id; ?>">
+                                        <label for="reason">Reason to finish contract.</label>
+                                        <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
+                                        <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                                        <input type="reset" name="reset" class="btn btn-warning" value="Reset">
+                                      </form>
+                                    </div>
+                                    <!--Footer-->
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                            <!-- Finish contract modal ends. -->
 			                          </td>
 			                        </tr>
-			                          <?php endforeach; ?>
+			                          <?php endif; endforeach; ?>
                       			</tbody>
                             </table>
                         </div>

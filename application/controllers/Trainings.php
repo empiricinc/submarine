@@ -4,6 +4,9 @@
 *  Author: Saddam
 *  Filepath: application / controllers / Trainings.php
 */
+use PhpOffice\PhpSpreadsheet\Spreadsheet; // use the phpspreadsheet libraries.
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Trainings extends CI_Controller{
 	function __construct(){
 		parent::__construct();
@@ -12,10 +15,24 @@ class Trainings extends CI_Controller{
 	}
 	// The default function to be loaded when one opens the application.
 	public function index($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+	    $departmentLevel5 = $session['department_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+        //$data['slt'] = $this->session->userdata('department_id'); // un-comment later.
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/index');
@@ -41,9 +58,23 @@ class Trainings extends CI_Controller{
 		$this->pagination->initialize($config);
 		$data['title'] = 'Trainings | Dashboard';
 		$data['content'] = 'training-files/dashboard';
-		$data['trainings_list'] = $this->Trainings_model->get_trainings($limit, $offset);
-		$data['refreshers'] = $this->Trainings_model->refresher_training();
-		$data['completed_trainings'] = $this->Trainings_model->trainings_completed();
+		if($data['sl2']){ // Check Access Level.
+			$data['trainings_list'] = $this->Trainings_model->get_trainings($limit, $offset);
+		}else{
+			$data['trainings_list'] = $this->Trainings_model->get_trainings_manager($provid, $limit, $offset);
+		}
+		
+		if($data['sl2']){
+			$data['refreshers'] = $this->Trainings_model->refresher_training();
+		}else{
+			$data['refreshers'] = $this->Trainings_model->refresher_training_manager($provid);
+		}
+		
+		if($data['sl2']){
+			$data['completed_trainings'] = $this->Trainings_model->trainings_completed();
+		}else{
+			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Load the create trainings page first.
@@ -102,10 +133,21 @@ class Trainings extends CI_Controller{
 	}
 	// List of all trainings.
 	public function all_trainings($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/all_trainings');
@@ -131,7 +173,11 @@ class Trainings extends CI_Controller{
 		$this->pagination->initialize($config);
 		$data['title'] = 'Trainings | Trainings List';
 		$data['content'] = 'training-files/trainings_list';
-		$data['list_trainings'] = $this->Trainings_model->get_all_trainings($limit, $offset);
+		if($data['sl2']){
+			$data['list_trainings'] = $this->Trainings_model->get_all_trainings($limit, $offset);
+		}else{
+			$data['list_trainings'] = $this->Trainings_model->get_all_trainings_manager($provid, $limit, $offset);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Get by training's status.
@@ -141,10 +187,22 @@ class Trainings extends CI_Controller{
 	}
 	// All refresher trainings' list.
 	public function all_refresher($offset = null){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/all_refresher');
@@ -170,23 +228,58 @@ class Trainings extends CI_Controller{
 		$this->pagination->initialize($config);
 		$data['title'] = 'Trainings | All Refreshers';
 		$data['content'] = 'training-files/all_refresher';
-		$data['list_trainings'] = $this->Trainings_model->all_refresher_trainings($limit, $offset); // Load the function and pass the vars to create pagination.
+		if($data['sl2']){ // Check Access Level.
+			$data['list_trainings'] = $this->Trainings_model->all_refresher_trainings($limit, $offset);
+		}else{
+			$data['list_trainings'] = $this->Trainings_model->all_refresher_trainings_manager($provid, $limit, $offset);
+		}
+		// Load the function and pass the vars to create pagination.
 		$this->load->view('training-files/components/template', $data); // Load view
 	}
 	// Search trainings.
 	public function training_search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$training = $this->input->get('search_training');
-		$data['results'] = $this->Trainings_model->search_trainings($training);
+		if($data['sl2']){
+			$data['results'] = $this->Trainings_model->search_trainings($training);
+		}else{
+			$data['results'] = $this->Trainings_model->search_trainings_manager($provid, $training);
+		}
 		$data['title'] = 'Trainings | Search Results';
 		$data['content'] = 'training-files/trainings_list';
 		$this->load->view('training-files/components/template', $data);
 	}
 	// View training detail.
 	public function detail_training($trg_id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$data['title'] = 'Trainings | Training Detail';
 		$data['content'] = 'training-files/trainings_list';
 		// Get trainees registered in the training.
-		$data['training_detail'] = $detail_row = $this->Trainings_model->training_detail($trg_id);
+		if($data['sl2']){
+			$data['training_detail'] = $detail_row = $this->Trainings_model->training_detail($trg_id);
+		}else{
+			$data['training_detail'] = $detail_row = $this->Trainings_model->training_detail_manager($provid, $trg_id);
+		}
 		$employee_detail = explode(',', $detail_row['trainee_employees']);
 		$serial = 1;
 		$employee_names = '';
@@ -337,10 +430,22 @@ class Trainings extends CI_Controller{
 	}
 	// Training locations setup.
 	public function locations($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 5;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/locations');
@@ -367,7 +472,11 @@ class Trainings extends CI_Controller{
 		$data['title'] = 'Trainings | Training Locations';
 		$data['content'] = 'training-files/training_locations';
 		$data['locations'] = $this->Trainings_model->get_locations();
-		$data['all_locations'] = $this->Trainings_model->get_trainig_locations($limit, $offset);
+		if($data['sl2']){
+			$data['all_locations'] = $this->Trainings_model->get_training_locations($limit, $offset);
+		}else{
+			$data['all_locations'] = $this->Trainings_model->get_training_locations_manager($provid, $limit, $offset);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Create training locations.
@@ -383,10 +492,22 @@ class Trainings extends CI_Controller{
 	}
 	// Add stay hotels in different places. Display a grid below the form.
 	public function stay_hotels($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 5;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/stay_hotels');
@@ -413,16 +534,32 @@ class Trainings extends CI_Controller{
 		$data['title'] = 'Trainings | Stay Hotels';
 		$data['content'] = 'training-files/stay_hotels';
 		$data['locations'] = $this->Trainings_model->get_locations();
-		$data['hotels'] = $this->Trainings_model->get_stay_hotels($limit, $offset);
+		if($data['sl2']){
+			$data['hotels'] = $this->Trainings_model->get_stay_hotels($limit, $offset);
+		}else{
+			$data['hotels'] = $this->Trainings_model->get_stay_hotels_manager($provid, $limit, $offset);
+		}
 		$data['room_types'] = $this->Trainings_model->get_room_types();
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Get all hotels to display them on a separate view page.
 	public function all_stay_hotels($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/all_stay_hotels');
@@ -449,22 +586,56 @@ class Trainings extends CI_Controller{
 		$data['title'] = 'Trainings | Hotels List';
 		$data['content'] = 'training-files/hotels_list';
 		$data['room_types'] = $this->Trainings_model->get_room_types();
-		$data['hotels_list'] = $this->Trainings_model->get_stay_hotels($limit, $offset);
+		if($data['sl2']){
+			$data['hotels_list'] = $this->Trainings_model->get_stay_hotels($limit, $offset);
+		}else{
+			$data['hotels_list'] = $this->Trainings_model->get_stay_hotels_manager($provid, $limit, $offset);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Search for specific hotels in the list.
 	public function hotel_search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$hotel = $this->input->get('search_hotel');
 		$data['title'] = 'Trainings | Search Hotels';
 		$data['content'] = 'training-files/hotels_list';
-		$data['results'] = $this->Trainings_model->search_hotels($hotel);
+		if($data['sl2']){
+			$data['results'] = $this->Trainings_model->search_hotels($hotel);
+		}else{
+			$data['results'] = $this->Trainings_model->search_hotels_manager($provid, $hotel);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Hotel detail, view single hotel with details by hotel_id.
 	public function detail_hotel($hotel_id){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$data['title'] = 'Trainings | Hotel Detail';
 		$data['content'] = 'training-files/hotels_list';
-		$data['hotel_detail'] = $this->Trainings_model->hotel_detail($hotel_id);
+		if($data['sl2']){
+			$data['hotel_detail'] = $this->Trainings_model->hotel_detail($hotel_id);
+		}else{
+			$data['hotel_detail'] = $this->Trainings_model->hotel_detail_manager($provid, $hotel_id);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Add new hotels for staying in the province or city.
@@ -682,10 +853,21 @@ class Trainings extends CI_Controller{
 	}
 	// Events calendar, tentative six months trainings calendar. (Setup form)
 	public function events_calendar($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 7;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('trainings/events_calendar');
@@ -715,7 +897,11 @@ class Trainings extends CI_Controller{
 		$data['training_types'] = $this->Trainings_model->get_training_types();
 		$data['locations'] = $this->Trainings_model->get_locations();
 		$data['designations'] = $this->Trainings_model->get_designations();
-		$data['events_list'] = $this->Trainings_model->get_events($limit, $offset);
+		if($data['sl2']){
+			$data['events_list'] = $this->Trainings_model->get_events($limit, $offset);
+		}else{
+			$data['events_list'] = $this->Trainings_model->get_events($provid, $limit, $offset);
+		}
 		$this->load->view('training-files/components/template', $data);
 	}
 	// Save events on the database.
@@ -765,6 +951,79 @@ class Trainings extends CI_Controller{
     	$data['content'] = 'training-files/events_calendar_view';
     	$data['event_detail'] = $this->Trainings_model->detail_event($event_id);
     	$this->load->view('training-files/components/template', $data);
+    }
+    // --------------------------------------------------------------------------------
+    // Export to excel.
+    // --------------------------------------------------------------------------------
+    // Exporting Events.
+    public function exportExcel() {
+		$fileName = 'Events Report.xlsx';  
+		$ucpos_data = $this->Trainings_model->get_events_report();
+		$spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+       	$sheet->setCellValue('A1', 'Title');
+        $sheet->setCellValue('B1', 'Province');
+        $sheet->setCellValue('C1', 'District');
+        $sheet->setCellValue('D1', 'Project');
+		$sheet->setCellValue('E1', 'Designation');
+        $sheet->setCellValue('F1', 'Training Type');      
+        $sheet->setCellValue('G1', 'Start Date');      
+        $sheet->setCellValue('H1', 'End Date');      
+        $rows = 2;
+        foreach ($ucpos_data as $val){
+            $sheet->setCellValue('A' . $rows, $val['title']);
+            $sheet->setCellValue('B' . $rows, $val['provName']);
+            $sheet->setCellValue('C' . $rows, $val['cityName']);
+            $sheet->setCellValue('D' . $rows, $val['compName']);
+            $sheet->setCellValue('E' . $rows, $val['designation_name']);
+	    	$sheet->setCellValue('F' . $rows, $val['type']);
+            $sheet->setCellValue('G' . $rows, $val['start_date']);
+            $sheet->setCellValue('H' . $rows, $val['end_date']);
+            $rows++;
+        } 
+        $writer = new Xlsx($spreadsheet);
+		$writer->save("uploads/".$fileName);
+		header("Content-Type: application/vnd.ms-excel");
+        redirect(base_url()."/uploads/".$fileName);              
+    }
+    // Exporting Trainings.
+    public function export_trainings() {
+		$fileName = 'Induction Trainings.xlsx';  
+		$ucpos_data = $this->Trainings_model->get_trainings_report();
+		$spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+       	$sheet->setCellValue('A1', 'Trg Type');
+        $sheet->setCellValue('B1', 'Location');
+        $sheet->setCellValue('C1', 'Trainers');
+        $sheet->setCellValue('D1', 'Facilitator');
+		$sheet->setCellValue('E1', 'Started On');
+        $sheet->setCellValue('F1', 'Ended On');      
+        $sheet->setCellValue('G1', 'Venue');      
+        $sheet->setCellValue('H1', 'Hall Detail');      
+        $sheet->setCellValue('I1', 'Sessions');     
+        $sheet->setCellValue('J1', 'Approval Type');     
+        $sheet->setCellValue('K1', 'Announcement');
+        $sheet->setCellValue('L1', 'No. of Trainees');
+        $rows = 2;
+        foreach ($ucpos_data as $val){
+            $sheet->setCellValue('A' . $rows, $val['type']);
+            $sheet->setCellValue('B' . $rows, $val['prov_name']);
+            $sheet->setCellValue('C' . $rows, $val['first_name'].' '.$val['last_name']);
+            $sheet->setCellValue('D' . $rows, $val['facilitator_name']);
+            $sheet->setCellValue('E' . $rows, $val['start_date']);
+	    	$sheet->setCellValue('F' . $rows, $val['end_date']);
+            $sheet->setCellValue('G' . $rows, $val['venue']);
+            $sheet->setCellValue('H' . $rows, $val['hall_detail']);
+            $sheet->setCellValue('I' . $rows, $val['session']);
+            $sheet->setCellValue('J' . $rows, $val['approval_type']);
+            $sheet->setCellValue('K' . $rows, $val['created_at']);
+            $sheet->setCellValue('L' . $rows, $val['trainees']);
+            $rows++;
+        } 
+        $writer = new Xlsx($spreadsheet);
+		$writer->save("uploads/".$fileName);
+		header("Content-Type: application/vnd.ms-excel");
+        redirect(base_url()."/uploads/".$fileName);              
     }
 }
 

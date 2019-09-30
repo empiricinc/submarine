@@ -76,7 +76,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php if(!empty($hotels)):
+					<?php if($sl3['accessLevel3']): // Check Access Level.
+					if(!empty($hotels)):
 					foreach($hotels as $hotel): ?>
 					<tr>
 						<td><?php echo $hotel->name; ?></td>
@@ -235,7 +236,7 @@
 					    </div>
 					  </div>
 					</div>
-					<?php endforeach;  ?>
+					<?php endforeach; endif; // IF condition for Access Level check.  ?>
 				</tbody>
 			</table>
 			<div class="row">
@@ -253,7 +254,8 @@
 								<h3><?php if(!empty($prices)){ echo $prices[0]->hotel_name; }?> | <small> Amenities & Prices list</small></h3>
 							</div>
 							<div class="panel-body">
-								<?php if(!empty($prices)): foreach($prices as $price): ?>
+								<?php if($sl3['accessLevel3']): 
+								if(!empty($prices)): foreach($prices as $price): ?>
 								<div class="row">
 									<div class="col-lg-3">
 										<strong>Room Type: </strong><?php echo $price->room_type; ?>
@@ -269,7 +271,7 @@
 									</div>
 									<hr>
 								</div>
-								<?php endforeach; endif; ?>
+								<?php endforeach; endif; endif; ?>
 							</div>
 							<div class="panel-footer text-right">
 								<p>

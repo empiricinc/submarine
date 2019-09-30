@@ -89,7 +89,11 @@
 				</div>
 				<div class="col-lg-12"><hr>
 					<div class="tabelHeading">
-						<h3>recently added <span style="text-transform: lowercase;">( Here's the list of recently added events )</span></h3>
+						<h3>recently added <span style="text-transform: lowercase;">( Here's the list of recently added events )</span>
+							<small><a href="<?php echo base_url('trainings/exportExcel'); ?>" class="btn btn-success btn-xs">
+								Export to Excel
+							</a></small>
+						</h3>
 					</div>
 					<div class="tableMain">
 		              <div class="table-responsive">
