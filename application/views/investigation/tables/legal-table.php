@@ -9,7 +9,6 @@
 							<a href="javascript:void(0);" data-status="pending" class="label label-warning">pending</a>
 							<a href="javascript:void(0);" data-status="process" class="label label-info">process</a>
 							<a href="javascript:void(0);" data-status="review" class="label label-success">review</a>
-							<a href="javascript:void(0);" data-status="resolved" class="label label-primary">resolved</a>
 							<a href="javascript:void(0);" data-status="all" class="label label-danger">show all</a>
 						</small>
 					</h3>
@@ -22,10 +21,9 @@
 		<div class="col-md-12">
 			<div class="tableMain">
 				<div class="table-responsive">
-					<table class="table table-hover" id="<?= $table_id; ?>">
+					<table class="table table-hover" id="complaints-legal">
 						<thead>
 							<tr>
-								<th>#</th>
 								<th>Complaint No</th>
 								<th>Subject</th>
 								<th>Name</th>
@@ -49,7 +47,6 @@
 							?>
 
 								<tr data="<?= $c->complaint_id; ?>">
-									<td><?= $count; ?></td>
 									<td><?= $c->complaint_no; ?></td>
 									<td><?= $c->subject; ?></td>
 									<td><?= $c->name; ?></td>

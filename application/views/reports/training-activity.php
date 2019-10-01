@@ -5,7 +5,7 @@
 			<div class="tabelHeading">
 				<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh clear-form" onclick="$('#activity-search-form')[0].reset();"></a></h3>
 			</div>
-			<form action="<?= base_url(); ?>Reports/activity" method="GET" id="activity-search-form">
+			<form action="<?= base_url(); ?>Reports/activity" method="GET" id="activity-search-form" class="search-form">
 				<div class="selectBoxMain">
 					<div class="filterSelect">
 						<select name="project" class="form-control">
@@ -44,13 +44,13 @@
 						</select>
 						<span></span>
 					</div>
-					<div class="filterSelect hide">
+					<!-- <div class="filterSelect hide">
 						<select name="district" class="form-control district" id="district">
 							<option value="">District</option>
 							
 						</select>
 						<span></span>
-					</div>
+					</div> -->
 					
 
 					<div class="filterSelectBtn">
@@ -75,8 +75,8 @@
 						</div>
 						<div class="col-md-4 text-right">
 							<div class="tabelTopBtn">
-								<a href="<?= base_url(); ?>Reports/training_activity_pdf" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a>
-								<a href="<?= base_url(); ?>Reports/activityXLS" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+								<a href="<?= base_url(); ?>Reports/training_activity_pdf?<?= $search_query; ?>" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a>
+								<a href="<?= base_url(); ?>Reports/activityXLS?<?= $search_query; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 							</div>
 						</div>
 					</div>

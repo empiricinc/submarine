@@ -29,10 +29,10 @@
 		<div class="col-md-12">
 			<div class="tableMain">
 				<div class="table-responsive">
-					<table class="table table-hover" id="<?= $table_id; ?>">
+					<table class="table table-hover" id="complaints-table">
 						<thead>
 							<tr>
-								<th>#</th>
+								<!-- <th>#</th> -->
 								<th>Complaint No</th>
 								<th>Subject</th>
 								<th>Contact No</th>
@@ -57,7 +57,7 @@
 							?>
 
 								<tr data="<?= $c->id; ?>">
-									<td><?= $count; ?></td>
+									<!-- <td><?= $count; ?></td> -->
 									<td><?= $c->complaint_no; ?></td>
 									<td><?= $c->subject; ?></td>
 									<td><?= $c->contact_no; ?></td>

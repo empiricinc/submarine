@@ -1,4 +1,4 @@
-<?php $this->load->view('employee-cards/components/header'); ?>
+<?php $this->load->view('html/header'); ?>
 <?php $this->load->view('employee-cards/components/navbar'); ?>
 
 

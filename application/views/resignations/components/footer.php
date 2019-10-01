@@ -91,6 +91,39 @@
 		});
 	</script>
 
+	<script type="text/javascript">
+		$('.resignation-detail').on('click', function() {
+			var id = $(this).data('id');
+			if(id == undefined)
+				return;
+
+			window.location = "<?= base_url(); ?>Resignations/detail/" + id;
+			return;
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('.resignation-accept').on('click', function() {
+			var id = $(this).data('id');
+			if(id == undefined)
+				return;
+
+			window.location = "<?= base_url(); ?>Resignations/accept_resignation/" + id;
+			return;
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('.resignation-reject').on('click', function() {
+			var id = $(this).data('id');
+			if(id == undefined)
+				return;
+
+			window.location = "<?= base_url(); ?>Resignations/reject_resignation/" + id;
+			return;
+		});
+	</script>
+
 
 
 </body>

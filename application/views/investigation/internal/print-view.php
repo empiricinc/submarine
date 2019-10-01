@@ -110,28 +110,28 @@
 										</thead>
 										<tbody id="print-view">
 											<?php //var_dump($complaints); exit; ?>
-											<?php $count=1; foreach($complaints AS $c): 
+											<?php $count=1; foreach($complaints AS $complaint): 
 												$label = '';
-												if($c->status == "pending") 
+												if($complaint->status == "pending") 
 													$label = "label label-warning";
-												elseif($c->status == "resolved")
+												elseif($complaint->status == "resolved")
 													$label = "label label-primary";
-												elseif($c->status == "review")
+												elseif($complaint->status == "review")
 													$label = "label label-success";
-												elseif($c->status == "process")
+												elseif($complaint->status == "process")
 													$label = "label label-info";
 											?>
 
-												<tr data-id="<?= $c->id; ?>">
-													<td><?= $c->complaint_no; ?></td>
-													<td><?= $c->employee_id; ?></td>
-													<td><?= $c->project_name; ?></td>
-													<td><?= $c->department_name; ?></td>
-													<td><?= $c->designation_name; ?></td>
-													<td><?= $c->reason_text; ?></td>
-													<td><?= date('d-m-Y', strtotime($c->reported_date)); ?></td>
+												<tr data-id="<?= $complaint->id; ?>">
+													<td><?= $complaint->complaint_no; ?></td>
+													<td><?= ucwords($complaint->emp_name); ?></td>
+													<td><?= $complaint->project_name; ?></td>
+													<td><?= $complaint->department_name; ?></td>
+													<td><?= $complaint->designation_name; ?></td>
+													<td><?= $complaint->reason_text; ?></td>
+													<td><?= date('d-m-Y', strtotime($complaint->reported_date)); ?></td>
 													<td>
-														<label class="<?= $label; ?>"><?= $c->status; ?></label>
+														<label class="<?= $label; ?>"><?= $complaint->status; ?></label>
 													</td>
 												</tr>
 											<?php $count++; endforeach; ?>

@@ -251,30 +251,7 @@
 <!-- ./Employee Detail Modla -->
 
 
-<footer></footer>
-
-	<script src="<?= base_url(); ?>assets/js/jquery.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/jquery-ui/jquery-ui.js"></script> 
-
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/clockpicker/dist/jquery-clockpicker.min.js"></script> 
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/tether/js/tether.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/bootstrap/js/bootstrap.min.js"></script> 
- 	<script type="text/javascript">var site_url = '<?php echo base_url(); ?>';</script> 
-	<script type="text/javascript" src="<?php echo base_url().'skin/js_module/employees_detail.js'; ?>"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/js/jquery.dataTables.min.js"></script> 
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/js/dataTables.bootstrap4.min.js"></script> 
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Responsive/js/dataTables.responsive.min.js"></script> 
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Responsive/js/responsive.bootstrap4.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Buttons/js/dataTables.buttons.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Buttons/js/buttons.bootstrap4.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/pdfmake/build/pdfmake.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/pdfmake/build/vfs_fonts.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Buttons/js/buttons.html5.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Buttons/js/buttons.print.min.js"></script>
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/DataTables/Buttons/js/buttons.colVis.min.js"></script> 
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/select2/dist/js/select2.min.js"></script> 
-
-	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/toastr/toastr.min.js"></script>
+<?php $this->load->view('html/footer'); ?>
 	
 
 	<script type="text/javascript">
@@ -569,7 +546,10 @@
 			}
 			else
 			{	
-				ids.splice($(this).data('index'), 1); 
+				var index = ids.indexOf($(this).data('id'));
+				if(index != -1)
+					ids.splice(index, 1); 
+
 			}
 
 		});
@@ -583,8 +563,8 @@
 				res += ids[i].toString() + '-';
 				
 			}
+			
 			res = res.replace(/-+$/,'');
-
 			var url = $(this).data('url');
 			window.location = url+'/'+res;
 		});
@@ -611,7 +591,7 @@
 			res = '/'+res;
 
 			var url = $(this).data('url');
-			console.log(url+res+status); return;
+			
 			window.location = url+res+status;
 
 		});

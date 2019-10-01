@@ -5,7 +5,7 @@
 				<div class="headingMain">
 					<h1>
 						Investigation's Dashboard
-						<span>statics and more</span>
+						<!-- <span>statics and more</span> -->
 					</h1>
 				</div>
 			</div>
@@ -39,7 +39,6 @@
 									<table class="table table-hover">
 										<thead>
 											<tr>
-												<th>#</th>
 												<th>Complaint No</th>
 												<th>Subject</th>
 												<th>Province</th>
@@ -62,7 +61,6 @@
 											?>
 
 												<tr data="<?= $c->id; ?>">
-													<td><?= $count; ?></td>
 													<td><?= $c->complaint_no; ?></td>
 													<td><?= $c->subject; ?></td>
 													<td><?= $c->province; ?></td>
@@ -110,7 +108,7 @@
 												<th>Complaint No</th>
 												<th>Project</th>
 												<th>Department</th>
-												<th>Reason</th>
+												<!-- <th>Reason</th> -->
 												<th>Date</th>
 												<th>Status</th>
 											</tr>
@@ -133,7 +131,6 @@
 													<td><?= $i->complaint_no; ?></td>
 													<td><?= $i->project_name; ?></td>
 													<td><?= $i->department_name; ?></td>
-													<td><?= $i->reason_text; ?></td>
 													<td><?= date('d-m-Y', strtotime($i->reported_date)); ?></td>
 													<td>
 														<label class="<?= $label; ?>"><?= $i->status; ?></label>

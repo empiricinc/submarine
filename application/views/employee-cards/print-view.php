@@ -30,7 +30,8 @@
 						<div class="tableMain">
 							<table class="table" style="width:872px;height:100%; margin-bottom: 0px;">
 								<tbody>
-	
+						<?php if(!empty($employees[0])): ?>
+					
 						<?php foreach($employees AS $e): ?>
 						<tr>
 							<td id="tdColumn1" style="width:50%;vertical-align: top; padding: 20px;" class="no-padding-print no-border">
@@ -44,10 +45,10 @@
 									<div class="card-province-logo"><img src="<?= base_url(); ?>assets/img/FATA_logo.png" style="position: relative; width: 57px;height: 67px;"></div>
 				                    <div class="card-district-heading">District :</div>
 				                    <div class="card-tehsil-uc-area-heading">UC/Area :</div>
-									<div class="card-district">KP-TD</div>
-									<div class="card-uc"></div>
+									<div class="card-district"><?= strtoupper($e->p_province); ?></div>
+									<div class="card-uc"><?= strtoupper($e->p_uc); ?></div>
 									<div class="card-job-type"><?= ucwords($e->designation_name); ?></div>
-									<div class="card-emp-id">1280010011978</div>
+									<div class="card-emp-id"></div>
 									<div class="card-sign-authority">( Regional Manager )</div>
 									<div class="card-authority-signature">
 										<img src="<?= base_url(); ?>assets/img/fatasign.png" style="position: relative; width: 60px;height: 43px; right: 80px;">
@@ -62,7 +63,7 @@
 									<div class="card-date-of-birth">
 										<?= date('d-m-Y', strtotime($e->date_of_birth)); ?>
 									</div>
-									<div class="card-emergency"><?= $e->personal_contact; ?></div>
+									<div class="card-emergency"><?= $e->contact_number; ?></div>
 									<div class="card-issue-date">Jan,2019</div>
 				                    <div class="temporary-card-issue-date"></div>
 				                    <div class="card-expiry-date"></div>
@@ -72,6 +73,7 @@
 						</tr>
 							
 						<?php endforeach; ?>
+					<?php endif; ?>
 							</tbody>
 						</table>
 							

@@ -1,4 +1,4 @@
-<?php $this->load->view('resignations/components/header'); ?>
+<?php $this->load->view('html/header'); ?>
 <?php $this->load->view('resignations/components/navbar'); ?>
 
 

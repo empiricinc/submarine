@@ -13,7 +13,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -72,9 +72,9 @@
 
 
 	<script>
-		$('.termination-table tr').on('click', function() {
+		$('.view-detail, .termination-table tr').on('click', function() {
 
-			var id = $(this).attr('data');
+			var id = $(this).data('id');
 			if(id == undefined)
 				return;
 
@@ -84,6 +84,18 @@
 		});
 
 	</script>
+
+	<script type="text/javascript">
+		$('.terminate').on('click', function() {
+			var id = $(this).data('id');
+			if(id == undefined)
+				return;
+
+			window.location = "<?= base_url(); ?>Terminations/confirm/" + id;
+			return;
+		});
+	</script>
+
 
 
 

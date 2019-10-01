@@ -7,13 +7,14 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="#"><img src="<?= base_url(); ?>assets/img/bars.png" alt=""></a>
+        <a class="navbar-brand" href="<?php echo base_url();?>"><div class="hrms-logo">HRMS</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
           <li class=""><a href="<?= base_url(); ?>">Home</a></li>
-          <li class=""><a href="<?= base_url(); ?>Terminations/add">Add</a></li>
-          <li><a href="<?= base_url(); ?>Terminations/view">View</a></li>
+          <li class=""><a href="<?= base_url(); ?>Terminations/add">Add Termination</a></li>
+          <li><a href="<?= base_url(); ?>Terminations/view">List Terminations</a></li>
+          <!-- <li><a href="<?= base_url(); ?>Terminations/requests">Termination Requests</a></li> -->
           <li>
             <a href="#">
               <span class="dot"></span>

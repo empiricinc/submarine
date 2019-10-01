@@ -7,11 +7,12 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="#"><img src="<?= base_url(); ?>assets/img/bars.png" alt=""></a>
+        <a class="navbar-brand" href="<?php echo base_url();?>"><div class="hrms-logo">HRMS</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li class=""><a href="<?= base_url(); ?>Investigation/dashboard">Home</a></li>
+          <li class=""><a href="<?= base_url(); ?>">Home</a></li>
+          <li class=""><a href="<?= base_url(); ?>Investigation/dashboard">Dashboard</a></li>
           <li class=""><a href="<?= base_url(); ?>Investigation/index">Add Complaint</a></li>
           <li class="dropdown">
             <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true"> Complaints </a>
@@ -45,14 +46,18 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li>
-            <a href="#">
+          <li class="dropdown">
+            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle">
               <img src="<?= base_url(); ?>assets/img/profile.png" alt="">
               Hasseb Khattak
               <span class="caret"></span>    
             </a>
+            <ul class="dropdown-menu">  
+                
+            </ul>
           </li>
         </ul>
+        
       </div>
     </div>
   </nav>

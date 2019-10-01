@@ -33,7 +33,7 @@
 				</div>
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<select name="reason" id="card-reason" class="form-control" required="required">
+						<select data-plugin="select_hrm" name="reason" id="card-reason" class="form-control" required="required">
 							<option value="">SELECT REASON</option>
 							<?php foreach($reason AS $r): ?>
 							<option value="<?= $r->id; ?>"><?= $r->reason_text; ?></option>
@@ -47,6 +47,7 @@
 						<button class="btn btnSubmit btn-block" id="card-request-btn">Submit</button>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>

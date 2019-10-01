@@ -163,6 +163,7 @@
 			</div>
 			<div class="col-print-12">
 				<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4><h4></h4></center>
+				<center><h4>Complaint Detail And Remarks</h4></center>
 			</div>
 			<div class="col-print-12">
 				<hr>
@@ -170,9 +171,9 @@
 		</div>
 	</div>
 	<div class="detail">
-		<div class="col-lg-12 col-print-12">
+		<!-- <div class="col-lg-12 col-print-12">
 			<h4>Complaint Detail And Remarks</h4>
-		</div>
+		</div> -->
 		<!-- <div class="col-lg-12 col-print-12"><hr></div> -->
 
 		<div class="mlr-15">				

@@ -1,4 +1,4 @@
-<?php $this->load->view('user_panel/components/header'); ?>
+<?php $this->load->view('html/header'); ?>
 <?php $this->load->view('user_panel/components/navbar'); ?>
 
 

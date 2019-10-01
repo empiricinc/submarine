@@ -39,7 +39,7 @@
 						
 						<div class="col-lg-12 ptb-5">
 							<div class="col-lg-2"><strong>Employee Name</strong></div>
-							<div class="col-lg-4"><?= $detail->employee_id; ?></div>
+							<div class="col-lg-4"><?= ucwords($detail->emp_name); ?></div>
 
 							<div class="col-lg-2"><strong>Project</strong></div>
 							<div class="col-lg-4"><?= $detail->project_name; ?></div>
@@ -85,8 +85,8 @@
 				</div>
 			</div>
 
-					<!-- Files and Remarks -->
-			<?php if(!empty($remarks_and_files)): ?>
+			<!-- Files and Remarks -->
+			<?php if(!empty($remarks_and_files) || !empty($detail->closing_remarks)): ?>
 			<div class="panel panel-default mlr-15">
 				<div class="panel-heading">
 					<h4>Investigation Remarks and Detail</h4>
@@ -131,6 +131,24 @@
 
 				<?php } ?>
 
+				<!-- Complainee Reply -->
+				<?php if($complainee_reply->complainee_reply != ''): ?>
+					<div class="col-lg-11">
+						<div class="col-lg-12 well mb-5">
+							<div class="col-lg-12 mb-10">
+								<strong><?= ucwords($complainee_reply->emp_name); ?> (Complainee Reply)</strong>
+							</div>
+							<div class="col-lg-12">
+								<?= $complainee_reply->complainee_reply; ?>
+							</div>
+							<div class="col-lg-12 mt-15">
+								<span class="label label-primary"><?= date('d-m-Y', strtotime($complainee_reply->reply_date)); ?></span>
+							</div>
+						</div>
+					</div>
+				<?php endif; ?>
+				<!-- ./ End of Complainee Reply -->
+
 				<!-- closing remarks -->
 				<?php if($detail->status == 'resolved'): ?>
 					<div class="col-lg-11">
@@ -169,9 +187,12 @@
 							<input type="file" name="docs[]" multiple>
 						</div>
 
-						<div class="submitBtn col-lg-2 pr-0">
+						<div class="submitBtn col-lg-3 pr-0">
 							<button type="submit" class="btn btnSubmit"><i class="fa fa-check"></i> Resolve </button>
 						</div>	
+						<div class="submitBtn col-lg-3 pl-0">
+							<button type="button" id="forward-complainee" class="btn btnSubmit"><i class="fa fa-forward"></i> Complainee </button>
+						</div>
 					</form>
 				</div>
 				<!-- ./ Form -->
@@ -216,7 +237,7 @@
 				
 				<div class="col-lg-12 col-print-12 ptb-5">
 					<div class="col-lg-2 col-print-2"><strong>Employee Name</strong></div>
-					<div class="col-lg-4 col-print-4"><?= $detail->employee_id; ?></div>
+					<div class="col-lg-4 col-print-4"><?= ucwords($detail->emp_name); ?></div>
 
 					<div class="col-lg-2 col-print-2"><strong>Project</strong></div>
 					<div class="col-lg-4 col-print-4"><?= $detail->project_name; ?></div>
@@ -265,7 +286,7 @@
 	</div>
 
 		<!-- Files and Reviews from Legal department -->
-		<?php if(!empty($remarks_and_files)): ?>
+		<?php if(!empty($remarks_and_files) || !empty($detail->closing_remarks)): ?>
 		<div class="remarks">
 		<div class="col-lg-12 col-print-12">
 			<h4>Investigation Remarks</h4>
@@ -301,6 +322,24 @@
 			</div>
 			</div>
 			<?php } ?>
+
+			<!-- Complainee Reply -->
+			<?php if(!empty($complainee_reply)): ?>
+				<div class="col-lg-11 col-print-11">
+					<div class="col-lg-12 col-print-12 mb-10 border">
+						<div class="col-lg-12 col-print-12">
+							<strong><?= ucwords($complainee_reply->emp_name); ?> (Complainee Reply)</strong>
+						</div>
+						<div class="col-lg-12 col-print-12">
+							<?= $complainee_reply->complainee_reply; ?>
+						</div>
+						<div class="col-lg-12 col-print-12">
+							<span class="font-12"><?= date('d-m-Y', strtotime($complainee_reply->reply_date)); ?></span>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+			<!-- ./ End of Complainee Reply -->
 
 			<!-- closing remarks -->
 			<?php if($detail->status == 'resolved'): ?>

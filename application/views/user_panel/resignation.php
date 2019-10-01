@@ -17,7 +17,7 @@
 			<div id="resignation-form">
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<input type="text" name="employee_name" value="<?= ucwords($emp->first_name .' '.$emp->last_name); ?>" class="form-control" id="resg-name" readonly>
+						<input type="text" name="employee_name" value="<?= ucwords($emp->emp_name); ?>" class="form-control" id="resg-name" readonly>
 					</div>
 				</div>
 				<div class="col-lg-12">
@@ -32,7 +32,7 @@
 				</div> -->
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<select name="reason" id="resg-reason" class="form-control" required="required">
+						<select data-plugin="select_hrm" name="reason" id="resg-reason" class="form-control" required="required">
 							<option value="">SELECT REASON OF RESIGNATION</option>
 							<?php foreach($reasons AS $r): ?>
 							<option value="<?= $r->reason_id; ?>"><?= $r->reason_text; ?></option>

@@ -140,7 +140,7 @@
 									<tbody>
 										<?php for($i=0; $i<count($attendees); $i++): ?>
 										<tr>
-											<td><?= $attendees[$i]['employee_name']; ?></td>
+											<td><?= ucwords($attendees[$i]['employee_name']); ?></td>
 											<td><?= $attendees[$i]['designation_name']; ?></td>
 											<?php foreach($attendance_date AS $ad): ?>
 											<td>

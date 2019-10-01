@@ -28,6 +28,17 @@
 				<?php echo form_open('Investigation/add_complaint'); ?>
 				
 				<!-- <form method="POST" action="" id="complaint-form"> -->
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<select name="project" id="project" class="form-control" data-toggle="tooltip" title="Project" required>
+								<option value="">Select Project</option>
+								<?php foreach($projects as $p): ?>
+								<option value="<?= $p->company_id; ?>"><?= $p->name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+
 				    <div class="col-lg-12">
 						<div class="inputFormMain">
 							<select name="province" id="province" class="form-control province" data-toggle="tooltip" title="Province" required>

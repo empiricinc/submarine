@@ -25,10 +25,10 @@
 			<form method="post" action="<?= base_url(); ?>Terminations/terminate" id="termination-form">
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<select name="employee" id="employee" class="form-control select2" required="required">
+						<select name="employee" id="employee" class="form-control" data-plugin="select_hrm" required="required">
 							<option value="">SELECT EMPLOYEE</option>
 							<?php foreach($employees as $e): ?>
-							<option value="<?= $e->user_id; ?>"><?= ucwords($e->emp_name); ?></option>
+							<option value="<?= $e->user_id; ?>"><?= ucwords($e->employee_name); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</div>
@@ -36,7 +36,7 @@
 
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<select name="reason" id="resg-reason" class="form-control" required="required">
+						<select name="reason" id="resg-reason" class="form-control" data-plugin="select_hrm" required="required">
 							<option value="">SELECT REASON OF TERMINATION</option>
 							<?php foreach($reasons as $r): ?>
 							<option value="<?= $r->id; ?>"><?= ucfirst($r->reason_text); ?></option>
@@ -51,7 +51,7 @@
 				</div>
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<input type="text" name="notice_date" class="form-control date" id="notice-date" placeholder="Notice Date" required>
+						<input type="text" name="termination_date" class="form-control date" id="termination-date" placeholder="Termination Date" required>
 					</div>
 				</div>
 				<div class="col-lg-12">

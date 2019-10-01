@@ -94,6 +94,24 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="col-lg-2 col-print-2">
+								<label>Resignation Date</label>
+							</div>
+							<div class="col-lg-3 col-print-3">
+								<?= $detail->resignation_date; ?>
+							</div>
+							<div class="col-lg-2 col-print-2"></div>
+							<div class="col-lg-2 col-print-2">
+								<label></label>
+							</div>
+							<div class="col-lg-3 col-print-3">
+								
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="col-lg-2 col-print-2">
 								<label>Subject</label>
 							</div>
 							<div class="col-lg-10 col-print-10">
@@ -112,43 +130,28 @@
 						</div>
 					</div>
 					<hr>
-
+					
+					<?php if($detail->decision_by != ''): ?>
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="col-lg-2 col-print-2">
 								<label>Accepted By</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->accepted_by); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label></label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Resignation Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->resignation_date; ?>
+								<?= ucwords($detail->decision_by); ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">
 								<label>Acceptance Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->accepted_date; ?>
+								<?= $detail->decision_date; ?>
 							</div>
 						</div>
 					</div>
 
+					
+					<?php endif; ?>
 					
 
 					<!-- <div class="row">

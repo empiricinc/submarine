@@ -1,7 +1,7 @@
 <section class="secMainWidth remove-padding-print">
 	<div class="row">
 		
-		<?php //var_dump($detail); exit; ?>
+	
 		<div class="col-lg-12">
 		<!-- <section class="secMainWidth"> -->
 			<section class="secFormLayout">
@@ -17,7 +17,6 @@
 							<div class="tabelTopBtn">
 								<div class="btn-group">
 									<a href="javascript:void(0);" onclick="window.print();" class="btn"><i class="fa fa-print"></i> Print</a>
-									<!-- <a href="<?= base_url(); ?>Reports/applicant_report_pdf/<?= $detail->application_id; ?>" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a> -->
 								</div>
 							
 							</div>
@@ -52,7 +51,7 @@
 								<label>Designation</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->designation_name; ?>
+								<?= ucwords($detail->designation_name); ?>
 							</div>
 						</div>
 					</div>
@@ -62,7 +61,7 @@
 								<label>Project</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->project_name; ?>
+								<?= ucwords($detail->project_name); ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">
@@ -95,17 +94,6 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="col-lg-2 col-print-2">
-								<label>Notice Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->notice_date)); ?>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
 								<label>Description</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
@@ -128,39 +116,17 @@
 								<label>Terminated By</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->terminated_by; ?>
+								<?= ucwords($detail->terminated_by); ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label>Confirmed By</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->confirmed_by; ?>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-						
 							<div class="col-lg-2 col-print-2">
 								<label>Termination Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
 								<?= date('d-m-Y', strtotime($detail->termination_date)); ?>
-							</div>	
-							<div class="col-lg-2 col-print-2"></div>
-
-							<div class="col-lg-2 col-print-2">
-								<label>Confirmed Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->confirmed_date)); ?>
 							</div>
 						</div>
 					</div>
-
-					
 
 				</div>
 			</section>

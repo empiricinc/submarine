@@ -14,9 +14,7 @@
 				<div class="">
 					<div class="col-md-3">
 						<div class="inputFormMain">
-							<select name="salary_date" id="salary-date" class="form-control select2" required="required">
-								<option value="">SELECT SALARY DATE</option>
-							</select>
+							<input type="text" name="salary_month" id="salary-month" class="form-control date" placeholder="Enter Payroll Month" required>
 						</div>
 					</div>
 					<div class="col-md-1">
@@ -50,35 +48,35 @@
 						</div>
 					</div>
 					
-					<div class="salary-slip-body">
+					<div class="salary-slip-body mlr-15">
 						<div class="row">
-							<div class="col-md-12 no-padding-print">
+							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Salary slip #</label></div>
 								<div class="col-md-4 col-print-3">1</div>
 
 								<div class="col-md-2 col-print-3"><label>Employee ID</label></div>
-								<div class="col-md-4 col-print-3">G34T7</div>
+								<div class="col-md-4 col-print-3"><?= $basic_info->employee_id; ?></div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
+							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Name</label></div>
-								<div class="col-md-4 col-print-3">Nawaz Sharif</div>
+								<div class="col-md-4 col-print-3"><?= ucwords($basic_info->emp_name); ?></div>
 
 								<div class="col-md-2 col-print-3"><label>CNIC</label></div>
-								<div class="col-md-4 col-print-3">548968299582</div>
+								<div class="col-md-4 col-print-3"><?= $basic_info->cnic; ?></div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
+							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Project</label></div>
-								<div class="col-md-4 col-print-3">CBV</div>
+								<div class="col-md-4 col-print-3"><?= $basic_info->company_name; ?></div>
 
 								<div class="col-md-2 col-print-3"><label>Designation</label></div>
-								<div class="col-md-4 col-print-3">VP</div>
+								<div class="col-md-4 col-print-3"><?= $basic_info->designation_name; ?></div>
 							</div>
 						</div>
-						<div class="row">
+<!-- 						<div class="row">
 							<div class="col-md-12 col-print-12 no-padding-print">
 								<div class="col-md-2 col-print-3"><label>Salary Date</label></div>
 								<div class="col-md-4 col-print-3">Mar-2019</div>
@@ -95,7 +93,7 @@
 								<div class="col-md-2 col-print-3"><label>Paid Days</label></div>
 								<div class="col-md-4 col-print-3">29</div>
 							</div>
-						</div>
+						</div> -->
 						<!-- <div class="row">
 							<div class="col-md-12 col-print-12 no-padding-print">
 								<div class="col-md-2 col-print-3"><label>Salary Per Day</label></div>
@@ -106,23 +104,27 @@
 							</div>
 						</div> -->
 						<div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
+							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Gross Salary</label></div>
-								<div class="col-md-4 col-print-3">900,000</div>
+								<div class="col-md-4 col-print-3"><?= (isset($salary->gross_salary)) ? $salary->gross_salary : 0; ?></div>
 
-								<div class="col-md-2 col-print-3"><label>Paid Salary</label></div>
-								<div class="col-md-4 col-print-3">900,0000</div>
+								<div class="col-md-2 col-print-3"><label>Basic Salary</label></div>
+								<div class="col-md-4 col-print-3"><?= (isset($salary->basic_salary)) ? $salary->basic_salary : 0; ?></div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
-								<div class="col-md-2 col-print-3"><label>Paid Date</label></div>
-								<div class="col-md-4 col-print-3">4-5-2019</div>
-
+							<div class="col-md-12 col-print-12">
+								<div class="col-md-2 col-print-3"><label>Payment Date</label></div>
+								<div class="col-md-4 col-print-3"></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Description</label></div>
 								<div class="col-md-4 col-print-3">None</div>
 							</div>
 						</div>
+
 					</div>
 
 					<div class="salary-slip-footer">
@@ -130,28 +132,33 @@
 							<div class="col-md-5 col-print-5 no-padding-print">
 								<table class="table table-bordered">
 									<thead>
-										<th colspan='2' class="bb-0">Earning</th>
+										<th colspan='2' class="bb-0">Allowances</th>
 									</thead>
 									<tbody>
 										<tr>
-											<td width="60%">Basic Salary</td>
-											<td>10000</td>
+											<td width="60%">House Rent Allowance</td>
+											<td>
+												<?= $house_rent = (isset($salary->house_rent_allowance)) ? $salary->house_rent_allowance : 0; ?>
+													
+											</td>
 										</tr>
 										<tr>
 											<td>Medical Allowance</td>
-											<td>30000</td>
+											<td>
+												<?= $medical = (isset($salary->medical_allowance)) ? $salary->medical_allowance : 0; ?>
+													
+											</td>
 										</tr>
 										<tr>
-											<td>Stationary Allowance</td>
-											<td>25000</td>
-										</tr>
-										<tr>
-											<td>Vehicle Fuel Allowance</td>
-											<td>70000</td>
+											<td>Travel Allowance</td>
+											<td>
+												<?= $travel = (isset($salary->travelling_allowance)) ? $salary->travelling_allowance : 0; ?>
+													
+											</td>
 										</tr>
 										<tr>
 											<td><strong>Total</strong></td>
-											<td>40000</td>
+											<td><?= $house_rent + $medical + $travel; ?></td>
 										</tr>
 									</tbody>
 								</table>
@@ -165,23 +172,25 @@
 									<tbody>
 										<tr>
 											<td width="50%">TAX</td>
-											<td>20000</td>
+											<td>
+												<?= $tax = (isset($salary->tax_deduction)) ? $salary->tax_deduction : 0; ?>
+											</td>
 										</tr>
 										<tr>
 											<td>EOBI</td>
-											<td>20000</td>
+											<td>
+												<?= $eobi = (isset($salary->eobi)) ? $salary->eobi : 0; ?>	
+											</td>
 										</tr>
 										<tr>
-											<td>Absent</td>
-											<td>22338</td>
-										</tr>
-										<tr>
-											<td>Others</td>
-											<td>2345</td>
+											<td>Provident Fund</td>
+											<td>
+												<?= $provident_fund = (isset($salary->provident_fund)) ? $salary->provident_fund : 0; ?>
+											</td>
 										</tr>
 										<tr>
 											<td><strong>Total</strong></td>
-											<td></td>
+											<td><?= $tax + $eobi + $provident_fund; ?></td>
 										</tr>
 									</tbody>
 								</table>

@@ -14,9 +14,11 @@
 						</small>
 					</h3>
 				</div>
-				<div class="col-md-2 text-right">
+				<div class="col-md-2">
 					<div class="tabelTopBtn">
-					<a href="<?= base_url(); ?>Reports/createComplaintsXLS" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+						<a href="<?= base_url(); ?>Reports/createComplaintsXLS?<?= $search_query; ?>" class="btn">
+							<i class="fa fa-file-excel-o"></i> Export All
+						</a>
 					</div>
 				</div>
 			</div>
@@ -27,10 +29,9 @@
 		<div class="col-md-12">
 			<div class="tableMain">
 				<div class="table-responsive">
-					<table class="table table-hover" id="complaints-table">
+					<table class="table table-hover">
 						<thead>
 							<tr>
-								<!-- <th>ID</th> -->
 								<!-- <th>#</th> -->
 								<th>Complaint No</th>
 								<th>Subject</th>
@@ -41,7 +42,7 @@
 								<th>Status</th>
 							</tr>
 						</thead>
-						<tbody id="complaints-handler">
+						<tbody id="complaints-tbody">
 							<?php //var_dump($complaints); exit; ?>
 							<?php $count=1; foreach($complaints AS $c): 
 								$label = '';
@@ -80,5 +81,4 @@
 			<?php echo $this->pagination->create_links(); ?>
 		</div>
 	</div>
-
 </div>

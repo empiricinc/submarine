@@ -6,7 +6,7 @@
 					<div class="tabelHeading">
 						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#terminations-search-form')[0].reset();"></a></h3>
 					</div>
-					<form action="<?= base_url(); ?>Reports/terminations" method="GET" id="terminations-search-form">
+					<form action="<?= base_url(); ?>Reports/terminations" method="GET" id="terminations-search-form" class="search-form">
 						<div class="selectBoxMain">
 
 							<div class="filterSelect">
@@ -58,7 +58,7 @@
 								</div>
 								<div class="col-md-2 text-right">
 									<div class="tabelTopBtn">
-									<a href="<?= base_url(); ?>Reports/terminationsXLS" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+									<a href="<?= base_url(); ?>Reports/terminationsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 									</div>
 								</div>
 							</div>
@@ -79,7 +79,7 @@
 											<th>Designation</th>	
 											<th>Termination Reason</th>
 											<th>Terminated By</th>
-											<th>Notice Date</th>
+											<th>Termination Date</th>
 										</thead>
 								        <tbody>
 								        	<?php $count = 1; ?>
@@ -87,11 +87,11 @@
 											<tr data="<?= $t->id; ?>" style="cursor: pointer;">
 												<!-- <td><?= $count; ?></td> -->
 												<td><?= ucwords($t->employee_name); ?></td>
-												<td><?= $t->company_name; ?></td>
-												<td><?= $t->designation_name; ?></td>
+												<td><?= ucwords($t->company_name); ?></td>
+												<td><?= ucwords($t->designation_name); ?></td>
 												<td><?= $t->reason_text; ?></td>
-												<td><?= $t->terminator; ?></td>
-												<td><?= $t->notice_date; ?></td>
+												<td><?= ucwords($t->terminator); ?></td>
+												<td><?= date('d-m-Y', strtotime($t->termination_date)); ?></td>
 											</tr>
 											<?php $count++; endforeach; ?>
 								        </tbody>

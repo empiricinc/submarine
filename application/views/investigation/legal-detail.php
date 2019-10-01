@@ -13,9 +13,7 @@
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-lg-10 text-left">
-						<div class="tabelHeading">
-							<h3><?= $title; ?></h3>
-						</div>
+						<h4><?= $title; ?></h4>
 					</div>
 					<div class="col-lg-2 text-right">	
 						<div class="btn-group" role="group" aria-label="Basic example">
@@ -82,7 +80,7 @@
 
 
 		<!-- Remarks and files -->
-		<?php if(!empty($remarks_and_files)): ?>
+		<?php if(!empty($remarks_and_files) || !empty($detail->closing_remarks)): ?>
 		<div class="panel panel-default mlr-15">
 			<div class="panel-heading">
 				<h4>Investigation Remarks and Detail</h4>
@@ -148,10 +146,10 @@
 						<input type="file" name="docs[]" multiple>
 					</div>
 
-					<div class="submitBtn col-lg-2 pr-0">
+					<div class="submitBtn col-lg-3 pr-0">
 						<button type="submit" class="btn btnSubmit"><i class="fa fa-check"></i> Resolve </button>
 					</div>	
-					<div class="submitBtn col-lg-2 pl-0">
+					<div class="submitBtn col-lg-3 pl-0">
 						<button type="button" data-toggle="modal" data-target="#select-inquirer-modal" class="btn btnSubmit"><i class="fa fa-forward"></i> Forward </button>
 					</div>	
 				</form>
@@ -172,6 +170,7 @@
 			</div>
 			<div class="col-print-12">
 				<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4><h4></h4></center>
+				<center><h4>Complaint Detail And Remarks</h4></center>
 			</div>
 			<div class="col-print-12">
 				<hr>
@@ -179,9 +178,9 @@
 		</div>
 	</div>
 	<div class="detail">
-		<div class="col-lg-12 col-print-12">
+		<!-- <div class="col-lg-12 col-print-12">
 			<h4>Complaint Detail And Remarks</h4>
-		</div>
+		</div> -->
 		<!-- <div class="col-lg-12 col-print-12"><hr></div> -->
 
 		<div class="mlr-15">				
@@ -241,7 +240,7 @@
 	</div>
 
 	<!-- Files and Reviews from Legal department -->
-	<?php if(!empty($remarks_and_files)): ?>
+	<?php if(!empty($remarks_and_files) || !empty($detail->closing_remarks)): ?>
 	<div class="remarks">
 		<div class="col-lg-12 col-print-12">
 			<h4>Investigation Remarks</h4>

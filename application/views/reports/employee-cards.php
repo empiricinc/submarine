@@ -5,7 +5,7 @@
 				<div class="tabelHeading">
 					<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh clear-form" onclick="$('#employee-search-form')[0].reset();"></a></h3>
 				</div>
-				<form action="<?= base_url(); ?>Reports/employee_cards" method="GET" id="employee-search-form">
+				<form action="<?= base_url(); ?>Reports/employee_cards" method="GET" id="employee-search-form" class="search-form">
 					<div class="selectBoxMain">
 						<div class="filterSelect">
 							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID">

@@ -5,12 +5,19 @@
  */
 class User_panel extends MY_Controller
 {
-	
+	var $session_data;
 	function __construct()
 	{
 		parent::__construct();
-		// if(!isset($this->session->user_id))
-		// 	redirect(base_url());
+		if(empty($this->session->username))
+            redirect(base_url());
+        
+        $this->session_data = array(
+					        	'user_id' => $this->session->username['employee_id'], 
+					        	'project_id' => '', 
+					        	'province_id' => ''
+					        );
+
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->helper(array('form', 'url', 'html'));
 
@@ -25,7 +32,9 @@ class User_panel extends MY_Controller
 				"Department_model",
 				"Designation_model",
 				"Roles_model",
-				"Location_model"
+				"Location_model",
+				"Contract_model",
+				"Resignations_model"
 			)
 		);
 
@@ -35,33 +44,27 @@ class User_panel extends MY_Controller
 
 	public function index()
 	{
-		$data['title'] = "Employee's Dashboard";
+		$employee_id = $this->session_data['user_id'];
 
+		$data['title'] = "Employee's Dashboard";
+		$data['trainings'] = $this->User_panel_model->get_employee_trainings($employee_id, FALSE, 5)->result();
+
+		$data['leave_application'] = $this->User_panel_model->previous_leave_applications($employee_id, 5);
 		$data['content'] = $this->load->view('user_panel/dashboard', $data, TRUE);
 		$this->load->view('user_panel/_template', $data);
 	}
 
 
-	public function personal_detail()
+	public function basic_info()
 	{
-		// $id = $this->session->user_id;
-		$id = 6;
+		$employee_id = $this->session_data['user_id'];
 
-		if(!empty($id))
+		if(!empty($employee_id))
 		{
 			$data['title'] = 'Employee Detail';
 
-			$emp_info = $data['basic_info'] = $this->User_panel_model->get_employee_detail($id);
-			//var_dump($emp_info); exit;
-			//$emp_info = $data['basic_info'] = $this->User_panel_model->emp_basic_info($id);
-
-			// $data['residential_info'] = $this->User_panel_model->emp_current_address($id);
-			// $data['permanent_location_info'] = $this->User_panel_model->emp_permanent_address($id);
-			// $data['educational_info'] = $this->User_panel_model->emp_educational_info($id);
-			// $data['total_experience_info'] = $this->User_panel_model->emp_work_experience($id);
-			// $data['bank_info'] = $this->User_panel_model->emp_bank_info($id);
-			$data['supervisor_detail'] = $this->User_panel_model->emp_supervisor_detail($id);
-			// echo $this->db->last_query();
+			$emp_info = $data['basic_info'] = $this->User_panel_model->get_employee_detail($employee_id);
+			$data['supervisor_detail'] = $this->User_panel_model->emp_supervisor_detail($employee_id);
 
 			$data['countries'] = $this->User_panel_model->get_countries();
 			$data['religion'] = $this->User_panel_model->get_religion();
@@ -75,10 +78,8 @@ class User_panel extends MY_Controller
 			$data['province'] = $this->User_panel_model->get_province();
 			$data['discipline'] = $this->User_panel_model->get_discipline();
 			$data['bank'] = $this->User_panel_model->get_bank();
-			$data['qualification'] = $this->User_panel_model->get_qualification($id);
-			
+			$data['qualification'] = $this->User_panel_model->get_qualification($employee_id);
 
-			
 			$data['r_district'] = $this->User_panel_model->get_district_province($emp_info->resident_province);
 			$data['p_district'] = $this->User_panel_model->get_district_province($emp_info->permanent_province);
 
@@ -87,8 +88,12 @@ class User_panel extends MY_Controller
 
 			$data['r_uc'] = $this->User_panel_model->get_uc_tehsil($emp_info->resident_tehsil);
 			$data['p_uc'] = $this->User_panel_model->get_uc_tehsil($emp_info->permanent_tehsil);
-			
-			$data['content'] = $this->load->view('user_panel/personal_detail', $data, TRUE);
+
+			$data['salary'] = $this->User_panel_model->employee_salary($employee_id);
+		
+			$data['contract_detail'] = $this->Contract_model->contract_print($employee_id);
+
+			$data['content'] = $this->load->view('user_panel/basic_info', $data, TRUE);
 			$this->load->view('user_panel/_template', $data);
 		}
 		else
@@ -97,14 +102,79 @@ class User_panel extends MY_Controller
 		}
 	}
 
+	
+	public function new_card()
+	{
+		$employee_id = $this->session_data['user_id'];
+
+		$data['title'] = 'Employee Card Request Form';
+		$data['employee'] = $this->User_panel_model->get_employee_card_detail($employee_id);
+		$data['reason'] = $this->User_panel_model->get_card_request_reasons($employee_id);
+
+	 	$data['content'] = $this->load->view('user_panel/employee-card', $data, TRUE);
+		$this->load->view('user_panel/_template', $data);
+	}
+
+
+	public function request_card()
+	{
+		$employee_id = $this->session_data['user_id'];
+		$date = date('Y-m-d');
+
+		$this->ajax_check();
+		$reason = $this->input->post('reason');
+
+		$data = array(
+					'employee_id' => $employee_id,
+					'card_status' => 'pending',
+					'request_reason' => $reason,
+					'request_date' => $date
+					);
+
+		$res = $this->db->insert('employee_cards', $data);
+		
+		if($res)
+		{
+			echo '1';
+		}
+		else
+		{
+			echo '0';
+		}
+	}
+
 
 	public function update_employee()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 6;
+		$employee_id = $this->session_data['user_id'];
 
 		if(isset($_POST['employee_name'])) 
 		{
+			
+			if($_FILES['profile_pic']['name'] != "")
+			{
+				$config['upload_path']="./uploads/profile";
+		        $config['allowed_types']='gif|jpg|png';
+		        $config['encrypt_name'] = TRUE;
+		        $config['max_size'] = '100000';
+		         
+		        $this->load->library('upload',$config);
+		        if($this->upload->do_upload('profile_pic')){
+		            $data = array('upload_data' => $this->upload->data());
+		            $image = $data['upload_data']['file_name']; 
+		            
+		            // $employeeRow = $this->User_panel_model->get_previous_pic($employee_id);
+		            $result = $this->User_panel_model->update_profile_pic($image, $employee_id);
+		           
+		            // if($result)
+		            // {
+
+		            // 	$oldPic = $employeeRow->profile_picture;
+		            // 	unlink(base_url().'uploads/profile/'.$oldPic);
+		            // }
+				}
+
+			}
 
 			$data = array(
 						'father_name' => $_POST['father_name'],
@@ -139,23 +209,34 @@ class User_panel extends MY_Controller
 
 	}
 
+
 	public function update_residential_address()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 6;
+		$employee_id = $this->session_data['user_id'];
 
 		if(isset($_POST['residential_province'])) 
 		{
-			$data = array(
-						'resident_province' => $_POST['residential_province'],
-						'resident_district' => $_POST['residential_district'],
-						'resident_tehsil' => $_POST['residential_tehsil'],
-						'resident_uc' => $_POST['residential_uc'],
-						'resident_address_details' => $_POST['residential_address']
-					);
+			$address_exist = $this->User_panel_model->check_address_existence('employee_residential_info', $employee_id);
 
-			$rec_update = $this->User_panel_model->update_current_address($data, $employee_id);
-			if($rec_update)
+			$data = array(
+							'resident_province' => $_POST['residential_province'],
+							'resident_district' => $_POST['residential_district'],
+							'resident_tehsil' => $_POST['residential_tehsil'],
+							'resident_uc' => $_POST['residential_uc'],
+							'resident_address_details' => $_POST['residential_address']
+						);
+
+			if($address_exist)
+			{
+				$res = $this->User_panel_model->update_current_address($data, $employee_id);
+			}
+			else
+			{
+				$data['user_id'] = $employee_id;
+				$res = $this->User_panel_model->add_residential_address($data);
+			}
+			
+			if($res)
 				echo '1';
 			else 
 				echo '0';
@@ -169,11 +250,12 @@ class User_panel extends MY_Controller
 
 	public function update_permanent_address()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 6;
+		$employee_id = $this->session_data['user_id'];
 
 		if(isset($_POST['permanent_province'])) 
 		{
+			$address_exist = $this->User_panel_model->check_address_existence('employee_permanent_location_info', $employee_id);
+
 			$data = array(
 						'permanent_province' => $_POST['permanent_province'],
 						'permanent_district' => $_POST['permanent_district'],
@@ -182,8 +264,17 @@ class User_panel extends MY_Controller
 						'permanent_address_details' => $_POST['permanent_address']
 					);
 
-			$rec_update = $this->User_panel_model->update_permanent_address($data, $employee_id);
-			if($rec_update)
+			if($address_exist)
+			{
+				$res = $this->User_panel_model->update_permanent_address($data, $employee_id);
+			}
+			else
+			{
+				$data['user_id'] = $employee_id;
+				$res = $this->User_panel_model->add_permanent_address($data);
+			}
+			
+			if($res)
 				echo '1';
 			else 
 				echo '0';
@@ -196,8 +287,7 @@ class User_panel extends MY_Controller
 
 	public function add_qualification()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
 
 		if(isset($_POST['institute_name'])) 
 		{
@@ -205,6 +295,8 @@ class User_panel extends MY_Controller
 					'institute_name' => $_POST['institute_name'],
 					'discipline_id' => $_POST['discipline'],
 					'qualification_id' => $_POST['qualification'],
+					'from' => $_POST['from'],
+					'to' => $_POST['to'],
 					'user_id' => $employee_id	
 					);
 
@@ -223,8 +315,8 @@ class User_panel extends MY_Controller
 
 	public function add_bank_info()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		if(isset($_POST['bank'])) 
 		{
 			$data = array(
@@ -236,8 +328,9 @@ class User_panel extends MY_Controller
 					);
 
 			$rec_added = $this->User_panel_model->add_bank_info($data);
+			$rec_id = $this->db->insert_id();
 			if($rec_added)
-				echo '1';
+				echo $rec_id;
 			else 
 				echo '0';
 		}
@@ -250,19 +343,6 @@ class User_panel extends MY_Controller
 
 	/******************************* Ajax calls ****************************************/
 
-	public function json_response($data)
-	{
-		$this->output
-			 ->set_content_type('application/json')
-			 ->set_output(json_encode(array('data' => $data)));
-	}
-
-	function ajax_check()
-	{
-		if (!$this->input->is_ajax_request()) {
-		   exit('No direct script access allowed');
-		}
-	}
 
 
 	public function district_for_province()
@@ -291,6 +371,8 @@ class User_panel extends MY_Controller
 
 		$this->json_response($union_councils);
 	}
+
+
 
 
 
@@ -339,19 +421,25 @@ class User_panel extends MY_Controller
 
 	public function payroll()
 	{
+		$employee_id = $this->session_data['user_id'];
 		$data['title'] = "Payroll Information";
 
+		$data['basic_info'] = $this->User_panel_model->get_employee_detail($employee_id);
+		$data['payroll'] = $this->User_panel_model->employee_salary($employee_id);
+		
 		$data['content'] = $this->load->view("user_panel/payroll", $data, TRUE);;
 		$this->load->view('user_panel/_template', $data);
 	}
 
-	public function leaveManagement()
+	public function leave_management()
 	{	
-		// $employee_id = $this->session->user_id;
-		$employee_id = 23;
+		$employee_id = $this->session_data['user_id'];
+		$emp_gender = $this->User_panel_model->get_employee_gender($employee_id);
+		$gender = strtolower($emp_gender->gender_name);
+
 		$data['title'] = "Leave Management";
-		$data['leave_type'] = $this->User_panel_model->get_leave_types();
-		$data['leave_available'] = $this->User_panel_model->leaves_available_count($employee_id);
+		$data['leave_type'] = $this->User_panel_model->get_leave_types($gender);
+		$data['leave_available'] = $this->User_panel_model->leaves_available_count($employee_id, $gender);
 		$data['leave_application'] = $this->User_panel_model->previous_leave_applications($employee_id);
 
 		$data['content'] = $this->load->view("user_panel/leave_management", $data, TRUE);
@@ -360,18 +448,19 @@ class User_panel extends MY_Controller
 
 	public function leave_request()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 23;
+		$employee_id = $this->session_data['user_id'];
 		$leave_type_id = $this->input->post('leave_type');
 		$from_date = $this->input->post('from_date');
 		$to_date = $this->input->post('to_date');
 		$reason = $this->input->post('reason');
+		$date = date('Y-m-d');
 
 		$data = array(
 					'employee_id' => $employee_id,
 					'leave_type_id' => $leave_type_id,
 					'from_date' => date('Y-m-d', strtotime($from_date)),
 					'to_date' => date('Y-m-d', strtotime($to_date)),
+					'applied_on' => $date,
 					'reason' => trim($reason),
 					'status' => '1'
 				);
@@ -379,7 +468,7 @@ class User_panel extends MY_Controller
 		if($this->User_panel_model->add_leave_request($data))
 		{
 			$this->session->set_flashdata('success', '<strong>Done!</strong> Your application is submitted, kindly wait for the reply');
-			redirect('User_panel/leaveManagement');
+			redirect('User_panel/leave_management');
 		}
 		else
 		{
@@ -408,7 +497,7 @@ class User_panel extends MY_Controller
         					<label for="">From Date</label>
         				</div>
         				<div class="col-md-9 title">
-        				'. $row->from_date .'
+        				'. date('d-m-Y', strtotime($row->from_date)) .'
         					
         				</div>
         			</div>
@@ -417,7 +506,7 @@ class User_panel extends MY_Controller
         					<label for="">To Date</label>
         				</div>
         				<div class="col-md-9 title">
-        				'. $row->to_date .'
+        				'. date('d-m-Y', strtotime($row->to_date)) .'
         					
         				</div>
         			</div>
@@ -446,11 +535,11 @@ class User_panel extends MY_Controller
 
 	public function resignation()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 6;
+		$employee_id = $this->session_data['user_id'];
 		$data['title'] = "Resignation Form";
-		$data['emp'] = $this->User_panel_model->get_employee_designation($employee_id);
+		$data['emp'] = $this->User_panel_model->get_name_designation($employee_id);
 		$data['reasons'] = $this->User_panel_model->get_resignation_reasons();
+		
 		$data['content'] = $this->load->view("user_panel/resignation", $data, TRUE);
 		$this->load->view('user_panel/_template', $data);
 	}
@@ -460,13 +549,14 @@ class User_panel extends MY_Controller
 	{
 		$this->ajax_check();
 
+		$employee_id = $this->session_data['user_id'];
+
 		$title = $this->input->post('title');
 		$reason = $this->input->post('reason');
 		$other_reason_text = $this->input->post('other_reason');
 		$subject = $this->input->post('subject');
 		$description = $this->input->post('desc');
-		// $employee_id = $this->session->user_id;
-		$employee_id = 8;
+		
 		$resignation_date = $notice_date = date("Y-m-d");
 		$entry_time = date("Y-m-d H:i:s");
 
@@ -477,16 +567,24 @@ class User_panel extends MY_Controller
 					'reason' => $other_reason_text,
 					'added_by' => $employee_id,
 					'created_at' => $entry_time, 
-
 					'reason_id' => $reason,
 					'subject' => $subject,
 					'description' => $description
 				);
 
-		if($this->User_panel_model->add_resignation($data))
-			echo '1';
+		if($this->Resignations_model->check_resignation_status($employee_id))
+		{
+			echo '2';
+		}
 		else
-			echo '0';
+		{
+			$res = $this->User_panel_model->add_resignation($data);
+			if($res)
+				echo '1';
+			else
+				echo '0';
+		}
+			
 
 	}
 
@@ -556,8 +654,8 @@ class User_panel extends MY_Controller
 	public function update_education_info()
 	{
 		$this->ajax_check();
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		
 		if(isset($_POST['discipline']))
 		{
@@ -565,11 +663,15 @@ class User_panel extends MY_Controller
 			$discipline = $this->input->post('discipline');
 			$qualification = $this->input->post('qualification_id');
 			$institute_name = $this->input->post('institute_name');
+			$from_date = $this->input->post('from_date');
+			$to_date = $this->input->post('to_date');
 
 			$data = array(
 					'institute_name' => $institute_name,
 					'discipline_id' => $discipline,
-					'qualification_id' => $qualification
+					'qualification_id' => $qualification,
+					'from' => $from_date,
+					'to' => $to_date
 					);
 
 			$updated = $this->User_panel_model->update_emp_qualification($data, $rec_id);
@@ -593,8 +695,8 @@ class User_panel extends MY_Controller
 	{
 
 		$this->ajax_check();
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		
 		if(isset($_POST['company']))
 		{
@@ -635,8 +737,8 @@ class User_panel extends MY_Controller
 	{
 
 		$this->ajax_check();
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		
 		if(isset($_POST['company']))
 		{
@@ -675,10 +777,9 @@ class User_panel extends MY_Controller
 
 	public function get_education_table()
 	{
-
 		$this->ajax_check();
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		$education_info = $this->User_panel_model->emp_educational_info($employee_id);
 		$total_rows = $this->db->get_where('employee_educational_info', array('user_id' => $employee_id))->num_rows();
 
@@ -690,6 +791,8 @@ class User_panel extends MY_Controller
 								$row->institute_name,
 								$row->name,
 								$row->discipline_name,
+								$row->from,
+								$row->to,
 								'<a class="plr-5 icon-gray edit-education" data-toggle="modal" href="#edit-education-modal" data="'.$row->id.'" title="Edit">
 										<i class="fa fa-pencil"></i>
 									</a>
@@ -708,7 +811,7 @@ class User_panel extends MY_Controller
 			"recordsFiltered" => $total_rows,
 			"data" => $data
 		);
-		// echo $this->db->last_query();
+		
 		echo json_encode($output);
 
 	}
@@ -716,8 +819,8 @@ class User_panel extends MY_Controller
 	public function get_bank_table()
 	{
 		$this->ajax_check();
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		$bank_info = $this->User_panel_model->emp_bank_info($employee_id);
 		$total_rows = $this->db->get_where('employee_bank_information_info', array('user_id' => $employee_id))->num_rows();
 
@@ -756,8 +859,8 @@ class User_panel extends MY_Controller
 	public function get_job_table()
 	{
 		$this->ajax_check();
-		// $employee_id = $this->session->user_id;
-		$employee_id = 5;
+		$employee_id = $this->session_data['user_id'];
+		
 		$job = $this->User_panel_model->emp_job_experience($employee_id);
 		$total_rows = $this->db->get_where('job_experience', array('user_id' => $employee_id))->num_rows();
 
@@ -1051,8 +1154,7 @@ class User_panel extends MY_Controller
 
 	function trainings()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 3;
+		$employee_id = $this->session_data['user_id'];
 
 		$training_id = $this->input->post('training_id');
 
@@ -1067,8 +1169,7 @@ class User_panel extends MY_Controller
 	{
 		$this->ajax_check();
 
-		// $employee_id = $this->session->user_id; 
-		$employee_id = 3;
+		$employee_id = $this->session_data['user_id']; 
 
 		if(isset($_POST['training_id']) && !empty($employee_id))
 		{
@@ -1153,154 +1254,176 @@ class User_panel extends MY_Controller
 		}
 	}
 
-
-	public function personalDetail() {
-
-		$session = $this->session->userdata('username');
-
-		// if(empty($session)){ 
-
-		// 	redirect('');
-
-		// }
-
-		$id = 7;
-
-		$result = $this->Employees_model->read_employee_information($id);
-
-		// if(is_null($result)){
-
-		// 	redirect('employees');
-
-		// }
-
-		// $role_resources_ids = $this->Xin_model->user_role_resource();
-
-		// $data['breadcrumbs'] = $this->lang->line('xin_employee_details');
-
-		// $data['path_url'] = 'employees_detail';
-
-		
-
-		// if(in_array('13',$role_resources_ids)) {
-
-		// } else {
-
-		// 	redirect('dashboard/');
-
-		// }
-
-		
-
-		$data = array(
-
-			'breadcrumbs' => $this->lang->line('xin_employee_detail'),
-
-			'title' => 'Employee Detail',
-
-			'path_url' => 'personal_detail_old',
-
-			'first_name' => $result[0]->first_name,
-
-			'last_name' => $result[0]->last_name,
-
-			'user_id' => $result[0]->user_id,
-
-			'employee_id' => $result[0]->employee_id,
-
-			'company_id' => $result[0]->company_id,
-
-			'username' => $result[0]->username,
-
-			'email' => $result[0]->email,
-
-			'department_id' => $result[0]->department_id,
-
-			'designation_id' => $result[0]->designation_id,
-
-			'user_role_id' => $result[0]->user_role_id,
-
-			'date_of_birth' => $result[0]->date_of_birth,
-
-			'date_of_leaving' => $result[0]->date_of_leaving,
-
-			'gender' => $result[0]->gender,
-
-			'marital_status' => $result[0]->marital_status,
-
-			'contact_no' => $result[0]->contact_no,
-
-			'address' => $result[0]->address,
-
-			'is_active' => $result[0]->is_active,
-
-			'date_of_joining' => $result[0]->date_of_joining,
-
-			'all_departments' => $this->Department_model->all_departments(),
-
-			'all_designations' => $this->Designation_model->all_designations(),
-
-			'all_user_roles' => $this->Roles_model->all_user_roles(),
-
-			// 'title' => $this->Xin_model->site_title(),
-
-			'profile_picture' => $result[0]->profile_picture,
-
-			'facebook_link' => $result[0]->facebook_link,
-
-			'twitter_link' => $result[0]->twitter_link,
-
-			'blogger_link' => $result[0]->blogger_link,
-
-			'linkdedin_link' => $result[0]->linkdedin_link,
-
-			'google_plus_link' => $result[0]->google_plus_link,
-
-			'instagram_link' => $result[0]->instagram_link,
-
-			'pinterest_link' => $result[0]->pinterest_link,
-
-			'youtube_link' => $result[0]->youtube_link,
-
-			'all_countries' => $this->Xin_model->get_countries(),
-
-			'all_document_types' => $this->Employees_model->all_document_types(),
-
-			'all_education_level' => $this->Employees_model->all_education_level(),
-
-			'all_qualification_language' => $this->Employees_model->all_qualification_language(),
-
-			'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
-
-			'all_contract_types' => $this->Employees_model->all_contract_types(),
-
-			'all_contracts' => $this->Employees_model->all_contracts(),
-
-			'all_office_shifts' => $this->Employees_model->all_office_shifts(),
-
-			'get_all_companies' => $this->Xin_model->get_companies(),
-
-			'all_office_locations' => $this->Location_model->all_office_locations(),
-
-			);
-
-		
-
-		$data['content'] = $this->load->view("user_panel/personalDetail", $data, TRUE);
-
-		$this->load->view('user_panel/_template', $data); //page load
-
-		
-
-		// Datatables Variables
-
-		$draw = intval($this->input->get("draw"));
-
-		$start = intval($this->input->get("start"));
-
-		$length = intval($this->input->get("length"));
-
-	 }
+	public function investigation()
+	{
+		$employee_id = $this->session_data['user_id'];
+		$data['title'] = 'Investigations';
+
+		$data['investigation'] = $this->User_panel_model->get_open_investigations($employee_id)->result();
+	 	$data['content'] = $this->load->view('user_panel/investigation', $data, TRUE);
+		$this->load->view('user_panel/_template', $data);
+
+	}
+
+	public function insurance()
+	{
+		$employee_id = $this->session_data['user_id'];
+		$data['title'] = 'Insurance Claim Form';
+		$data['employee'] = $this->User_panel_model->get_name_designation($employee_id);
+		// $data['insurance'] = $this->User_panel_model->get_open_investigations($employee_id)->result();
+	 	$data['content'] = $this->load->view('user_panel/insurance', $data, TRUE);
+		$this->load->view('user_panel/_template', $data);
+	}
+
+	public function investigation_reply()
+	{
+		if(isset($_POST))
+		{
+			$complaint_id = $this->input->post('complaint_id');
+			$reply = $this->input->post('complaint_reply');
+			$date = date('Y-m-d');
+
+			$data = array(
+						'complainee_reply' => $reply,
+						'reply_date' => $date
+						);
+
+			$this->db->where('id', $complaint_id);
+			$complaint_reply = $this->db->update('complaint_internal', $data);
+			
+			if($complaint_reply)
+			{
+				$this->session->set_flashdata('success', '<strong>Success!</strong> Complaint reply forwarded successfully.');
+			}
+			else
+			{
+				$this->session->set_flashdata('error', '<strong>Error!</strong> Problem in server.');
+			}
+
+			redirect(base_url().'User_panel/investigation', 'refresh');
+		}
+		else
+		{
+			show_404();
+		}
+	}
+
+
+	public function reject_training()
+	{
+		if(isset($_POST))
+		{
+			$employee_id = $this->session_data['user_id'];
+
+			$training_id = $this->input->post('training_id');
+			$rejection_reason = $this->input->post('rejection_reason');
+		}
+		else
+		{
+			show_404();
+		}
+	}
+
+	public function leaveManagementXLS() {
+		// create file name
+        $fileName = 'data-'.time().'.xlsx';  
+		// load excel library
+        $this->load->library('excel');
+
+        $employee_id = $this->session_data['user_id'];
+
+        $leave_application = $this->User_panel_model->previous_leave_applications($employee_id);
+        if(count($leave_application) == 0)
+        	exit('No Records found');
+        
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0);
+        $sheet = $objPHPExcel->getActiveSheet();  
+        // set Header
+        $sheet->SetCellValue('A1', '#');
+        $sheet->SetCellValue('B1', 'Leave Title');
+        $sheet->SetCellValue('C1', 'Reason');
+        $sheet->SetCellValue('D1', 'From Date');
+        $sheet->SetCellValue('E1', 'To Date');
+        $sheet->SetCellValue('F1', 'Applied On');       
+        $sheet->SetCellValue('G1', 'Remarks');       
+        $sheet->SetCellValue('H1', 'Status');    
+
+
+        // set Row
+        $rowCount = 2;
+        foreach ($leave_application as $element) {
+        	$status = "";
+        	if($element->status == '1') 
+        	{
+	 			$status = 'pending';
+	 		} elseif($element->status == '2') {
+	 			$status = 'approved';
+	 		} else {
+	 			$status = 'rejected';
+	 		}
+
+            $sheet->SetCellValue('A' . $rowCount, $rowCount - 1);
+            $sheet->SetCellValue('B' . $rowCount, $element->type_name);
+            $sheet->SetCellValue('C' . $rowCount, $element->reason);
+            $sheet->SetCellValue('D' . $rowCount, date('d-m-Y', strtotime($element->from_date)));
+            $sheet->SetCellValue('E' . $rowCount, date('d-m-Y', strtotime($element->to_date)));
+            $sheet->SetCellValue('F' . $rowCount, date('d-m-Y', strtotime($element->applied_on)));
+            $sheet->SetCellValue('G' . $rowCount, $element->remarks);
+            $sheet->SetCellValue('H' . $rowCount, $status);
+
+
+ 
+            $rowCount++;
+        }
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+       
+		// download file
+        header("Content-Type: application/vnd.ms-excel");
+        header('Content-Disposition: attachment;filename="leaveApplications.xlsx"');
+        $objWriter->save('php://output');      
+    }
+
+
+
+
+	 /** 
+	 *	 Add leaves earned to employee table using cron job .
+	 *   This method will be called on 1st of each month.
+	 *	 If employee had applied for leave in previous month and leave was approved than
+	 *	 no action will be taken. But if employee didn't applied for leave or his/her application was
+	 *   rejected than 1.6 day will be added to his/her leaves_earned 
+	 **/
+
+	public function leaves_earned()
+	{
+	 	$previous_month = date('Y-m', strtotime('-1 month'));
+
+	 	$this->db->select('employee_id');
+	 	$employees = $this->db->get('xin_employees')->result();
+
+	 	foreach ($employees as $e) {
+	 		$this->db->select('COUNT(*) AS leaves_taken');
+	 		$this->db->where(array('DATE_FORMAT(applied_on, "%Y-%m") =' => $previous_month, 'employee_id' => $e->employee_id, 'status' => '2'));
+	 		$leave_application = $this->db->get('xin_leave_applications')->row();
+	 		
+	 		if($leave_application->leaves_taken == '0')
+	 		{
+	 			$this->db->select('employee_id, leaves_earned');
+	 			$this->db->where(array('employee_id' => $e->employee_id));
+	 			$emp_row = $this->db->get('xin_employees')->row();
+
+	 			$leaves_earned = $emp_row->leaves_earned;
+
+	 			$leaves_earned = $leaves_earned + 1.6;
+
+	 			$this->db->where('employee_id', $e->employee_id);
+	 			$this->db->update('xin_employees', array('leaves_earned' => $leaves_earned));
+	 		}
+	 		
+	 	}
+
+	}
 
 
 

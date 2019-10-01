@@ -1,37 +1,22 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-
-class User_panel_model extends CI_Model {
-
- 
+class User_panel_model extends CI_Model 
+{
 
     public function __construct()
-
     {
-
         parent::__construct();
-
         $this->load->database();
-
     }
 
- 
-    public function get_personal_detail_old($id)
-    {
- 		$this->db->select('xe.first_name, xe.last_name, ebi.father_name');
- 		$this->db->join('employee_basic_info ebi', 'xe.user_id = ebi.user_id', 'left');
-    	$this->db->join('employee_educational_info eei', 'xe.user_id = eei.user_id', 'left');
-    	$this->db->join('employee_permanent_location_info epli', 'xe.user_id = epli.user_id', 'left');
-    	$this->db->join('employee_residential_info eri', 'xe.user_id = eri.user_id', 'left');
-    	$this->db->join('employee_bank_information_info ebii', 'xe.user_id = ebii.user_id', 'left');
-    	$this->db->join('employee_supervisor_details esd', 'xe.user_id = esd.user_id', 'left');
-    	$this->db->join('employee_total_experience_info eti', 'xe.user_id = eti.user_id', 'left');
-    	$this->db->join('job_experience je', 'xe.user_id = je.user_id', 'left');
-    	return $this->db->get_where('xin_employees xe', array('xe.user_id' => $id))->row();
 
+    function get_name_designation($id)
+    {
+        $this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, xd.designation_name');
+        $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+        return $this->db->get_where('xin_employees xe', array('xe.employee_id' => $id))->row();
     }
 
 
@@ -40,22 +25,22 @@ class User_panel_model extends CI_Model {
         $employee_basic_info_fileds = ", ebi.father_name, ebi.date_of_birth, ebi.cnic, ebi.cnic_expiry_date, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, ebi.tribe, ebi.ethnicity, ebi.language, ebi.nationality, ebi.religion, ebi.bloodgroup, xec.contract_type_id, xec.from_date AS date_of_joining, xec.to_date AS contract_expiry_date";
 
 
-		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', xe.last_name) AS emp_name, xe.email AS email_address,
-		 xc.name as company_name, xdd.department_name, xd.designation_name, xol.location_name, xe.employee_id, CONCAT(xe.first_name, ' ', xe.last_name) AS emp_name, 
+		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.email AS email_address, xe.profile_picture,
+		 xc.name as company_name, xdd.department_name, xd.designation_name, xol.location_name, xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, 
             epli.permanent_address_details, permanent_province, permanent_district, permanent_tehsil, permanent_uc,
             eri.resident_address_details, resident_province, resident_district, resident_tehsil, resident_uc $employee_basic_info_fileds");
 		      
         $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
         $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
 
-        $this->db->join('employee_permanent_location_info epli', 'xe.user_id = epli.user_id', 'left');
-        $this->db->join('employee_residential_info eri', 'xe.user_id = eri.user_id', 'left');
+        $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
+        $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
 
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
         $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
         
-        $this->db->join('employee_basic_info ebi', 'xe.user_id = ebi.user_id', 'left');
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         
         $this->db->join('xin_employee_contract xec', 'ebi.user_id = xec.employee_id', 'left');
         $this->db->join('xin_contract_type xct', 'xec.contract_type_id = xct.contract_type_id', 'left');
@@ -66,9 +51,41 @@ class User_panel_model extends CI_Model {
 
 
     public function update_employee($data, $id)
-    {
+    {        
+        $this->db->where(array('employee_id' => $id));
+        $this->db->update('xin_employees', array('email' => $data['email_address']));
+
+        $key = array_search($data['email_address'], $data);
+        unset($data[$key]);
+
         $this->db->where('user_id', $id);
         return $this->db->update('employee_basic_info', $data);
+    }
+
+    public function update_profile_pic($image, $id)
+    {
+        $this->db->where('employee_id', $id);
+        return $this->db->update('xin_employees', array('profile_picture' => $image));
+    }
+
+    public function get_employee_gender($employee_id)
+    {
+        $this->db->select('g.gender_id, g.gender_name');
+        $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');
+        $this->db->where('ebi.user_id', $employee_id);
+        return $this->db->get('employee_basic_info ebi')->row();  
+    }
+
+    public function get_previous_pic($employee_id)
+    {
+        $this->db->select('profile_picture');
+        return $this->db->get_where('xin_employees', array('employee_id' => $employee_id))->row();
+    }
+
+    public function check_address_existence($table, $id)
+    {
+        $this->db->where('user_id', $id);
+        return $this->db->get($table)->num_rows();
     }
 
     public function update_current_address($data, $id)
@@ -77,10 +94,20 @@ class User_panel_model extends CI_Model {
         return $this->db->update('employee_residential_info', $data);
     }
 
+    public function add_residential_address($data)
+    {
+        return $this->db->insert('employee_residential_info', $data);
+    }
+
     public function update_permanent_address($data, $id)
     {
         $this->db->where('user_id', $id);
         return $this->db->update('employee_permanent_location_info', $data);
+    }
+
+    public function add_permanent_address($data)
+    {
+        return $this->db->insert('employee_permanent_location_info', $data);
     }
 
     public function update_emp_qualification($data, $id)
@@ -137,25 +164,6 @@ class User_panel_model extends CI_Model {
 
     /********************* Employee Information **************************/
 
-    public function emp_basic_info($id)
-    {
-
-
-        $this->db->join('employee_permanent_location_info AS epl', 'ebi.user_id = epl.user_id', 'left');
-        $this->db->join('employee_residential_info AS eri', 'ebi.user_id = eri.user_id', 'left');
-
-        // $this->db->join('district AS pd', 'epl.permanent_district = pd.id', 'left');
-        // $this->db->join('district AS rd', 'eri.resident_district = rd.id', 'left');
-
-        // $this->db->join('tehsil AS pt', 'epl.permanent_tehsil = pt.id', 'left');
-        // $this->db->join('tehsil AS rt', 'eri.resident_tehsil = rt.id', 'left');
-
-        // $this->db->join('union_councel AS puc', 'epl.permanent_uc = puc.id', 'left');
-        // $this->db->join('union_councel AS ruc', 'eri.resident_uc = ruc.id', 'left');
-
-        return $this->db->get_where('employee_basic_info AS ebi', array('ebi.user_id' => $id))->row();
-    }
-
     public function emp_current_address($id)
     {
         return $this->db->get_where('employee_residential_info', array('user_id' => $id))->row();
@@ -168,7 +176,7 @@ class User_panel_model extends CI_Model {
 
     public function emp_educational_info($id)
     {
-        $this->db->select('eei.id, eei.institute_name, eei.qualification_id, eei.discipline_id, d.discipline_name, q.name');
+        $this->db->select('eei.id, eei.institute_name, eei.qualification_id, eei.discipline_id, d.discipline_name, q.name, eei.from, eei.to');
         $this->db->join('qualification AS q', 'eei.qualification_id = q.id', 'left');
         $this->db->join('discipline AS d', 'eei.discipline_id = d.discipline_id');
         return $this->db->get_where('employee_educational_info AS eei', array('eei.user_id' => $id))->result();
@@ -189,13 +197,18 @@ class User_panel_model extends CI_Model {
 
     public function emp_supervisor_detail($id)
     {
-        $this->db->select('ebi.user_id, CONCAT(xe.first_name, " ", xe.last_name) AS emp_name, ebi.job_title, ebi.contact_number, d.name AS district, t.name AS tehsil, uc.name AS union_council, dsg.designation_name');
+        $this->db->select('ebi.user_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, dsg.designation_name, ebi.contact_number, d.name AS district, t.name AS tehsil, uc.name AS union_council, dsg.designation_name');
+
         $this->db->join('employee_basic_info AS ebi', 'esd.as_id = ebi.user_id', 'left');
         $this->db->join('district AS d', 'esd.ds_id = d.id', 'left');
         $this->db->join('tehsil AS t', 'esd.ts_id = t.id', 'left');
         $this->db->join('union_councel AS uc', 'esd.us_id = uc.id', 'left');
         $this->db->join('xin_designations AS dsg', 'esd.as_id = dsg.designation_id', 'left');
-        $this->db->join('xin_employees xe', 'xe.user_id = ebi.user_id', 'left');
+
+        // $this->db->join('xin_employees xe', 'xe.employee_id = ebi.user_id', 'left');
+
+        $this->db->join('xin_employees AS xe', 'ebi.user_id = xe.employee_id', 'left');
+
 
         return $this->db->get_where('employee_supervisor_details AS esd', array('esd.user_id' => $id))->row();
     }
@@ -207,7 +220,7 @@ class User_panel_model extends CI_Model {
 
     public function get_education_info($id)
     {
-        $this->db->select('eei.id, eei.institute_name, eei.qualification_id, eei.discipline_id, d.discipline_name, q.name');
+        $this->db->select('eei.id, eei.institute_name, eei.qualification_id, eei.discipline_id, d.discipline_name, q.name, eei.from, eei.to');
         $this->db->join('qualification AS q', 'eei.qualification_id = q.id', 'left');
         $this->db->join('discipline AS d', 'eei.discipline_id = d.discipline_id', 'left');
         $this->db->where(array('eei.id' => $id));
@@ -314,18 +327,24 @@ class User_panel_model extends CI_Model {
     }
 
 
-    public function get_district_province($id)
+    public function get_district_province($id="")
     {
+        if($id == "")
+            return false;
         return $this->db->get_where('district', array('province_id' => $id))->result();
     }
 
-    public function get_tehsil_district($id)
+    public function get_tehsil_district($id="")
     {
+        if($id == "")
+            return false;
         return $this->db->get_where('tehsil', array('district_id' => $id))->result();
     }
 
-    public function get_uc_tehsil($id)
+    public function get_uc_tehsil($id="")
     {
+        if($id == "")
+            return false;
         return $this->db->get_where('union_councel', array('tehsil_id' => $id))->result();
     }
 
@@ -335,6 +354,7 @@ class User_panel_model extends CI_Model {
     {
         return $this->db->get('xin_company_policy')->result();
     }
+
 
     public function get_policy_detail($id)
     {
@@ -351,16 +371,11 @@ class User_panel_model extends CI_Model {
 
     public function get_employee_designation($emp_id)
     {
-        // $this->db->select('xe.first_name, xe.last_name, xd.designation_name, xc.name AS company_name');
-        // $this->db->join('xin_companies AS xc', 'xe.company_id = xc.company_id');
-        // $this->db->join('xin_designations AS xd', 'xe.designation_id = xd.designation_id');
-        // $this->db->where(array('xe.employee_id' => $emp_id));
-        // return $this->db->get('xin_employees AS xe')->row();
-        $this->db->select('xe.first_name, xe.last_name, xd.designation_name');
-        $this->db->join('xin_designations AS xd', 'e.job_title = xd.designation_id', 'left');
-        $this->db->join('xin_employees AS xe', 'e.user_id = xe.user_id', 'left');
-        $this->db->where(array('e.user_id' => $emp_id));
-        return $this->db->get('employee_basic_info AS e')->row();
+
+        $this->db->select('CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, xd.designation_name');
+        $this->db->join('xin_designations AS xd', 'xe.designation_id = xd.designation_id');
+        return $this->db->get('xin_employees xe')->row();
+
     }
  
     public function add_resignation($data)
@@ -368,21 +383,50 @@ class User_panel_model extends CI_Model {
         return $this->db->insert('xin_employee_resignations', $data);
     }
 
-    public function get_leave_types()
+    public function get_leave_types($gender)
     {
+        if($gender == 'male')
+            $this->db->where('identifier !=', 'maternity');
         $this->db->where('status', '1');
         return $this->db->get('xin_leave_type')->result();
     }
 
-    public function leaves_available_count($emp_id)
-    {
-        $query = $this->db->query("SELECT xlt.*, (SELECT COUNT(*) FROM xin_leave_applications AS xla WHERE xla.employee_id = $emp_id AND xla.leave_type_id = xlt.leave_type_id) AS leave_taken FROM `xin_leave_type` AS xlt");
-        return $query->result();
+    // public function leaves_available_count($emp_id)
+    // {
+    //     $query = $this->db->query("SELECT xlt.*, (SELECT SUM(DATEDIFF(xla.to_date, xla.from_date)) AS leave_count FROM `xin_leave_applications` xla WHERE xla.employee_id = $emp_id AND xla.leave_type_id = xlt.leave_type_id AND xla.status = '2') AS leave_taken FROM `xin_leave_type` AS xlt");
+    //     return $query->result();
         
+    // }
+
+    
+    public function leaves_available_count($emp_id, $gender)
+    {
+        $year = date('Y');
+        $query = "
+            SELECT `xlt`.*, (SELECT FLOOR(`leaves_earned`) FROM `xin_employees` WHERE `employee_id` = $emp_id AND `xlt`.`identifier` = 'casual') AS `leaves_earned`,
+            (SELECT SUM(DATEDIFF(`xla`.`to_date`, `xla`.`from_date`)) AS leave_count 
+            FROM `xin_leave_applications` `xla` 
+            WHERE `xla`.`employee_id` = $emp_id 
+            AND `xla`.`leave_type_id` = `xlt`.`leave_type_id` 
+            AND `xla`.`status` = '2' AND DATE_FORMAT(`xla`.`from_date`, '%Y') = '$year') AS leave_taken
+            FROM `employee_basic_info` `ebi`, `gender` `g`, `xin_leave_type` `xlt`
+            WHERE `ebi`.`gender` = `g`.`gender_id`
+            AND `ebi`.`user_id` = $emp_id 
+            AND LOWER(`g`.`gender_name`) = '$gender'
+            ";
+        if(strtolower($gender) == 'male')
+        {
+            $query .= "AND `xlt`.`identifier` != 'maternity'";
+        }
+
+        return $this->db->query($query)->result();
     }
 
-    public function previous_leave_applications($emp_id)
+    public function previous_leave_applications($emp_id, $limit="")
     {
+        if($limit != "")
+            $this->db->limit($limit);
+
         $this->db->select('xla.leave_id, xla.leave_type_id, xlt.type_name, xla.from_date, xla.to_date, xla.reason, xla.remarks, xla.applied_on, xla.status');
         $this->db->join('xin_leave_type AS xlt', 'xla.leave_type_id = xlt.leave_type_id');
         $this->db->where('xla.employee_id', $emp_id);
@@ -404,14 +448,27 @@ class User_panel_model extends CI_Model {
         return $this->db->get('xin_leave_applications AS xla')->row();
     }
 
-    public function get_employee_trainings($employee_id=FALSE, $training_id=FALSE)
+    public function get_employee_trainings($employee_id=FALSE, $training_id=FALSE, $limit=FALSE)
     {
-        if($employee_id == FALSE)
-            return false;
+        $condition = "";
 
-        $condition = ' ORDER BY xt.start_date DESC';
+        $rowLimit = "";
+        $date = date('Y-m-d');
+
+        if($limit !== FALSE)
+        {
+            $rowLimit = " LIMIT 5";
+            $condition .= " AND xt.start_date > '$date'";
+        }
+
         if($training_id !== FALSE)
-            $condition = 'AND xt.trg_id = ' . $training_id . ' LIMIT 1';
+        {
+            $condition .= ' AND xt.trg_id = ' . $training_id;
+            $rowLimit = " LIMIT 1";
+        }
+
+
+        $condition .= ' ORDER BY xt.start_date DESC';
 
         $query = $this->db->query("SELECT xt.trg_id AS training_id, xt.trainer_one, xt.trainer_two, xt.facilitator_name, xt.target_group, xt.start_date, xt.end_date, xt.hall_detail, xt.session, xt.approval_type, 
             p.name AS province, 
@@ -429,12 +486,12 @@ class User_panel_model extends CI_Model {
             LEFT JOIN xin_trainers t2 ON xt.trainer_two = t2.trainer_id
             LEFT JOIN xin_training_locations xtl ON xt.venue = xtl.location_id
             LEFT JOIN city c ON xtl.city = c.id
-            LEFT JOIN xin_employees xe ON xt.trainee_employees = xe.user_id
+            LEFT JOIN xin_employees xe ON xt.trainee_employees = xe.employee_id
 
             WHERE (trainee_employees LIKE '".$employee_id.",%' 
             OR trainee_employees LIKE '%,".$employee_id."' 
             OR trainee_employees LIKE '%,".$employee_id.",%' 
-            OR trainee_employees LIKE '".$employee_id."') $condition");
+            OR trainee_employees LIKE '".$employee_id."') $condition $rowLimit");
 
         return $query;
     }
@@ -444,6 +501,44 @@ class User_panel_model extends CI_Model {
         $current_date = date('Y-m-d');
         $this->db->where(array('start_date <' => $current_date));
         $this->db->get('xin_trainings')->num_rows();
+    }
+
+    public function get_employee_card_detail($employee_id)
+    {
+        $this->db->select('xe.employee_id, CONCAT(xe.first_name," ", IFNULL(xe.last_name, "")) AS emp_name, xc.name AS project_name, xd.designation_name');
+        $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
+        $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+        return $this->db->get_where('xin_employees xe', array('xe.employee_id' => $employee_id))->row();
+    }
+
+    public function get_card_request_reasons($employee_id)
+    {
+        return $this->db->get('card_request_reasons')->result();
+    }
+
+    public function get_previous_request($employee_id)
+    {
+        $this->db->where('ec.employee_id', $employee_id);
+        $this->db->order_by('ec.id', 'DESC');
+        return $this->db->get('employee_cards ec')->row();
+    }
+
+
+    public function employee_salary($employee_id)
+    {
+        $this->db->where('es.user_id', $employee_id);
+        $this->db->join('employee_allowances ea', 'es.user_id = ea.user_id', 'left');
+        $this->db->join('employee_deductions ed', 'es.user_id = ed.user_id', 'left');
+        return $this->db->get('employee_salary es')->row();
+    }
+
+    public function get_open_investigations($employee_id)
+    {
+        $this->db->select('ci.id AS complaint_id, ci.complaint_no, ci.employee_id, ci.evidence, ci.evidence_date, ci.description, ci.reported_by, ci.reported_date, ci.forward_date, ci.other_reason, ir.reason_text');
+        $this->db->where(array('ci.employee_id' => $employee_id, 'ci.contact_complainee' => '1', 'ci.complainee_reply' => NULL));
+        $this->db->or_where('ci.complainee_reply', '');
+        $this->db->join('investigation_reasons ir', 'ci.reason_id = ir.id', 'left');
+        return $this->db->get('complaint_internal ci');
     }
 
 }

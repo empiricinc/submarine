@@ -6,7 +6,7 @@
 				<div class="tabelHeading">
 					<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#resignations-search-form')[0].reset();"></a></h3>
 				</div>
-				<form action="<?= base_url(); ?>Reports/resignations" method="GET" id="resignations-search-form">
+				<form action="<?= base_url(); ?>Reports/resignations" method="GET" id="resignations-search-form" class="search-form">
 					<div class="selectBoxMain">
 						<div class="filterSelect">
 							<input type="text" name="employee_name" class="form-control" placeholder="Employee Name">
@@ -57,7 +57,7 @@
 							</div>
 							<div class="col-md-2 text-right">
 								<div class="tabelTopBtn">
-								<a href="http://localhost/submarine/Reports/resignationsXLS" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+								<a href="<?= base_url(); ?>Reports/resignationsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 								</div>
 							</div>
 						</div>
@@ -84,10 +84,10 @@
 										<tr data="<?= $r->resignation_id; ?>" style="cursor: pointer;">
 											<!-- <td><?= $count; ?></td> -->
 											<td><?= ucfirst($r->first_name.' '.$r->last_name); ?></td>
-											<td><?= $r->name; ?></td>
-											<td><?= $r->designation_name; ?></td>
+											<td><?= ucwords($r->name); ?></td>
+											<td><?= ucwords($r->designation_name); ?></td>
 											<td><?= $r->reason_text; ?></td>
-											<td><?= $r->resignation_date; ?></td>
+											<td><?= date('d-m-Y', strtotime($r->resignation_date)); ?></td>
 										</tr>
 										<?php $count++; endforeach; ?>
 							        </tbody>

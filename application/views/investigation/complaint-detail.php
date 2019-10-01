@@ -19,7 +19,7 @@
 					</div>
 					<div class="col-lg-2 text-right">
 						<div class="btn-group" role="group" aria-label="Basic example">
-						  <a href="javascript:void(0);" class="btn btn-default print-btn" onclick="window.print();"><i class="fa fa-print"></i> Print </a>
+						  <button class="btn btn-default print-btn" onclick="window.print();"><i class="fa fa-print"></i> Print </button>
 						 
 						  <a href="<?= base_url(); ?>Investigation/report/<?= $detail->id; ?>" target="_blank" class="btn btn-default"><i class="fa fa-file"></i> Pdf </a>
 						</div>
@@ -83,7 +83,7 @@
 
 		<!-- Files and Reviews from Legal department -->
 
-		<?php if(!empty($remarks_and_files)): ?>
+		<?php if(!empty($remarks_and_files) || !empty($detail->closing_remarks)): ?>
 		<div class="panel panel-default mlr-15">
 			<div class="panel-heading">
 				<h4>Investigation Remarks</h4>
@@ -93,7 +93,7 @@
 				$employee_name = ucfirst($remarks_and_files[$i]['first_name'])." ".ucfirst($remarks_and_files[$i]['last_name']);
 			?>
 				<?php if($remarks_and_files[$i]['send_from'] == 'head'):
-						$sender = 'You';
+						$sender = $employee_name . ' (Project Head)';
 						$marginLeft = 0;
 					  elseif($remarks_and_files[$i]['send_from'] == 'legal'):
 					  	$sender = $employee_name . ' (Legal)';
@@ -159,10 +159,10 @@
 						<input type="hidden" name="complaint_type" id="complaint_type" value="external">
 						<textarea name="remarks" id="remarks" class="form-control resize-v" rows="5" required="required" placeholder="Your remarks about the complaint..."></textarea>	
 					</div>
-					<div class="submitBtn col-lg-2 pr-0">
+					<div class="submitBtn col-lg-3 pr-0">
 						<button type="submit" class="btn btnSubmit"><i class="fa fa-check"></i> Resolve </button>
 					</div>	
-					<div class="submitBtn col-lg-2 pl-0">
+					<div class="submitBtn col-lg-3 pl-0">
 						<button type="button" id="forward-legal" class="btn btnSubmit"><i class="fa fa-forward"></i> Forward </button>
 					</div>	
 				</form>
@@ -188,6 +188,7 @@
 			</div>
 			<div class="col-print-12">
 				<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4><h4></h4></center>
+				<center><h4>Complaint Detail And Remarks</h4></center>
 			</div>
 			<div class="col-print-12">
 				<hr>
@@ -195,9 +196,9 @@
 		</div>
 	</div>
 	<div class="detail">
-		<div class="col-lg-12 col-print-12">
+		<!-- <div class="col-lg-12 col-print-12">
 			<h4>Complaint Detail And Remarks</h4>
-		</div>
+		</div> -->
 		<!-- <div class="col-lg-12 col-print-12"><hr></div> -->
 
 		<div class="mlr-15">				
@@ -257,7 +258,7 @@
 	</div>
 
 	<!-- Files and Reviews from Legal department -->
-	<?php if(!empty($remarks_and_files)): ?>
+	<?php if(!empty($remarks_and_files) || !empty($detail->closing_remarks)): ?>
 	<div class="remarks">
 		<div class="col-lg-12 col-print-12">
 			<h4>Investigation Remarks</h4>

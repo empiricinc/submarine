@@ -7,7 +7,7 @@
 					<div class="tabelHeading">
 						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#complaints-search-form')[0].reset();"></a></h3>
 					</div>
-					<form action="<?= base_url(); ?>Reports/complaints" method="GET" id="complaints-search-form">
+					<form action="<?= base_url(); ?>Reports/complaints" method="GET" id="complaints-search-form" class="search-form">
 						<div class="selectBoxMain">
 							<div class="filterSelect">
 								<input type="text" name="complaint_no" class="form-control" placeholder="Complaint No">
@@ -21,9 +21,9 @@
 							</div>
 
 							<div class="filterSelect">
-								<select name="complaint_status" class="form-control">
+								<select name="status" class="form-control" id="complaint-status">
 									<option value="">Status</option>
-									<option value="all">Show All</option>
+									<option value="">Show All</option>
 									<option value="pending">Pending</option>
 									<option value="process">Process</option>
 									<option value="review">Review</option>
@@ -31,8 +31,29 @@
 								</select>
 								<span></span>
 							</div>
+
 							<div class="filterSelect">
-								<select name="designation" class="form-control province">
+								<select name="project" class="form-control">
+									<option value="">Project</option>
+									<?php foreach($projects AS $p): ?>
+									<option value="<?= $p->company_id; ?>"><?= $p->name; ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span></span>
+							</div>
+
+							<div class="filterSelect">
+								<select name="location" class="form-control">
+									<option value="">Location</option>
+									<?php foreach($locations AS $l): ?>
+									<option value="<?= $l->location_id; ?>"><?= $l->location_name; ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span></span>
+							</div>
+
+							<div class="filterSelect">
+								<select name="province" class="form-control province">
 									<option value="">Province</option>
 									<?php foreach($province AS $p): ?>
 									<option value="<?= $p->id; ?>"><?= $p->name; ?></option>
@@ -41,7 +62,7 @@
 								<span></span>
 							</div>
 
-							<div class="filterSelect hide">
+							<!-- <div class="filterSelect hide">
 								<select name="district" class="form-control district" id="district">
 									<option value="">District</option>
 									
@@ -61,10 +82,10 @@
 									
 								</select>
 								<span></span>
-							</div>
+							</div> -->
 
 							<div class="filterSelectBtn">
-								<button type="submit" name="search" class="btn btnSubmit">Search</button>
+								<button type="submit" name="search" id="search-btn" class="btn btnSubmit">Search</button>
 							</div>
 						</div>
 					</form>

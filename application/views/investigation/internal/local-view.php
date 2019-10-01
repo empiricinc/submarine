@@ -2,7 +2,7 @@
 	<!-- <section class="secFormLayout"> -->
 		
 		<div class="row marg">
-			<!-- <div class="col-lg-2 no-leftPad">
+			<div class="col-lg-2 no-leftPad">
 				<div class="main-leftFilter">
 					<div class="tabelHeading">
 						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#complaints-search-form')[0].reset();"></a></h3>
@@ -20,17 +20,6 @@
 								<input type="text" name="to_date" class="form-control date" placeholder="To Date">
 							</div>
 
-							<div class="filterSelect">
-								<select name="complaint_status" class="form-control">
-									<option value="">Status</option>
-									<option value="all">Show All</option>
-									<option value="pending">Pending</option>
-									<option value="process">Process</option>
-									<option value="review">Review</option>
-									<option value="resolved">Resolved</option>
-								</select>
-								<span></span>
-							</div>
 							<div class="filterSelect">
 								<select name="project" class="form-control">
 									<option value="">Project</option>
@@ -67,8 +56,8 @@
 						</div>
 					</form>
 				</div>
-			</div> -->
-			<div class="col-lg-12">
+			</div>
+			<div class="col-lg-10">
 				<div class="topNavFilter">
 				
 				</div>
@@ -78,16 +67,7 @@
 							<div class="col-md-12">
 								<div class="tabelHeading">
 									<div class="col-md-10">
-										<h3><?= $title; ?><span></span>
-											<br>
-											<!-- <small class="" id="status-btn">
-												<a href="javascript:void(0);" data-status="pending" class="label label-warning">pending</a>
-												<a href="javascript:void(0);" data-status="process" class="label label-info">process</a>
-												<a href="javascript:void(0);" data-status="review" class="label label-success">review</a>
-												<a href="javascript:void(0);" data-status="resolved" class="label label-primary">resolved</a>
-												<a href="javascript:void(0);" data-status="all" class="label label-danger">show all</a>
-											</small> -->
-										</h3>
+										<h3><?= $title; ?><span></span></h3>
 									</div>
 								</div>
 							</div>
@@ -126,7 +106,7 @@
 
 													<tr data-id="<?= $c->id; ?>">
 														<td><?= $c->complaint_no; ?></td>
-														<td><?= $c->employee_id; ?></td>
+														<td><?= ucwords($c->emp_name); ?></td>
 														<td><?= $c->project_name; ?></td>
 														<td><?= $c->department_name; ?></td>
 														<td><?= $c->designation_name; ?></td>

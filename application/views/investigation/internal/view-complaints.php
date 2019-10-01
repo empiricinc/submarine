@@ -21,9 +21,9 @@
 							</div>
 
 							<div class="filterSelect">
-								<select name="complaint_status" class="form-control">
+								<select name="complaint_status" id="complaint-status" class="form-control">
 									<option value="">Status</option>
-									<option value="all">Show All</option>
+									<option value="">Show All</option>
 									<option value="pending">Pending</option>
 									<option value="process">Process</option>
 									<option value="review">Review</option>
@@ -62,7 +62,7 @@
 							</div>
 
 							<div class="filterSelectBtn">
-								<button type="submit" name="search" class="btn btnSubmit">Search</button>
+								<button type="submit" name="search" id="complaint-search-btn" class="btn btnSubmit">Search</button>
 							</div>
 						</div>
 					</form>
@@ -80,13 +80,13 @@
 									<div class="col-md-10">
 										<h3><?= $title; ?><span></span>
 											<br>
-											<!-- <small class="" id="status-btn">
+											<small class="" id="status-btn">
 												<a href="javascript:void(0);" data-status="pending" class="label label-warning">pending</a>
 												<a href="javascript:void(0);" data-status="process" class="label label-info">process</a>
 												<a href="javascript:void(0);" data-status="review" class="label label-success">review</a>
 												<a href="javascript:void(0);" data-status="resolved" class="label label-primary">resolved</a>
 												<a href="javascript:void(0);" data-status="all" class="label label-danger">show all</a>
-											</small> -->
+											</small>
 										</h3>
 									</div>
 								</div>
@@ -108,6 +108,7 @@
 													<th>Reason</th>
 													<th>Date</th>
 													<th>Status</th>
+													<th>Action</th>
 												</tr>
 											</thead>
 											<tbody id="complaints-tbody-internal">
@@ -126,7 +127,7 @@
 
 													<tr data="<?= $c->id; ?>">
 														<td><?= $c->complaint_no; ?></td>
-														<td><?= $c->employee_id; ?></td>
+														<td><?= ucwords($c->emp_name); ?></td>
 														<td><?= $c->project_name; ?></td>
 														<td><?= $c->department_name; ?></td>
 														<td><?= $c->designation_name; ?></td>
@@ -134,6 +135,23 @@
 														<td><?= date('d-m-Y', strtotime($c->reported_date)); ?></td>
 														<td>
 															<label class="<?= $label; ?>"><?= $c->status; ?></label>
+														</td>
+														<td>
+								<?php if($c->status == 'resolved' && $c->action == NULL): ?>
+								<a href="javascript:void(0);" class="label label-primary">Take Action</a>
+									<?php elseif($c->status == 'resolved' && $c->action != NULL):  ?>
+										<?php 
+											$action_label = '';
+											if($c->action == "warning") 
+												$action_label = "label label-warning";
+											elseif($c->action == "suspend")
+												$action_label = "label label-info";
+											elseif($c->action == "terminate")
+												$action_label = "label label-danger";
+
+										 ?>
+										<label class="label <?= $action_label; ?>"><?= $c->action; ?></label>
+									<?php endif; ?>
 														</td>
 													</tr>
 												<?php $count++; endforeach; ?>

@@ -120,7 +120,7 @@
 								<label>Accepted By</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->accepted_by; ?>
+								<?= $detail->decision_by; ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">
@@ -145,7 +145,7 @@
 								<label>Acceptance Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->accepted_date; ?>
+								<?= $detail->decision_date; ?>
 							</div>
 						</div>
 					</div>

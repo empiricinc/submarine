@@ -44,7 +44,7 @@
 								<label>Name</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->first_name .' '. $detail->last_name); ?>
+								<?= ucwords($detail->emp_name); ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">

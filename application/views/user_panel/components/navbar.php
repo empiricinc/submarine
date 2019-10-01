@@ -7,26 +7,29 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="#"><img src="<?= base_url(); ?>assets/img/bars.png" alt=""></a>
+        <a class="navbar-brand" href="<?php echo base_url();?>"><div class="hrms-logo">HRMS</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li class=""><a href="<?= base_url(); ?>User_panel">Home</a></li>
-          <li><a href="<?= base_url(); ?>User_panel/personal_detail">Employee Detail</a></li>
+          <!-- <li class=""><a href="<?= base_url(); ?>">Home</a></li> -->
+          <li class=""><a href="<?= base_url(); ?>User_panel">Dashboard</a></li>
+          <li><a href="<?= base_url(); ?>User_panel/basic_info">Basic Info</a></li>
           <li><a href="<?= base_url(); ?>User_panel/policies">Policies</a></li>
           <li><a href="<?= base_url(); ?>User_panel/payroll">Payroll Info</a></li>
-          <li><a href="<?= base_url(); ?>User_panel/leaveManagement">Leave Management</a></li>
+          <li><a href="<?= base_url(); ?>User_panel/leave_management">Leave Management</a></li>
           <li><a href="<?= base_url(); ?>User_panel/resignation">Resignation</a></li>
 
           <li><a href="<?= base_url(); ?>User_panel/trainings">Trainings</a></li>
           <li><a href="<?= base_url(); ?>User_panel/new_card">Card Request</a></li>
-          <li>
+          <li><a href="<?= base_url(); ?>User_panel/investigation">Investigation</a></li>
+          <li><a href="<?= base_url(); ?>User_panel/insurance">Insurance</a></li>
+          <!-- <li>
             <a href="#">
               <span class="dot"></span>
               <span class="dot"></span>
               <span class="dot"></span>
             </a>
-          </li>
+          </li> -->
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
@@ -41,3 +44,4 @@
     </div>
   </nav>
 </section>
+

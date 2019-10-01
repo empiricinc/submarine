@@ -13,10 +13,10 @@
         			
         		</div>
         		<div class="modal-footer hide-from-print">
-        			<button type="button" class="btn btn-success" id="print-employee-detail"> 
+        			<button type="button" class="btn btnSubmit" id="print-employee-detail"> 
         				Print 
         			</button>
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -41,7 +41,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -66,7 +66,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -237,7 +237,7 @@
     			<button type="button" class="btn btn-danger" id="deleteBtn" data-dismiss="modal" aria-label="Close"> 
     				Yes 
     			</button>
-    			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+    			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
     				No
     			</button>
     		</div>
@@ -432,20 +432,27 @@
 	<!-- Change status btns -->
 	<script type="text/javascript">
 
+	    // $('#complaints-handler').on('click', '#status-btn .label', function() {
+	    // 	var status = $(this).data('status');
+	    // 	$('#complaints-handler').html('');
+	    	
+	    // 	$.ajax({
+	    // 		url: '<?= base_url(); ?>Reports/get_complaints_table',
+	    // 		type: 'GET',
+	    // 		dataType: 'json',
+	    // 		data: {status: status, search: '1'},
+	    // 		success: function(response) {
+	    // 			console.log(response.data.query);
+	    // 			$('#complaints-handler').append(response.data.table);
+	    // 		}
+	    // 	});
+	    	
+	    // });
+
 	    $('#complaints-handler').on('click', '#status-btn .label', function() {
 	    	var status = $(this).data('status');
-	    	$('#complaints-handler').html('');
-	    	
-	    	$.ajax({
-	    		url: '<?= base_url(); ?>Reports/get_complaints_table',
-	    		type: 'GET',
-	    		dataType: 'html',
-	    		data: {status: status},
-	    		success: function(response) {
-	    			$('#complaints-handler').append(response);
-	    		}
-	    	});
-	    	
+	    	$('#complaint-status').val(status);
+	    	$('#search-btn').trigger('click');
 	    });
 
 	</script>
@@ -638,7 +645,7 @@
 		$('#tests-table tbody tr').on('click', function() {
 			
 			var id = $(this).attr('data');
-			// console.log(id);
+
 			if(id == undefined)
 				return;
 

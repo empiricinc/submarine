@@ -1,6 +1,6 @@
 <!-- Select Inquirer Modal -->
 <div class="modal fade animated" id="select-inquirer-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
         	<div class="modal-header">
     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
@@ -11,64 +11,86 @@
     		</div>
     		<div class="modal-body" id="inquirer-handler">
     			<div class="row">
-    				<div class="col-lg-12">
-						<div class="inputFormMain">
-							<select name="province" id="province" class="form-control province" data-toggle="" title="Province" >
-								<option value="">Select Province</option>
-								<?php foreach($province as $p): ?>
-								<option value="<?= $p->id; ?>"><?= $p->name; ?></option>
-								<?php endforeach; ?>
-							</select>
+    			
+	    			<div class="col-lg-7">
+	    				<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="project" id="project" class="form-control project" data-toggle="" title="Project" >
+									<option value="">Select Projects</option>
+									<?php foreach($projects as $p): ?>
+									<option value="<?= $p->company_id; ?>"><?= $p->name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<select name="district" id="district" class="form-control district" data-toggle="" title="District" >
-								<option value="">Select District</option>
-								
-							</select>
+	    				<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="province" id="province" class="form-control province" data-toggle="" title="Province" >
+									<option value="">Select Province</option>
+									<?php foreach($province as $p): ?>
+									<option value="<?= $p->id; ?>"><?= $p->name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<select name="tehsil" id="tehsil" class="form-control tehsil" data-toggle="" title="Tehsil" >
-								<option value="">Select Tehsil</option>
-								
-							</select>
+						<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="district" id="district" class="form-control district" data-toggle="" title="District" >
+									<option value="">Select District</option>
+									
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<select name="uc" id="uc" class="form-control union-council uc-investigation" data-toggle="" title="Union council" required>
-								<option value="">Select Union Council</option>
-								
-							</select>
+						<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="tehsil" id="tehsil" class="form-control tehsil" data-toggle="" title="Tehsil" >
+									<option value="">Select Tehsil</option>
+									
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<select name="designation" id="designation" class="form-control" data-toggle="" title="Designation" required>
-								<option value="">Select Designation</option>
-								<?php foreach($designations AS $d): ?>
-								<option value="<?= $d->designation_id; ?>"><?= $d->designation_name; ?></option>
-								<?php endforeach; ?>
-							</select>
+						<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="uc" id="uc" class="form-control union-council uc-investigation" data-toggle="" title="Union council" required>
+									<option value="">Select Union Council</option>
+									
+								</select>
+							</div>
 						</div>
-					</div>
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<select name="employee" id="employee" class="form-control" data-toggle="" title="Employee" required>
-								<option value="">Select Employee</option>
-								
-							</select>
+						<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="designation" id="designation" class="form-control" data-toggle="" title="Designation" required>
+									<option value="">Select Designation</option>
+									<?php foreach($designations AS $d): ?>
+									<option value="<?= $d->designation_id; ?>"><?= $d->designation_name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
 						</div>
-					</div>
+						<div class="col-lg-12">
+							<div class="inputFormMain">
+								<select name="employee" id="employee" class="form-control" data-toggle="" title="Employee" required>
+									<option value="">Select Employee</option>
+									
+								</select>
+							</div>
+						</div>
+	    			</div>
+	    			<div class="col-lg-5" style="padding-left: 0px;">
+	    				<div id="project-employees" style="border: 1px solid #e1e4e7; background: #f6f7f8; height: 375px; margin-top: 10px; margin-right: 15px; border-radius: 3px; overflow-y: scroll; padding: 10px">
+	    					<div class="new"></div>
+	    				</div>
+	    			</div>
+
     			</div>
     		</div>
     		<div class="modal-footer">
-    			<button type="button" class="btn btn-primary" id="forward-local"> 
-    				Forward Inquiry
-    			</button>
+    			<div class="col-lg-12">
+    				<button type="button" class="btn btnSubmit" id="forward-local"> 
+	    				Forward Inquiry
+	    			</button>
+    			</div>
+    			
     		</div>
     		
         </div>
@@ -76,30 +98,31 @@
 </div>
 <!-- ./Select Inquirer Modal -->
 
-<!-- Employee Investigation Modal -->
-<!-- <div class="modal fade animated" id="investigation-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<!-- Previous Investigation Modal -->
+<div class="modal fade animated" id="previous-inquires-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" style="width: 80%; margin: 3% auto;">
         <div class="modal-content">
         	<div class="modal-header hide-from-print">
     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
     				<span aria-hidden="true">×</span> 
     			</button>
 
-    			<strong class="modal-title">Create Investigation</strong> 
+    			<strong class="modal-title">Previous Inquires</strong> 
     		</div>
-    		<div class="modal-body" id="investigation-handler">
+    		<div class="modal-body" id="inquires-handler">
     			
     		</div>
     		<div class="modal-footer">
-    			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+    			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
     				Close 
     			</button>
     		</div>
     		
         </div>
     </div>
-</div> -->
-<!-- ./Employee Investigation Modal -->
+</div>
+<!-- ./Previous Investigation Modal -->
+
 
 
 <?php $this->load->view('html/footer'); ?>
@@ -155,9 +178,105 @@
 
 
 	<script type="text/javascript">
+		function ucwords($str)
+		{
+			$str = $str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+			    return letter.toUpperCase();
+			});
+
+			return $str;
+		}
+	</script>
+
+	<script type="text/javascript">
+		var employeesHandler = $('#project-employees');
+
+		function employee_designation_tree(employees, designations)
+		{
+			var designation_list = '';
+			var tree = '<ul id="tree1" class="tree" style="visibility: hidden;">';
+            $.each(designations, function(index, val) {
+                 designation_list += `<option value="${val.designation_id}">${val.designation_name}</option>`;  
+
+                 tree += `<li data-id="${val.designation_id}">
+                                        <a href="javascript:void(0);">${ucwords(val.designation_name)}</a>
+                                        <ul id="designation-${val.designation_id}">
+
+                                        </ul>
+                                       </li>`;
+            });
+
+            if(tree != '')
+            {
+                employeesHandler.html('');
+                employeesHandler.append(tree);  
+            }
+
+            $.each(employees, function(index, val) {
+
+                $(`#designation-${val.designation_id}`).append(`<li>${ucwords(val.emp_name)}</li>`);
+                
+    
+            });
+
+            return designation_list;
+		}
+
+	</script>
+
+	<script type="text/javascript">
+		$('.project').on('change', function() {
+			var project = $(this).val();
+			var provinceHandler = $('#province').html('<option value="">Select Province</option>');
+			var dsgHandler = $('#designation').html('<option value="">Select Designation</option>');
+
+			$('#district').html('<option value="">Select District</option>');
+			$('#tehsil').html('<option value="">Select Tehsil</option>');
+			$('#uc').html('<option value="">Select Union Council</option>');
+
+			if(project == "")
+				return;
+
+			$.ajax({
+				url: '<?= base_url(); ?>Investigation/get_provinces',
+				type: 'POST',
+				dataType: 'json',
+				data: {project_id: project},
+				success: function (response) {
+					// console.log(response.data.query);
+					var province = response.data.provinces;
+					var designation = response.data.designations;
+					var employees = response.data.employees;
+
+					var province_list = '';
+					var designation_list = '';
+
+					$.each(province, function(index, val) {
+						 province_list += `<option value="${val.id}">${val.name}</option>`;
+					});
+
+					var designation_list = employee_designation_tree(employees, designation);
+					provinceHandler.append(province_list);
+					dsgHandler.append(designation_list);
+					// $('#tree1').treed();
+					$('.tree').css('visibility', 'visible');
+
+				}
+
+			});
+
+		});
+
 		$('.province').on('change', function() {
 			var province = $(this).val();
+			var project = $('#project option:selected').val();
 			var districtHandler = $('#district').html('<option value="">Select District</option>');
+			var dsgHandler = $('#designation').html('<option value="">Select Designation</option>');
+
+
+			$('#tehsil').html('<option value="">Select Tehsil</option>');
+			$('#uc').html('<option value="">Select Union Council</option>');
+
 			if(province == "")
 				return;
 
@@ -165,16 +284,23 @@
 				url: '<?= base_url(); ?>Investigation/get_districts',
 				type: 'POST',
 				dataType: 'json',
-				data: {province_id: province},
+				data: {province_id: province, project_id: project},
 				success: function (response) {
 
-					var obj = response.data;
+					var district = response.data.districts;
+					var designation = response.data.designations;
+					var employees = response.data.employees;
+
 					var district_list = '';
-					$.each(obj, function(index, val) {
+					var designation_list = '';
+					$.each(district, function(index, val) {
 						 district_list += `<option value="${val.id}">${val.name}</option>`;
 					});
 
+					var designation_list = employee_designation_tree(employees, designation);
 					districtHandler.append(district_list);
+					dsgHandler.append(designation_list);
+					$('.tree').css('visibility', 'visible');
 				}
 
 			});
@@ -184,7 +310,13 @@
 
 		$('.district').on('change', function() {
 			var district = $(this).val();
+			var project = $('#project option:selected').val();
 			var tehsilHandler = $('#tehsil').html('<option value="">Select Tehsil</option>');
+			var dsgHandler = $('#designation').html('<option value="">Select Designation</option>');
+
+
+			$('#uc').html('<option value="">Select Union Council</option>');
+
 			if(district == "")
 				return;
 
@@ -192,15 +324,22 @@
 				url: '<?= base_url(); ?>Investigation/get_tehsils',
 				type: 'POST',
 				dataType: 'json',
-				data: {district_id: district},
+				data: {district_id: district, project_id: project},
 				success: function (response) {
-					var obj = response.data;
+					var tehsil = response.data.tehsils;
+					var designation = response.data.designations;
+					var employees = response.data.employees;
+
 					var tehsil_list = '';
-					$.each(obj, function(index, val) {
+					var designation_list = '';
+					$.each(tehsil, function(index, val) {
 						 tehsil_list += `<option value="${val.id}">${val.name}</option>`;
 					});
 
+					var designation_list = employee_designation_tree(employees, designation);
 					tehsilHandler.append(tehsil_list);
+					dsgHandler.append(designation_list);
+					$('.tree').css('visibility', 'visible');
 				}
 
 			});
@@ -210,7 +349,10 @@
 
 		$('.tehsil').on('change', function() {
 			var tehsil = $(this).val();
+			var project = $('#project option:selected').val();
 			var ucHandler = $('#uc').html('<option value="">Select Union Council</option>');
+			var dsgHandler = $('#designation').html('<option value="">Select Designation</option>');
+
 
 			if(tehsil == "")
 				return;
@@ -219,16 +361,53 @@
 				url: '<?= base_url(); ?>Investigation/get_union_councils',
 				type: 'POST',
 				dataType: 'json',
-				data: {tehsil_id: tehsil},
+				data: {tehsil_id: tehsil, project_id: project},
 				success: function (response) {
 
-					var obj = response.data;
+					var ucs = response.data.ucs;
+					var designation = response.data.designations;
+					var employees = response.data.employees;
+
 					var ucs_list = '';
-					$.each(obj, function(index, val) {
+					var designation_list = '';
+					$.each(ucs, function(index, val) {
 						 ucs_list += `<option value="${val.id}">${val.name}</option>`;
 					});
 
+					var designation_list = employee_designation_tree(employees, designation);
 					ucHandler.append(ucs_list);
+					dsgHandler.append(designation_list);
+					$('.tree').css('visibility', 'visible');
+				}
+
+			});
+
+		});
+
+
+		$('.uc').on('change', function() {
+			var uc = $(this).val();
+			var project = $('#project option:selected').val();
+			var dsgHandler = $('#designation').html('<option value="">Select Designation</option>');
+
+
+			if(uc == "")
+				return;
+
+			$.ajax({
+				url: '<?= base_url(); ?>Investigation/get_uc_designations',
+				type: 'POST',
+				dataType: 'json',
+				data: {uc_id: uc, project_id: project},
+				success: function (response) {
+
+					var designation = response.data.designations;
+					var employees = response.data.employees;
+					var designation_list = '';
+
+					var designation_list = employee_designation_tree(employees, designation);
+					dsgHandler.append(designation_list);
+					$('.tree').css('visibility', 'visible');
 				}
 
 			});
@@ -263,22 +442,11 @@
 	</script>
 
 	<script>
-	   $('#complaints-handler').on('click', '#status-btn .label', function() {
+	
+		 $('#complaints-handler').on('click', '#status-btn .label', function() {
 	    	var status = $(this).data('status');
-	    	var type = "<?= $this->uri->segment(2); ?>";
-
-	    	$('#complaints-handler').html('');
-	    	
-	    	$.ajax({
-	    		url: '<?= base_url(); ?>Investigation/get_complaints_table',
-	    		type: 'GET',
-	    		dataType: 'html',
-	    		data: {status: status, type: type},
-	    		success: function(response) {
-	    			$('#complaints-handler').append(response);
-	    		}
-	    	});
-	    	
+	    	$('#complaint-status').val(status);
+	    	$('#complaint-search-btn').trigger('click');
 	    });
 
 	</script>
@@ -286,7 +454,7 @@
 	<script type="text/javascript">
 		$('#complaints-handler').on('click', '#complaints-tbody tr', function() {
 			var id = $(this).attr('data');
-			
+
 			if($('#complaints-handler').hasClass('print'))
 			{
 				window.location = "<?= base_url(); ?>Investigation/complaint_detail/" + id;
@@ -325,7 +493,6 @@
 		
 		$('#legal-tbody-internal tr').on('click', function() {
 			var id = $(this).attr('data');
-			console.log(id);
 			window.location = "<?= base_url(); ?>Investigation/legal_detail_internal/" + id;
 			return;
 		});
@@ -367,7 +534,6 @@
 					}
 					else 
 					{
-						console.log(response);
 						toastr.error('Error! There\'s problem on server');
 					}
 				}
@@ -377,6 +543,41 @@
 
 	</script>
 	<!-- ./ Forward a complaint -->
+
+	<!-- Forward Complainee -->
+	<script type="text/javascript">
+		$('#forward-complainee').on('click', function() {
+			var complaint_id = $('#complaint_id').val();
+
+			$.ajax({
+				url: '<?= base_url(); ?>Investigation/forward_complainee',
+				type: 'POST',
+				dataType: 'html',
+				data: {complaint_id: complaint_id},
+				success: function(response) {
+					if(response == '2')
+					{	
+						$('#remarks').val('');
+						toastr.error('Investigation already sent to complainee');
+					}
+					else if(response == '1')
+					{
+						toastr.success('Complaint forwarded successfully.');
+					}
+					else if(response == '0')
+					{
+						toastr.error('Error! Complaint coudn\'t be forwarded');
+					}
+					else 
+					{
+						toastr.error('Error! There\'s problem on server');
+					}
+				}
+			});
+			
+		});
+	</script>
+	<!-- ./ Forward Complainee -->
 
 
 
@@ -447,11 +648,10 @@
 
 	<script type="text/javascript">
 		$('#investigation-table tr').on('click', function() {
-			// $('#investigation-modal').modal('show');
-			var employee_id = $(this).attr('data');
+			var employee_id = $(this).data('id');
 			if(employee_id == undefined)
 				return;
-			// console.log(employee_id);
+			
 			window.location = "<?= base_url(); ?>Investigation/create/"+employee_id;
 		});
 	</script>
@@ -463,7 +663,7 @@
 	<script type="text/javascript">
 		$('#local-table tbody tr').on('click', function() {
 			var id = $(this).data('id');
-			window.location = "<?= base_url(); ?>Investigation/local_view/"+id;
+			window.location = "<?= base_url(); ?>Investigation/local_detail/"+id;
 		});
 	</script>
 
@@ -481,7 +681,181 @@
 		});
 	</script>
 
+	
+	<script type="text/javascript">
+		$('#inv-reason').on('change', function() {
+			var reason = $(this).val();
+			if(reason == 'other')
+				$('#inv-other-reason').prop('disabled', false);
+			else
+				$('#inv-other-reason').prop('disabled', true);
+		});
+	</script>
 
+	<script type="text/javascript">
+		$('#previous-inquiry-btn').on('click', function() {
+			var id = $(this).data('id');
+			// no_of_records = 0;
+			var inquiryHandler = $('#inquires-handler').html('');
+
+			$.ajax({
+				url: '<?= base_url(); ?>Investigation/previous_inquiries',
+				type: 'POST',
+				dataType: 'json',
+				data: {employee_id: id},
+				success: function(response) {
+					var obj = response.data;
+
+					var table = `<table class="table table-hover" id="previous-complaints-table">
+									<thead>
+										<tr>
+											<th>Complaint No</th>
+											<th>Title</th>
+											<th>Reason</th>
+											<th>Evidence</th>
+											<th>Reported Date</th>
+											<th>Intensity</th>
+											<th>Action</th>
+											<th>Status</th>
+										</tr>
+									</thead>
+									<tbody>`;
+
+					$.each(obj, function(index, val) {
+
+						var reason = (val.reason_text == '') ? val.other_reason : val.reason_text;
+						var evidence = (val.evidence == '1') ? 'Yes' : 'No';
+						var label = '';
+						if(val.status == "pending") 
+							label = "label label-warning";
+						else if(val.status == "resolved")
+							label = "label label-primary";
+						else if(val.status == "review")
+							label = "label label-success";
+						else if(val.status == "process")
+							label = "label label-info";
+
+						table += `<tr data-cid="${val.complaint_id}">
+									<td>${val.complaint_no}</td>
+									<td>${val.title}</td>
+									<td>${reason}</td>
+									<td>${evidence}</td>
+									<td>${val.reported_date}</td>
+									<td>${val.intensity}</td>
+									<td>${val.action}</td>
+									<td><label class="${label}">${val.status}</label></td>
+								</tr>`;
+					});
+										
+						table += `</tbody>
+							</table>`;
+
+					inquiryHandler.append(table);
+
+					if(obj.length > 0)
+						$('#previous-inquires-modal').modal('show');
+					else
+						toastr.error('No Previous Records Found');
+
+				}
+
+			});
+
+			// $('#previous-inquires-modal').modal('show');
+
+		});
+
+		$('#inquires-handler').on('click', '#previous-complaints-table>tbody>tr', function() {
+			var complaint_id = $(this).data('cid');
+			window.open('<?= base_url(); ?>Investigation/print_detail/'+complaint_id, '_blank');
+		});
+	</script>
+
+	<script type="text/javascript">
+
+	  $(".collapse").on('show.bs.collapse', function(){
+			$('#remarks-btn').html('<i class="fa fa-minus-circle fa-1x"></i>');
+	  });
+
+	  $(".collapse").on('hide.bs.collapse', function(){
+			$('#remarks-btn').html('<i class="fa fa-plus-circle fa-1x"></i>');
+	  });
+	</script>
+
+	<script type="text/javascript">
+        $.fn.extend({
+            treed: function (o) {
+              
+              var openedClass = 'glyphicon-minus-sign';
+              var closedClass = 'glyphicon-plus-sign';
+              
+              if (typeof o != 'undefined'){
+                if (typeof o.openedClass != 'undefined'){
+                openedClass = o.openedClass;
+                }
+                if (typeof o.closedClass != 'undefined'){
+                closedClass = o.closedClass;
+                }
+              };
+              
+                //initialize each of the top levels
+                var tree = $(this);
+                tree.addClass("tree");
+                tree.find('li').has("ul").each(function () {
+                    var branch = $(this); //li with children ul
+                    branch.prepend("<i class='indicator glyphicon " + closedClass + "'></i>");
+                    branch.addClass('branch');
+                    branch.on('click', function (e) {
+                        if (this == e.target) {
+                            var icon = $(this).children('i:first');
+                            icon.toggleClass(openedClass + " " + closedClass);
+                            $(this).children().children().toggle();
+                        }
+                    })
+                    branch.children().children().toggle();
+                });
+                //fire event from the dynamically added icon
+              tree.find('.branch .indicator').each(function(){
+                $(this).on('click', function () {
+                    $(this).closest('li').click();
+                });
+              });
+                //fire event to open branch if the li contains an anchor instead of text
+                tree.find('.branch>a').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+                //fire event to open branch if the li contains a button instead of text
+                tree.find('.branch>button').each(function () {
+                    $(this).on('click', function (e) {
+                        $(this).closest('li').click();
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
+
+        //Initialization of treeviews
+
+        $('#tree1').treed();
+
+        $('#tree2').treed({openedClass:'glyphicon-folder-open', closedClass:'glyphicon-folder-close'});
+
+        $('#tree3').treed({openedClass:'glyphicon-chevron-right', closedClass:'glyphicon-chevron-down'});
+
+    </script>
+
+	
+	<script type="text/javascript">
+		$('#inv-evidence').on('change', function() {
+			if($('#inv-evidence').val() == '1')
+				$('#inv-evidence-date').prop('disabled', false);
+			else
+				$('#inv-evidence-date').prop('disabled', true);
+		});
+	</script>
 
 
 </body>

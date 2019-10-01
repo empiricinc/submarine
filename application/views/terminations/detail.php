@@ -94,17 +94,6 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="col-lg-2 col-print-2">
-								<label>Notice Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->notice_date)); ?>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
 								<label>Description</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
@@ -131,35 +120,13 @@
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">
-								<label>Confirmed By</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->confirmed_by); ?>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-						
-							<div class="col-lg-2 col-print-2">
 								<label>Termination Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
 								<?= date('d-m-Y', strtotime($detail->termination_date)); ?>
-							</div>	
-							<div class="col-lg-2 col-print-2"></div>
-
-							<div class="col-lg-2 col-print-2">
-								<label>Confirmed Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->confirmed_date)); ?>
 							</div>
 						</div>
 					</div>
-
-					
 
 				</div>
 			</section>

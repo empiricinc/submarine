@@ -7,7 +7,7 @@
 					<div class="tabelHeading">
 						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#complaints-search-form')[0].reset();"></a></h3>
 					</div>
-					<form action="<?= base_url(); ?>Investigation/view_internal" method="GET" id="complaints-search-form">
+					<form action="<?= base_url(); ?>Investigation/legal_internal" method="GET" id="complaints-search-form">
 						<div class="selectBoxMain">
 							<div class="filterSelect">
 								<input type="text" name="complaint_no" class="form-control" placeholder="Complaint No">
@@ -21,16 +21,26 @@
 							</div>
 
 							<div class="filterSelect">
-								<select name="complaint_status" class="form-control">
+								<select name="complaint_status" id="complaint-status" class="form-control">
 									<option value="">Status</option>
-									<option value="all">Show All</option>
+									<option value="">Show All</option>
 									<option value="pending">Pending</option>
 									<option value="process">Process</option>
 									<option value="review">Review</option>
-									<option value="resolved">Resolved</option>
 								</select>
 								<span></span>
 							</div>
+							<!-- <div class="filterSelect">
+								<select name="complaint_action" id="complaint-action" class="form-control">
+									<option value="">Action</option>
+									<option value="">Show All</option>
+									<option value="warning">Warning</option>
+									<option value="suspend">Suspension</option>
+									<option value="terminate">Terminations</option>
+								</select>
+								<span></span>
+							</div> -->
+
 							<div class="filterSelect">
 								<select name="project" class="form-control">
 									<option value="">Project</option>
@@ -62,7 +72,7 @@
 							</div>
 
 							<div class="filterSelectBtn">
-								<button type="submit" name="search" class="btn btnSubmit">Search</button>
+								<button type="submit" name="search" id="complaint-search-btn" class="btn btnSubmit">Search</button>
 							</div>
 						</div>
 					</form>
@@ -80,13 +90,12 @@
 									<div class="col-md-10">
 										<h3><?= $title; ?><span></span>
 											<br>
-											<!-- <small class="" id="status-btn">
+											<small class="" id="status-btn">
 												<a href="javascript:void(0);" data-status="pending" class="label label-warning">pending</a>
 												<a href="javascript:void(0);" data-status="process" class="label label-info">process</a>
 												<a href="javascript:void(0);" data-status="review" class="label label-success">review</a>
-												<a href="javascript:void(0);" data-status="resolved" class="label label-primary">resolved</a>
 												<a href="javascript:void(0);" data-status="all" class="label label-danger">show all</a>
-											</small> -->
+											</small>
 										</h3>
 									</div>
 								</div>
@@ -126,7 +135,7 @@
 
 													<tr data="<?= $c->id; ?>">
 														<td><?= $c->complaint_no; ?></td>
-														<td><?= $c->employee_id; ?></td>
+														<td><?= ucwords($c->emp_name); ?></td>
 														<td><?= $c->project_name; ?></td>
 														<td><?= $c->department_name; ?></td>
 														<td><?= $c->designation_name; ?></td>

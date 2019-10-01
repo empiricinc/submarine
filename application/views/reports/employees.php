@@ -5,7 +5,7 @@
 				<div class="tabelHeading">
 					<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh clear-form" onclick="$('#employee-search-form')[0].reset();"></a></h3>
 				</div>
-				<form action="<?= base_url(); ?>Reports/employees" method="GET" id="employee-search-form">
+				<form action="<?= base_url(); ?>Reports/employees" method="GET" id="employee-search-form" class="search-form">
 					<div class="selectBoxMain">
 						<div class="filterSelect">
 							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID">
@@ -13,15 +13,7 @@
 						<div class="filterSelect">
 							<input type="text" name="employee_name" class="form-control" placeholder="Employee Name">
 						</div>
-						<div class="filterSelect">
-							<select name="designation" class="form-control">
-								<option value="">Designation</option>
-								<?php foreach($designations AS $d): ?>
-								<option value="<?= $d->designation_id; ?>"><?= $d->designation_name; ?></option>
-								<?php endforeach; ?>
-							</select>
-							<span></span>
-						</div>
+
 						<div class="filterSelect">
 							<select name="project" class="form-control">
 								<option value="">Project</option>
@@ -31,7 +23,18 @@
 							</select>
 							<span></span>
 						</div>
+						
 						<div class="filterSelect">
+							<select name="designation" class="form-control">
+								<option value="">Designation</option>
+								<?php foreach($designations AS $d): ?>
+								<option value="<?= $d->designation_id; ?>"><?= $d->designation_name; ?></option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						
+						<!-- <div class="filterSelect">
 							<select name="location" class="form-control">
 								<option value="">Location</option>
 								<?php foreach($locations AS $l): ?>
@@ -39,16 +42,8 @@
 								<?php endforeach; ?>
 							</select>
 							<span></span>
-						</div>
-						<div class="filterSelect">
-							<select name="employee_type" class="form-control">
-								<option value="current">Employee Type</option>
-								<option value="current">Current</option>
-								<option value="resigned">Resigned</option>
-								<option value="terminated">Terminated</option>
-							</select>
-							<span></span>
-						</div>
+						</div> -->
+						
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>
@@ -58,7 +53,7 @@
 							</select>
 							<span></span>
 						</div>
-						<div class="filterSelect hide">
+						<!-- <div class="filterSelect hide">
 							<select name="district" class="form-control district" id="district">
 								<option value="">District</option>
 								
@@ -78,11 +73,19 @@
 								
 							</select>
 							<span></span>
+						</div> -->
+						<div class="filterSelect">
+							<select name="employee_type" class="form-control">
+								<option value="current">Employee Type</option>
+								<option value="current">Current</option>
+								<option value="resigned">Resigned</option>
+								<option value="terminated">Terminated</option>
+							</select>
+							<span></span>
 						</div>
-						
 
 						<div class="filterSelectBtn">
-							<button type="submit" name="search" class="btn btnSubmit" id="search">Search</button>
+							<button type="submit" name="search" class="btn btnSubmit" id="emp-search">Search</button>
 						</div>
 					</div>
 				</form>
@@ -104,7 +107,7 @@
 							</div>
 							<div class="col-md-2 text-right">
 								<div class="tabelTopBtn">
-								<a href="<?= base_url(); ?>Reports/createEmployeeXLS" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+								<a href="<?= base_url(); ?>Reports/createEmployeeXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 								</div>
 							</div>
 
@@ -134,7 +137,7 @@
 										<tr data="<?= $e->employee_id; ?>">
 											<!-- <td><?= $count; ?></td> -->
 											<td><?= ucwords($e->emp_name); ?></td>
-											<td><?= $e->contact_no; ?></td>
+											<td><?= $e->contact_number; ?></td>
 											<!-- <td><?= $e->email; ?></td> -->
 											<td><?= $e->company_name; ?></td>
 											<td><?= $e->department_name; ?></td>

@@ -39,7 +39,7 @@
 						
 						<div class="col-lg-12 col-print-12 ptb-5">
 							<div class="col-lg-2 col-print-2"><strong>Employee Name</strong></div>
-							<div class="col-lg-4 col-print-2"><?= $detail->employee_id; ?></div>
+							<div class="col-lg-4 col-print-2"><?= ucwords($detail->emp_name); ?></div>
 
 							<div class="col-lg-2 col-print-2"><strong>Project</strong></div>
 							<div class="col-lg-4 col-print-2"><?= $detail->project_name; ?></div>
@@ -194,7 +194,7 @@
 				
 				<div class="col-lg-12 col-print-12 ptb-5">
 					<div class="col-lg-2 col-print-2"><strong>Employee Name</strong></div>
-					<div class="col-lg-4 col-print-4"><?= $detail->employee_id; ?></div>
+					<div class="col-lg-4 col-print-4"><?= ucwords($detail->emp_name); ?></div>
 
 					<div class="col-lg-2 col-print-2"><strong>Project</strong></div>
 					<div class="col-lg-4 col-print-4"><?= $detail->project_name; ?></div>

@@ -22,7 +22,7 @@
 								break;
 
 						} ?>
-						<input type="hidden" name="card_status" value="<?= $status; ?>">
+						<input type="hidden" name="status" value="<?= $status; ?>">
 						<div class="filterSelect">
 							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID">
 						</div>
@@ -74,7 +74,7 @@
 							</select>
 							<span></span>
 						</div>
-						<div class="filterSelect hide">
+						<!-- <div class="filterSelect hide">
 							<select name="district" class="form-control district" id="district">
 								<option value="">District</option>
 								
@@ -94,7 +94,7 @@
 								
 							</select>
 							<span></span>
-						</div>
+						</div> -->
 						
 
 						<div class="filterSelectBtn">
@@ -130,7 +130,7 @@
 											<i class="fa fa-check"></i> Mark As Printed
 										</a>
 
-										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/print_cards/<?= $this->uri->segment(3); ?>" class="btn print-cards">
+										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/print_cards" class="btn print-cards">
 											<i class="fa fa-print"></i> Print View
 										</a>
 									<?php endif; ?>
@@ -153,9 +153,12 @@
 								<table class="table table-hover" id="employee-table" style="cursor: pointer;">
 									<thead>
 										<tr>
-											<th>
+											<?php if($card_status != 'received'): ?>
+											<th style="padding-left: 10px;">
 												<input type="checkbox" id="mark-all">
 											</th>
+											<?php endif; ?>
+											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
 											<th>Project</th>
@@ -176,11 +179,14 @@
 									<tbody>
 										<?php $count=0; foreach($employees AS $e): ?>
 										<tr>
+											<?php if($card_status != 'received'): ?>
 											<td>
-												<input type="checkbox" data-id="<?= $e->employee_id; ?>" data-index="<?= $count; ?>" class="employee">
+												<input type="checkbox" data-id="<?= $e->card_id; ?>" data-index="<?= $count; ?>" class="employee">
 											</td>
+											<?php endif; ?>
+											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
-											<td><?= $e->contact_no; ?></td>
+											<td><?= $e->contact_number; ?></td>
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
 											<td><?= date('d-m-Y', strtotime($e->date_of_joining)); ?></td>
@@ -194,17 +200,17 @@
 
 											<?php if($card_status == 'pending'): ?>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/print_cards/1/<?= $e->employee_id; ?>" class="label label-primary">Print</a>
+												<a href="<?= base_url(); ?>Employee_cards/print_cards/<?= $e->card_id; ?>" class="label label-primary">Print</a>
 											</td>
 									
 											<?php elseif($card_status == 'printed'): ?>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->employee_id; ?>/2" class="label label-danger">deliver</a>
+												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->card_id; ?>/2" class="label label-danger">deliver</a>
 											</td>
 
 											<?php elseif($card_status == 'delivered'): ?>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->employee_id; ?>/3" class="label label-success">receive</a>
+												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->card_id; ?>/3" class="label label-success">receive</a>
 											</td>
 											<?php endif; ?>
 										</tr>

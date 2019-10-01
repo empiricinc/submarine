@@ -14,7 +14,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -23,6 +23,71 @@
 	    </div>
 	</div>
 <!-- ./Policy Detail Modal -->
+
+<!-- Complainee Modal -->
+	<div class="modal fade animated" id="complainee-reply-modal" tabindex="-1" role="dialog" aria-hidden="true">
+
+		<form action="<?= base_url(); ?>User_panel/investigation_reply" method="POST">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	        	<div class="modal-header">
+        			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+        				<span aria-hidden="true">×</span> 
+        			</button>
+
+        			<strong class="modal-title">Complainee Reply Form</strong> 
+        		</div>
+        		<div class="modal-body" id="complainee-reply-handler">
+        			<input type="hidden" name="complaint_id" id="complaint_id" value="">
+        			<textarea name="complaint_reply" id="complainee_reply" class="form-control noresize" cols="30" rows="10" style="width: 100%;" placeholder="Write your reply here..."></textarea>
+        		</div>
+        		<div class="modal-footer">
+        			<button type="submit" class="btn btnSubmit" id="send-reply"> 
+        				Send 
+        			</button>
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
+        				Close 
+        			</button>
+        		</div>
+	    		
+	        </div>
+	    </div>
+	    </form>
+	</div>
+<!-- ./Complainee Modal -->
+
+
+<!-- Field Joining Modal -->
+	<div class="modal fade animated" id="field-modal" tabindex="-1" role="dialog" aria-hidden="true">
+
+		<form action="<?= base_url(); ?>User_panel/" method="POST">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	        	<div class="modal-header">
+        			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+        				<span aria-hidden="true">×</span> 
+        			</button>
+
+        			<strong class="modal-title">Field Joining Report</strong> 
+        		</div>
+        		<div class="modal-body" id="field-handler">
+        			
+        			
+        		</div>
+        		<div class="modal-footer">
+        			<button type="submit" class="btn btnSubmit" id=""> 
+        				Submit 
+        			</button>
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
+        				Close 
+        			</button>
+        		</div>
+	    		
+	        </div>
+	    </div>
+	    </form>
+	</div>
+<!-- ./Field Joining Modal -->
 
 
 <!-- Training Detail Modal -->
@@ -41,7 +106,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -50,6 +115,52 @@
 	    </div>
 	</div>
 <!-- ./Training Detail Modal -->
+
+
+<!-- Training Rejection Modal -->
+	<div class="modal fade animated" id="training-rejection-modal" tabindex="-1" role="dialog" aria-hidden="true">
+		<form action="<?= base_url(); ?>User_panel/reject_training" method="POST">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		        	<div class="modal-header">
+	        			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+	        				<span aria-hidden="true">×</span> 
+	        			</button>
+
+	        			<h4 class="modal-title">Training Rejection Form</h4> 
+	        		</div>
+	        		<div class="modal-body" id="training-rejection-handler">
+	        			
+	        			<input type="hidden" id="trainingID" name="training_id" value="">
+	        			<div class="row">	
+							<div class="col-lg-12">
+								<div class="inputFormMain">
+									<select name="rejection_reason" id="rejection-reason" class="form-control"required="">
+										<option value="">Select Rejection Reason</option>
+										<option value="1">Reason 1</option>
+										<option value="2">Reason 2</option>
+										<option value="3">Reason 3</option>
+										<option value="4">Reason 4</option>
+									</select>
+								</div>
+							</div>
+						</div>
+	        			
+	        		</div>
+	        		<div class="modal-footer">
+	        			<button type="submit" class="btn btnSubmit"> 
+	        				Submit 
+	        			</button>
+	        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
+	        				Close 
+	        			</button>
+	        		</div>	
+		        </div>
+		    </div>
+		</form>
+	</div>
+<!-- ./Training Rejection Modal -->
+
 
 <!-- Leave Application Detail Modal -->
 	<div class="modal fade animated" id="leave-app-detail-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -67,7 +178,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
         				Close 
         			</button>
         		</div>
@@ -159,6 +270,16 @@
 								</select>
 							</div>
 						</div>
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<input type="text" name="from" value="" id="update-qFromDate" class="form-control date" placeholder="From Date"  data-toggle="tooltip" title="From Date" required >
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<input type="text" name="to" value="" id="update-qToDate" class="form-control date" placeholder="To Date"  data-toggle="tooltip" title="To Date" required >
+							</div>
+						</div>
 					</div>	
         		</div>
         		<div class="modal-footer">
@@ -224,12 +345,12 @@
 
 <!-- Delete Modal -->
 <div class="modal fade animated" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content modal-sm">
     		<div class="modal-body" id="delete-data-handler">
     			<input type="hidden" id="record-id" value="">
     			<input type="hidden" id="record-type" value="">
-    			<h4>Do you want this record to be deleted?</h4>
+    			<h4>Are you sure to delete?</h4>
     		</div>
     		<div class="modal-footer">
     			<button type="button" class="btn btn-danger" id="deleteBtn" data-dismiss="modal" aria-label="Close"> 
@@ -347,11 +468,18 @@
 				data: {reason: reason, other_reason: other_reason, subject: subject, desc: desc},
 				success: function(response) 
 				{
-					if(response == '1')
+					if(response == '1' || response == '2')
 					{
-						$('.alert').css('display', 'block');
-						toastr.success('Your resignation was submitted');
-
+						if(response == '1')
+						{
+							$('.alert').css('display', 'block');
+							toastr.success('Your resignation was submitted');
+						}
+						else if(response == '2')
+						{
+							toastr.error('Resignation already in queue');
+						}
+						
 						// $('#resg-reason').select2("val", "All");
 						$('#resg-reason').val('');
 						$('#resg-other-reason').val('');
@@ -372,6 +500,9 @@
 		$('.leave-application-table tr').on('click', function() {
 
 			var id = $(this).attr('data');
+			if(id == undefined)
+				return;
+
 			$('#leave-app-handler').html('');
 
 			$.ajax({
@@ -399,6 +530,10 @@
 			var province = $(this).val();
 			var type = $(this).attr('type');
 			var districtHandler = $('#'+type+'-district').html('<option>Select District</option>');
+
+			$('#'+type+'-tehsil').html('<option>Select Tehsil</option>');
+			$('#'+type+'-uc').html('<option>Select Union Council</option>');
+
 			if(province == "")
 				return;
 
@@ -426,6 +561,8 @@
 			var district = $(this).val();
 			var type = $(this).attr('type');
 			var tehsilHandler = $('#'+type+'-tehsil').html('<option>Select Tehsil</option>');
+
+			$('#'+type+'-uc').html('<option>Select Union Council</option>');
 			if(district == "")
 				return;
 
@@ -452,7 +589,7 @@
 		$('.tehsil').on('change', function() {
 			var tehsil = $(this).val();
 			var type = $(this).attr('type');
-			console.log(type);
+		
 			var ucHandler = $('#'+type+'-uc').html('<option>Select Union Council</option>');
 
 			if(tehsil == "")
@@ -479,7 +616,7 @@
 		});
 	</script>
 
-	
+
 	<!-- Employee detail forms -->
 
 	<script type="text/javascript">
@@ -487,12 +624,23 @@
 		$('#basic-information-form').on('submit', function(e) {
 			e.preventDefault();
 
+			var contact_no = $('.contact-no').val();
+			if(!contact_no.match(/^\d+$/))
+			{
+				toastr.error('Contact No must not contain letters');
+				return;
+			}
 			$.ajax({
 				url: '<?= base_url(); ?>User_panel/update_employee',
 				type: 'POST',
 				dataType: 'html',
-				data: $('#basic-information-form').serialize(),
+				data: new FormData(this),
+				processData:false,
+	            contentType:false,
+	            cache:false,
+	            async:false,
 				success: function(response) {
+					
 					if(response == '1')
 						toastr.success('Success! Record was updated');
 					else
@@ -511,6 +659,7 @@
 				dataType: 'html',
 				data: $('#residential-address-form').serialize(),
 				success: function(response) {
+
 					if(response == '1')
 						toastr.success('Success! Address was updated');
 					else
@@ -543,8 +692,10 @@
 			var institute_name = $('#institute-name').val();
 			var qualification_id = $('#qualification option:selected').val();
 			var discipline = $('#discipline option:selected').text();
+			var from_date = $('#qFromDate').val();
+			var to_date = $('#qToDate').val();
 
-			if(institute_name == "" || qualification_id == "" || discipline == "")
+			if(institute_name == "" || qualification_id == "" || discipline == "" || from_date == "" || to_date == "")
 				toastr.error('Error! All fields are requird');
 
 			var row_count = $('#education-table').DataTable().column(0).data().length + 1;
@@ -587,36 +738,21 @@
 				dataType: 'html',
 				data: $('#bank-information-form').serialize(),
 				success: function(response) {
-			
+					
 					if(response != '0')
 					{
-						
-						$('#bank-detail-table')
-						.DataTable()
-						.row
-						.add([ 
-								row_count, 
-								account_title, 
-								account_no, 
-								bank, 
-								branch_code,
-								`<a class="plr-5 icon-gray edit-bank" data-toggle="modal" href="#edit-bankinfo-modal" data="${response}" title="Edit">
-										<i class="fa fa-pencil"></i>
-									</a>
-									<a class="plr-5 icon-gray delete-bank" data-toggle="modal" href="#delete-modal" data-id="${response}" data-type="bank" title="Delete">
-										<i class="fa fa-trash"></i>
-									</a>` ] ).draw().node();
-
+						bank_table.dataTable().api().ajax.reload();
 						$('#account-title').val('');
 						$('#account').val('');
 						$('#branch-code').val('');
 						$('#bank').val($('#bank option:first').val());
-						toastr.success('Success! Qualification was added');
+						toastr.success('Success! Bank Detail was added');
 					}
 					else
 					{
-						toastr.error('Error! Qualification wasn\'t added');
+						toastr.error('Error! Bank Detail wasn\'t added');
 					}
+
 				}
 			});
 		});
@@ -686,6 +822,9 @@
 					var selected_discipline = response.data.discipline_id;
 					var record_id = response.data.id;
 
+					var from_date = response.data.from;
+					var to_date = response.data.to;
+
 					$.each(disciplines, function(index, val) {
 						if(val.discipline_id == selected_discipline)
 							disciplines += `<option value="${val.discipline_id}" selected>${val.discipline_name}</option>`;
@@ -706,6 +845,8 @@
 					qualificationHolder.append(qualifications);
 					$('#qualification-detail-id').val(record_id);
 					$('#update-institute-name').val(institute_name);
+					$('#update-qFromDate').val(from_date);
+					$('#update-qToDate').val(to_date);
 				
 				}
 			});
@@ -725,6 +866,7 @@
 				data: {id: rec_id},
 				success: function(response)
 				{
+					console.log(response);
 					var obj = response.bank;
 					var acc_no = response.data.account_id;
 					var branch_code = response.data.branch_code;
@@ -799,6 +941,8 @@
 			var discipline = $('#update-discipline').val();
 			var qualification = $('#update-qualification-id').val();
 			var institute_name = $('#update-institute-name').val();
+			var from_date = $('#update-qFromDate').val();
+			var to_date = $('#update-qToDate').val();
 
 			var tableRowCount = $('#education-table').DataTable().column(0).data().length + 1;
 			
@@ -811,7 +955,7 @@
 				url: '<?= base_url(); ?>User_panel/update_education_info',
 				type: 'POST',
 				dataType: 'html',
-				data: {id: id, discipline: discipline, qualification_id: qualification, institute_name: institute_name},
+				data: {id: id, discipline: discipline, qualification_id: qualification, institute_name: institute_name, from_date, to_date},
 				success: function(response) {
 					
 					if(response == '0')
@@ -1056,6 +1200,32 @@
 	</script>
 
 	<script type="text/javascript">
+		$('.new-trainings-table #detail').on('click', function() {
+			var id = $(this).data('id');
+			$('#training-handler').html('');
+
+			$.ajax({
+				url: '<?= base_url(); ?>User_panel/training_detail',
+				type: 'POST',
+				dataType: 'html',
+				data: {training_id: id},
+				success: function(response)
+				{
+					$('#training-handler').append(response);
+					$('#training-detail-modal').modal('show');
+				}
+			});
+		});
+
+		$('.new-trainings-table #reject').on('click', function() {
+			var id = $(this).data('id');
+			$('#trainingID').val(id);
+			$('#training-rejection-modal').modal('show');
+
+		});
+	</script>
+
+	<script type="text/javascript">
 		$('#card-request-btn').on('click', function() {
 			var reason = $('#card-reason').val();
 
@@ -1081,6 +1251,59 @@
 				
 		});
 	</script>
+
+	<script type="text/javascript">
+		$('#print-contract').on('click', function() {
+			var user_id = "<?= $id = (isset($contract_detail[0]->user_id)) ? $contract_detail[0]->user_id : ''; ?>";
+			window.open("<?= base_url(); ?>Contract/print_contract/"+user_id, "_blank");
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('#elm-xls').on('click', function() {
+			window.open("<?= base_url(); ?>User_panel/leaveManagementXLS", "_blank");
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('.overlay').on('mouseenter', function() {
+			$(this).css('opacity', '1');
+		});
+
+		$('.overlay').on('mouseleave', function() {
+			$(this).css('opacity', '0');
+		});
+
+		$('#edit-profile-pic').on('click', function() {
+			$('#profile-pic').click();
+
+		});
+
+		$('#profile-pic').on('change', function(e){
+            var fileName = e.target.files[0];
+            $('#profile').attr('src', window.URL.createObjectURL(fileName));
+
+
+        });
+
+  		// $('#image').on('change', function(e) {
+  		// 	var fileName = e.target.files[0].name;
+  		// 	console.log(e.target);
+  		// });
+	</script>
+
+	<script type="text/javascript">
+		$('.investigation-table>tbody>tr').on('click', function() {
+			var complaint_id = $(this).data('id');
+		
+			if(complaint_id == undefined)
+				return; 
+
+			$('#complaint_id').val(complaint_id);
+			$('#complainee-reply-modal').modal('show');
+		});
+	</script>
+
 
 
 </body>

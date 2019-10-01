@@ -1,11 +1,11 @@
 <section class="secMainWidthFilter">
 	<div class="row marg">
-		<!-- <div class="col-lg-2 no-leftPad">
+		<div class="col-lg-2 no-leftPad">
 			<div class="main-leftFilter">
 				<div class="tabelHeading">
 					<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#complaints-search-form')[0].reset();"></a></h3>
 				</div>
-				<form action="<?= base_url(); ?>Investigation/legal_view" method="GET" id="complaints-search-form">
+				<form action="<?= base_url(); ?>Investigation/local_view" method="GET" id="complaints-search-form">
 					<div class="selectBoxMain">
 						<div class="filterSelect">
 							<input type="text" name="complaint_no" class="form-control" placeholder="Complaint No">
@@ -18,18 +18,7 @@
 							<input type="text" name="to_date" class="form-control date" placeholder="To Date">
 						</div>
 
-						<div class="filterSelect">
-							<select name="complaint_status" class="form-control">
-								<option value="">Status</option>
-								<option value="all">Show All</option>
-								<option value="pending">Pending</option>
-								<option value="process">Process</option>
-								<option value="review">Review</option>
-								<option value="resolved">Resolved</option>
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect">
+						<!-- <div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>
 								<?php foreach($province AS $p): ?>
@@ -59,7 +48,7 @@
 								
 							</select>
 							<span></span>
-						</div>
+						</div> -->
 
 						<div class="filterSelectBtn">
 							<button type="submit" name="search" class="btn btnSubmit">Search</button>
@@ -67,9 +56,9 @@
 					</div>
 				</form>
 			</div>
-		</div> -->
+		</div>
 		<div class="mainTableWhite" style="margin-top: 0px">
-			<div class="col-lg-12" style="padding-top: 22px;">
+			<div class="col-lg-10" style="padding-top: 22px;">
 				<!-- data -->
 				<div class="mainTableWhite">
 					<div class="row">
@@ -89,7 +78,7 @@
 									<table class="table table-hover" id="local-table">
 										<thead>
 											<tr>
-												<th>#</th>
+												<!-- <th>#</th> -->
 												<th>Complaint No</th>
 												<th>Subject</th>
 												<th>Name</th>
@@ -103,7 +92,7 @@
 											<?php $count=1; $previous_ids=array(); foreach($complaints as $c): ?>
 											<?php if(in_array($c->complaint_id, $previous_ids)) continue; ?>
 												<tr data-id="<?= $c->complaint_id; ?>">
-													<td><?= $count; ?></td>
+													<!-- <td><?= $count; ?></td> -->
 													<td><?= $c->complaint_no; ?></td>
 													<td><?= $c->subject; ?></td>
 													<td><?= $c->name; ?></td>

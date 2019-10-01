@@ -5,7 +5,7 @@
 			<div class="tabelHeading">
 				<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh clear-form" onclick="$('#trainings-search-form')[0].reset();"></a></h3>
 			</div>
-			<form action="<?= base_url(); ?>Reports/trainings" method="GET" id="trainings-search-form">
+			<form action="<?= base_url(); ?>Reports/trainings" method="GET" id="trainings-search-form" class="search-form">
 				<div class="selectBoxMain">
 					<div class="filterSelect">
 						<select name="project" class="form-control">
@@ -55,13 +55,13 @@
 						</select>
 						<span></span>
 					</div>
-					<div class="filterSelect hide">
+					<!-- <div class="filterSelect hide">
 						<select name="district" class="form-control district" id="district">
 							<option value="">District</option>
 							
 						</select>
 						<span></span>
-					</div>
+					</div> -->
 					
 
 					<div class="filterSelectBtn">
@@ -86,7 +86,7 @@
 						</div>
 						<div class="col-md-2 text-right">
 							<div class="tabelTopBtn">
-							<a href="<?= base_url(); ?>Reports/trainingsXLS" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+							<a href="<?= base_url(); ?>Reports/trainingsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 							</div>
 						</div>
 					</div>

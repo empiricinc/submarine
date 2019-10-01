@@ -5,10 +5,33 @@
  */
 class Employee_cards extends MY_Controller
 {
-
+	var $session_data;
 	function __construct()
 	{
 		parent::__construct();
+		if(empty($this->session->username))
+            redirect(base_url());
+
+        $roles = array(1, 2, 3);
+        $user_role = $this->session->username['user_role'];
+
+        $project_id = $this->session->username['project_id'];
+        $province_id = $this->session->username['provience_id'];
+        if(!in_array($user_role, $roles))
+			redirect(base_url().'User_panel');
+
+		if($user_role == 1 || $user_role == 2)
+		{
+			$project_id = '';
+			$province_id = '';
+		}
+
+        $this->session_data = array(
+					        	'user_id' => $this->session->username['employee_id'], 
+					        	'project_id' => $project_id, 
+					        	'province_id' => $province_id
+					        );
+        
 		$this->load->database();
 
 		$this->load->model(array(
@@ -16,19 +39,45 @@ class Employee_cards extends MY_Controller
 							'Investigation_model',
 							'Resignations_model',
 							'Terminations_model',
-							'User_panel_model'
+							'User_panel_model',
+							'Designations_model',
+							'Province_model',
+							'Projects_model',
+							'Locations_model'
 						));
 
 
+	}
+
+	function remove_empty_entries($conditions)
+	{
+		foreach ($conditions as $key => $value) {
+			if($value == '')
+				unset($conditions[$key]);
+
+		}
+
+		return $conditions;
 	}
 
 	function index()
 	{
 		$data['title'] = 'Employee Cards Dashboard';
 
-		$data['cards'] = $this->Reports_model->get_employee_cards("", "", 20, "")->result();
-		// echo $this->db->last_query(); exit;
-		// var_dump($data['cards']); exit;
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id'],
+					'ec.card_status' => 'printed'
+				];
+
+		$data['printed'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+		$conditions['ec.card_status'] = 'pending';
+		$data['pending'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+		$conditions['ec.card_status'] = 'delivered';
+		$data['delivered'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+		$conditions['ec.card_status'] = 'received';
+		$data['received'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+
 		$data['content'] = $this->load->view('employee-cards/dashboard', $data, TRUE);
 		$this->load->view('employee-cards/_template', $data);
 	}
@@ -36,76 +85,74 @@ class Employee_cards extends MY_Controller
 
 	public function view()
 	{
-		$card_status = $this->uri->segment(3);
-		if($card_status == "")
-			$status = $card_status = $this->input->get('card_status');
+		$status_num = $this->input->get('status');
+		$offset = $this->input->get('page');
 
-		if($card_status == '1')
+		// if($status_num == "")
+		// 	$status = $card_status = $this->input->get('card_status');
+		$card_status = "";
+		if($status_num == '1')
 			$card_status = 'pending';
-		elseif($card_status == '2')
+		elseif($status_num == '2')
 			$card_status = 'printed';
-		elseif($card_status == '3')
+		elseif($status_num == '3')
 			$card_status = 'delivered';
-		elseif($card_status == '4')
+		elseif($status_num == '4')
 			$card_status = 'received';
-		else
-			show_404();
+		// else
+		// 	show_404();
 
-		$this->security->xss_clean($card_status);
+		$this->security->xss_clean($status_num);
 
-		$employee_id = $employee_name = $designation_id = $project_id = $location_id = $province_id = $district_id = $tehsil_id = $uc_id = "1";
-		$employee_type = "current";
-		$conditions = "";
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id'],
+					'ec.card_status' => $card_status
+				];
+
 		if(isset($_GET['search']))
 		{
-			$employeeID = $this->input->get('employee_id');
+			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
-			$province = $this->input->get('province');
-			$district = $this->input->get('district');
-			$tehsil = $this->input->get('tehsil');
-			$uc = $this->input->get('uc');
-			$project = $this->input->get('project');
-			$designation = $this->input->get('designation');
-			$location = $this->input->get('location');
+			$province = (int) $this->input->get('province');
+			// $district = $this->input->get('district');
+			// $tehsil = $this->input->get('tehsil');
+			// $uc = $this->input->get('uc');
+			$project = (int) $this->input->get('project');
+			$designation = (int) $this->input->get('designation');
+			$location = (int) $this->input->get('location');
 
 			$employee_type = $this->input->get('employee_type');
 			
-			if($employeeID != "")
-				$employee_id = "xe.employee_id = $employeeID";
-			if($employeeName != "")
-				$employee_name = "CONCAT_WS(' ', xe.first_name, xe.last_name) LIKE '%".$employeeName."%'";
-			
-			if($province != "")
-				$province_id = "(pp.id = $province OR rp.id = $province)";
-			if($district != "")
-				$district_id = "(pd.id = $district OR rd.id = $district)";
-			if($tehsil != "")
-				$tehsil = "(pt.id = $tehsil OR rt.id = $tehsil)";
-			if($uc != "")
-				$uc_id = "(pu.id = $uc OR ru.id = $uc)";
-			if($designation != "")
-				$designation_id = "xd.designation_id = $designation";
-			if($project != "")
-				$project_id = "xc.company_id = $project";
+			if($employeeName != '')
+				$employeeName = '%'.$employeeName.'%';
 
-			if($location != "")
-				$location_id = "xol.location_id = $location";
+			$conditions['xe.employee_id'] = $employeeID;
+			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
+			$conditions['xe.designation_id'] = $designation;
+			$conditions['xol.location_id'] = $location;
 
-			$conditions = "$employee_id AND $employee_name AND $designation_id AND $project_id AND $location_id AND $province_id AND $district_id AND $tehsil_id AND $uc_id";
+			if($project != 0)
+				$conditions['xe.company_id'] = $project;
+			if($province != 0)
+				$conditions['xe.provience_id'] = $province;
+
 		} 
 		
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
 		$data['title'] = 'Employee Cards';
-		$data['employees'] = $this->Reports_model->get_employee_cards($conditions, $card_status, "", "")->result();
-		// echo $this->db->last_query(); exit;
-		$total_rows = $this->Reports_model->get_employee_cards()->num_rows();
+		$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
+		
+		$total_rows = $this->Reports_model->get_employee_cards($filtered_conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
-		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
+		$this->pagination_initializer_query_string($this->limit, $this->num_links, $total_rows, $url);
 		
-		$data['designations'] = $this->Reports_model->get_designations();
-		$data['provinces'] = $this->Reports_model->get_provinces();
-		$data['projects'] = $this->Reports_model->get_companies();
-		$data['locations'] = $this->Reports_model->get_locations();
+		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
+		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
+		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['card_status'] = $card_status;
 		$data['content'] = $this->load->view('employee-cards/view', $data, TRUE);
@@ -114,117 +161,101 @@ class Employee_cards extends MY_Controller
 
 	public function print_cards()
 	{
-		$status = $card_status = $this->uri->segment(3);
-		$ids = $this->uri->segment(4);
-		$employee_ids = explode('-', $ids);
-
-		if($card_status == "")
-			$card_status = $this->input->get('card_status');
-
-		if($card_status == '1')
-			$card_status = 'pending';
-		elseif($card_status == '2')
-			$card_status = 'printed';
-		elseif($card_status == '3')
-			$card_status = 'delivered';
-		elseif($card_status == '4')
-			$card_status = 'received';
+		$ids = $this->uri->segment(3);
+		$card_ids = explode('-', $ids);
 
 		$data['title'] = 'Employee Cards';
 
 		$employees = array();
-		
-		if($employee_ids[0] != "")
+
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id'],
+					'ec.card_status' => 'pending'
+				];
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+		if($card_ids[0] != "")
 		{
-			for ($i=0; $i < count($employee_ids); $i++) { 
-				$condition = "ec.employee_id = " . $employee_ids[$i];
-				$emp_data = $this->Reports_model->get_employee_cards($condition, $card_status, "", "")->row();
+			for ($i=0; $i < count($card_ids); $i++) { 
+				$conditions['ec.id'] = $card_ids[$i];
+				$filtered_conditions = $this->remove_empty_entries($conditions);
+				$emp_data = $this->Reports_model->get_employee_cards($filtered_conditions)->row();
+				
 				array_push($employees, $emp_data);
 			}
 			$data['employees'] = $employees;
 		}
 		else
 		{
-			$data['employees'] = $this->Reports_model->get_employee_cards("", $card_status, "", "")->result();
+			$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions)->result();
 		}
 		
-		// var_dump($employees);
-		// echo $this->db->last_query(); exit;
-		$total_rows = $this->Reports_model->get_employee_cards()->num_rows();
+		$total_rows = $this->Reports_model->get_employee_cards($conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
 		
-		$data['designations'] = $this->Reports_model->get_designations();
-		$data['provinces'] = $this->Reports_model->get_provinces();
-		$data['projects'] = $this->Reports_model->get_companies();
-		$data['locations'] = $this->Reports_model->get_locations();
+		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
+		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
+		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
+
 		$data['content'] = $this->load->view('employee-cards/print-view', $data, TRUE);
 		$this->load->view('employee-cards/_template', $data);
 	}
 
-	public function received()
+	public function received($offset="")
 	{
-
 		$card_status = 'delivered';
 		$ids = $this->uri->segment(3);
-		$employee_ids = explode('-', $ids);
+		$card_ids = explode('-', $ids);
 
 		$data['title'] = 'Employee Cards';
 
-				$employee_id = $employee_name = $designation_id = $project_id = $location_id = $province_id = $district_id = $tehsil_id = $uc_id = "1";
-		$employee_type = "current";
-		$conditions = "";
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id'],
+					'ec.card_status' => $card_status
+				];
+
 		if(isset($_GET['search']))
 		{
-			$employeeID = $this->input->get('employee_id');
+			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
-			$province = $this->input->get('province');
-			$district = $this->input->get('district');
-			$tehsil = $this->input->get('tehsil');
-			$uc = $this->input->get('uc');
-			$project = $this->input->get('project');
-			$designation = $this->input->get('designation');
-			$location = $this->input->get('location');
+			$province = (int) $this->input->get('province');
+			// $district = $this->input->get('district');
+			// $tehsil = $this->input->get('tehsil');
+			// $uc = $this->input->get('uc');
+			$project = (int) $this->input->get('project');
+			$designation = (int) $this->input->get('designation');
+			$location = (int) $this->input->get('location');
 
 			$employee_type = $this->input->get('employee_type');
 			
-			if($employeeID != "")
-				$employee_id = "xe.employee_id = $employeeID";
-			if($employeeName != "")
-				$employee_name = "CONCAT_WS(' ', xe.first_name, xe.last_name) LIKE '%".$employeeName."%'";
-			
-			if($province != "")
-				$province_id = "(pp.id = $province OR rp.id = $province)";
-			if($district != "")
-				$district_id = "(pd.id = $district OR rd.id = $district)";
-			if($tehsil != "")
-				$tehsil = "(pt.id = $tehsil OR rt.id = $tehsil)";
-			if($uc != "")
-				$uc_id = "(pu.id = $uc OR ru.id = $uc)";
-			if($designation != "")
-				$designation_id = "xd.designation_id = $designation";
-			if($project != "")
-				$project_id = "xc.company_id = $project";
+			if($employeeName != '')
+				$employeeName = '%'.$employeeName.'%';
 
-			if($location != "")
-				$location_id = "xol.location_id = $location";
+			$conditions['xe.employee_id'] = $employeeID;
+			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
+			$conditions['xe.designation_id'] = $designation;
+			$conditions['xol.location_id'] = $location;
 
-			$conditions = "$employee_id AND $employee_name AND $designation_id AND $project_id AND $location_id AND $province_id AND $district_id AND $tehsil_id AND $uc_id";
 		} 
 		
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
 		$data['title'] = 'Employee Cards';
-		$data['employees'] = $this->Reports_model->get_employee_cards($conditions, $card_status, "", "")->result();
-		// echo $this->db->last_query(); exit;
-		$total_rows = $this->Reports_model->get_employee_cards()->num_rows();
+		$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
+		
+		$total_rows = $this->Reports_model->get_employee_cards($filtered_conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
 		
-		$data['designations'] = $this->Reports_model->get_designations();
-		$data['provinces'] = $this->Reports_model->get_provinces();
-		$data['projects'] = $this->Reports_model->get_companies();
-		$data['locations'] = $this->Reports_model->get_locations();
+		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
+		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
+		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['card_status'] = $card_status;
 		$data['content'] = $this->load->view('employee-cards/card-received', $data, TRUE);
@@ -236,7 +267,7 @@ class Employee_cards extends MY_Controller
 	{	
 
 		$ids = $this->uri->segment(3);
-		$employee_ids = explode('-', $ids);
+		$card_ids = explode('-', $ids);
 
 		$status = $card_status = $this->uri->segment(4);
 		$is_dash = $this->uri->segment(5);
@@ -271,12 +302,12 @@ class Employee_cards extends MY_Controller
 		$data['title'] = 'Employee Cards';
 
 		
-		if($employee_ids[0] != "")
+		if($card_ids[0] != "")
 		{
-			for ($i=0; $i < count($employee_ids); $i++) { 
+			for ($i=0; $i < count($card_ids); $i++) { 
 				$this->db->update('employee_cards', 
 									array('card_status' => $card_status, $date_type => $date), 
-									array('employee_id' => $employee_ids[$i])
+									array('id' => $card_ids[$i])
 								);
 			}
 		}
@@ -286,17 +317,14 @@ class Employee_cards extends MY_Controller
 								array('card_status' => $card_status)
 							);
 		}
-		// echo $this->db->last_query(); exit;
 
 		
 		if($is_dash == '1')
 			redirect('Employee_cards/index');
 		else if($card_status == 'received')
 			redirect('Employee_cards/received');
-		redirect(base_url().'Employee_cards/view/'.$status, 'refresh');
+		redirect(base_url().'Employee_cards/view?status='.$status, 'refresh');
 	}
-
-
 
 
 

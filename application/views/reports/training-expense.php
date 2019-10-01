@@ -148,7 +148,7 @@
 											$grand_total += $total_expense;
 										?>
 										<tr>
-											<td><?= $e->employee_name; ?></td>
+											<td><?= ucwords($e->employee_name); ?></td>
 											<td><?= $e->designation_name; ?></td>
 											<td><?= $e->dsa; ?></td>
 											<td><?= $e->travel; ?></td>

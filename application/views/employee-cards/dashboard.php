@@ -5,7 +5,7 @@
 				<div class="headingMain">
 					<h1>
 						Employee's Card Dashboard
-						<span>statics and more</span>
+						<span></span>
 					</h1>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 								<a href="<?= base_url(); ?>Employee_cards/print_cards/1" class="btn">
 									<i class="fa fa-print"></i> Print All
 								</a>
-								<a href="<?= base_url(); ?>Employee_cards/view/1" class="btn">
+								<a href="<?= base_url(); ?>Employee_cards/view?status=1" class="btn">
 									<i class="fa fa-eye"></i> View All
 								</a>
 							</div>
@@ -44,30 +44,26 @@
 												</th> -->
 												<th>ID</th>
 												<th>Name</th>
-												<th>CNIC</th>
 												<th>Project</th>
 												<th>Date of Joining</th>
 												<th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
-											<?php foreach($cards AS $c): ?>
-												<?php if($c->card_status == 'pending'): ?>
+											<?php foreach($pending AS $c): ?>
 											<tr>
 												<!-- <td>
 													<input type="checkbox" data-id="<?= $c->employee_id; ?>" class="pending-card">
 												</td> -->
 												<td><?= $c->employee_id; ?></td>
 												<td><?= ucwords($c->emp_name); ?></td>
-												<td><?= $c->cnic; ?></td>
 												<td><?= $c->project_name; ?></td>
 												<td><?= date('d-m-Y', strtotime($c->date_of_joining)); ?></td>
 												<td>
-													<a href="<?= base_url(); ?>Employee_cards/print_cards/1/<?= $c->employee_id; ?>" class="label label-primary">Print</a>
-													<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->employee_id; ?>/1/1" class="label label-info">Mark Print</a>
+													<a href="<?= base_url(); ?>Employee_cards/print_cards/<?= $c->card_id; ?>" class="label label-primary">Print</a>
+													<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->card_id; ?>/1/1" class="label label-info">Mark Print</a>
 												</td>
 											</tr>
-												<?php endif; ?>
 											<?php endforeach; ?>
 										</tbody>
 									</table>
@@ -88,7 +84,7 @@
 						</div>
 						<div class="col-md-5">
 							<div class="tabelTopBtn" style="padding-top: 12px !important;">
-								<a href="<?= base_url(); ?>Employee_cards/view/2" class="btn">
+								<a href="<?= base_url(); ?>Employee_cards/view?status=2" class="btn">
 									<i class="fa fa-eye"></i> View All
 								</a>
 							</div>
@@ -106,30 +102,26 @@
 												</th> -->
 												<th>ID</th>
 												<th>Name</th>
-												<th>CNIC</th>
 												<th>Project</th>
 												<th>Print Date</th>
 												<th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
-											<?php foreach($cards AS $c): ?>
-												<?php if($c->card_status == 'printed'): ?>
+											<?php foreach($printed AS $c): ?>
 												<tr>
 													<!-- <td>
 														<input type="checkbox" data-id="<?= $c->employee_id; ?>" class="delivered-card">
 													</td> -->
 													<td><?= $c->employee_id; ?></td>
 													<td><?= ucwords($c->emp_name); ?></td>
-													<td><?= $c->cnic; ?></td>
 													<td><?= $c->project_name; ?></td>
 													<td><?= date('d-m-Y', strtotime($c->print_date)); ?></td>
 													<td>
-														<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->employee_id; ?>/2/1" class="label label-danger">deliver</a>
+														<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->card_id; ?>/2/1" class="label label-danger">deliver</a>
 
 													</td>
 												</tr>
-												<?php endif; ?>
 											<?php endforeach; ?>
 										</tbody>
 									</table>
@@ -152,7 +144,7 @@
 						</div>
 						<div class="col-md-5">
 							<div class="tabelTopBtn" style="padding-top: 12px !important;">
-								<a href="<?= base_url(); ?>Employee_cards/view/3" class="btn">
+								<a href="<?= base_url(); ?>Employee_cards/view?status=3" class="btn">
 										<i class="fa fa-eye"></i> View All
 								</a>
 							</div>
@@ -170,30 +162,26 @@
 												</th> -->
 												<th>ID</th>
 												<th>Name</th>
-												<th>CNIC</th>
 												<th>Project</th>
 												<th>Deliver Date</th>
 												<th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
-											<?php foreach($cards AS $c): ?>
-												<?php if($c->card_status == 'delivered'): ?>
+											<?php foreach($delivered AS $c): ?>
 												<tr>
 													<!-- <td>
 														<input type="checkbox" data-id="<?= $c->employee_id; ?>" class="delivered-card">
 													</td> -->
 													<td><?= $c->employee_id; ?></td>
 													<td><?= ucwords($c->emp_name); ?></td>
-													<td><?= $c->cnic; ?></td>
 													<td><?= $c->project_name; ?></td>
 													<td><?= date('d-m-Y', strtotime($c->deliver_date)); ?></td>
 													<td>
-														<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->employee_id; ?>/3/1" class="label label-success">receive</a>
+														<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->card_id; ?>/3/1" class="label label-success">receive</a>
 
 													</td>
 												</tr>
-												<?php endif; ?>
 											<?php endforeach; ?>
 										</tbody>
 									</table>
@@ -213,7 +201,7 @@
 						</div>
 						<div class="col-md-5">
 							<div class="tabelTopBtn" style="padding-top: 12px !important;">		
-								<a href="<?= base_url(); ?>Employee_cards/view/4" class="btn">
+								<a href="<?= base_url(); ?>Employee_cards/view?status=4" class="btn">
 									<i class="fa fa-eye"></i> View All
 								</a>
 							</div>
@@ -231,25 +219,21 @@
 												</th> -->
 												<th>ID</th>
 												<th>Name</th>
-												<th>CNIC</th>
 												<th>Project</th>
 												<th>Receive Date</th>
 											</tr>
 										</thead>
 										<tbody>
-											<?php foreach($cards AS $c): ?>
-												<?php if($c->card_status == 'received'): ?>
+											<?php foreach($received AS $c): ?>
 												<tr>
 													<!-- <td>
 														<input type="checkbox" data-id="<?= $c->employee_id; ?>" class="delivered-card">
 													</td> -->
 													<td><?= $c->employee_id; ?></td>
 													<td><?= ucwords($c->emp_name); ?></td>
-													<td><?= $c->cnic; ?></td>
 													<td><?= $c->project_name; ?></td>
 													<td><?= date('d-m-Y', strtotime($c->receive_date)); ?></td>
 												</tr>
-												<?php endif; ?>
 											<?php endforeach; ?>
 										</tbody>
 									</table>

@@ -7,16 +7,16 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="#"><img src="<?= base_url(); ?>assets/img/bars.png" alt=""></a>
+        <a class="navbar-brand" href="<?php echo base_url();?>dashboard"><div class="hrms-logo">HRMS</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li><a href="<?= base_url(); ?>">Home</a></li>
           <!-- <li class="dropdown">
               <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                 Reports <span class="fa fa-caret"></span>
               </a>
               <ul class="dropdown-menu"> -->
+                <li class=""><a href="<?= base_url(); ?>">Home</a></li>
                 <li class=""><a href="<?= base_url(); ?>Employee_cards/index">Dashboard</a></li>
 
                 <li class=""><a href="<?= base_url(); ?>Employee_cards/received">Received Cards</a></li>
