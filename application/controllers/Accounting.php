@@ -55,6 +55,7 @@ class Accounting extends MY_Controller
 	public function output($Return=array()){
 
 		/*Set response header*/
+		//dasasdasddsa
 
 		header("Access-Control-Allow-Origin: *");
 
