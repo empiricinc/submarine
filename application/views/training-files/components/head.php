@@ -40,7 +40,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="<?php echo base_url();?>"><div class="hrms-logo">HRMS</div></a>
+        <a class="navbar-brand" href="<?php echo base_url();?>dashboard"><div class="hrms-logo">HRMS</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
@@ -64,11 +64,18 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
+            <?php if($this->session->userdata('username')): ?>
+              <a href="<?php echo base_url('logout'); ?>">
+              <img src="<?php echo base_url('assets/img/profile.png'); ?>" alt="">
+              Logout &nbsp; <i class="fa fa-sign-out"></i>  
+            </a>
+            <?php else: ?>
             <a href="#">
               <img src="<?php echo base_url('assets/img/profile.png'); ?>" alt="">
               Haseeb Khattak
               <span class="caret"></span>    
             </a>
+            <?php endif; ?>
           </li>
         </ul>
       </div>
