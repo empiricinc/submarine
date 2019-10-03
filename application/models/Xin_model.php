@@ -534,7 +534,7 @@ class xin_model extends CI_Model {
 
 	public function site_title() {
 
-		return 'HRMS Software | Ayatullah@CTC';
+		return 'HRMS Software | HRMS@CTC';
 
 	}
 

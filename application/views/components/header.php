@@ -160,7 +160,8 @@ if($system[0]->system_skin=='skin-6'){
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Organization </a>
                     <ul class="dropdown-menu">
                         <li><a href="<?php echo base_url(); ?>company">All Projects</a></li>
-                        <li><a href="<?php echo base_url(); ?>location">Setup / Add Location to Project</a></li>
+                        <li><a href="<?php echo base_url(); ?>location">Project Location Setup</a></li>
+                        <li><a href="<?php echo base_url(); ?>area_code_shift">Shift Job/Area Code </a></li>
                         <li><a href="<?php echo base_url(); ?>district_setup">District Setup</a></li>
                         <li><a href="<?php echo base_url(); ?>tehsil_setup">Tehsil Setup</a></li>
                         <li><a href="<?php echo base_url(); ?>uc_setup">UC Setup</a></li>
