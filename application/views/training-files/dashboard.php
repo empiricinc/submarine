@@ -32,7 +32,7 @@
 						<div class="col-md-4">
 							<div class="tabelTopBtn">
 								<a class="btn" href="<?php echo base_url('trainings/add_trainings'); ?>">
-									<img src="<?php echo base_url('dashboardDesign/assets/img/plus.png'); ?>" alt=""> 
+									<img src="<?php echo base_url('assets/img/plus.png'); ?>" alt=""> 
 									Create Training
 								</a>
 							</div>
@@ -182,7 +182,6 @@
 				<div class="col-md-4">
 					<div class="tabelTopBtn">
 						<a class="btn" href="<?php echo base_url('trainings/all_completed'); ?>">
-							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
 							View All
 						</a>
 					</div>

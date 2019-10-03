@@ -294,8 +294,8 @@ class Trainings extends CI_Controller{
 								xin_companies.name,
 								xin_designations.designation_id,
 								xin_designations.designation_name');
-			$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
-			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+			$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
 			$row = $this->db->get_where('xin_employees', array('user_id' => $employee_detail[$i]))->row();
 			// Print the data in HTML view.
 			$employee_names .= "<div class='row'><div class='col-lg-2'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-2'>".$row->name."</div><div class='col-lg-2'>".$row->contact_no."</div><div class='col-lg-3'>".$row->address."</div><hr></div>";

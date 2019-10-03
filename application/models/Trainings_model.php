@@ -27,14 +27,13 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
-		echo $this->db->last_query();
 		return $query->result();
 	}
 	// Get trainings -- Manager.
@@ -50,10 +49,10 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->limit($limit, $offset);
@@ -73,10 +72,10 @@ class Trainings_model extends CI_Model{
 							provinces.name as prov_name,
 							training_attendance.training_id');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->join('training_attendance', 'xin_trainings.trg_id = training_attendance.training_id', 'left');
 		$this->db->group_by('xin_trainings.trg_id');
 		$this->db->order_by('xin_trainings.start_date', 'ASC');
@@ -97,10 +96,10 @@ class Trainings_model extends CI_Model{
 							provinces.name as prov_name,
 							training_attendance.training_id');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->join('training_attendance', 'xin_trainings.trg_id = training_attendance.training_id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->group_by('xin_trainings.trg_id');
@@ -122,10 +121,10 @@ class Trainings_model extends CI_Model{
 							provinces.name as prov_name,
 							training_attendance.training_id');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->join('training_attendance', 'xin_trainings.trg_id = training_attendance.training_id', 'left');
 		$this->db->where('xin_trainings.status', $status);
 		$this->db->group_by('xin_trainings.trg_id');
@@ -143,9 +142,9 @@ class Trainings_model extends CI_Model{
 							xin_training_locations.location_id,
 							xin_training_locations.location');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 2, 'xin_trainings.status' => 2));
 		$this->db->limit(10);
 		return $this->db->get()->result();
@@ -161,9 +160,9 @@ class Trainings_model extends CI_Model{
 							xin_training_locations.location_id,
 							xin_training_locations.location');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 2, 'xin_trainings.status' => 2));
 		$this->db->where(array('xin_trainings.location' => $provid));
 		$this->db->limit(10);
@@ -189,10 +188,10 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 2));
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
@@ -212,10 +211,10 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 2));
 		$this->db->where(array('xin_trainings.location' => $provid));
 		$this->db->limit($limit, $offset);
@@ -242,10 +241,10 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->like('xin_trainings.facilitator_name', $training);
 		$this->db->or_like('xin_trainings.approval_type', $training);
 		$this->db->or_like('xin_trainers.first_name', $training);
@@ -276,10 +275,10 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->like('xin_trainings.facilitator_name', $training);
 		$this->db->or_like('xin_trainings.approval_type', $training);
@@ -303,8 +302,6 @@ class Trainings_model extends CI_Model{
 							xin_training_locations.location,
 							xin_companies.company_id,
 							xin_companies.name,
-							xin_designations.designation_id,
-							xin_designations.designation_name,
 							provinces.id,
 							provinces.name as provName,
 							city.id,
@@ -314,13 +311,14 @@ class Trainings_model extends CI_Model{
 							union_councel.id,
 							union_councel.name as uc_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('xin_companies', 'xin_trainings.project = xin_companies.company_id');
-		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
-		$this->db->join('city', 'xin_trainings.district = city.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('xin_companies', 'xin_trainings.project = xin_companies.company_id', 'left');
+		// xin_designations.designation_id, xin_designations.designation_name, -- Removed these two.
+		// $this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+		$this->db->join('city', 'xin_trainings.district = city.id', 'left');
 		$this->db->join('tehsil', 'xin_trainings.tehsil = tehsil.id', 'left');
 		$this->db->join('union_councel', 'xin_trainings.uc = union_councel.id', 'left');
 		$this->db->where('xin_trainings.trg_id', $trg_id);
@@ -351,13 +349,13 @@ class Trainings_model extends CI_Model{
 							union_councel.id,
 							union_councel.name as uc_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('xin_companies', 'xin_trainings.project = xin_companies.company_id');
-		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
-		$this->db->join('city', 'xin_trainings.district = city.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('xin_companies', 'xin_trainings.project = xin_companies.company_id', 'left');
+		// $this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+		$this->db->join('city', 'xin_trainings.district = city.id', 'left');
 		$this->db->join('tehsil', 'xin_trainings.tehsil = tehsil.id', 'left');
 		$this->db->join('union_councel', 'xin_trainings.uc = union_councel.id', 'left');
 		$this->db->where('xin_trainings.trg_id', $trg_id);
@@ -451,8 +449,8 @@ class Trainings_model extends CI_Model{
 							city.id as cityId,
 							city.name as city_name');
 		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id');
-		$this->db->join('city', 'xin_training_hotels.city = city.id');
+		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_hotels.city = city.id', 'left');
 		$this->db->like('xin_training_hotels.hotel_name', $hotel);
 		$this->db->or_like('provinces.name', $hotel);
 		$this->db->or_like('city.name', $hotel);
@@ -469,8 +467,8 @@ class Trainings_model extends CI_Model{
 							city.id as cityId,
 							city.name as city_name');
 		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id');
-		$this->db->join('city', 'xin_training_hotels.city = city.id');
+		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_hotels.city = city.id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->like('xin_training_hotels.hotel_name', $hotel);
 		$this->db->or_like('provinces.name', $hotel);
@@ -495,8 +493,8 @@ class Trainings_model extends CI_Model{
 							city.id,
 							city.name as cityName');
 		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id');
-		$this->db->join('city', 'xin_training_hotels.city = city.id');
+		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_hotels.city = city.id', 'left');
 		$this->db->where('hotel_id', $hotel_id);
 		return $this->db->get()->row_array();
 	}
@@ -511,8 +509,8 @@ class Trainings_model extends CI_Model{
 							city.id,
 							city.name as cityName');
 		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id');
-		$this->db->join('city', 'xin_training_hotels.city = city.id');
+		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_hotels.city = city.id', 'left', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->where('hotel_id', $hotel_id);
 		return $this->db->get()->row_array();
@@ -541,7 +539,7 @@ class Trainings_model extends CI_Model{
 							xin_designations.designation_name,
 							xin_employees.designation_id');
 		$this->db->from('xin_employees');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
 		$this->db->group_by('xin_employees.designation_id');
 		return $this->db->get()->result();
 	}
@@ -558,7 +556,7 @@ class Trainings_model extends CI_Model{
 							xin_designations.designation_id,
 							xin_designations.designation_name');
 		$this->db->from('xin_companies');
-		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id');
+		// $this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
 		$this->db->where('xin_companies.company_id', $proj_id);
 		return $this->db->get()->result();
 	}
@@ -581,7 +579,7 @@ class Trainings_model extends CI_Model{
 							city.id as city_id,
 							city.name as city_name');
 		$this->db->from('provinces');
-		$this->db->join('city', 'provinces.id = city.province_id');
+		$this->db->join('city', 'provinces.id = city.province_id', 'left');
 		$this->db->where('provinces.id', $id);
 		return $this->db->get()->result();
 	}
@@ -592,7 +590,7 @@ class Trainings_model extends CI_Model{
 							tehsil.id,
 							tehsil.name as teh_name');
 		$this->db->from('city');
-		$this->db->join('tehsil', 'tehsil.district_id = city.id');
+		$this->db->join('tehsil', 'tehsil.district_id = city.id', 'left');
 		$this->db->where('city.id', $id);
 		return $this->db->get()->result();
 	}
@@ -603,7 +601,7 @@ class Trainings_model extends CI_Model{
 							union_councel.id,
 							union_councel.name as uc_name');
 		$this->db->from('tehsil');
-		$this->db->join('union_councel', 'tehsil.id = union_councel.tehsil_id');
+		$this->db->join('union_councel', 'tehsil.id = union_councel.tehsil_id', 'left');
 		$this->db->where('tehsil.id', $id);
 		return $this->db->get()->result();
 	}
@@ -623,8 +621,8 @@ class Trainings_model extends CI_Model{
 							city.id as city_id,
 							city.name as city_name');
 		$this->db->from('xin_training_locations');
-		$this->db->join('provinces', 'xin_training_locations.province = provinces.id');
-		$this->db->join('city', 'xin_training_locations.city = city.id');
+		$this->db->join('provinces', 'xin_training_locations.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_locations.city = city.id', 'left');
 		$this->db->limit($limit, $offset);
 		$this->db->order_by('xin_training_locations.location_id', 'DESC');
 		return $this->db->get()->result();
@@ -641,8 +639,8 @@ class Trainings_model extends CI_Model{
 							city.id as city_id,
 							city.name as city_name');
 		$this->db->from('xin_training_locations');
-		$this->db->join('provinces', 'xin_training_locations.province = provinces.id');
-		$this->db->join('city', 'xin_training_locations.city = city.id');
+		$this->db->join('provinces', 'xin_training_locations.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_locations.city = city.id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->limit($limit, $offset);
 		$this->db->order_by('xin_training_locations.location_id', 'DESC');
@@ -671,8 +669,8 @@ class Trainings_model extends CI_Model{
 							xin_designations.designation_id,
 							xin_designations.designation_name');
 		$this->db->from('xin_training_allowances');
-		$this->db->join('xin_companies', 'xin_training_allowances.project = xin_companies.company_id');
-		$this->db->join('xin_designations', 'xin_training_allowances.designation = xin_designations.designation_id');
+		$this->db->join('xin_companies', 'xin_training_allowances.project = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_training_allowances.designation = xin_designations.designation_id', 'left');
 		$this->db->order_by('xin_training_allowances.allowance_id', 'DESC');
 		return $this->db->get()->result();
 	}
@@ -709,8 +707,8 @@ class Trainings_model extends CI_Model{
 							city.id as city_id,
 							city.name as city_name');
 		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id');
-		$this->db->join('city', 'xin_training_hotels.city = city.id');
+		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_hotels.city = city.id', 'left');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
@@ -725,8 +723,8 @@ class Trainings_model extends CI_Model{
 							city.id as city_id,
 							city.name as city_name');
 		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id');
-		$this->db->join('city', 'xin_training_hotels.city = city.id');
+		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_training_hotels.city = city.id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
@@ -774,8 +772,8 @@ class Trainings_model extends CI_Model{
 							xin_designations.designation_name,
 							xin_designations.designation_name');
 		$this->db->from('xin_employees');
-		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
 		$this->db->where(array('xin_companies.company_id' => $comp_id));
 		$query = $this->db->get();
 		return $query->result();
@@ -791,7 +789,7 @@ class Trainings_model extends CI_Model{
 							xin_training_types.training_type_id,
 							xin_training_types.type');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
 		return $this->db->get()->result();
 	}
 	// Save employees' attendance to the database now.
@@ -907,7 +905,7 @@ class Trainings_model extends CI_Model{
 							xin_employees.last_name,
 							xin_employees.company_id,
 							xin_employees.designation_id,
-							xin_employees.province_id,
+							
 							training_attendance.emp_id,
 							training_attendance.project_id,
 							training_attendance.status,
@@ -942,7 +940,7 @@ class Trainings_model extends CI_Model{
 							xin_employees.last_name,
 							xin_employees.company_id,
 							xin_employees.designation_id,
-							xin_employees.province_id,
+							xin_employees.provience_id
 							training_attendance.emp_id,
 							training_attendance.project_id,
 							training_attendance.status,
@@ -964,7 +962,7 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
 		$this->db->group_by('training_attendance.emp_id');
 		$this->db->where('xin_employees.user_id = training_attendance.emp_id');
-		$this->db->where(array('xin_employees.province_id' => $provid));
+		$this->db->where(array('xin_employees.provience_id' => $provid));
 		// $this->db->where('xin_employees.company_id = training_attendance.project_id');
 		$this->db->where('xin_trainings.trg_id', $trg_id);
 		return $this->db->get()->result();
@@ -979,9 +977,9 @@ class Trainings_model extends CI_Model{
 							xin_companies.company_id,
 							xin_companies.name');
 		$this->db->from('training_attendance');
-		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id');
-		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id');
-		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id');
+		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id', 'left');
+		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id', 'left');
 		$this->db->where('training_attendance.training_id', 1);
 		$this->db->group_by('training_attendance.emp_id');
 		$report = $this->db->get();
@@ -999,9 +997,9 @@ class Trainings_model extends CI_Model{
 							xin_companies.company_id,
 							xin_companies.name');
 		$this->db->from('training_attendance');
-		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id');
-		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id');
-		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id');
+		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id', 'left');
+		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id', 'left');
 		$this->db->where('training_attendance.training_id', 1);
 		$this->db->where(array('xin_trainings.location' => $provid));
 		$this->db->group_by('training_attendance.emp_id');
@@ -1019,8 +1017,8 @@ class Trainings_model extends CI_Model{
 							xin_designations.designation_id,
 							xin_designations.designation_name');
 		$this->db->from('xin_employees');
-		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
 		if($desig_id != 0){
 			$this->db->where('xin_employees.designation_id', $desig_id);
 		}
@@ -1052,10 +1050,10 @@ class Trainings_model extends CI_Model{
 							xin_training_types.training_type_id,
 							xin_training_types.type');
 		$this->db->from('xin_activity_reporting');
-		$this->db->join('xin_trainings', 'xin_activity_reporting.trg_id = xin_trainings.trg_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
-		$this->db->join('city', 'provinces.id = city.province_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_trainings', 'xin_activity_reporting.trg_id = xin_trainings.trg_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+		$this->db->join('city', 'provinces.id = city.province_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
 		$this->db->where('xin_activity_reporting.activity_id', $activity_id);
 		$this->db->or_where('xin_activity_reporting.trg_id', $activity_id);
 		$this->db->group_by('xin_trainings.trg_id');
@@ -1079,10 +1077,10 @@ class Trainings_model extends CI_Model{
 							xin_training_types.training_type_id,
 							xin_training_types.type');
 		$this->db->from('xin_activity_reporting');
-		$this->db->join('xin_trainings', 'xin_activity_reporting.trg_id = xin_trainings.trg_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
-		$this->db->join('city', 'provinces.id = city.province_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
+		$this->db->join('xin_trainings', 'xin_activity_reporting.trg_id = xin_trainings.trg_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+		$this->db->join('city', 'provinces.id = city.province_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->where('xin_activity_reporting.activity_id', $activity_id);
 		$this->db->or_where('xin_activity_reporting.trg_id', $activity_id);
@@ -1186,11 +1184,11 @@ class Trainings_model extends CI_Model{
 							xin_training_types.training_type_id,
 							xin_training_types.type');
 		$this->db->from('events_calendar');
-		$this->db->join('provinces', 'events_calendar.province = provinces.id');
-		$this->db->join('city', 'events_calendar.district = city.id');
-		$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id');
-		$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id');
-		$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id');
+		$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
+		$this->db->join('city', 'events_calendar.district = city.id', 'left');
+		$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
+		$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
 		$this->db->where('events_calendar.event_id', $event_id);
 		return $this->db->get()->row_array();
 	}
@@ -1215,11 +1213,11 @@ class Trainings_model extends CI_Model{
 							xin_training_types.training_type_id,
 							xin_training_types.type');
 		$this->db->from('events_calendar');
-		$this->db->join('provinces', 'events_calendar.province = provinces.id');
-		$this->db->join('city', 'events_calendar.district = city.id');
-		$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id');
-		$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id');
-		$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id');
+		$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
+		$this->db->join('city', 'events_calendar.district = city.id', 'left');
+		$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
+		$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
 		$this->db->where(array('provinces.id' => $provid));
 		$this->db->where('events_calendar.event_id', $event_id);
 		return $this->db->get()->row_array();
@@ -1279,10 +1277,10 @@ class Trainings_model extends CI_Model{
 							provinces.id,
 							provinces.name as prov_name');
 		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id');
+		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
 		$query = $this->db->get();
 		echo $this->db->last_query();

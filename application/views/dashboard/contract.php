@@ -426,14 +426,6 @@ h4 {
               </div>
               <div class="col-md-7">
                 <div class="tabelTopBtn">
-                  <a href="javascript:void(0);" class="btn">
-                      <img src="<?=base_url()?>assets/img/plus.png" alt="">
-                      Extend
-                  </a>
-                  <a href="javascript:void(0);" class="btn">
-                      <img src="<?=base_url()?>assets/img/arrow-right.png" alt="">
-                      Finish
-                  </a>
                   <a href="<?= base_url('contract/all_expired'); ?>" class="btn">View All</a>
                 </div>
               </div>

@@ -189,25 +189,7 @@ $(document).ready(function() {
                       <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
                     </td>
                     <td>
-                    <?php
-                      if($contract->status == 0): ?>
-                        <a href="<?= base_url() ?>contract/activatecontract/<?= $contract->user_id; ?>"><i class="fa fa-arrow-circle-right"></i></a>
-                        <a href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>"><i class="fa fa-check-circle"></i></a>
-                        <a href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
-                      <?php elseif($contract->status == 1): ?>
-                        <a data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
-                      <?php elseif($contract->status == 2): ?>
-                        <a data-toggle="tooltip" title="Add to distributed." href="<?= base_url(); ?>contract/distribute/<?= $contract->user_id; ?>"><i class="fa fa-share"></i></a>
-                      <?php elseif($contract->status == 3): ?>
-                        <i data-toggle="tooltip" title="Activated" class="fa fa-check-circle" style="color: green;"></i>
-                        <i data-toggle="tooltip" title="Printed" class="fa fa-print" style="color: green;"></i>
-                        <i data-toggle="tooltip" title="Distributed" class="fa fa-share" style="color: green;"></i>
-                        <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/<?= $contract->user_id; ?>"><i class="fa fa-forward"></i></a>
-                      <?php elseif($contract->status == 4): ?>
-                        <i data-toggle="tooltip" title="Everything's done, no further actions needed. Enjoy !" class="fa fa-bed" style="color: green;"></i>
-                      <?php else: ?>
-                        <i data-toggle="tooltip" title="No actions performed yet, status is Pending." class="fa fa-arrow-circle-right" style="color: red;"></i>
-                     <?php endif; ?>                  
+                      <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->employee_id; ?>" class="btn btn-primary btn-xs">Print</a>
                     </td>
                   </tr>
                   <?php } } ?>
@@ -307,7 +289,7 @@ $(document).ready(function() {
                 <td>${val.cont_type}</td>
                 <td>${subDate}</td>
                 <td>
-                  <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.user_id}" class="btn btn-primary btn-xs">Distribute</a>
+                  <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.employee_id}" class="btn btn-primary btn-xs">Distribute</a>
                 </td>
               </tr>
             `;
@@ -325,7 +307,7 @@ $(document).ready(function() {
                 <td>${val.cont_type}</td>
                 <td>${subDate}</td>
                 <td>
-                  <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.user_id}" class="btn btn-primary btn-xs">Attach to File</a>
+                  <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.employee_id}" class="btn btn-primary btn-xs">Attach to File</a>
                 </td>
               </tr>
             `;
