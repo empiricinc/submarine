@@ -206,16 +206,57 @@ class Area_code_shift extends MY_Controller {
 
 
  
+  public function shift_areas_code() {   
+
+    
+/*     $job_id =  $this->uri->segment(3);
+	 $application_id =  $this->uri->segment(4);
+	 $total_positions =  $this->uri->segment(5);
+*/
+
+//print_r($_POST); exit();
+
+    $id = $this->input->post('id');
+
+     
+   	$data = array(
+
+		'company_id' => $this->input->post('company_id'), 
+		
+		'designation_id' => $this->input->post('designation_id'), 
+
+		'department_id' => $this->input->post('department_id'),
+
+		'province_id' => $this->input->post('province_id'),
+
+		'district_id' => $this->input->post('district_id'), 
+
+		'city_id' => $this->input->post('district_id'), 
+		
+		'tehsil_id' => $this->input->post('tehsil_id'), 
+
+		'uc_id' => $this->input->post('uc_id'),
+
+		'area_id' => $this->input->post('area_id'),
+
+		'sub_area_id' => $this->input->post('sub_area_id') 
+
+		);
+	 
+
+		 
+		 $this->Job_longlisted_model->update_shift_areas_code($id,$data);
+
+		 $this->session->set_flashdata('message', ' Area Shifted Successfully ');
+
+		//}
+
+		
+
+		redirect($_SERVER['HTTP_REFERER']); 
 
 
-
-
-
-    public function weakened_position()
-
-     { 
-
-     }
+ }
 
 	 
 

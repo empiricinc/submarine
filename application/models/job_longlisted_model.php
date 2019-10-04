@@ -385,6 +385,25 @@ public function getjobdetails($jobId){
 
 
 
+   public function update_shift_areas_code($id,$data){
+
+        $this->db->where('id', $id);
+
+        if( $this->db->update('location_job_position',$data)) {
+
+          return true;
+
+        } else {
+
+          return false;
+
+        }   
+
+      }
+
+
+
+
      public function read_postedjob_information($jobId) {
 
         $condition = "job_id =" . "'" . $jobId . "'";

@@ -38,13 +38,13 @@ if ($message) {
 
    //$this->Job_post_model->all_job_types();
 
-if($_POST){ ($this->input->post('job_code')) ? $location_job_position = $this->Location_model->all_location_job_positionCondiall($_POST['job_code']) : '';
+if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->Location_model->all_location_area_code($_POST['job_code']) : '';
     }else{
       //if($data['sl2']['accessLevel2']){
       if(isset($sl2['accessLevel2'])  &&  !empty($sl2['accessLevel2'])){  
-                $location_job_position = $this->Location_model->all_location_job_position();
+                $location_area_by_code = $this->Location_model->all_location_area_code_all();
          }else{ 
-                  $location_job_position = $this->Location_model->all_location_job_positionn($projid,$provid);
+                  $location_area_by_code = $this->Location_model->all_location_area_code_proj_prov($projid,$provid);
                 }            
     }
     
@@ -110,15 +110,13 @@ if($_POST){ ($this->input->post('job_code')) ? $location_job_position = $this->L
 <?php }/*elseif($sl3['accessLevel3']) { echo "ye manager ha-----------------------------------"; }*/  ?>
  
 <div class="box box-block bg-white">
-<!-- <ul class="nav nav-tabs">
-      <li class="">
-        <a  href="<?php echo base_url(); ?>job_post" >All Posted Jobs</a>
-      </li> 
+<ul class="nav nav-tabs">
       <li class="active">
-        <a href="<?php echo base_url(); ?>vacant_position" >Vacant Position</a>
-      </li>
+        <a  href="<?php echo base_url(); ?>area_code_shift" >All Areas</a>
+      </li> 
        
-</ul> -->
+       
+</ul>
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -154,7 +152,7 @@ if($_POST){ ($this->input->post('job_code')) ? $location_job_position = $this->L
 
   $i = 0;
     $location_detail=0;
-    foreach($location_job_position as $location_detail){  // echo $location_detail->company_id;
+    foreach($location_area_by_code as $location_detail){  // echo $location_detail->company_id;
     $i++;
      
     $designation = $this->Designation_model->read_designation_information($location_detail->designation_id);
@@ -274,21 +272,21 @@ if($_POST){ ($this->input->post('job_code')) ? $location_job_position = $this->L
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="jobsetupModalLabel"> Job Posting... </h4>
       </div>
-      <form action="<?php echo site_url("job_post/add_job") ?>" method="post" name="add_job" id="xin-form">
-        <input type="hidden" value="job" name="add_type">
+      <form action="<?php echo site_url("area_code_shift/shift_areas_code") ?>" method="post" name="add_job" id="xin-form">
+         
         <input type="hidden" value="<?php echo $location_detail->id; ?>" name="id"> 
-        <input type="hidden" value="<?php echo $location_detail->location_id; ?>" name="location_id"> 
+        <!-- <input type="hidden" value="<?php echo $location_detail->location_id; ?>" name="location_id"> 
         <input type="hidden" value="<?php echo $location_detail->company_id; ?>" name="company_id"> 
         <input type="hidden" value="<?php echo $location_detail->designation_id; ?>" name="designation_id"> 
         <input type="hidden" value="<?php echo $location_detail->department_id; ?>" name="department_id"> 
 
         <input type="hidden" value="<?php echo $location_detail->province_id; ?>" name="province_id"> 
-        <!-- <input type="hidden" value="<?php echo $location_detail->city_id; ?>" name="city_id">  -->
+        <input type="hidden" value="<?php echo $location_detail->city_id; ?>" name="city_id"> 
         <input type="hidden" value="<?php echo $location_detail->district_id; ?>" name="district_id"> 
         <input type="hidden" value="<?php echo $location_detail->tehsil_id; ?>" name="tehsil_id"> 
         <input type="hidden" value="<?php echo $location_detail->uc_id; ?>" name="uc_id"> 
         <input type="hidden" value="<?php echo $location_detail->area_id; ?>" name="area_id"> 
-        <input type="hidden" value="<?php echo $location_detail->sub_area_id; ?>" name="sub_area_id">  
+        <input type="hidden" value="<?php echo $location_detail->sub_area_id; ?>" name="sub_area_id"> -->  
         <br>
         <div style="width: 96%; margin:auto;">
           <div class="col-md-12">
@@ -390,7 +388,7 @@ if($_POST){ ($this->input->post('job_code')) ? $location_job_position = $this->L
                         <label for="Project">Area</label>
                         <select class="form-control" name="area_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
                           <?php foreach($allareas as $alarea) {?>
-                          <option value="<?php echo $alarea['id']; ?>" <?php echo ($alarea['id'] == $location_detail->area_id) ? 'selected' : ''; ?>  ><?php echo $alarea['name'];?></option>
+                          <option value="<?php echo $alarea['id']; ?>" <?php echo ($alarea['id'] == $location_detail->area_id) ? 'selected' : ''; ?>  ><?php echo $alarea['name']; ?></option>
                           <?php } ?>
                         </select>
                       </div>
@@ -407,7 +405,7 @@ if($_POST){ ($this->input->post('job_code')) ? $location_job_position = $this->L
                         <label for="Project">Sub Area</label>
                         <select class="form-control" name="sub_area_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
                           <?php foreach($all_sub_areas as $sarea) {?>
-                          <option value="<?php echo $sarea['id']; ?>" <?php echo ($sarea['id'] == $location_detail->sub_area_id) ? 'selected' : ''; ?>  ><?php echo $sarea['name']?></option>
+                          <option value="<?php echo $sarea['id']; ?>" <?php echo ($sarea['id'] == $location_detail->sub_area_id) ? 'selected' : ''; ?> ><?php echo substr($sarea['name'], 0, 40); ?></option>
                           <?php } ?>
                         </select>
                       </div>
