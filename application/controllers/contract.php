@@ -539,7 +539,7 @@ if(!$user_session['sl4']['accessLevel3']){ redirect(''); } // If it wan't access
 	public function get_printed($status = ''){
 		$session = $this->session->userdata('username');
 		$projid = $session['project_id'];
-	   $provid = $session['provience_id'];
+	   	$provid = $session['provience_id'];
 
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  

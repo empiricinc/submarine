@@ -151,7 +151,7 @@
 											</td>
 											<td>
 												<?php if($expense->status == 'Absent'):
-													echo $expense->travel - $expense->travel; else:
+													echo ($expense->travel) - ($expense->travel); else:
 												echo $expense->dsa + $expense->travel + $expense->stay_allowance;
 												endif; 
 												?>

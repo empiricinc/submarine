@@ -109,7 +109,7 @@ class Contract_model extends CI_Model {
                             xin_employees.city_id,
                             xin_employees.user_role_id,
                             xin_companies.company_id,
-xin_companies.name as comp_name,
+							xin_companies.name as comp_name,
                             xin_designations.designation_id,
                             xin_departments.department_id,
                             provinces.id');
@@ -492,17 +492,17 @@ $date1 = date('Y-m-d');
 	 	 					xin_employees.last_name,
 	 	 					xin_employees.company_id as compID,
 	 	 					xin_employees.designation_id as desigID,
-                      xin_employees.department_id,
-                      xin_employees.provience_id,
-                      xin_employees.city_id,
-                      xin_employees.user_role_id,
+                        	xin_employees.department_id,
+                        	xin_employees.provience_id,
+                        	xin_employees.city_id,
+                        	xin_employees.user_role_id,
 	 	 					xin_employees.address,
 	 	 					xin_companies.company_id,
 	 	 					xin_companies.name,
 	 	 					xin_designations.designation_id,
 	 	 					xin_designations.designation_name,
-	                   xin_departments.department_id,
-	                   provinces.id');
+	                    	xin_departments.department_id,
+	                    	provinces.id');
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
 		$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
