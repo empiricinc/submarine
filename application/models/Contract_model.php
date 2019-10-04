@@ -688,21 +688,23 @@ function applicantdetails($id){
 	public function count_attached_contracts(){
 		return $this->db->where('status', 4)->from('employee_contract')->count_all_results();
 	}
+	// ---------------------- Offer Letters -------------------------------------------//
 public function offer_letters(){
      $this->db->select('employee_offer_letter.id, 
- 					employee_offer_letter.user_id,
- 					employee_offer_letter.status,
- 					employee_offer_letter.sdt,
- 					xin_companies.company_id,
- 					xin_companies.name,
- 					xin_designations.designation_id,
- 					xin_designations.designation_name,
- 					xin_job_applications.application_id,
- 					xin_job_applications.job_id,
- 					xin_job_applications.fullname,
- 					xin_jobs.job_id,
- 					xin_jobs.company,
- 					xin_jobs.designation_id');
+	 					employee_offer_letter.user_id,
+	 					employee_offer_letter.status,
+	 					employee_offer_letter.attachment,
+	 					employee_offer_letter.sdt,
+	 					xin_companies.company_id,
+	 					xin_companies.name,
+	 					xin_designations.designation_id,
+	 					xin_designations.designation_name,
+	 					xin_job_applications.application_id,
+	 					xin_job_applications.job_id,
+	 					xin_job_applications.fullname,
+	 					xin_jobs.job_id,
+	 					xin_jobs.company,
+	 					xin_jobs.designation_id');
  	$this->db->from('employee_offer_letter');
  	$this->db->join('xin_job_applications', 'employee_offer_letter.user_id = xin_job_applications.application_id', 'left');
  	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
@@ -710,6 +712,16 @@ public function offer_letters(){
  	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
  	$query = $this->db->get();
  	return $query->result();
+}
+// Select offer letters from database.
+public function get_offer_letters(){
+	return $this->db->from('offer_letter_formats')->get()->result();
+}
+// Upload offer letter
+public function upload_offer_letter($user_id = '', $data = ''){
+	$this->db->where('user_id', $user_id);
+	$this->db->update('employee_offer_letter', $data);
+	return true;
 }
 // Accept letter
  public function accept_letter($user_id){
