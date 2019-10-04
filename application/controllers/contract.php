@@ -678,8 +678,8 @@ if(!$user_session['sl4']['accessLevel3']){ redirect(''); } // If it wan't access
 		}
 	}
 // Offer letters
-public function offer_letters(){
-$session = $this->session->userdata('username');
+	public function offer_letters($offset = NULL){
+	$session = $this->session->userdata('username');
 		if(empty($session)){
 			redirect('');
 		}
@@ -693,10 +693,10 @@ $session = $this->session->userdata('username');
 		 
 		$data['sl3'] = $this->session->userdata('accessLevel');  
         $data['sl2'] = $this->session->userdata('accessLevel');
-     $data['letters'] = $this->Contract_model->offer_letters();
-     $data['subview'] = $this->load->view('dashboard/offer_letters', $data, TRUE);
-     $this->load->view('layout_main', $data); // Page load.
-}
+	    $data['letters'] = $this->Contract_model->offer_letters();
+	    $data['subview'] = $this->load->view('dashboard/offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
+	}
 
 	// get opened and closed tickets for chart
 
@@ -736,6 +736,7 @@ $session = $this->session->userdata('username');
 	        echo 'update not successful...';
 	    }
  }
+ //---------------------------- Offer Letters ----------------------------//
 // Accept Offer letter
   public function accept_offer_letter($user_id){
     if($this->Contract_model->accept_letter($user_id)){
@@ -753,6 +754,22 @@ $session = $this->session->userdata('username');
     }else{
       echo "The operation wasn't successful !";
     }
+  }
+  // Upload offer letters.
+  public function upload_offer_letter($user_id){
+  	$data['letters'] = $this->Contract_model->get_offer_letters();
+  	$data['subview'] = $this->load->view('dashboard/upload_letter', $data, TRUE);
+    $this->load->view('layout_main', $data); // Page load.
+  }
+  // Create an offer letter.
+  public function create_offer_letter(){
+  	$user_id = $this->input->post('user_id');
+  	$data = array(
+  		'attachment' => $this->input->post('offer_letter'),
+  	);
+  	$this->Contract_model->upload_offer_letter($user_id, $data);
+  	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been uploaded successfully!');
+  	redirect('contract/offer_letters');
   }
 
 
