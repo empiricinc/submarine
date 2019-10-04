@@ -156,11 +156,17 @@ class Area_code_shift extends MY_Controller {
 		$data['all_departments'] = $this->Department_model->all_departments();
 
 		$data['all_companies'] = $this->Xin_model->get_companies();
+       
+        $data['all_provinces'] = $this->All_setups_model->all_provinces();
 
 		$data['all_district'] = $this->All_setups_model->all_district();
+
 		$data['all_tehsil'] = $this->All_setups_model->all_tehsil();  
+		
 		$data['all_uc'] = $this->All_setups_model->all_uc();  
+		
 		$data['allareas'] = $this->All_setups_model->allareas();
+		
 		$data['all_sub_areas'] = $this->All_setups_model->all_sub_areas();
 
 
