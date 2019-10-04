@@ -114,6 +114,11 @@ h4 {
             <h1>
               Offer Letters Management Dashboard
             </h1>
+            <?php if($success = $this->session->flashdata('success')): ?>
+              <div class="alert alert-success">
+                <p class="text-center"><?php echo $success; ?></p>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
       </div>
@@ -146,7 +151,7 @@ h4 {
                       <th>project</th>
                       <th>designation</th>
                       <th>date sent</th>
-                      <th>Status</th>
+                      <th>options</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -154,7 +159,7 @@ h4 {
                     foreach ($letters as $letter){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($letter->user_id);
-                      if($letter->status == 0 ){
+                      if($letter->status == 0){
                     ?>
                     <tr>
                       <td>CTC-<?php echo $letter->user_id; ?></td>
@@ -166,8 +171,34 @@ h4 {
                         <?php if($letter->status != 0): ?>
                           <a href="javascript:void(0)" class="btn btn-success btn-xs">Accepted</a>
                             <?php else: ?>
-                          <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Accept</a>
-                          <a href="<?php echo base_url(); ?>contract/reject_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-danger btn-xs">Reject</a>
+                          <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-info btn-xs">Upload</a>
+                          <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Forward</a>
+                          <a data-toggle="modal" data-target="#attachment<?php echo $letter->user_id; ?>" href="#" class="btn btn-warning btn-xs">View</a>
+                          <div class="modal fade" id="attachment<?= $letter->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                  <!--Header-->
+                                <div class="modal-header">
+                                  <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Offer Letter Description</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                  </button>
+                                </div>
+                                <!--Body-->
+                                <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <p><?php echo $letter->attachment; ?></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--Footer-->
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         <?php endif; ?>
                       </td>
                     </tr>
