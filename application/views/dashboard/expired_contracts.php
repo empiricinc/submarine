@@ -131,7 +131,7 @@ h4 {
 			                          	<div class="label label-warning">Expiring</div>
 			                          </td>
 			                          <td>
-			                            <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->id; ?>">
+			                            <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>">
 				                            <div class="label label-primary">
 				                              Extend
 				                            </div> &nbsp;

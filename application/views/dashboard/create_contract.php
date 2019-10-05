@@ -25,11 +25,21 @@
           <form method='post' action='<?php if(empty($extension)){ echo base_url("contract/add_contract"); }else{ echo base_url("contract/extend_contract"); } ?>'>
             <!-- Textarea -->
             <input type="hidden" name="user_id" value="<?php echo $this->uri->segment(3); ?>">
-              <div class="col-lg-6">
-                <input type="text" name="from_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['from_date'])); }else{ echo date('Y/m/d', strtotime($extension['from_date'])); } ; ?>">
+              <div class="col-lg-4">
+                <input type="text" name="from_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['from_date'])); }elseif(!empty($extension)){ echo date('Y/m/d', strtotime($extension['from_date'])); }else{ echo date('Y-m-d'); } ; ?>">
               </div>
-              <div class="col-lg-6">
-                <input type="text" name="to_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['to_date'])); }else{ echo date('Y/m/d', strtotime($extension['to_date'])); } ; ?>">
+              <div class="col-lg-4">
+                <input type="text" name="to_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['to_date'])); }elseif(!empty($extension)){ echo date('Y/m/d', strtotime($extension['to_date'])); }else{ echo date('Y-m-d'); } ; ?>">
+              </div>
+              <div class="col-lg-4">
+                <select class="form-control" id="contract_type">
+                  <option value="">Select Type...</option>
+                  <?php foreach($types as $type): ?>
+                    <option value="<?php echo $type->contract_format; ?>">
+                      <?php echo $type->name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
               </div><br><br><br>
               <div class="col-lg-12">
                 <textarea class='editor' name='long_description'>
@@ -60,5 +70,12 @@ tinymce.init({
   selector:'.editor',
   theme: 'modern',
   height: 200
+});
+// Get offer letter from database to the textarea.
+$(function() {
+    $("#contract_type").change(function() {
+        var s = $(this).val();
+        tinyMCE.activeEditor.setContent(s);
+    });
 });
 </script>
