@@ -39,6 +39,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['base_url'] = 'http://localhost/submarine/';
 
 
+/*
+
+$config['base_url'] = 'http://www.ctcorg.com/hrms/Dev';
+
+*/
+
 
 /*
 

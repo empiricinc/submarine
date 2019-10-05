@@ -16,7 +16,7 @@
 				<form method="post" action="">
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="">
+							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="required">
 								<option value="">Select Project</option>
 								<?php foreach($projects as $project) : ?>
 									<option value="<?php echo $project->company_id; ?>">
@@ -28,7 +28,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<select name="designation" id="designation" class="form-control" style="color: #aeafaf;" required="">
+							<select name="designation" id="designation" class="form-control" style="color: #aeafaf;" required="required">
 								<option value="" >Select Designation</option>
 								
 							</select>

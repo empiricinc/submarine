@@ -1,3 +1,4 @@
+
 <?php defined('BASEPATH') OR exit('No direct script access allowed!');
 /* Filename: head.php
 *  Author: Saddam
@@ -64,11 +65,18 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li>
+            <?php if($this->session->userdata('username')): ?>
+              <a href="<?php echo base_url('logout'); ?>">
+              <img src="<?php echo base_url('assets/img/profile.png'); ?>" alt="">
+              Logout &nbsp; <i class="fa fa-sign-out"></i>  
+            </a>
+            <?php else: ?>
             <a href="#">
               <img src="<?php echo base_url('assets/img/profile.png'); ?>" alt="">
               Haseeb Khattak
               <span class="caret"></span>    
             </a>
+            <?php endif; ?>
           </li>
         </ul>
       </div>

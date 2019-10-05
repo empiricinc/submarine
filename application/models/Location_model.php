@@ -160,6 +160,62 @@
 	}
 
 
+	public function all_location_job_positionCondiall($company) {
+
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 AND company_id = ".$company." ");	 
+	 
+  	  return $query->result(); 
+
+	}
+
+
+
+	public function all_location_area_code($job_code) {
+
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where job_code = '".$job_code."' ");	 
+	 
+  	  return $query->result(); 
+
+	}
+
+
+	public function all_location_area_code_proj_prov($projid,$provid) {
+
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where company_id=".$projid." AND province_id=".$provid." ORDER BY id DESC LIMIT 100 ");
+	
+  	  return $query->result(); 
+
+	}
+
+
+	public function all_location_area_code_all() {
+
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position ORDER BY id DESC LIMIT 100 ");	 
+	 
+  	  return $query->result(); 
+
+	}	
+
+	public function all_location_job_positionCondi($company,$province) {
+
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 AND company_id = ".$company." AND province_id = ".$province." ");
+
+  	  return $query->result(); 
+
+	}
+
+
+	public function all_location_job_positionn($projid,$provid) {
+
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 AND company_id=".$projid." AND province_id=".$provid." ");
+	
+	 
+	//echo $this->db->last_query();
+
+  	  return $query->result(); 
+
+	}
+
 
 	public function all_location_job_position() {
 

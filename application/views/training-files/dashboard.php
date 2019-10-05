@@ -1,3 +1,4 @@
+
 <?php defined('BASEPATH') OR exit('No direct script access allowed!');
 /* Filename : dashboard.php
 *  Author: Saddam
@@ -32,7 +33,7 @@
 						<div class="col-md-4">
 							<div class="tabelTopBtn">
 								<a class="btn" href="<?php echo base_url('trainings/add_trainings'); ?>">
-									<img src="<?php echo base_url('dashboardDesign/assets/img/plus.png'); ?>" alt=""> 
+									<img src="<?php echo base_url('assets/img/plus.png'); ?>" alt=""> 
 									Create Training
 								</a>
 							</div>
@@ -53,7 +54,8 @@
 											</tr>
 										</thead>
 										<tbody>
-										<?php $serial = 1; foreach($trainings_list as $training): ?>
+										<?php $serial = 1; if($sl3['accessLevel3']): // Check Access Level.
+										foreach($trainings_list as $training): ?>
 											<tr>
 												<td>
 													<?php echo $serial++; ?>
@@ -72,7 +74,7 @@
 													<?php echo date('M d, Y', strtotime($training->end_date)); ?>
 												</td>
 											</tr>
-										<?php endforeach; ?>
+										<?php endforeach; endif; ?>
 										</tbody>
 									</table>
 								</div>
@@ -125,7 +127,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											<?php $sno =1; foreach($refreshers as $refresh): ?>
+											<?php $sno =1; if($sl3['accessLevel3']):
+											foreach($refreshers as $refresh): ?>
 											<tr>
 												<td>
 													<?php echo $sno++; ?>
@@ -144,7 +147,7 @@
 													<?php echo date('M d, Y', strtotime($refresh->end_date)); ?>
 												</td>
 											</tr>
-											<?php endforeach; ?>
+											<?php endforeach; endif; ?>
 										</tbody>
 									</table>
 								</div>
@@ -180,7 +183,6 @@
 				<div class="col-md-4">
 					<div class="tabelTopBtn">
 						<a class="btn" href="<?php echo base_url('trainings/all_completed'); ?>">
-							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
 							View All
 						</a>
 					</div>
@@ -206,7 +208,8 @@
 									</tr>
 								</thead>
 								<tbody>
-									<?php foreach($completed_trainings as $completed): ?>
+									<?php if($sl3['accessLevel3']): // Check Access Level.
+									foreach($completed_trainings as $completed): ?>
 									<tr>
 										<td>
 											<a href="<?= base_url(); ?>trainings/expenses/<?= $completed->trg_id; ?>"><?= $completed->type; ?></a>
@@ -239,7 +242,7 @@
 											<?= $completed->attendees; ?>
 										</td>
 									</tr>
-									<?php endforeach; ?>
+									<?php endforeach; endif; ?>
 								</tbody>
 							</table>
 						</div>

@@ -149,21 +149,21 @@ h4 {
                     <th><input type="checkbox" name="checkPrint" id="checkAll"></th>
                     <th>emp iD</th>
                     <th>name</th>
-                    <th>project</th>
-                    <th>designation</th>
-                    <th>location</th>
-                    <th>contract duration</th>
-                    <th>manager</th>
-                    <th>type</th>
+                    <th>province</th>
+                    <th>district</th>
+                    <th>domicile</th>
+                    <th>gender</th>
+                    <th>email</th>
+                    <th>message</th>
                     <th>status</th>
-                    <th>submission date</th>
+                    <th>application date</th>
+                    <th>process date</th>
                     <th>action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php  
-                    $i=0;
-                    foreach ($all_contract as $contract){
+                  <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Levels.
+                    foreach ($pending_contracts as $contract){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
                     if($contract->status == 0){
@@ -173,30 +173,61 @@ h4 {
                       <input type="checkbox" name="print" id="checkPrint" style="display: block;">
                     </td>
                     <td>
-                      CTC-<?php echo $contract->name.'-0'.$contract->user_id; ?>
+                      CTC-<?php echo '0'.$contract->user_id; ?>
                     </td>
                     <td>
-                      <?php echo $contract->first_name.' '.$contract->last_name;?>
+                      <?php echo $contract->fullname; ?>
                     </td>
                     <td>
                       <?php echo $contract->name; ?>
                     </td>
                     <td>
-                      <?php echo $contract->designation_name; ?>
+                      <?php echo $contract->city_name; ?>
                     </td>
                     <td>
-                      <?php echo $contract->address; ?>
+                      <?php echo $contract->dom_name; ?>
                     </td>
                     <td>
-                      <?php echo date('M d, Y', strtotime($contract->from_date)).' - '.date('M d, Y', strtotime($contract->to_date)); ?>
+                      <?php echo $contract->gender_name; ?>
                     </td>
                     <td>
-                      <?php echo $contract->contract_manager; ?>
+                      <?php echo $contract->email; ?>
                     </td>
                     <td>
-                      <?php echo $contract->cont_type; ?>
+                      <a data-toggle="modal" data-target="#message<?= $contract->application_id; ?>" href="#message">
+                        <?php echo substr($contract->message, 0, 20).'...'; ?>
+                      </a>
+                      <div class="modal fade" id="message<?= $contract->application_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <!--Header-->
+                                <div class="modal-header">
+                                  <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Message... </h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                  </button>
+                                </div>
+                                <!--Body-->
+                                <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-md-6 col-md-offset-3 text-center">
+                                      <strong>Message Description</strong>
+                                      <p><?php echo $contract->message; ?></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--Footer-->
+                                <div class="modal-footer">
+                                  <?php if($contract->status == 1): ?>
+                                    <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
+                                  <?php endif; ?>
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                     </td>
-                    <td>
+                    <td align="center">
                       <?php if($contract->status == 0): ?>
                       <a data-toggle="tooltip" title="Click to view all pending contracts." data-placement="left" href="<?= base_url('contract/pending_contracts'); ?>">
                         <i class="fa fa-spinner"></i>
@@ -206,6 +237,9 @@ h4 {
                         </div>
                       <?php endif; ?>
                       </a>
+                    </td>
+                    <td>
+                      <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
                     </td>
                     <td>
                       <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
@@ -254,12 +288,19 @@ h4 {
                      <?php endif; ?>                  
                     </td>
                   </tr>
-                  <?php } } ?>
+                  <?php } } } ?>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8 text-center">
+          <?php echo $this->pagination->create_links(); ?>
+        </div>
+        <div class="col-lg-2"></div>
       </div>
     </div>
   </section>
@@ -298,8 +339,7 @@ h4 {
                     </tr>
                   </thead>
                   <tbody>
-                    <?php  
-                    $i=0; 
+                    <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Level.
                     foreach ($all_contract as $contract){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
@@ -367,7 +407,7 @@ h4 {
                         <?php endif; ?>
                       </td>
                     </tr>
-                    <?php } } ?>
+                    <?php } } } ?>
                   </tbody>
                 </table>
               </div>
@@ -386,14 +426,6 @@ h4 {
               </div>
               <div class="col-md-7">
                 <div class="tabelTopBtn">
-                  <a href="javascript:void(0);" class="btn">
-                      <img src="<?=base_url()?>assets/img/plus.png" alt="">
-                      Extend
-                  </a>
-                  <a href="javascript:void(0);" class="btn">
-                      <img src="<?=base_url()?>assets/img/arrow-right.png" alt="">
-                      Finish
-                  </a>
                   <a href="<?= base_url('contract/all_expired'); ?>" class="btn">View All</a>
                 </div>
               </div>
@@ -413,7 +445,8 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php foreach($expired_contracts as $exp_cont): ?>
+                        <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
+                          foreach($expired_contracts as $exp_cont): ?>
                         <?php
                           if($exp_cont->contract_type != 1):
                           $date1=date_create(date('Y-m-d'));
@@ -469,7 +502,7 @@ h4 {
                             <!-- Finish contract modal ends. -->
                           </td>
                         </tr>
-                          <?php endif; endforeach; ?>
+                          <?php endif; endforeach; endif; ?>
                       </tbody>
                     </table>
                   </div>
@@ -513,7 +546,8 @@ h4 {
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach($all_contract as $cont): ?>
+                  <?php if($sl3['accessLevel3']): // IF condition for Access Level.
+                   foreach($all_contract as $cont): ?>
                     <?php if(strtotime($cont->to_date) < time() AND $cont->status == 5 OR $cont->status == 6 AND $cont->contract_type != 1): ?>
                   <tr>
                     <td>CTC-<?= $cont->name.'-'.$cont->user_id; ?></td>
@@ -540,7 +574,7 @@ h4 {
                       <?php endif; ?>
                     </td>
                   </tr>
-                <?php endif; endforeach; ?>
+                <?php endif; endforeach; endif; ?>
                 </tbody>
               </table>
             </div>

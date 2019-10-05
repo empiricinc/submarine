@@ -37,6 +37,8 @@
 
  * @copyright  Copyright © ctc.org.pk. All Rights Reserved
 
+ * @Edited by Saddam@CTC - contract
+
  */
 
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -129,9 +131,13 @@ class Contract extends MY_Controller {
 
 	
 
-	public function index()
+	public function index($offset = NULL)
 
 	{
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
 
 		$session = $this->session->userdata('username');
 
@@ -140,7 +146,15 @@ class Contract extends MY_Controller {
 			redirect('');
 
 		}
-		
+		$projid = $session['project_id'];
+	   $provid = $session['provience_id']; 
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+      $data['sl2'] = $this->session->userdata('accessLevel');
+$user_session['sl4'] = $this->session->userdata('accessLevel'); // var_dump($user_session['sl4']['accessLevel3']); exit;
+if(!$user_session['sl4']['accessLevel3']){ redirect(''); } // If it wan't accessLevel3, user will be redirected to the login screen.
+		 
 		// get user > added by
 
 		$user = $this->Xin_model->read_user_info($session['user_id']);
@@ -150,58 +164,73 @@ class Contract extends MY_Controller {
 		$_designation = $this->Designation_model->read_designation_information($user[0]->designation_id);
 
 		$all_contract = $this->Contract_model->contract_information();
+			$this->load->library('pagination');
+			$config['uri_segment'] = 3;
+			$config['base_url'] = base_url('contract/index');
+			$config['total_rows'] = $this->Contract_model->count_contracts();
+			$config['per_page'] = $limit;
+			$config['num_links'] = 3;
+			$config["full_tag_open"] = '<ul class="pagination">';
+		    $config["full_tag_close"] = '</ul>';
+		    $config["first_tag_open"] = '<li>';
+		    $config["first_tag_close"] = '</li>';
+		    $config["last_tag_open"] = '<li>';
+		    $config["last_tag_close"] = '</li>';
+		    $config['next_link'] = 'next &raquo;';
+		    $config["next_tag_open"] = '<li>';
+		    $config["next_tag_close"] = '</li>';
+		    $config["prev_link"] = "prev &laquo;";
+		    $config["prev_tag_open"] = "<li>";
+		    $config["prev_tag_close"] = "</li>";
+		    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+		    $config["cur_tag_close"] = "</a></li>";
+		    $config["num_tag_open"] = "<li>";
+		    $config["num_tag_close"] = "</li>";
+			$this->pagination->initialize($config);
 
-		/*$data = array(
+			if($data['sl2']){
+				$data['all_contract']=$this->Contract_model->contract_information();
+			}else{
+				$data['all_contract']=$this->Contract_model->contract_information_manager($projid, $provid);
+			}
 
-			'title' => $this->Xin_model->site_title(),
+			if($data['sl2']){
+				$data['expired_contracts'] = $this->Contract_model->get_by_date();
+			}else{
+				$data['expired_contracts'] = $this->Contract_model->get_by_date_manager($projid, $provid);
+			}
 
-			'breadcrumbs' => $this->lang->line('interview_title'),
-
-			'path_url' => 'interview',
-
-			'first_name' => $user[0]->first_name,
-
-			'last_name' => $user[0]->last_name,
-
-			'employee_id' => $user[0]->employee_id,
-
-			'username' => $user[0]->username,
-
-			'email' => $user[0]->email,
-
-			'designation_name' => $_designation[0]->designation_name,
-
-			'date_of_birth' => $user[0]->date_of_birth,
-
-			'date_of_joining' => $user[0]->date_of_joining,
-
-			'contact_no' => $user[0]->contact_no,
-
-			'last_four_employees' => $this->Xin_model->last_four_employees(),
-
-			//'all_interviews' => $this->Contract_model->contract_information(),
-
-			'last_jobs' => $this->Xin_model->last_jobs()
-
-			);*/
-
-			$data['all_contract']=$this->Contract_model->contract_information();
-
-			$data['expired_contracts'] = $this->Contract_model->get_by_date();
-
+			if($data['sl2']){
+				$data['pending_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
+			}else{
+				$data['pending_contracts'] = $this->Contract_model->get_pending_contracts_manager($projid, $provid, $limit, $offset);
+			}
 			//$data['list_jobs'] = $this->Contract_model->jobs_list(); 
+            $data['path_url'] = 'dashboard';
+            $role_resources_ids = $this->Xin_model->user_role_resource();            
+			if(in_array('45',$role_resources_ids)) {
+				$data['subview'] = $this->load->view('dashboard/contract', $data, TRUE);
 
-			$data['subview'] = $this->load->view('dashboard/contract', $data, TRUE);
-
-			$this->load->view('layout_main', $data); //page load
-
+				$this->load->view('layout_main', $data); //page load
+			}
 	}
 	// List of all pending contracts
 	public function pending_contracts($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+     	$data['sl2'] = $this->session->userdata('accessLevel');  
+		 
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('contract/pending_contracts');
@@ -225,16 +254,31 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		$data['pen_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
+		if($data['sl2']){
+			$data['pen_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
+		}else{
+			$data['pen_contracts'] = $this->Contract_model->get_pending_contracts_manager($projid, $provid, $limit, $offset);
+		}
 		$data['subview'] = $this->load->view('dashboard/pending_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
 	// List of all active contracts.
 	public function all_active($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');  
+		 
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('contract/all_active');
@@ -258,16 +302,33 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		$data['active_contracts'] = $this->Contract_model->all_active_contracts($limit, $offset);
+		if($data['sl2']){
+			$data['active_contracts'] = $this->Contract_model->all_active_contracts($limit, $offset);
+		}else{
+			$data['active_contracts'] = $this->Contract_model->all_active_contracts_manager($projid, $provid, $limit, $offset);
+		}
+      $data['path_url'] = 'dashboard';
 		$data['subview'] = $this->load->view('dashboard/active_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
 	// List of all Expired contracts.
 	public function all_expired($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!empty($offset)){
 			$this->uri->segment(3);
-		}$this->load->library('pagination');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');  
+		 
+		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
 		$config['base_url'] = base_url('contract/all_expired');
 		$config['total_rows'] = $this->Contract_model->count_expired();
@@ -290,9 +351,61 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
+		if($data['sl2']){
+			$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
+		}else{
+			$data['expired_contracts'] = $this->Contract_model->all_expired_contracts_manager($projid, $provid, $limit, $offset);
+		}
 		$data['subview'] = $this->load->view('dashboard/expired_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data);
+	}
+	// All rejected / finished contracts.
+	public function all_rejected($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+      $this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/all_expired');
+		$config['total_rows'] = $this->Contract_model->count_rejected();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		if($data['sl2']){
+			$data['rej_contracts'] = $this->Contract_model->rejected_contracts($limit, $offset);
+		}else{
+			$data['rej_contracts'] = $this->Contract_model->rejected_contracts_manager($projid, $provid, $limit, $offset);
+		}
+		$data['subview'] = $this->load->view('dashboard/rejected_contracts', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
 	}
 	// Create new contract.
 	public function create_contract(){
@@ -424,7 +537,19 @@ class Contract extends MY_Controller {
 	}
 	// View printed contracts by status.
 	public function get_printed($status = ''){
-		$printed = $this->Contract_model->printed_contracts($status);
+		$session = $this->session->userdata('username');
+		$projid = $session['project_id'];
+	   	$provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+      $data['sl2'] = $this->session->userdata('accessLevel');
+
+		if($data['sl2']){
+			$printed = $this->Contract_model->printed_contracts($status);
+		}else{
+			$printed = $this->Contract_model->printed_contracts_manager($projid, $provid, $status);
+		}
 		echo json_encode($printed);
 	}
 	// View contract detail. view images and other important things.
@@ -459,7 +584,7 @@ class Contract extends MY_Controller {
 	      $to_date = date('l, F jS, Y', strtotime($print->to_date));
 	    }
 	    $pdf->AddPage(); // Data will be loaded to the page here.
-	    $html =  $content.'<br>Starts From: <strong>'.$from_date.'</strong> till <strong>'.$to_date.'</strong>.';
+	    $html =  $content.'Starts From: <strong>'.$from_date.'</strong> till <strong>'.$to_date.'</strong>.';
 	    $pdf->writeHTML($html, true, false, true, false, '');
 	    ob_clean();
 	    $pdf->Output(md5(time()).'.pdf', 'I');
@@ -496,7 +621,7 @@ class Contract extends MY_Controller {
 		    $to_date = date('l jS F, Y', strtotime($print->to_date));
 	    
 		    $pdf->AddPage(); // Data will be loaded to the page here.
-		    $html =  $content.'<br>Starts from <strong>'.$from_date.'</strong> till <strong>'.$to_date.'.';
+		    $html =  $content.'Starts from <strong>'.$from_date.'</strong> till <strong>'.$to_date.'.';
 		    $pdf->writeHTML($html, true, false, true, false, '');
 		}
 	    ob_clean();
@@ -525,6 +650,24 @@ class Contract extends MY_Controller {
 			echo "Distributing contracts was not successful, try again !";
 		}
 	}
+        // Bulk distribute.
+	public function bulk_distribute(){
+		if($this->Contract_model->distribute_bulk()){
+			$this->session->set_flashdata('messageactive', 'Contracts have been added to distributed!');
+			redirect($_SERVER['HTTP_REFERER']);
+		}else{
+			echo "The action was not successful, please try again!";
+		}
+	}
+        // Bulk attach
+	public function bulk_attach(){
+		if($this->Contract_model->attach_bulk()){
+			$this->session->set_flashdata('messageactive', 'Contracts have been attached to personal file.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}else{
+			echo "The action was not successful, please try again!";
+		}
+	}
 	// Attach to personal file.
 	public function attach($id){
 		if($this->Contract_model->attach_to_file($id)){
@@ -533,6 +676,26 @@ class Contract extends MY_Controller {
 		}else{
 			echo "Attachment wasn't successful, try again !";
 		}
+	}
+// Offer letters
+	public function offer_letters($offset = NULL){
+	$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+	    $data['letters'] = $this->Contract_model->offer_letters();
+	    $data['subview'] = $this->load->view('dashboard/offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
 	}
 
 	// get opened and closed tickets for chart
@@ -573,6 +736,42 @@ class Contract extends MY_Controller {
 	        echo 'update not successful...';
 	    }
  }
+ //---------------------------- Offer Letters ----------------------------//
+// Accept Offer letter
+  public function accept_offer_letter($user_id){
+    if($this->Contract_model->accept_letter($user_id)){
+       $this->session->set_flashdata('messageactive', 'Offer letter has been accepted successfully!');
+       redirect($_SERVER['HTTP_REFERER']);
+    }else{
+      echo "The letter acceptance wasn't successful !";
+    }
+  }
+// Reject Offer letter
+  public function reject_offer_letter($user_id){
+    if($this->Contract_model->reject_letter($user_id)){
+       $this->session->set_flashdata('messageactive', 'The offer letter was rejected !');
+       redirect($_SERVER['HTTP_REFERER']);
+    }else{
+      echo "The operation wasn't successful !";
+    }
+  }
+  // Upload offer letters.
+  public function upload_offer_letter($user_id){
+  	$data['letters'] = $this->Contract_model->get_offer_letters();
+  	$data['subview'] = $this->load->view('dashboard/upload_letter', $data, TRUE);
+    $this->load->view('layout_main', $data); // Page load.
+  }
+  // Create an offer letter.
+  public function create_offer_letter(){
+  	$user_id = $this->input->post('user_id');
+  	$data = array(
+  		'attachment' => $this->input->post('offer_letter'),
+  	);
+  	$this->Contract_model->upload_offer_letter($user_id, $data);
+  	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been uploaded successfully!');
+  	redirect('contract/offer_letters');
+  }
+
 
 	
 
