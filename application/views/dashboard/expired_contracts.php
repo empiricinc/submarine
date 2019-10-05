@@ -128,19 +128,11 @@ h4 {
 			                            <?php echo $diff->format("%a days"); ?>
 			                          </td>
 			                          <td>
-			                          	<div class="label label-warning">Expiring</div>
+			                          	<button class="btn btn-warning btn-xs">Expiring</button>
 			                          </td>
 			                          <td>
-			                            <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>">
-				                            <div class="label label-primary">
-				                              Extend
-				                            </div> &nbsp;
-			                            </a>
-			                            <a href="#finishContract" data-toggle="modal" data-target="#finishModal<?= $exp_cont->id; ?>">
-			                            <div class="label label-danger">
-			                              &nbsp;Finish
-			                            </div>
-			                            </a>
+			                            <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>
+			                            <a href="#finishContract" data-toggle="modal" data-target="#finishModal<?= $exp_cont->id; ?>" class="btn btn-danger btn-xs">Finish</a>
                                   <!-- Finish contract modal starts. -->
                               <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
