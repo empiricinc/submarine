@@ -79,12 +79,8 @@ class Disciplinary_model extends CI_Model
 
 	}
 
-	// function get_disciplinary_status($id)
-	// {
 
-	// }
-
-	function update_status($id, $data)
+	function update($id, $data)
 	{
 		$this->db->where('id', $id);
 		return $this->db->update('disciplinary', $data);
@@ -95,15 +91,18 @@ class Disciplinary_model extends CI_Model
 		return $this->db->get('disciplinary_status');
 	}
 
+	function disciplinary_files()
+	{
+		$this->db->select('df.original_name, df.file_name, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, df.upload_date');
+		$this->db->join('xin_employees xe', 'df.uploaded_by = xe.employee_id', 'left');
+		return $this->db->get('disciplinary_files df');
+	}
+
 	function add_comments($data)
 	{
 		return $this->db->insert('disciplinary_comments', $data);
 	}
 
-	// function comments()
-	// {
-	// 	return $this->db->get('disciplinary_comments')->result();
-	// }
 
 	function get_comments($id)
 	{
@@ -128,6 +127,13 @@ class Disciplinary_model extends CI_Model
 	{
 		return $this->db->get('disciplinary_type')->result();
 	}
+
+	function get_status_id($status_text)
+	{
+		$this->db->where('status_text', $status_text);
+    	return $this->db->get('disciplinary_status')->row();
+	}
+
 
 
 

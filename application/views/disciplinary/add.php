@@ -17,7 +17,7 @@
 			<div class="row">
 				<form action="<?= base_url(); ?>Disciplinary/add" method="POST">
 	    			<div class="col-lg-12">
-	    				<div class="col-lg-6">
+	    				<div class="col-lg-4">
 	    					<input type="hidden" name="employee_id" id="employee-id" value="<?= $detail->employee_id; ?>">
 	    					<input type="hidden" name="project_id" id="project-id" value="<?= $detail->company_id; ?>">
 	    					<input type="hidden" name="province_id" id="province-id" value="<?= $detail->provience_id; ?>">
@@ -28,14 +28,14 @@
 								<input type="text" name="employee_name" id="employee-name" class="form-control" value="<?= ucwords($detail->emp_name); ?>" readonly>
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Designation</label>
 								<input type="text" name="designation_name" id="designation-name" class="form-control" value="<?= ucwords($detail->designation_name); ?>" readonly>
 							</div>
 						</div>
 
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Type</label>
 								<select name="type_id" id="type" class="form-control" required="required">
@@ -47,10 +47,10 @@
 							</div>
 						</div>
 
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reason</label>
-								<select name="reason" id="reason" class="form-control" required="required">
+								<select name="reason" id="reason" class="form-control reason" required="required">
 									<option value="">SELECT REASON</option>
 									<?php foreach($reasons AS $r): ?>
 										<?php if($r->parent_id == '0') { ?>
@@ -63,20 +63,20 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Other Reason</label>
-								<input type="text" name="other_reason" id="other-reason" class="form-control" disabled>
+								<input type="text" name="other_reason" id="other-reason" class="form-control other-reason" disabled>
 							</div>
 						</div>
 
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reported By</label>
 								<input type="text" name="reported_by" class="form-control">
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reporting Date</label>
 								<input type="text" name="reporting_date" class="form-control date">

@@ -11,19 +11,49 @@
 							<button type="button" class="btn btn-sm btn-warning" onclick="document.getElementById('comments-form').scrollIntoView();">
 								<i class="fa fa-comments"></i> COMMENTS
 							</button>
-							<button type="button" class="btn btn-sm btn-danger">
-								<i class="fa fa-trash"></i> DELETE
-							</button>
-							
-							<!-- <button type="button" class="btn btn-sm btn-primary" id="disciplinary-status-btn" data-id="<?= $status->id; ?>">
-								<i class="fa fa-archive"></i><?= strtoupper($status->status_text); ?>	
-							</button> -->
-							<?php foreach ($status as $s): ?>
-								<!-- <button type="button" class="btn btn-sm btn-primary" id="disciplinary-status-btn" data-id="<?= $s->id; ?>">
-									<i class="fa fa-archive"></i> <?= strtoupper($s->status_text); ?>	
-								</button> -->
-							<?php endforeach; ?>
 
+						<?php if($detail->status_text != 'delete'): ?>
+							<?php if($detail->status_text == 'open' OR $detail->status_text == 'pending'): ?>
+								<button type="button" class="btn btn-sm btn-danger disciplinary-status-btn" data-text="delete">
+									<i class="fa fa-trash"></i> DELETE
+								</button>
+							<?php endif; ?>
+							
+
+							<?php if($detail->status_text == 'open') { ?>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="pending">
+									<i class="fa fa-archive"></i> PENDING	
+								</button>
+							<?php } elseif($detail->status_text == 'pending') { ?>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="issued">
+									<i class="fa fa-archive"></i> ISSUE	
+								</button>
+							<?php } elseif($detail->status_text == 'issued') { ?>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="printed">
+									<i class="fa fa-archive"></i> PRINT	
+								</button>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
+									<i class="fa fa-archive"></i> NO ACTION	
+								</button>
+							<?php } elseif($detail->status_text == 'printed') { ?>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="delivered">
+									<i class="fa fa-archive"></i> DELIVER
+								</button>
+
+							<?php } elseif($detail->status_text == 'delivered') { ?>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="received">
+									<i class="fa fa-archive"></i> RECEIVED
+								</button>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="not received">
+									<i class="fa fa-archive"></i> NOT RECEIVED
+								</button>
+								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
+									<i class="fa fa-archive"></i> NO ACTION
+								</button>
+
+							<?php } ?>
+						
+						<?php endif; ?>
 						</h3>
 					</div>
 				</div>
@@ -48,6 +78,13 @@
 						<div class="col-lg-4"><?= $detail->designation_name; ?></div>
 					</div>
 
+					<div class="col-lg-12 ptb-5">
+						<div class="col-lg-2"><strong>Type</strong></div>
+						<div class="col-lg-4"><label class="label label-primary"><?= strtoupper($detail->type_name); ?></label></div>
+						<div class="col-lg-2"><strong>Status</strong></div>
+						<div class="col-lg-4"><label class="label label-warning"><?= strtoupper($detail->status_text); ?></label></div>
+					</div>
+
 					<!-- <div class="col-lg-12"><hr></div> -->
 					<div class="col-lg-12 ptb-5">
 						<div class="col-lg-2"><strong>Reason</strong></div>
@@ -64,6 +101,12 @@
 						<div class="col-lg-2"><strong>Evidence Date</strong></div>
 						<div class="col-lg-4"><?= date('d-m-Y', strtotime($detail->evidence_date)); ?></div>
 					</div>
+					
+					<div class="col-lg-12 ptb-5">
+						<div class="col-lg-2"><strong>Salary Hold</strong></div>
+						<div class="col-lg-4"><?= ($detail->salary_hold) ? 'Yes' : 'No'; ?></div>
+					</div>
+
 					<div class="col-lg-12 ptb-5">
 						<div class="col-lg-2"><strong>Reported By</strong></div>
 						<div class="col-lg-4"><?= $detail->reported_by; ?></div>
@@ -71,6 +114,7 @@
 						<div class="col-lg-2"><strong>Reported Date</strong></div>
 						<div class="col-lg-4"><?= date('d-m-Y', strtotime($detail->reported_date)); ?></div>
 					</div>
+
 					
 
 					<div class="col-lg-12 ptb-5">
@@ -84,27 +128,20 @@
 				
 				<div class="row" style="margin-left: 2px; margin-right: 2px;">
 					<div class="col-lg-4">
-						<table class="table table-bordered">
-							<tbody>
-								<tr>
-									<td><input type="checkbox" class="checkbox" id="analysis"
-										 <?php if($detail->analysis) { ?>checked <?php } ?>></td>
-									<td><label>Preliminary Analysis</label></td>
-								</tr>
-								<tr>
-									<td><input type="checkbox" class="checkbox" id="investigation"
-										 <?php if($detail->investigation) { ?>checked <?php } ?>></td>
-									<td><label>Investigation Process</label></td>
-								</tr>
-								<tr>
-									<td><input type="checkbox" class="checkbox" id="conclusion"
-										 <?php if($detail->conclusion) { ?>checked <?php } ?>></td>
-									<td><label>Finding and Conclusion</label></td>
-								</tr>
-							</tbody>
-						</table>
+						<h4 style="margin-top: 0px;">Attachments</h4>
+						<ul style="padding-left: 15px;">
+						<?php foreach($files AS $f): ?>
+							<li>
+								<a href="<?= base_url(); ?>uploads/disciplinary_files/<?= $f->file_name; ?>" target="_blank">
+									<?= $f->original_name; ?>
+								</a>
+								<small>
+									, Uploaded by: <?= ucwords($f->emp_name); ?>, at: <?= date('d-m-Y', strtotime($f->upload_date)); ?>
+								</small>
+							</li>
+						<?php endforeach; ?>
+						</ul>
 					</div>
-
 					<div class="col-lg-8">
 						<table class="table table-bordered">
 							<thead>
@@ -116,20 +153,18 @@
 								</tr>
 							</thead>
 							<tbody>
+								<tr>
+									<td>Open</td>
+									<td width="50%"><?= $detail->description; ?></td>
+									<td><?= ucwords($detail->emp_name); ?></td>
+									<td><?= date('d-m-Y', strtotime($detail->created_date)); ?></td>
+								</tr>
 								<?php foreach ($comments as $c): ?>
 								<tr>
-									<td>
-										<?= $c->status_text; ?>
-									</td>
-									<td width="50%">
-										<?= $c->comment_text; ?>
-									</td>
-									<td>
-										<?= ucwords($c->emp_name); ?>
-									</td>
-									<td>
-										<?= $c->added_date; ?>
-									</td>
+									<td><?= ucwords($c->status_text); ?></td>
+									<td width="50%"><?= $c->comment_text; ?></td>
+									<td><?= ucwords($c->emp_name); ?></td>
+									<td><?= date('d-m-Y', strtotime($c->added_date)); ?></td>
 								</tr>
 								<?php endforeach; ?>
 							</tbody>
