@@ -112,7 +112,7 @@
 	    		</div>
 	    		<div class="modal-body">
 	    			<div class="row">
-	    				<div class="col-lg-6">
+	    				<div class="col-lg-4">
 	    					<input type="hidden" name="employee_id" id="employee-id" value="">
 	    					<input type="hidden" name="project_id" id="project-id" value="">
 	    					<input type="hidden" name="province_id" id="province-id" value="">
@@ -123,14 +123,14 @@
 								<input type="text" name="employee_name" id="employee-name" class="form-control" readonly>
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Designation</label>
 								<input type="text" name="designation_name" id="designation-name" class="form-control" readonly>
 							</div>
 						</div>
 
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Type</label>
 								<select name="type" id="type" class="form-control" required="required">
@@ -142,7 +142,7 @@
 							</div>
 						</div>
 
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reason</label>
 								<select name="reason" id="reason" class="form-control" required="required">
@@ -158,20 +158,20 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Other Reason</label>
 								<input type="text" name="other_reason" id="other-reason" class="form-control" disabled>
 							</div>
 						</div>
 
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reported By</label>
 								<input type="text" name="reported_by" class="form-control">
 							</div>
 						</div>
-						<div class="col-lg-6">
+						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reporting Date</label>
 								<input type="text" name="reporting_date" class="form-control date">
@@ -202,33 +202,84 @@
 </div>
 <!-- ./Previous Investigation Modal -->
 
-
 <div class="modal fade" id="disciplinary-modal">
 	<div class="modal-dialog">
-		<form action="<?= base_url(); ?>Disciplinary/add_comments" method="POST">
+		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Status Modal</h4>
 				</div>
 				<div class="modal-body">
+					<input type="hidden" name="status_text" id="status-text" value="<?= $detail->status_text; ?> ">
+					<input type="hidden" name="disciplinary_id" value="<?= $detail->id; ?>">
+					<?php if($detail->status_text == 'open'): ?>
 					<div class="row">
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<label>Action Approval Date</label>
+								<input type="text" name="approval_date" class="form-control date">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<label>Approval Receive Date</label>
+								<input type="text" name="approval_receive_date" class="form-control date">
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<label>Approved By</label>
+								<input type="text" name="approved_by" class="form-control">
+							</div>
+						</div>
+
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<label>Approved Action</label>
+								<select name="approved_action" class="form-control" required="required">
+									<option value="">SELECT ACTION</option>
+									<?php foreach($type AS $t): ?>
+										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<?php endif; ?>
+
+					<div class="row">
+						<?php if($detail->status_text != 'open'): ?>
 						<div class="col-lg-12">
 							<div class="inputFormMain">
 								<label>Date</label>
 								<input type="text" name="added_date" class="form-control date">
 							</div>
 						</div>
+						<?php endif; ?>
+
+						<div class="col-lg-12 hide" id="next-action">
+							<div class="inputFormMain">
+								<label>Next Action</label>
+								<select name="approved_action" class="form-control" required="required">
+									<option value="">SELECT ACTION</option>
+									<?php foreach($type AS $t): ?>
+										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<label>Description</label>
+								<label>Comments</label>
 								<textarea name="comments" id="comments" class="form-control noresize" rows="5" required="required"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btnSubmit" data-dismiss="modal">Update</button>
+					<button type="submit" class="btn btnSubmit">Update</button>
 					<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
 				</div>
 			</div>
@@ -328,7 +379,6 @@
 		$('.disciplinary').on('change', '.province', function() {
 			
 			var province = $(this).val();
-			var project = $('#project option:selected').val();
 			var districtHandler = $('#district').html('<option value="">Select District</option>');
 
 
@@ -342,15 +392,12 @@
 				url: '<?= base_url(); ?>User_panel/district_for_province',
 				type: 'POST',
 				dataType: 'json',
-				data: {province_id: province, project_id: project},
+				data: {province_id: province},
 				success: function (response) {
 
-					var district = response.data.districts;
-					var designation = response.data.designations;
-					var employees = response.data.employees;
+					var district = response.data;
 
 					var district_list = '';
-					var designation_list = '';
 					$.each(district, function(index, val) {
 						 district_list += `<option value="${val.id}">${val.name}</option>`;
 					});
@@ -363,9 +410,8 @@
 		});
 
 
-		$('.district').on('change', function() {
+		$('.disciplinary').on('change', '.district', function() {
 			var district = $(this).val();
-			var project = $('#project option:selected').val();
 			var tehsilHandler = $('#tehsil').html('<option value="">Select Tehsil</option>');
 
 
@@ -378,14 +424,11 @@
 				url: '<?= base_url(); ?>User_panel/tehsil_for_district',
 				type: 'POST',
 				dataType: 'json',
-				data: {district_id: district, project_id: project},
+				data: {district_id: district},
 				success: function (response) {
-					var tehsil = response.data.tehsils;
-					var designation = response.data.designations;
-					var employees = response.data.employees;
+					var tehsil = response.data;
 
 					var tehsil_list = '';
-					var designation_list = '';
 					$.each(tehsil, function(index, val) {
 						 tehsil_list += `<option value="${val.id}">${val.name}</option>`;
 					});
@@ -398,9 +441,8 @@
 		});
 
 
-		$('.tehsil').on('change', function() {
+		$('.disciplinary').on('change', '.tehsil', function() {
 			var tehsil = $(this).val();
-			var project = $('#project option:selected').val();
 			var ucHandler = $('#uc').html('<option value="">Select Union Council</option>');
 
 
@@ -411,20 +453,16 @@
 				url: '<?= base_url(); ?>User_panel/uc_for_tehsil',
 				type: 'POST',
 				dataType: 'json',
-				data: {tehsil_id: tehsil, project_id: project},
+				data: {tehsil_id: tehsil},
 				success: function (response) {
 
-					var ucs = response.data.ucs;
-					var designation = response.data.designations;
-					var employees = response.data.employees;
-
+					var ucs = response.data;
 					var ucs_list = '';
-					var designation_list = '';
+
 					$.each(ucs, function(index, val) {
 						 ucs_list += `<option value="${val.id}">${val.name}</option>`;
 					});
 
-					var designation_list = employee_designation_tree(employees, designation);
 					ucHandler.append(ucs_list);
 				}
 
@@ -479,31 +517,6 @@
 		});
 	</script>
 
-	
-	<script type="text/javascript">
-		$('.checkbox').on('change', function() {
-			var id = $('#disciplinary-id').val();
-			var type = $(this).attr('id');
-			var value = 0;
-
-			if($(this).is(':checked'))
-				value = 1;
-
-				$.ajax({
-					url: '<?= base_url(); ?>Disciplinary/update_status',
-					type: 'POST',
-					dataType: 'html',
-					data: {id: id, type: type, value: value},
-					success: function(res)
-					{
-						if(res == '1')
-							toastr.success('Record Updated');
-					}
-
-				});
-
-		});
-	</script>
 
 	<script type="text/javascript">
 		$('#type').on('change', function() {
@@ -512,7 +525,7 @@
 
 			if(type == 'Warning' || type == 'Final Warning' || type == 'Explanation' || type == 'Suspension' || type == 'Query')
 			{
-				$('.disciplinary').append(`<div class="col-lg-6">
+				$('.disciplinary').append(`<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Evidence</label>
 									<select name="evidence" id="evidence" class="form-control" required>
@@ -522,13 +535,13 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Evidence Date</label>
 									<input type="text" name="evidence_date" class="form-control date">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Salary Hold</label>
 									<select name="salary_hold" id="salary" class="form-control" required="required">
@@ -542,7 +555,7 @@
 
 			else if(type == 'Show Cause')
 			{
-				$('.disciplinary').append(`<div class="col-lg-6">
+				$('.disciplinary').append(`<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Evidence</label>
 									<select name="evidence" id="evidence" class="form-control" required="required">
@@ -552,13 +565,13 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Evidence Date</label>
 									<input type="text" name="evidence_date" class="form-control date">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Salary Hold</label>
 									<select name="salary_hold" id="salary" class="form-control" required="required">
@@ -568,7 +581,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Suspende from Duty</label>
 									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
@@ -582,7 +595,7 @@
 
 			else if(type == 'Resign')
 			{
-				$('.disciplinary').html(`<div class="col-lg-6">
+				$('.disciplinary').html(`<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Evidence</label>
 									<select name="evidence" id="evidence" class="form-control" required="required">
@@ -592,13 +605,13 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Evidence Date</label>
 									<input type="text" name="evidence_date" class="form-control date">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Salary Hold</label>
 									<select name="salary_hold" id="salary" class="form-control" required="required">
@@ -608,7 +621,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Suspende from Duty</label>
 									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
@@ -622,13 +635,13 @@
 
 			else if(type == 'Contract Closure')
 			{
-				$('.disciplinary').html(`<div class="col-lg-6">
+				$('.disciplinary').html(`<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Issue Reporting Date</label>
 									<input type="text" name="issue_reporting_date" class="form-control date">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Salary Hold</label>
 									<select name="salary_hold" id="salary" class="form-control" required="required">
@@ -638,13 +651,13 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Last Working Date</label>
 									<input type="text" name="last_working_date" class="form-control date">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Position Abolish</label>
 									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
@@ -654,7 +667,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Abolish Date</label>
 									<input type="text" name="abolish_date" class="form-control date">
@@ -664,13 +677,13 @@
 
 			else if(type == 'Refusal')
 			{
-				$('.disciplinary').html(`<div class="col-lg-6">
+				$('.disciplinary').html(`<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Issue Reporting Date</label>
 									<input type="text" name="issue_reporting_date" class="form-control date">
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Salary Hold</label>
 									<select name="salary" id="salary" class="form-control" required="required">
@@ -680,7 +693,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Last Working Date</label>
 									<input type="text" name="last_working_date" class="form-control date">
@@ -695,7 +708,7 @@
 				 provinces += "<?= $province_string; ?>";
 				<?php endif; ?>
 
-				$('.disciplinary').html(`<div class="col-lg-6">
+				$('.disciplinary').html(`<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Transfer Type</label>
 									<select name="salary_hold" id="salary" class="form-control" required="required">
@@ -705,7 +718,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Position Abolish</label>
 									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
@@ -716,21 +729,21 @@
 								</div>
 							</div>
 
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Abolish Date</label>
 									<input type="text" name="abolish_date" class="form-control date">
 								</div>
 							</div>
 
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Reporting Date To CTC</label>
 									<input type="text" name="reported_date_ctc" class="form-control date">
 								</div>
 							</div>
 
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Province</label>
 									<select name="province" id="province" class="form-control province" required="required">
@@ -739,7 +752,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>District</label>
 									<select name="district" id="district" class="form-control district" required="required">
@@ -747,7 +760,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Tehsil</label>
 									<select name="tehsil" id="tehsil" class="form-control tehsil" required="required">
@@ -755,7 +768,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>UC</label>
 									<select name="uc" id="uc" class="form-control" required="required">
@@ -763,7 +776,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Position Filled Against</label>
 									<select name="position_filled_against" id="position_filled_against" class="form-control" required="required">
@@ -775,7 +788,7 @@
 								</div>
 							</div>
 
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>New Job Position</label>
 									<select name="job_position" id="job_position" class="form-control" required="required">
@@ -784,7 +797,7 @@
 								</div>
 							</div>
 
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="inputFormMain">
 									<label>Transfer Effective Date</label>
 									<input type="text" name="transfer_effective_date" class="form-control date">
@@ -797,14 +810,22 @@
 		});
 	</script>
 
+
 	<script type="text/javascript">
 		
-		$('#disciplinary-status-btn').on('click', function() {
-			var id = $(this).data('id');
-			
+		$('.disciplinary-status-btn').on('click', function() {
+			var status_text = $(this).data('text');
+			$('#status-text').val(status_text);
+
+			if(status_text == 'not received')
+				$('#next-action').removeClass('hide');
+			else
+				$('#next-action').addClass('hide');
+
 			$('#disciplinary-modal').modal('show');
 			
 		});
+
 		
 	</script> 
 

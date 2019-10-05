@@ -5,10 +5,14 @@
 			<div class="col-lg-2 no-leftPad">
 				<div class="main-leftFilter">
 					<div class="tabelHeading">
-						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#disciplinary-search-form')[0].reset();"></a></h3>
+						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#investigation-search-form')[0].reset();"></a></h3>
 					</div>
-					<form action="<?= base_url(); ?>Disciplinary/view" method="GET" id="complaints-search-form">
+					<form action="<?= base_url(); ?>Investigation/view" method="GET" id="investigation-search-form">
 						<div class="selectBoxMain">
+							<div class="filterSelect">
+								<input type="text" name="case_no" class="form-control" placeholder="Case No">
+							</div>
+							
 							<div class="filterSelect">
 								<input type="text" name="from_date" class="form-control date" placeholder="From Date">
 							</div>
@@ -17,11 +21,14 @@
 							</div>
 
 							<div class="filterSelect">
-								<select name="status" id="status" class="form-control">
+								<select name="investigation_status" id="investigation-status" class="form-control">
 									<option value="">Status</option>
-									<?php foreach($status AS $s): ?>
-										<option value="<?= $s->id; ?>"><?= ucwords($s->status_text); ?></option>
-									<?php endforeach; ?>
+									<option value="">Show All</option>
+									<option value="initiated">Initiated</option>
+									<option value="in-progress">In Progress</option>
+									<option value="completed">Completed</option>
+									<option value="submitted">Submitted</option>
+									<option value="cancelled">Cancelled</option>
 								</select>
 								<span></span>
 							</div>
@@ -56,7 +63,7 @@
 							</div>
 
 							<div class="filterSelectBtn">
-								<button type="submit" name="search" id="disciplinary-search-btn" class="btn btnSubmit">Search</button>
+								<button type="submit" name="search" id="investigation-search-btn" class="btn btnSubmit">Search</button>
 							</div>
 						</div>
 					</form>
@@ -66,7 +73,7 @@
 				<div class="topNavFilter">
 				
 				</div>
-				<div id="complaints-handler">
+				<div>
 					<div class="mainTableWhite">
 						<div class="row">
 							<div class="col-md-12">
@@ -74,16 +81,13 @@
 									<div class="col-md-10">
 										<h3><?= $title; ?><span></span>
 											<br>
-											<small class="" id="status-btn">
-												<?php 
-													// $labels = array('warning', 'info', 'success', 'primary', 'danger'); 
-												?>
-
-												<?php $i=0; foreach($status AS $s): ?>
-												<!-- <a href="javascript:void(0);" data-status="<?= $s->id; ?>" class="label label-default"><?= $s->status_text; ?></a>  -->
-												
-												<?php $i++; endforeach; ?>
-												<!-- <a href="javascript:void(0);" data-status="all" class="label label-default">show all</a> -->
+											<small class="" id="inv-status-btn">
+												<a href="javascript:void(0);" data-status="pending" class="label label-warning">initiated</a>
+												<a href="javascript:void(0);" data-status="in-progress" class="label label-info">in progress</a>
+												<a href="javascript:void(0);" data-status="completed" class="label label-success">completed</a>
+												<a href="javascript:void(0);" data-status="submitted" class="label label-primary">submitted</a>
+												<a href="javascript:void(0);" data-status="cancelled" class="label label-danger">cancelled</a>
+												<a href="javascript:void(0);" data-status="all" class="label label-default">show all</a>
 											</small>
 										</h3>
 									</div>
@@ -95,48 +99,47 @@
 							<div class="col-md-12">
 								<div class="tableMain">
 									<div class="table-responsive">
-										<table class="table table-hover" id="">
+										<table class="table table-hover" id="investigations-table">
 											<thead>
 												<tr>
+													<th>Case No</th>
 													<th>Employee</th>
 													<th>Project</th>
 													<th>Department</th>
 													<th>Designation</th>
 													<th>Reason</th>
-													<th>Type</th>
 													<th>Date</th>
 													<th>Status</th>
 												</tr>
 											</thead>
-											<tbody id="investigations-list">
+											<tbody>
 												
-												<?php $count=1; foreach($complaints AS $c): 
+												<?php $count=1; foreach($investigation AS $i): 
 													$label = '';
-													// if($c->status_id == "1") 
-													// 	$label = "label label-warning";
-													// elseif($c->status_id == "2")
-													// 	$label = "label label-primary";
-													// elseif($c->status_id == "3")
-													// 	$label = "label label-success";
-													// elseif($c->status_id == "4")
-													// 	$label = "label label-info";
-													// elseif($c->status_id == "5")
-													// 	$label = "label label-danger";
+													if($i->status == "initiated") 
+														$label = "label label-warning";
+													elseif($i->status == "submitted")
+														$label = "label label-primary";
+													elseif($i->status == "completed")
+														$label = "label label-success";
+													elseif($i->status == "in-progress")
+														$label = "label label-info";
+													elseif($i->status == "cancelled")
+														$label = "label label-danger";
 												?>
 
-													<tr data="<?= $c->id; ?>">
-														<td><?= ucwords($c->emp_name); ?></td>
-														<td><?= $c->project_name; ?></td>
-														<td><?= $c->department_name; ?></td>
-														<td><?= $c->designation_name; ?></td>
-														<td><?= $c->reason_text; ?></td>
+													<tr data-id="<?= $i->id; ?>">
+														<td><?= $i->case_no; ?></td>
+														<td><?= ucwords($i->emp_name); ?></td>
+														<td><?= $i->project_name; ?></td>
+														<td><?= $i->department_name; ?></td>
+														<td><?= $i->designation_name; ?></td>
+														<td><?= $i->reason_text; ?></td>
+														<td><?= date('d-m-Y', strtotime($i->reported_date)); ?></td>
 														<td>
-															<?= ucwords($c->type_name); ?>
+															<label class="<?= $label; ?>"><?= $i->status; ?></label>
 														</td>
-														<td><?= date('d-m-Y', strtotime($c->reported_date)); ?></td>
-														<td>
-															<label class="label label-primary"><?= $c->status_text; ?></label>
-														</td>
+
 													</tr>
 												<?php $count++; endforeach; ?>
 											</tbody>
