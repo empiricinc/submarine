@@ -333,8 +333,7 @@ h4 {
                       <th>project</th>
                       <th>designation</th>
                       <th>till</th>
-                      <th>manager</th>
-                      <th>type</th>
+                      <!-- <th>type</th> -->
                       <th>Status</th>
                     </tr>
                   </thead>
@@ -394,16 +393,10 @@ h4 {
                         <?php echo date('M d, Y', strtotime($contract->to_date)); ?>
                       </td>
                       <td>
-                        <?php echo $contract->contract_manager; ?>
-                      </td>
-                      <td>
-                        <?php echo $contract->cont_type; ?>
-                      </td>
-                      <td>
                         <?php if($contract->status != 0): ?>
-                          <div class="label label-warning" style="display: block;">Active</div>
+                          <button class="btn btn-success btn-xs">Active</button>
                             <?php else: ?>
-                          <div class="label label-danger" style="display: block;">Inactive</div>
+                          <button class="btn btn-info btn-xs">Inactive</button>
                         <?php endif; ?>
                       </td>
                     </tr>
@@ -419,12 +412,12 @@ h4 {
       <div class="col-md-6">
         <div class="mainTableWhite">
             <div class="row">
-              <div class="col-md-5">
+              <div class="col-md-7">
                   <div class="tabelHeading">
-                    <h3>contracts expired</h3>
+                    <h3>contracts to be expired</h3>
                   </div>
               </div>
-              <div class="col-md-7">
+              <div class="col-md-5">
                 <div class="tabelTopBtn">
                   <a href="<?= base_url('contract/all_expired'); ?>" class="btn">View All</a>
                 </div>
@@ -438,7 +431,6 @@ h4 {
                       <thead>
                         <tr>
                           <th>emp iD</th>
-                          <th>manager</th>
                           <th>type</th>
                           <th>days left</th>
                           <th>actions</th>
@@ -448,57 +440,48 @@ h4 {
                         <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($expired_contracts as $exp_cont): ?>
                         <?php
-                          if($exp_cont->contract_type != 1):
+                          if($exp_cont->contract_type != 1 AND $exp_cont->status != 5 AND $exp_cont->status != 6):
                           $date1=date_create(date('Y-m-d'));
                           $date2=date_create(date('Y-m-d', strtotime($exp_cont->to_date)));
                           $diff=date_diff($date1, $date2);
                         ?>
                         <tr>
                           <td>CTC-<?= $contract->name.'-'.$exp_cont->user_id; ?></td>
-                          <td><?= $exp_cont->contract_manager; ?></td>
                           <td><?= $exp_cont->name; ?></td>
                           <td>
-                            <?php echo $diff->format("%a days"); ?>
+                            <?php echo $diff->format("%a day(s)"); ?>
                           </td>
                           <td>
-                            <a data-toggle="tooltip" title="<?php echo date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->id; ?>">
-                            <div class="label label-primary" style="display: inline-block;">
-                              Extend
-                            </div>
-                            </a>
-                            <a data-toggle="modal" data-target="#finishModal<?= $exp_cont->id; ?>" href="#finishContract">
-                            <div class="label label-danger" style="display: inline-block;">
-                              Finish
-                            </div>
-                            </a>
+                            <a data-toggle="tooltip" title="<?php echo date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>
+                            <a data-toggle="modal" data-target="#finishModal<?= $exp_cont->user_id; ?>" href="#finishContract" class="btn btn-danger btn-xs">Finish</a>
                             <!-- Finish contract modal starts. -->
-                              <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                      <!--Header-->
-                                    <div class="modal-header">
-                                      <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                      </button>
-                                    </div>
-                                    <!--Body-->
-                                    <div class="modal-body">
-                                      <form action="<?= base_url('contract/finish'); ?>" method="post">
-                                        <input type="hidden" name="id" value="<?= $exp_cont->id; ?>">
-                                        <label for="reason">Reason to finish contract.</label>
-                                        <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
-                                        <input type="submit" name="submit" class="btn btn-primary" value="Submit">
-                                        <input type="reset" name="reset" class="btn btn-warning" value="Reset">
-                                      </form>
-                                    </div>
-                                    <!--Footer-->
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
+                            <div class="modal fade" id="finishModal<?php echo $exp_cont->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <!--Header-->
+                                  <div class="modal-header">
+                                    <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">×</span>
+                                    </button>
+                                  </div>
+                                  <!--Body-->
+                                  <div class="modal-body">
+                                    <form action="<?= base_url('contract/finish'); ?>" method="post">
+                                      <input type="hidden" name="id" value="<?= $exp_cont->user_id; ?>">
+                                      <label for="reason">Reason to finish contract.</label>
+                                      <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
+                                      <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                                      <input type="reset" name="reset" class="btn btn-warning" value="Reset">
+                                    </form>
+                                  </div>
+                                  <!--Footer-->
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                   </div>
                                 </div>
                               </div>
+                            </div>
                             <!-- Finish contract modal ends. -->
                           </td>
                         </tr>
@@ -523,7 +506,7 @@ h4 {
         </div>
         <div class="col-md-6 text-right">
           <div class="tabelTopBtn">
-            <a href="<?= base_url('contract/all_finished'); ?>" class="btn">View All</a>
+            <a href="<?= base_url('contract/all_rejected'); ?>" class="btn">View All</a>
           </div>
         </div>
       </div>
@@ -539,38 +522,69 @@ h4 {
                     <th>project</th>
                     <th>designation</th>
                     <th>location</th>
-                    <th>contract manager</th>
                     <th>contract type</th>
                     <th>status</th>
-                    <th>rejection reason</th>
+                    <th>rejection reason / finish date</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php if($sl3['accessLevel3']): // IF condition for Access Level.
-                   foreach($all_contract as $cont): ?>
+                   foreach($rejected_contracts as $cont): ?>
                     <?php if(strtotime($cont->to_date) < time() AND $cont->status == 5 OR $cont->status == 6 AND $cont->contract_type != 1): ?>
                   <tr>
-                    <td>CTC-<?= $cont->name.'-'.$cont->user_id; ?></td>
-                    <td><?= $cont->first_name.' '.$cont->last_name; ?></td>
-                    <td><?= $cont->name; ?></td>
-                    <td><?= $cont->designation_name; ?></td>
                     <td>
-                      <?php echo $cont->address; ?>
+                      CTC-<?php echo $cont->user_id; ?>
                     </td>
-                    <td><?= $cont->contract_manager; ?></td>
-                    <td><?= $cont->cont_type; ?></td>
+                    <td>
+                      <?php echo $cont->fullname; ?>
+                    </td>
+                    <td>
+                      <?php echo $cont->name; ?>
+                    </td>
+                    <td>
+                      <?php echo $cont->designation_name; ?>
+                    </td>
+                    <td>
+                      <?php echo $cont->provName; ?>
+                    </td>
+                    <td>
+                      <?php echo 'N/A'; ?>
+                    </td>
                     <td>
                       <?php if($cont->status == 5): ?>
-                        <div class="label label-danger" style="display: block;">Finished</div>
-                      <?php else: ?>
-                        <div class="label label-warning" style="display: block;">Rejected</div>
+                        <button class="btn btn-warning btn-xs">Finished</button>
                       <?php endif; ?>
                     </td>
                     <td>
                       <?php if($cont->status == 5): ?>
-                        <?= date('D, M jS,  Y', strtotime($cont->to_date)); ?>
+                      <a data-toggle="modal" data-target="#reason<?= $cont->user_id; ?>" href="#reason"><?php echo substr($cont->rejection_reason, 0, 15).'...'; ?></a>
+                      <div class="modal fade" id="reason<?= $cont->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                              <!--Header-->
+                            <div class="modal-header">
+                              <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Rejection Reason... </h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <!--Body-->
+                            <div class="modal-body">
+                              <div class="row">
+                                <div class="col-md-6 col-md-offset-3 text-center">
+                                  <p><?php echo $cont->rejection_reason; ?></p>
+                                </div>
+                              </div>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       <?php else: ?>
-                        <?= $cont->rejection_reason; ?>
+                        <?php echo date('M d, Y', strtotime($cont->to_date)); ?>
                       <?php endif; ?>
                     </td>
                   </tr>
@@ -579,32 +593,6 @@ h4 {
               </table>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-           <!--  <div class="tabelSideListing">
-                <a href="#"><img src="assets/img/single-arrow-left.png" alt=""></a>
-                <span>1</span>
-                to
-                <span>6</span>
-                <a href="#"><img src="assets/img/single-arrow-right.png" alt=""></a>
-            </div> -->
-        </div>
-        <div class="col-md-4">
-            <!-- <div class="tabelCenterListing">
-                <a href="#" class="arrowIcons">
-                    <img src="assets/img/arrow-left.png" alt="">
-                </a>
-                <a href="#">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <a href="#">4</a>
-                <a href="#">5</a>
-                <a href="#" class="arrowIcons">
-                    <img src="assets/img/arrow-right.png" alt="">
-                </a>
-            </div> -->
         </div>
       </div>
     </div>

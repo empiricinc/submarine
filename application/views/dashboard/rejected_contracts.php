@@ -116,10 +116,9 @@ h4 {
       <div class="mainTableWhite">
         <div class="col-lg-12">
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="tabelHeading">
-                <?php $count = $this->Contract_model->count_contracts(); ?>
-                <h3>list of all rejected / finished contracts | <small><a href="javascript:history.go(-1);"></small></h3>
+                <h3>list of all rejected / finished contracts | <small><a href="javascript:history.go(-1);">Go Back &laquo;</a></small></h3>
               </div>
             </div>
           </div>
@@ -136,10 +135,9 @@ h4 {
                       <th>project</th>
                       <th>designation</th>
                       <th>location</th>
-                      <th>contract manager</th>
                       <th>contract type</th>
                       <th>status</th>
-                      <th>rejection reason</th>
+                      <th>reason / finish date</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -167,15 +165,17 @@ h4 {
                       <?php echo $contract->provName; ?>
                     </td>
                     <td>
-                      <?php echo $contract->contract_mananger; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->contType; ?>
+                      <?php echo 'N/A'; ?>
                     </td>
                     <td>
                       <?php if($contract->status == 5): ?>
-                      <a data-toggle="modal" data-target="#reason<?= $contract->id; ?>" href="#reason"></a>
-                      <div class="modal fade" id="reason<?= $contract->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <button class="btn btn-warning btn-xs">Finished</button>
+                      <?php endif; ?>
+                    </td>
+                    <td>
+                      <?php if($contract->status == 5): ?>
+                      <a data-toggle="modal" data-target="#reason<?= $contract->user_id; ?>" href="#reason"><?php echo substr($contract->rejection_reason, 0, 15).'...'; ?></a>
+                      <div class="modal fade" id="reason<?= $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                               <!--Header-->
@@ -189,7 +189,6 @@ h4 {
                             <div class="modal-body">
                               <div class="row">
                                 <div class="col-md-6 col-md-offset-3 text-center">
-                                  <strong>Message Description</strong>
                                   <p><?php echo $contract->rejection_reason; ?></p>
                                 </div>
                               </div>
@@ -204,12 +203,6 @@ h4 {
                       <?php else: ?>
                         <?php echo date('M d, Y', strtotime($contract->to_date)); ?>
                       <?php endif; ?>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
                     </td>
                   </tr>
                   <?php } } } ?>
