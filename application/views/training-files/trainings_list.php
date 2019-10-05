@@ -25,7 +25,6 @@
 									</span> |
 									<small>
 										<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
-										<a href="<?php echo base_url('trainings/export_trainings'); ?>" class="btn btn-success btn-xs">Export Excel</a>
 									</small><br>
 									<small id="status-btns">
 										<a href="<?= base_url('trainings/all_trainings'); ?>">
@@ -97,8 +96,7 @@
 										</tr>
 									</thead>
 									<tbody id ='filter_results'>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
-										if(!empty($list_trainings)):
+										<?php if(!empty($list_trainings)):
 										foreach($list_trainings as $training): ?>
 										<tr>
 											<td>
@@ -172,7 +170,7 @@
 					<div class="col-md-10">
 						<div class="tabelSideListing text-center">
 							<span>
-								<?php echo $this->pagination->create_links(); endif; endif; ?>
+								<?php echo $this->pagination->create_links(); endif; ?>
 							</span>
 						</div>
 					</div>
@@ -233,8 +231,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
-										foreach($results as $result): ?>
+										<?php foreach($results as $result): ?>
 										<tr>
 											<td>
 												<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $result->trg_id; ?>"><?=$result->type; ?></a>
@@ -261,7 +258,7 @@
 												<?= $result->hall_detail; ?>
 											</td>
 										</tr>
-										<?php endforeach; endif; ?>
+										<?php endforeach; ?>
 									</tbody>
 								</table>
 							</div>

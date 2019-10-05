@@ -6,10 +6,6 @@ $system = $this->Xin_model->read_setting_info(1);
 
 $user_info = $this->Xin_model->read_user_info($session['user_id']);
 
-
-
-//$dept_info = $this->Department_model->all_department_info();
-
 /*if ($user_info[0]->user_role_id==5) {    echo 'kkkkkkkkkkkk'; exit(); header('Location: user_panel');
   # code...
 }
@@ -43,7 +39,7 @@ $city_id = $user_info[0]->city_id;
 */
 
 
-  //echo $RollNumber['RollNumber'];
+  //var_dump($session);
 
 
 //echo $session['department_id'];
@@ -57,11 +53,11 @@ $role_user = $this->Xin_model->read_user_role_info($user_info[0]->user_role_id);
 
 if(!is_null($role_user)){
 
-	$role_resources_ids = explode(',',$role_user[0]->role_resources);
+  $role_resources_ids = explode(',',$role_user[0]->role_resources);
 
 } else {
 
-	$role_resources_ids = explode(',',0);	
+  $role_resources_ids = explode(',',0); 
 
 }
 
@@ -74,43 +70,53 @@ $accessLevel = array('accessLevel5' => $accessLevel5, 'accessLevel3' => $accessL
 $this->session->set_userdata('accessLevel', $accessLevel);
 
 
- 
-//echo $accessLevel5; exit();
 
-
-
-$deptLevel1 = 1; //Trainings
-$deptLevel2 = 2; //Finance
-$deptLevel3 = 3; // Admin - Administrations 
-$deptLevel4 = 4; //Operations
-$deptLevel5 = 5; //HR
-$deptLevel6 = 6; //Payroll
-$deptLevel7 = 7; //Test/Exam
-$deptLevel8 = 8; //Legal
-$deptLevel9 = 9; //Insurance
-$deptLevel10 = 10; //Card Management
-$deptLevel11 = 11; //Contracts
+$departmentLevel0 = ($user_info[0]->department_id==3); //Administrations 
+$departmentLevel1 = ($user_info[0]->department_id==5); //HR
+$departmentLevel2 = ($user_info[0]->department_id==2); //Finance
+$departmentLevel3 = ($user_info[0]->department_id==6); //Payroll
+$departmentLevel4 = ($user_info[0]->department_id==4); //Operations
+$departmentLevel5 = ($user_info[0]->department_id==1); //Trainings
+$departmentLevel6 = ($user_info[0]->department_id==7); //Test/Exam
+$departmentLevel7 = ($user_info[0]->department_id==8); //Legal
+$departmentLevel8 = ($user_info[0]->department_id==9); //Insurance
+$departmentLevel9 = ($user_info[0]->department_id==10); //Card Management
+$departmentLevel10 = ($user_info[0]->department_id==11); //Contracts
 
  
 
-$deptLevel = array('deptLevel1' => $deptLevel1, 'deptLevel2' => $deptLevel2, 'deptLevel3' => $deptLevel3, 'deptLevel4' => $deptLevel4, 'deptLevel5' => $deptLevel5, 'deptLevel6' => $deptLevel6, 'deptLevel7' => $deptLevel7, 'deptLevel8' => $deptLevel8, 'deptLevel9' => $deptLevel9, 'deptLevel10' => $deptLevel10, 'deptLevel11' => $deptLevel11);
-$this->session->set_userdata('deptLevel', $deptLevel);
+$departmentLevel = array('departmentLevel1' => $departmentLevel1, 'departmentLevel2' => $departmentLevel2, 'departmentLevel3' => $departmentLevel3, 'departmentLevel4' => $departmentLevel4, 'departmentLevel5' => $departmentLevel5, 'departmentLevel6' => $departmentLevel6, 'departmentLevel7' => $departmentLevel7, 'departmentLevel8' => $departmentLevel8, 'departmentLevel9' => $departmentLevel9, 'departmentLevel10' => $departmentLevel10);
+$this->session->set_userdata('departmentLevel', $departmentLevel);
 
 
-//var_dump($deptLevel);
 
-/*$accessLevel = $this->session->userdata("accessLevel");
-echo $accessLevel['accessLevel3'];
-*/
-//echo $accessLevel['accessLevel3'];
 
-//($session['department_id']==6) ? $DeptAccessLevel3=true : $DeptAccessLevel3=false;
 
-//echo $DeptAccessLevel3;
+if($system[0]->system_skin=='skin-default'){
 
- 
+	$cl_skin = 'light';
 
-if($system[0]->system_skin=='skin-6'){
+} else if($system[0]->system_skin=='skin-1'){
+
+	$cl_skin = 'dark';
+
+} else if($system[0]->system_skin=='skin-2'){
+
+	$cl_skin = 'light';
+
+} else if($system[0]->system_skin=='skin-3'){
+
+	$cl_skin = 'light';
+
+} else if($system[0]->system_skin=='skin-4'){
+
+	$cl_skin = 'dark';
+
+} else if($system[0]->system_skin=='skin-5'){
+
+	$cl_skin = 'dark';
+
+} else if($system[0]->system_skin=='skin-6'){
 
 	$cl_skin = 'dark';
 
@@ -122,7 +128,7 @@ if($system[0]->system_skin=='skin-6'){
 
 <?php $wz_lang = $site_lang->session->userdata('site_lang');?>
 
-<?php if($accessLevel3) { ?>
+<?php if($user_info[0]->user_role_id==1) { ?>
  
 
 <?php }?>
@@ -154,166 +160,58 @@ if($system[0]->system_skin=='skin-6'){
               <ul class="nav navbar-nav">
                 <li class=""><a href="<?php echo base_url(); ?>dashboard">Home</a></li>
 
-<?php if($accessLevel2) { ?>
-                 
                 <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Organization </a>
+                    <a href="<?php echo base_url(); ?>company" data-toggle="dropdown" class="dropdown-toggle"> Organization </a>
                     <ul class="dropdown-menu">
                         <li><a href="<?php echo base_url(); ?>company">All Projects</a></li>
                         <li><a href="<?php echo base_url(); ?>location">Setup / Add Location to Project</a></li>
-                        <li><a href="<?php echo base_url(); ?>district_setup">District Setup</a></li>
-                        <li><a href="<?php echo base_url(); ?>tehsil_setup">Tehsil Setup</a></li>
-                        <li><a href="<?php echo base_url(); ?>uc_setup">UC Setup</a></li>
-                        <li><a href="<?php echo base_url(); ?>Areas_setup">Areas Setup</a></li>
-                        <li><a href="<?php echo base_url(); ?>Sub_areas_setup">Sub Areas Setup</a></li>
-                        <!-- <li><a href="<?php echo base_url(); ?>department">Add Departments to Project</a></li> -->  
-                        <!-- <li><a href="<?php echo base_url(); ?>department">Department Setup</a></li> -->                 
+                        <li><a href="<?php echo base_url(); ?>department">Add Departments to Project</a></li> 
+                        <li><a href="<?php echo base_url(); ?>department">Department Setup</a></li>       
+                        <li><a href="<?php echo base_url(); ?>job_position_setup">Job Position Setup</a></li> 
                         <li><a href="<?php echo base_url(); ?>designation">Designation</a></li>
-                        <li><a href="<?php echo base_url(); ?>Employees">Employees</a></li>
+                        <li><a href="<?php echo base_url(); ?>announcement">Announcement</a></li>
+                        <li><a href="<?php echo base_url(); ?>policy">Policies</a></li>
+                        <li><a href="<?php echo base_url(); ?>expense">Expenses</a></li>
+                         
 
                     </ul>
                 </li>
-                <!-- <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Employees Management </a>
-                    <ul class="dropdown-menu">
-                      <li><a href="<?php echo base_url(); ?>Employees">Employees</a></li>
-                       
-                    </ul>
-                </li> -->
-<?php }?>
-
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel6 || $session['department_id']==$deptLevel3){ 
- ?>
 
                 <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Payroll </a>
+                    <a href="<?php echo base_url(); ?>employees" data-toggle="dropdown" class="dropdown-toggle"> System Users </a>
                     <ul class="dropdown-menu">
-                      <li><a href="<?php echo base_url(); ?>payroll">Payroll</a></li>
-                      <li><a href="<?php echo base_url(); ?>payroll/payment_sheet">Payment Sheet</a></li> 
-                    </ul>
-                </li>
 
-<?php } } ?>
-
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel5 || $session['department_id']==$deptLevel3){ 
-
-
-  ?>
-
-                <!-- <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> User Panel </a>
-                    <ul class="dropdown-menu">
-                       
                       <li><a href="<?php echo base_url(); ?>user_panel">User Panel</a></li>
-                      <li><a href="<?php echo base_url(); ?>investigation">Investigation</a></li>
-                      <li><a href="<?php echo base_url(); ?>reports/employees">Reports</a></li>
-                      <li><a href="<?php echo base_url(); ?>terminations/view">Terminations</a></li>
-                      <li><a href="<?php echo base_url(); ?>resignations/view">Resignations</a></li>
-                    </ul>
-                </li> -->
-
-<?php } } ?>
-
-
-<?php if($accessLevel2) { if($session['department_id']==$deptLevel5 || $session['department_id']==$deptLevel3){ 
-
-
-  ?>
-
-                
-
-                <li class="dropdown">
-                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> HR</a>
-                    <ul class="dropdown-menu">
-                      <li><a href="<?php echo base_url(); ?>Field_joining">Field Joining</a></li>
-                       <li><a href="<?php echo base_url(); ?>terminations/view">Terminations</a></li>
-                      <li><a href="<?php echo base_url(); ?>resignations/view">Resignations</a></li>
-                      <li><a href="<?php echo base_url(); ?>investigation">Investigation</a></li>
-                      <li><a href="<?php echo base_url(); ?>reports/employees">Reports</a></li>
+                        <li><a href="<?php echo base_url(); ?>investigation/dashboard">Investigation</a></li>
+                        <li><a href="<?php echo base_url(); ?>reports/employees">Reports</a></li>
+                        <li><a href="<?php echo base_url(); ?>terminations/view">Terminations</a></li>
+                        <li><a href="<?php echo base_url(); ?>resignations/view">Resignations</a></li>
+                        <li><a href="<?php echo base_url(); ?>Employee_cards">Employee Cards</a></li>
+                        <li><a href="<?php echo base_url(); ?>Field_joining">Field Joining</a></li>
+                        <li><a href="<?php echo base_url(); ?>insurance/dashboard">Insurance</a></li>
+                        <li><a href="<?php echo base_url(); ?>Pages">Pages</a></li>
+                        <li><a href="<?php echo base_url(); ?>Groups">Roles/Groups</a></li>
                     </ul>
                 </li>
 
-
-<?php } } ?>
-
-
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel5 || $session['department_id']==$deptLevel3){ 
- ?>
 
                 <li class="dropdown">
                     <a href="<?php echo base_url(); ?>job_post" data-toggle="dropdown" class="dropdown-toggle"> Recruitments </a>
                     <ul class="dropdown-menu">
                         <li><a href="<?php echo base_url(); ?>vacant_position">Vacant Positions</a></li>
                         <li><a href="<?php echo base_url(); ?>job_post">Posted Jobs</a></li>
-                        <li><a href="<?php echo base_url(); ?>frontend/jobs/">Jobs WebSite</a></li>                   
+                        <li><a href="<?php echo base_url(); ?>frontend/jobs/">Jobs WebSite</a></li>
+                        
+                        <li><a href="<?php echo base_url(); ?>trainings">Trainings</a></li>
+                        <li class=""><a href="<?php echo base_url(); ?>tests">Test</a></li>                 
+                         
                         <li class=""><a href="<?php echo base_url(); ?>interview">Interview</a></li>
-
+                        <li class=""><a href="<?php echo base_url(); ?>contract">Contract</a></li>
                         
                     </ul>
-                </li> 
-
-<?php } } ?>
+                </li>          
 
 
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel7 || $session['department_id']==$deptLevel3){ ?>
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Test</a>
-    <ul class="dropdown-menu">
-        <li class=""><a href="<?php echo base_url(); ?>tests">Test</a></li> 
-    </ul>
-</li>
-<?php } } ?>
-
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel1 || $session['department_id']==$deptLevel3){ ?>
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Trainings</a>
-    <ul class="dropdown-menu">
-        <li><a href="<?php echo base_url(); ?>trainings">Trainings</a></li> 
-    </ul>
-</li>
-<?php } } ?>
- 
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel11 || $session['department_id']==$deptLevel3){ ?>
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Contract</a>
-    <ul class="dropdown-menu">
-        <li class=""><a href="<?php echo base_url(); ?>contract">Contract</a></li>
-        <li class=""><a href="<?php echo base_url(); ?>contract/offer_letters">Offer Letters</a></li>
-    </ul>
-</li>
-<?php } } ?>
-
-
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel10 || $session['department_id']==$deptLevel3){ ?>
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Card Management</a>
-    <ul class="dropdown-menu">
-        <li><a href="<?php echo base_url(); ?>Employee_cards">Employee Cards</a></li>
-        <!-- <li><a href="<?php echo base_url(); ?>performance_evaluation/tcsp_evaluation">TCSP evaluation</a></li> -->
-    </ul>
-</li>
-<?php } } ?>
-
-
-
-<?php if($accessLevel3) { if($session['department_id']==$deptLevel9 || $session['department_id']==$deptLevel3){ ?>
-<li class="dropdown">
-    <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Insurance</a>
-    <ul class="dropdown-menu">
-        <li><a href="<?php echo base_url(); ?>Insurance/dashboard">Insurance</a></li>
-    </ul>
-</li>
-<?php } } ?>
-
-
-            <!-- <li class="dropdown">
-                <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Employee Dashboard </a>
-                <ul class="dropdown-menu">
-                   
-                  <li><a href="<?php echo base_url(); ?>user_panel">User Panel</a></li>
-                   
-                </ul>
-            </li> -->
                  
                 <!-- <li><a href="<?php echo base_url(); ?>/settings">settings</a></li> -->
                 <!--  <li><a href="#">leads</a></li>
@@ -349,41 +247,98 @@ if($system[0]->system_skin=='skin-6'){
       <!-- <div class="toggle-button <?php echo $cl_skin;?> sidebar-toggle-second float-xs-left hidden-sm-down" data-toggle-tooltip="tooltip" data-placement="bottom" data-title="Sidebar" data-original-title="" title=""> <span class="hamburger"></span> </div> -->
 
       <ul class="nav navbar-nav float-md-right">
-  
-        <li><a href=""><?php echo $session['username']; ?></a></li>
+ 
+        <?php if($system[0]->enable_policy_link=='yes'):?>
+
+        <!-- <li class="nav-item"> <a class="nav-link" href="#" data-toggle="modal" data-target=".policy"> <i class="fa fa-product-hunt"></i> <span class="hidden-md-up ml-1"><?php echo $this->lang->line('header_policies');?></span></a> </li> -->
+
+        <?php endif;?>
+
+        <?php if($user_info[0]->user_role_id==1) {?>
+
+        <!-- <li class="nav-item dropdown"> <a class="nav-link" href="#" data-toggle="dropdown" aria-expanded="false"> <i class="ti-bell"></i> <span class="hidden-md-up ml-1"><?php echo $this->lang->line('header_notifications');?></span> </a>
+
+          <div class="dropdown-messages dropdown-tasks dropdown-menu dropdown-menu-right animated <?php echo $system[0]->animation_effect_topmenu;?>">
+
+            <?php foreach($this->Xin_model->get_last_leave_applications() as $leave_notify){?>
+
+            <?php $employee_info = $this->Xin_model->read_user_info($leave_notify->employee_id);?>
+
+            <?php
+
+				if(!is_null($employee_info)){
+
+					$emp_name = $employee_info[0]->first_name. ' '.$employee_info[0]->last_name;
+
+				} else {
+
+					$emp_name = '--';	
+
+				}
+
+			?>
+
+            <?php //$el_type = $this->Xin_model->read_leave_type($leave_notify->leave_type_id);?>
+
+            <div class="m-item">
+
+              <div class="mi-icon bg-info"><i class="ti-comment"></i></div>
+
+              <div class="mi-text"><a class="text-black" href="<?php echo site_url()?>timesheet/leave_details/id/<?php echo $leave_notify->leave_id;?>/"><?php echo $emp_name;?></a> <span class="text-muted"><?php echo $this->lang->line('header_has_applied_for_leave');?></span></div>
+
+              <div class="mi-time"><?php echo $this->Xin_model->set_date_format($leave_notify->applied_on);?></div>
+
+            </div>
+
+            <?php } ?>
+
+            <a class="dropdown-more" href="<?php echo site_url()?>timesheet/leave/"> <strong><?php echo $this->lang->line('header_view_all_leave');?></strong> </a> </div>
+
+        </li> -->
+
+        <?php } ?>
+
+        <?php if(in_array('53',$role_resources_ids) || in_array('54',$role_resources_ids) || in_array('55',$role_resources_ids) || in_array('56',$role_resources_ids)){?>
+
+       <!--  <li class="nav-item dropdown"> <a class="nav-link" href="#" data-toggle="dropdown" aria-expanded="false" data-placement="bottom"> <i class="ti-settings"></i> <span class="hidden-md-up ml-1"><?php echo $this->lang->line('left_settings');?></span> </a>
+
+          <div class="dropdown-menu dropdown-menu-right animated <?php echo $system[0]->animation_effect_topmenu;?>">
+
+            <?php if(in_array('53',$role_resources_ids)){?>
+
+            <a class="dropdown-item" href="<?php echo site_url()?>settings/"> <?php echo $this->lang->line('header_configuration');?> </a>
+
+            <?php } ?>
+
+            <?php if(in_array('54',$role_resources_ids)){?>
+
+            <a class="dropdown-item" href="<?php echo site_url()?>settings/constants/"> <?php echo $this->lang->line('left_constants');?> </a>
+
+            <?php } ?>
+
+            <?php if(in_array('55',$role_resources_ids)){?>
+
+            <a class="dropdown-item" href="<?php echo site_url()?>settings/email_template/"> <?php echo $this->lang->line('left_email_templates');?> </a>
+
+            <?php } ?>
+
+            <?php if(in_array('56',$role_resources_ids)){?>
+
+            <a class="dropdown-item" href="<?php echo site_url()?>settings/database_backup/"> <?php echo $this->lang->line('header_db_log');?> </a>
+
+            <?php } ?>
+
+          </div>
+
+        </li> -->
+
+        <?php } ?>
+
+        
 
         <li class="nav-item dropdown hidden-sm-down">
-          
-         <a href="<?php echo base_url(); ?>user_panel" >
 
-                        <span class="avatar box-32">
-
-                            <?php  if($user_info[0]->profile_picture!='' && $user_info[0]->profile_picture!='no file') {?>
-
-                            <img src="<?php  echo base_url().'uploads/profile/'.$user_info[0]->profile_picture;?>" alt="" id="user_avatar" 
-
-                            class="b-a-radius-circle user_profile_avatar">
-
-                            <?php } else {?>
-
-                            <?php  //if($user_info[0]->gender=='Male') { ?>
-
-                            <?php   $de_file = base_url().'uploads/profile/default_male.jpg';?>
-
-                            <?php //} else { ?>
-
-                            <?php   //$de_file = base_url().'uploads/profile/default_female.jpg';?>
-
-                            <?php //} ?>
-
-                            <img src="<?php  echo $de_file;?>" alt="" id="user_avatar" class=" b-a-radius-circle user_profile_avatar">
-
-                            <?php  } ?>
-
-                        </span>
-
-                    </a>
-           <!--  <a href="#" data-toggle="dropdown" aria-expanded="false">
+            <a href="#" data-toggle="dropdown" aria-expanded="false">
 
                 <span class="avatar box-32">
 
@@ -411,7 +366,7 @@ if($system[0]->system_skin=='skin-6'){
 
                 </span>
 
-            </a> -->
+            </a>
 
             <div class="dropdown-menu dropdown-menu-right animated <?php echo $system[0]->animation_effect_topmenu;?>">
 
@@ -446,6 +401,58 @@ if($system[0]->system_skin=='skin-6'){
       <ul class="nav navbar-nav">
 
         <li class="nav-item hidden-sm-down"> <a class="nav-link toggle-fullscreen" href="#"> <i class="ti-fullscreen"></i> </a> </li>
+
+       
+
+        <?php /*if($system[0]->enable_job_application_candidates=='yes'){?>
+
+        <li class="nav-item hidden-sm-down"> <a href="<?php echo site_url();?>frontend/jobs/" target="_blank">
+
+          <button type="button" class="btn btn-outline-success w-min-sm mb-0-25 waves-effect waves-light" style="background:#43b968; color:#fff;"><?php echo $this->lang->line('header_apply_jobs');?></button>
+
+          </a> </li>
+
+        <?php }*/ ?>
+
+        <?php if($user_info[0]->user_role_id!=1) {?>
+
+        <?php if($system[0]->enable_attendance == 'yes' && $system[0]->enable_clock_in_btn=='yes'){?>
+
+        <li class="nav-item hidden-sm-down clock-in-btn">
+
+          <form name="set_clocking" id="set_clocking_hd" method="post">
+
+            <input type="hidden" name="timeshseet" value="<?php echo $user_info[0]->user_id;?>">
+
+            <?php $attendances = $this->Xin_model->attendance_time_checks($session['user_id']); $dat = $attendances->result();?>
+
+            <?php if($attendances->num_rows() < 1) {?>
+
+            <input type="hidden" value="clock_in" name="clock_state" id="clock_state">
+
+            <input type="hidden" value="" name="time_id" id="time_id">
+
+            <button class="btn btn-success text-uppercase w-min-sm mb-0-25 waves-effect waves-light" type="submit"><i class="fa fa-arrow-circle-right"></i> <?php echo $this->lang->line('dashboard_clock_in');?></button>
+
+            <?php } else {?>
+
+            <input type="hidden" value="clock_out" name="clock_state" id="clock_state">
+
+            <input type="hidden" value="<?php echo $dat[0]->time_attendance_id;?>" name="time_id" id="time_id">
+
+            <button class="btn btn-warning text-uppercase w-min-sm mb-0-25 waves-effect waves-light" type="submit"><i class="fa fa-arrow-circle-left"></i> <?php echo $this->lang->line('dashboard_clock_out');?></button>
+
+            <?php } ?>
+
+          </form>
+
+        </li>
+
+        <?php } ?>
+
+        <?php } ?>
+
+        
 
       </ul>
   </div>

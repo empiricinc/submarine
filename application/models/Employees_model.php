@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-class Employees_model extends CI_Model {
+class employees_model extends CI_Model {
 
  
 
@@ -36,87 +36,6 @@ class Employees_model extends CI_Model {
         $query = $this->db->get();
         return $query->result();
     }
-
-
-
-	public function payrollempName($id) {
-		$condition = "company_id =" . "'" . $id . "'";
-        $this->db->select('employee_id,company_id,designation_id,department_id,first_name,last_name');
-        $this->db->from('xin_employees');
-        $this->db->where($condition);
-        $query = $this->db->get();
-        	//echo $this->db->last_query();
-        return $query->result();
-    }
-
-	public function payrollempName2($projid,$provid) {
-		$condition1 = "company_id =" . "'" . $projid . "'";
-		$condition2 = "provience_id =" . "'" . $provid . "'";
-
-        $this->db->select('employee_id,company_id,provience_id,designation_id,department_id,first_name,last_name');
-        $this->db->from('xin_employees');
-        $this->db->where($condition1);
-        $this->db->where($condition2);
-        
-        $query = $this->db->get();
-        	//echo $this->db->last_query();
-        return $query->result();
-    }
-
-
-     public function read_employee_salary($id) {	
-
-		$condition = "user_id =" . "'" . $id . "'";
-		$this->db->select('*');
-		$this->db->from('employee_salary');
-		$this->db->where($condition);
-		$this->db->limit(1);
-		$query = $this->db->get();		
-
-		if ($query->num_rows() == 1) {
-			return $query->result();
-		} else {
-			return null;
-		}
-
-	}
-
-
-     public function read_employee_allowances($id) {	
-
-		$condition = "user_id =" . "'" . $id . "'";
-		$this->db->select('*');
-		$this->db->from('employee_allowances');
-		$this->db->where($condition);
-		$this->db->limit(1);
-		$query = $this->db->get();		
-
-		if ($query->num_rows() == 1) {
-			return $query->result();
-		} else {
-			return null;
-		}
-
-	}
-
-   
-   public function read_employee_deductions($id) {	
-
-		$condition = "user_id =" . "'" . $id . "'";
-		$this->db->select('*');
-		$this->db->from('employee_deductions');
-		$this->db->where($condition);
-		$this->db->limit(1);
-		$query = $this->db->get();		
-
-		if ($query->num_rows() == 1) {
-			return $query->result();
-		} else {
-			return null;
-		}
-
-	}	
-
 
 	
 

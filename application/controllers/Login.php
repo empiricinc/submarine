@@ -152,39 +152,51 @@ class Login extends MY_Controller
 
 		if ($result == TRUE) {
 
-			
 
 				$result = $this->Login_model->read_user_information($username);
+
+				$location = $this->db->get_where('xin_employee_location', array('employee_id' => $result[0]->user_id))->row();
+
+				$location_id = "";
+				$province_id = "";
+				$office = new stdClass();
+				$location_head = "";
+				$location_manager = "";
+
+				if(!empty($location))
+				{
+					$location_id = $location->location_id;
+					
+					$office = $this->db->get_where('xin_office_location', array('location_id' => $location->location_id))->row();
+
+					$location_head = $office->location_head;
+					$location_manager = $office->location_manager;
+					$province_id = $office->province_id;
+				}
+
 
 				$session_data = array(
 
 				'user_id' => $result[0]->user_id,
-
-				'employee_id' => $result[0]->employee_id,
-
+				'employee_id' => $result[0]->user_id,
 				'username' => $result[0]->username,
-
-				'email' => $result[0]->email,
-
-				'user_role' => $result[0]->user_role_id,
-
+				'email' => $result[0]->email,				
+				'group_id' => $result[0]->group_id,
 				'designation_id' => $result[0]->designation_id,
-
 				'department_id' => $result[0]->department_id,
-
 				'project_id' => $result[0]->company_id,
-
+				'location_id' => $location_id,
+				'location_head' => $location_head,
+				'legal_consultant' => 3,
+				'location_manager' => $location_manager,
+				'province_id' => $province_id,
 				'provience_id' => $result[0]->provience_id,
-
-				'city_id' => $result[0]->city_id,
-
-				//'company_id' => $result[0]->company_id,
-
-
+				'user_role' => $result[0]->user_role_id
+				
 				);
 
 				// Add user data in session
-
+				$this->session->set_userdata($session_data);
 				$this->session->set_userdata('username', $session_data);
 
 				$Return['result'] = $this->lang->line('xin_success_logged_in');

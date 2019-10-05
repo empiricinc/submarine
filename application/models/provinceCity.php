@@ -111,64 +111,6 @@ class ProvinceCity extends CI_Model {
             }
     }
 
-    public function all_tehsil() {
-       // $condition = "id =" . "'" . $id . "'";
-        $this->db->select('*');
-        $this->db->from('tehsil');
-        //$this->db->where($condition);
-        //$this->db->limit(1);
-        $query = $this->db->get(); 
-
-        
-        return $query->result_array();
-
-    }
-
- 
-    public function all_uc() {
-       // $condition = "id =" . "'" . $id . "'";
-        $this->db->select('*');
-        $this->db->from('union_councel');
-        //$this->db->where($condition);
-        //$this->db->limit(1);
-        $query = $this->db->get(); 
-
-        
-        return $query->result_array();
-
-    }   
-
-
- 
-    public function all_district() {
-       // $condition = "id =" . "'" . $id . "'";
-        $this->db->select('*');
-        $this->db->from('district');
-        //$this->db->where($condition);
-        //$this->db->limit(1);
-        $query = $this->db->get(); 
-
-        
-        return $query->result_array();
-
-    }
-
-
- 
-    public function all_provinces() {
-       // $condition = "id =" . "'" . $id . "'";
-        $this->db->select('*');
-        $this->db->from('provinces');
-        //$this->db->where($condition);
-        //$this->db->limit(1);
-        $query = $this->db->get(); 
-
-        
-        return $query->result_array();
-
-    }
-
-
     public function read_union_councel_information($id) {
         $condition = "id =" . "'" . $id . "'";
         $this->db->select('*');
@@ -319,18 +261,6 @@ class ProvinceCity extends CI_Model {
         //$this->db->where('s.province_id', $this->provinceID);
         $query = $this->db->get();
         return $query->result_array();
-    }
-
-     
-
-    public function Alldistricts() {
-        
-        $this->db->select(array('id', 'name'));
-        $this->db->from('district');
-        //$this->db->where('s.province_id', $this->provinceID);
-        $query = $this->db->get();
-        return $query->result_array();
-
     }
 
 

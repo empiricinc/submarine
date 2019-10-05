@@ -124,15 +124,9 @@ class Location extends MY_Controller {
 		$data['all_companies'] = $this->Xin_model->get_companies();
 
 		$data['all_employees'] = $this->Xin_model->all_employees();
+		
+		$data['all_locations'] = $this->Location_model->all_office_locations();
 
-		if ($_POST) {  ($this->input->post('province_id')=='all') ? $data['all_locations'] = $this->Location_model->all_office_locationsCondiall($_POST['company_id']) :  $data['all_locations'] = $this->Location_model->all_office_locationsCondi($_POST['company_id'],$_POST['province_id']);
-							
-				} else {
-						$data['all_locations'] = $this->Location_model->all_office_locations();
-
-				}
-						
-		 
 		
 
 		$data['all_designations'] = $this->Designation_model->all_designations();

@@ -83,90 +83,6 @@
 	}
 
 
-	public function add_sub_areas($data){
-
-		$this->db->insert('sub_area', $data);
-
-		if ($this->db->affected_rows() > 0) {
-
-			return true;
-
-		} else {
-
-			return false;
-
-		}
-
-	}
-
-
-	public function add_areas($data){
-
-		$this->db->insert('areas', $data);
-
-		if ($this->db->affected_rows() > 0) {
-
-			return true;
-
-		} else {
-
-			return false;
-
-		}
-
-	}
-
-
-
-	public function add_uc($data){
-
-		$this->db->insert('union_councel', $data);
-
-		if ($this->db->affected_rows() > 0) {
-
-			return true;
-
-		} else {
-
-			return false;
-
-		}
-
-	}
-
-	public function add_district($data){
-
-			$this->db->insert('district', $data);
-
-			if ($this->db->affected_rows() > 0) {
-
-				return true;
-
-			} else {
-
-				return false;
-
-			}
-
-		}	
-
-public function add_tehsil($data){
-
-			$this->db->insert('tehsil', $data);
-
-			if ($this->db->affected_rows() > 0) {
-
-				return true;
-
-			} else {
-
-				return false;
-
-			}
-
-		}			
-
-
 
 	public function add_job_positions($data){
 		$this->db->insert('location_job_position', $data);
@@ -237,64 +153,17 @@ public function add_tehsil($data){
 
 	public function all_office_locations() {
 
-	  $query = $this->db->query("SELECT * from xin_office_location ORDER BY location_id DESC limit 50 ");
+	  $query = $this->db->query("SELECT * from xin_office_location");
 
   	  return $query->result();
 
 	}
 
-
-
-
-	public function all_office_locationsCondi($company,$province) {
-
-	  $query = $this->db->query("SELECT * from xin_office_location where company_id = ".$company." AND province_id = ".$province." ");
-//echo $this->db->last_query();
-  	  return $query->result();
-
-	}
-
-public function all_office_locationsCondiall($company) {
-
-	  $query = $this->db->query("SELECT * from xin_office_location where company_id = ".$company." ");
-//echo $this->db->last_query();
-  	  return $query->result();
-
-	}
-
-
-	public function all_location_job_positionCondiall($company) {
-
-	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 AND company_id = ".$company." ");	 
-	 
-  	  return $query->result(); 
-
-	}
-
-	public function all_location_job_positionCondi($company,$province) {
-
-	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 AND company_id = ".$company." AND province_id = ".$province." ");
-
-  	  return $query->result(); 
-
-	}
-
-
-	public function all_location_job_positionn($projid,$provid) {
-
-	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 AND company_id=".$projid." AND province_id=".$provid." ");
-	
-	 
-	//echo $this->db->last_query();
-
-  	  return $query->result(); 
-
-	}
 
 
 	public function all_location_job_position() {
 
-	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position where status = 0 ORDER BY `id` DESC LIMIT 50");
+	  $query = $this->db->query("SELECT `id`, `location_id`, `company_id`, `province_id`, `city_id`, `district_id`, `tehsil_id`, `uc_id`, `area_id`, `sub_area_id`, `designation_id`, `department_id`, `job_code`, `status`, `sdt` from location_job_position");
 
   	  return $query->result();
 
@@ -310,7 +179,7 @@ public function all_office_locationsCondiall($company) {
 	  //$this->db->where($condition);
 
   	  return $query->result(); 
-  	  //echo $this->db->last_query();
+  	  echo $this->db->last_query();
 
 	}
 

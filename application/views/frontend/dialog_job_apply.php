@@ -398,7 +398,7 @@ jQuery(document).on('change', 'select#city-name', function (e) {
 // function get All city
 function getCityList(provinceID) {
     $.ajax({
-        url: "http://localhost/submarine/job_post/getcity",
+        url: "http://www.ctcorg.com/hrms/job_post/getcity",
         type: 'post',
         data: {provinceID: provinceID},
         dataType: 'json',

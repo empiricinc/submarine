@@ -465,7 +465,7 @@
   // function get All District
   function getDistrictList(provinceID) {
       $.ajax({
-          url: "http://localhost/submarine/job_post/getDistrict",
+          url: "http://www.ctcorg.com/hrms/job_post/getDistrict",
           type: 'post',
           data: {provinceID: provinceID},
           dataType: 'json',
@@ -494,7 +494,7 @@
   function getTehsilList(thedistrictID) {
                 $.ajax({
                     //url: baseurl + "location/getTehsils",
-                    url: "http://localhost/submarine/job_post/getTehsil",
+                    url: "http://www.ctcorg.com/hrms/job_post/getTehsil",
                     type: 'post',
                     data: {thedistrictID: thedistrictID},
                     dataType: 'json',
@@ -523,7 +523,7 @@
   function getucList(tehsilID) {
                 $.ajax({
                      
-                    url: "http://localhost/submarine/job_post/getuc",
+                    url: "http://www.ctcorg.com/hrms/job_post/getuc",
                     type: 'post',
                     data: {tehsilID: tehsilID},
                     dataType: 'json',
@@ -552,7 +552,7 @@
   function getCBVAreaList(theucID) {
         $.ajax({
             //url: baseurl + "location/getareas",
-            url: "http://localhost/submarine/job_post/getCBVareas",
+            url: "http://www.ctcorg.com/hrms/job_post/getCBVareas",
             type: 'post',
             data: {theucID: theucID},
             dataType: 'json',
@@ -580,7 +580,7 @@
   function getCBVSubAreaList(theareaID) {
         $.ajax({
             //url: baseurl + "location/getareas",
-            url: "http://localhost/submarine/job_post/getCBVSubAreas",
+            url: "http://www.ctcorg.com/hrms/job_post/getCBVSubAreas",
             type: 'post',
             data: {theareaID: theareaID},
             dataType: 'json',
@@ -650,7 +650,7 @@ jQuery(document).on('change', 'select#city-name', function (e) {
 // function get All city
 function getCityList(provinceID) {
     $.ajax({
-        url: "http://localhost/submarine/job_post/getcity",
+        url: "http://www.ctcorg.com/hrms/job_post/getcity",
         type: 'post',
         data: {provinceID: provinceID},
         dataType: 'json',
@@ -679,7 +679,7 @@ function getCityList(provinceID) {
 function getAreaList(thecityID) {
               $.ajax({
                   //url: baseurl + "location/getareas",
-                  url: "http://localhost/submarine/job_post/getareas",
+                  url: "http://www.ctcorg.com/hrms/job_post/getareas",
                   type: 'post',
                   data: {thecityID: thecityID},
                   dataType: 'json',

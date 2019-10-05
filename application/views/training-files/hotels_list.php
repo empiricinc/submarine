@@ -53,8 +53,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
-										if(!empty($hotels_list)):
+										<?php if(!empty($hotels_list)):
 										foreach($hotels_list as $hotel): ?>
 										<tr>
 											<td><a href="<?php echo base_url(); ?>trainings/detail_hotel/<?php echo $hotel->hotel_id; ?>"><?=$hotel->hotel_name; ?></a></td>
@@ -62,9 +61,9 @@
 											<td><?=$hotel->city_name; ?></td>
 											<td>
 												<div class="submitBtn">
-													<a href="" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit"><i class="fa fa-plus"></i> Room Charges</a>
-													<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>"><i class="fa fa-plus"></i> Amenities</a>
-													<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit"><i class="fa fa-eye"></i> View Prices</a>
+													<a href="" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>" class="btn btn-info btn-xs"><i class="fa fa-plus"></i> Room Charges</a>
+													<a href="" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>"><i class="fa fa-plus"></i> Amenities</a>
+													<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btn-success btn-xs"><i class="fa fa-eye"></i> View Prices</a>
 												</div>
 											</td>
 											<td>
@@ -82,7 +81,7 @@
 										    <div class="modal-content">
 										      <div class="modal-header">
 										        <button type="button" class="close" data-dismiss="modal">&times;</button>
-										        <h4 class="modal-title">Add amenities here</h4>
+										        <h4 class="modal-title">Add amenities</h4>
 										      </div>
 										      <div class="modal-body">
 										      	<div class="row">
@@ -116,8 +115,8 @@
 														</div>
 														<div class="col-lg-12">
 															<div class="submitBtn">
-																<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-																<button type="reset" class="btn btnSubmit">Reset</button>
+																<button id="save" type="submit" class="btn btn-success">Submit</button>
+																<button type="reset" class="btn btn-info">Reset</button>
 															</div>
 														</div>
 											      	</form>
@@ -125,7 +124,7 @@
 										      </div>
 										      <div class="modal-footer">
 										      	<div class="submitBtn">
-										      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+										      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 										      	</div>
 										      </div>
 										    </div>
@@ -139,7 +138,7 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Add prices here</h4>
+					        <h4 class="modal-title">Add room charges</h4>
 					      </div>
 					      <div class="modal-body">
 					      	<div class="row">
@@ -162,8 +161,8 @@
 								</div><br><br><br>
 								<div class="col-lg-12">
 									<div class="submitBtn">
-										<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-										<button type="reset" class="btn btnSubmit">Reset</button>
+										<button id="save" type="submit" class="btn btn-success">Submit</button>
+										<button type="reset" class="btn btn-info">Reset</button>
 									</div>
 								</div>
 					      	</form>
@@ -171,7 +170,7 @@
 					      </div>
 					      <div class="modal-footer">
 					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					      	</div>
 					      </div>
 					    </div>
@@ -185,7 +184,7 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Modify room prices or type here</h4>
+					        <h4 class="modal-title">Modify hotel name</h4>
 					      </div>
 					      <div class="modal-body">
 					      	<div class="row">
@@ -198,8 +197,8 @@
 								</div><br><br><br>
 								<div class="col-lg-12">
 									<div class="submitBtn">
-										<button id="save" type="submit" class="btn btnSubmit">Update</button>
-										<button type="reset" class="btn btnSubmit">Reset</button>
+										<button id="save" type="submit" class="btn btn-success">Update</button>
+										<button type="reset" class="btn btn-info">Reset</button>
 									</div>
 								</div>
 					      	</form>
@@ -207,13 +206,13 @@
 					      </div>
 					      <div class="modal-footer">
 					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					      	</div>
 					      </div>
 					    </div>
 					  </div>
 					</div>
-										<?php endforeach; endif; ?>
+										<?php endforeach; ?>
 									</tbody>
 								</table>
 							</div>
@@ -277,8 +276,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if($sl3['accessLevel3']): // Check Acccess Level.
-										foreach($results as $result): ?>
+										<?php foreach($results as $result): ?>
 										<tr>
 											<td><a href="<?php echo base_url(); ?>trainings/detail_hotel/<?php echo $result->hotel_id; ?>"><?=$result->hotel_name; ?></a></td>
 											<td><?=$result->name; ?></td>
@@ -289,7 +287,7 @@
 												</div>
 											</td>
 										</tr>
-										<?php endforeach; endif; ?>
+										<?php endforeach; ?>
 									</tbody>
 								</table>
 							</div>

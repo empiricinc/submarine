@@ -25,10 +25,10 @@
 
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700,800|Roboto:400,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/bootstrap.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/style.css'); ?>">
-	<script src="<?php echo base_url('dashboardDesign/assets/js/jquery.js'); ?>"></script>
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+	<script src="<?php echo base_url('assets/js/jquery.js'); ?>"></script>
 </head>
 <body>
 <section class="secnavMain">
@@ -40,7 +40,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span> 
         </button>
-        <a class="navbar-brand" href="<?php echo base_url();?>"><div class="hrms-logo">HRMS</div></a>
+        <a class="navbar-brand" href="<?php echo base_url();?>dashboard"><div class="hrms-logo">HRMS</div></a>
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
@@ -64,7 +64,7 @@
         <ul class="nav navbar-nav navbar-right">
           <li>
             <a href="#">
-              <img src="<?php echo base_url('dashboardDesign/assets/img/profile.png'); ?>" alt="">
+              <img src="<?php echo base_url('assets/img/profile.png'); ?>" alt="">
               Haseeb Khattak
               <span class="caret"></span>    
             </a>

@@ -52,14 +52,16 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
               <div class="row">
 
             
-          <div class="col-md-4" style="margin-left: 1.2%; width: 32.3%;">
+          <div class="col-md-6">
               <div class="form-group">
-                  <label for="Selector option" class="control-label">Select Locations(Project Type)</label>
-                  <select id="mystuff" class="form-control">                         
+                  <label for="Selector option" class="control-label">Select Locations</label>
+                  <select id="mystuff" class="form-control">      
+                       
                        <option value="0">-- Choose Locations --</option>       
                        <option value="opt1">Option 1</option>
                        <option value="opt2">CBV</option>
                        <option value="opt3">ComNet</option>
+
                   </select>
               </div>
           </div>    
@@ -368,66 +370,6 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
 
 </div>
 
-
-
-
-
-<div class="box box-block bg-white">
-<br>
-<div class="col-md-12">
-<div class="row">
-<form action="<?php echo base_url(); ?>/location" method="post" name="location">
-  <div class="col-sm-3">
-
-      <div class="form-group">
-
-        <label for="company_name"><?php echo $this->lang->line('module_company_title');?></label>
-
-        <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="Select Project" required="required">
-
-          <option value=""><?php echo $this->lang->line('xin_select_one');?></option>
-
-          <?php foreach($all_companies as $company) {?>
-
-          <option value="<?php echo $company->company_id;?>"> <?php echo $company->name;?></option>
-
-          <?php } ?>
-
-        </select>
-
-      </div>
-  </div>
-  <div class="col-md-3">
-            <div class="form-group">
-                <label for="date_of_closing" class="control-label">Province</label>
-                <select title="Select province" name="province_id" class="form-control" required="required">      
-                    <option value="all">All Provinces</option>
-                    <?php
-                    foreach ($geProvinces as $key => $element) {
-                        echo '<option value="'.$element['province_id'].'">'.$element['province_name'].'</option>';
-                    }
-                    ?>
-                </select>
-            </div>
-  </div> 
-
-  <div class="col-md-3">
-
-    <div class="form-group" style="margin-top: 8%;">
-
-      <button type="submit" class="btn btn-primary save"><?php echo $this->lang->line('xin_search');?></button>
-
-    </div>
-
-  </div>              
-</form>
-</div>
-</div>  
-<br><br><br><br>                                     
-</div>
-
-
-
 <div class="box box-block bg-white">
 
   <h2><strong><?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_locations');?>
@@ -464,20 +406,22 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
         <thead>
             <tr>
                 <th>Id</th>
-                <th colspan="2" class="text-center">Action</th>
+                <th colspan="2">Action</th>
 
                 <th>Project</th>
                <!--  <th>Designation</th>
                 <th>Department</th> -->
-                <th>Province</th>
-                <th>District</th>
-                <th>Tehsil</th>
-                <th>UC</th>
-                <th>Area</th>                
-                <th>Sub Area</th>                 
-                <th>Positions</th>
-                <th>Status</th>
-                <th class="text-center">Date</th>
+                <th>province</th>
+                <th>district</th>
+                <th>tehsil</th>
+                <th>uc</th>
+                <th>area</th>
+                
+                <th>sub area</th>
+                 
+                <th>No.Positions</th>
+                <th>status</th>
+                <th>Date</th>
             </tr>
         </thead>
         <tbody>
@@ -750,8 +694,8 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
   
     $k = 0;
     $all_area_code = $this->Location_model->get_all_area_code($location_detail->location_id);
-         $count = 0;       
-            foreach($all_area_code as $areaCod){ $count++;  //echo '<pre>'; print_r($all_area_code); echo '</pre>';
+                
+            foreach($all_area_code as $areaCod){   //echo '<pre>'; print_r($all_area_code); echo '</pre>';
 
                   $k++;
                    
@@ -808,8 +752,11 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
                 <td><?php echo $uc_name; ?></td>
                 <td><?php echo $area_name; ?></td>
                 <td><?php echo $sub_area_name; ?></td>
-                <td class="text-center"><?php echo $count; ?></td>
-                <td>Active</td>                
+                <td><?php //echo $location_detail->tehsil_id; ?>1</td>
+
+
+
+                <td><?php //echo $location_detail->status; ?>Active</td>                
                 <td><?php echo $location_detail->sdt; ?></td>
                 
 
@@ -868,7 +815,7 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
   // function get All District
   function getDistrictList(provinceID) {
       $.ajax({
-          url: "<?php echo base_url(); ?>job_post/getDistrict",
+          url: "http://www.ctcorg.com/hrms/job_post/getDistrict",
           type: 'post',
           data: {provinceID: provinceID},
           dataType: 'json',
@@ -897,7 +844,7 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
   function getTehsilList(thedistrictID) {
                 $.ajax({
                     //url: baseurl + "location/getTehsils",
-                    url: "<?php echo base_url(); ?>job_post/getTehsil",
+                    url: "http://www.ctcorg.com/hrms/job_post/getTehsil",
                     type: 'post',
                     data: {thedistrictID: thedistrictID},
                     dataType: 'json',
@@ -926,7 +873,7 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
   function getucList(tehsilID) {
                 $.ajax({
                      
-                    url: "<?php echo base_url(); ?>job_post/getuc",
+                    url: "http://www.ctcorg.com/hrms/job_post/getuc",
                     type: 'post',
                     data: {tehsilID: tehsilID},
                     dataType: 'json',
@@ -955,7 +902,7 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
   function getCBVAreaList(theucID) {
         $.ajax({
             //url: baseurl + "location/getareas",
-            url: "<?php echo base_url(); ?>job_post/getCBVareas",
+            url: "http://www.ctcorg.com/hrms/job_post/getCBVareas",
             type: 'post',
             data: {theucID: theucID},
             dataType: 'json',
@@ -983,7 +930,7 @@ if ($error) { echo $error = '<div class="alert alert-danger text-center"><strong
   function getCBVSubAreaList(theareaID) {
         $.ajax({
             //url: baseurl + "location/getareas",
-            url: "<?php echo base_url(); ?>job_post/getCBVSubAreas",
+            url: "http://www.ctcorg.com/hrms/job_post/getCBVSubAreas",
             type: 'post',
             data: {theareaID: theareaID},
             dataType: 'json',
@@ -1039,7 +986,7 @@ jQuery(document).on('change', 'select#city-name', function (e) {
 // function get All city
 function getCityList(provinceID) {
     $.ajax({
-        url: "<?php echo base_url(); ?>job_post/getcity",
+        url: "http://www.ctcorg.com/hrms/job_post/getcity",
         type: 'post',
         data: {provinceID: provinceID},
         dataType: 'json',
@@ -1068,7 +1015,7 @@ function getCityList(provinceID) {
 function getAreaList(thecityID) {
               $.ajax({
                   //url: baseurl + "location/getareas",
-                  url: "<?php echo base_url(); ?>job_post/getareas",
+                  url: "http://www.ctcorg.com/hrms/job_post/getareas",
                   type: 'post',
                   data: {thecityID: thecityID},
                   dataType: 'json',

@@ -34,11 +34,11 @@ if(!is_null($department)){
 
 ?>
 
-<?php if($user_info[0]->user_role_id=='1' || $user_info[0]->user_role_id=='2' || $user_info[0]->user_role_id=='3'){?>
+<?php if($user_info[0]->user_role_id=='1'){?>
 <style type="text/css">.breadcrumb.no-bg{ display: none; } h4{ display: none; }</style>
 
 
-<section class="secMainWidth" style="padding: 0px;">
+<section class="secMainWidth" style="padding: 0px; margin-top: -4%;">
   <section class="secIndex">
     <div class="row">
       <div class="col-md-12">
@@ -56,7 +56,7 @@ if(!is_null($department)){
           <div class="mainGrid">
             <div class="aligmentWrap">
               <div class="gridIcon icon1">
-                <img src="<?php echo site_url();?>assets/img/icon1.png" alt="">
+                <img src="assets/img/icon1.png" alt="">
               </div>
               <div class="gridContent">
                 <h3>12421</h3>
@@ -71,7 +71,7 @@ if(!is_null($department)){
           <div class="mainGrid">
             <div class="aligmentWrap">
               <div class="gridIcon icon2">
-                <img src="<?php echo site_url();?>assets/img/icon2.png" alt="">
+                <img src="assets/img/icon2.png" alt="">
               </div>
               <div class="gridContent">
                 <h3>12421</h3>
@@ -86,7 +86,7 @@ if(!is_null($department)){
           <div class="mainGrid">
             <div class="aligmentWrap">
               <div class="gridIcon icon3">
-                <img src="<?php echo site_url();?>assets/img/icon3.png" alt="">
+                <img src="assets/img/icon3.png" alt="">
               </div>
               <div class="gridContent">
                 <h3>12421</h3>
@@ -101,7 +101,7 @@ if(!is_null($department)){
           <div class="mainGrid">
             <div class="aligmentWrap">
               <div class="gridIcon icon4">
-                <img src="<?php echo site_url();?>assets/img/icon4.png" alt="">
+                <img src="assets/img/icon4.png" alt="">
               </div>
               <div class="gridContent">
                 <h3>12421</h3>
@@ -116,7 +116,7 @@ if(!is_null($department)){
           <div class="mainGrid">
             <div class="aligmentWrap">
               <div class="gridIcon icon5">
-                <img src="<?php echo site_url();?>assets/img/icon5.png" alt="">
+                <img src="assets/img/icon5.png" alt="">
               </div>
               <div class="gridContent">
                 <h3>12421</h3>
@@ -131,7 +131,7 @@ if(!is_null($department)){
           <div class="mainGrid">
             <div class="aligmentWrap">
               <div class="gridIcon icon1">
-                <img src="<?php echo site_url();?>assets/img/icon1.png" alt="">
+                <img src="assets/img/icon1.png" alt="">
               </div>
               <div class="gridContent">
                 <h3>12421</h3>
@@ -156,7 +156,7 @@ if(!is_null($department)){
         <div class="col-md-6">
           <div class="tabelTopBtn">
             <button class="btn">
-              <img src="<?php echo site_url();?>assets/img/plus.png" alt=""> 
+              <img src="assets/img/plus.png" alt=""> 
               <a href="<?php echo base_url(); ?>job_post"> Create Job Recuritment </a>
             </button>
           </div>
@@ -170,26 +170,26 @@ if(!is_null($department)){
     //$session = $this->session->userdata('username');
 
 
-    //$this->load->model("Job_post_model");
+    $this->load->model("Job_post_model");
 
-    //$this->load->model("Xin_model");
+    $this->load->model("Xin_model");
 
       // $this->load->model("Designation_model");
 
      //   $this->load->model('provinceCity');
 
-   // $this->load->model('job_longlisted_model'); // load model
+    $this->load->model('job_longlisted_model'); // load model
         
 
 
 
 
-   
+    $jobdetails = $this->job_longlisted_model->getJobPosted();
 
 
-   // $this->load->model("Designation_model");
+    $this->load->model("Designation_model");
 
-   // $this->load->model("Job_post_model");
+    $this->load->model("Job_post_model");
 
 
     //$this->load->model("Job_post_model");

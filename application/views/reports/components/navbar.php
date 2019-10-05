@@ -18,7 +18,7 @@
               </a>
               <ul class="dropdown-menu"> -->
                 <li class=""><a href="<?= base_url(); ?>Reports/employees">Employees</a></li>
-                <li><a href="<?= base_url(); ?>Reports/complaints">Complaints</a></li>
+                <!-- <li><a href="<?= base_url(); ?>Reports/complaints">Complaints</a></li> -->
                 <li><a href="<?= base_url(); ?>Reports/terminations">Terminations</a></li>
                 <li><a href="<?= base_url(); ?>Reports/resignations">Resignations</a></li>
                 <li><a href="<?= base_url(); ?>Reports/trainings">Trainings</a></li>

@@ -417,7 +417,7 @@ class Jobs extends MY_Controller {
 		'province' => $province,	
 		'city_name' => $city_name,	
 		'message' => $message,
-		'job_resume' => 'resume_abc.pdf',
+		'job_resume' => 'resume_1552575517.pdf',
 		//'job_resume' => $fname,
 
 		'application_status' => '1',

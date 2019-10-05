@@ -53,8 +53,7 @@
 											</tr>
 										</thead>
 										<tbody>
-										<?php $serial = 1; if($sl3['accessLevel3']): // Check Access Level.
-										foreach($trainings_list as $training): ?>
+										<?php $serial = 1; foreach($trainings_list as $training): ?>
 											<tr>
 												<td>
 													<?php echo $serial++; ?>
@@ -73,7 +72,7 @@
 													<?php echo date('M d, Y', strtotime($training->end_date)); ?>
 												</td>
 											</tr>
-										<?php endforeach; endif; ?>
+										<?php endforeach; ?>
 										</tbody>
 									</table>
 								</div>
@@ -126,8 +125,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											<?php $sno =1; if($sl3['accessLevel3']):
-											foreach($refreshers as $refresh): ?>
+											<?php $sno =1; foreach($refreshers as $refresh): ?>
 											<tr>
 												<td>
 													<?php echo $sno++; ?>
@@ -146,7 +144,7 @@
 													<?php echo date('M d, Y', strtotime($refresh->end_date)); ?>
 												</td>
 											</tr>
-											<?php endforeach; endif; ?>
+											<?php endforeach; ?>
 										</tbody>
 									</table>
 								</div>
@@ -208,8 +206,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<?php if($sl3['accessLevel3']): // Check Access Level.
-									foreach($completed_trainings as $completed): ?>
+									<?php foreach($completed_trainings as $completed): ?>
 									<tr>
 										<td>
 											<a href="<?= base_url(); ?>trainings/expenses/<?= $completed->trg_id; ?>"><?= $completed->type; ?></a>
@@ -242,7 +239,7 @@
 											<?= $completed->attendees; ?>
 										</td>
 									</tr>
-									<?php endforeach; endif; ?>
+									<?php endforeach; ?>
 								</tbody>
 							</table>
 						</div>

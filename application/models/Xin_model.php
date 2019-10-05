@@ -142,8 +142,8 @@ class xin_model extends CI_Model {
 
 	
 
-		//$condition = "user_id =" . "'" . $id . "'";
-		$condition = "employee_id =" . "'" . $id . "'";
+		$condition = "user_id =" . "'" . $id . "'";
+
 		$this->db->select('*');
 
 		$this->db->from('xin_employees');
@@ -598,13 +598,13 @@ class xin_model extends CI_Model {
 
 			$ar_sc = explode(' -',$system_setting[0]->default_currency_symbol);
 
-			$sc_show = /*$ar_sc[0]*/'Rs ';
+			$sc_show = $ar_sc[0];
 
 		} else {
 
 			$ar_sc = explode('- ',$system_setting[0]->default_currency_symbol);
 
-			$sc_show = /*$ar_sc[1]*/'Rs ';
+			$sc_show = $ar_sc[1];
 
 		}
 

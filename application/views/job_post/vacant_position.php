@@ -30,7 +30,7 @@ if ($message) {
   </h2> -->
 <?php 
 
-// $jobdetails = $this->Job_longlisted_model->getJobPosted();
+ $jobdetails = $this->Job_longlisted_model->getJobPosted();
 
     $this->load->model("Designation_model");
 
@@ -38,80 +38,25 @@ if ($message) {
 
    //$this->Job_post_model->all_job_types();
 
-if($_POST){ ($this->input->post('province_id')=='all') ?  $location_job_position = $this->Location_model->all_location_job_positionCondiall($_POST['company_id']) : $location_job_position = $this->Location_model->all_location_job_positionCondi($_POST['company_id'],$_POST['province_id']);
-    }else{
-      //if($data['sl2']['accessLevel2']){
-      if(isset($sl2['accessLevel2'])  &&  !empty($sl2['accessLevel2'])){  
-                $location_job_position = $this->Location_model->all_location_job_position();
-         }else{ 
-                  $location_job_position = $this->Location_model->all_location_job_positionn($projid,$provid);
-                }            
-    }
-    
+
 
 ?>
 
 
-<?php if($sl2['accessLevel2']) { 
-        // if($session['department_id']==3 || $session['department_id']==6){ 
- ?>
-
-<div class="box box-block bg-white">
-<br>
-<div class="col-md-12">
-<div class="row">
-<form action="<?php echo base_url(); ?>vacant_position" method="post" name="set_salary_details">
-  <div class="col-sm-3">
-      <div class="form-group">
-        <label for="company_name"><?php echo $this->lang->line('module_company_title');?></label>
-        <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="Select Project" required="required">
-          <option value="">Select Project</option>
-          <?php foreach($all_companies as $company) {?>
-          <option value="<?php echo $company->company_id;?>"> <?php echo $company->name;?></option>
-          <?php } ?>
-        </select>
-      </div>
-  </div>
-  <div class="col-md-3">
-            <div class="form-group">
-                <label for="date_of_closing" class="control-label">Province</label>
-                <select title="Select province" name="province_id" class="form-control" required="required">   <option value="all">All Provinces</option>
-                    <?php
-                    foreach ($geProvinces as $key => $element) {
-                        echo '<option value="'.$element['province_id'].'">'.$element['province_name'].'</option>';
-                    }
-                    ?>
-                </select>
-            </div>
-  </div> 
-
-  <div class="col-md-3">
-
-    <div class="form-group" style="margin-top: 8%;">
-
-      <button type="submit" class="btn btn-primary save"><?php echo $this->lang->line('xin_search');?></button>
-
-    </div>
-
-  </div>              
-</form>
-</div>
-</div>  
-<br><br><br><br>                                     
-</div>
-
-<?php }/*elseif($sl3['accessLevel3']) { echo "ye manager ha-----------------------------------"; }*/  ?>
  
 <div class="box box-block bg-white">
 <ul class="nav nav-tabs">
       <li class="">
-        <a  href="<?php echo base_url(); ?>job_post" >All Posted Jobs</a>
+        <a  href="<?php echo base_url(); ?>job_post" >All Applications</a>
       </li> 
       <li class="active">
         <a href="<?php echo base_url(); ?>vacant_position" >Vacant Position</a>
       </li>
-       
 </ul>
+
+
+
+
 
 <script type="text/javascript">
   $(document).ready(function() {
@@ -135,13 +80,12 @@ if($_POST){ ($this->input->post('province_id')=='all') ?  $location_job_position
                 <th>UC</th>
                 <th>Area</th>
                 <th>Sub.Area</th>
-               <!--  <th>No.Positions</th> -->
+                <th>No.Positions</th>
                 <th>Job Code</th>
                 <th>To Be Vacant Position</th>
                 <th>Status</th>
                 <th>Date</th>
-                <th>Post</th>
-                <th>Reserve</th>
+                <th>Action</th>
                 
             </tr>
         </thead>
@@ -252,88 +196,55 @@ if($_POST){ ($this->input->post('province_id')=='all') ?  $location_job_position
                 <td><?php echo $uc_name; ?></td>
                 <td><?php echo $area_name; ?></td>
                 <td><?php echo $sub_area_name; ?></td>
-                <!-- <td>1</td> -->
+                <td>1</td>
                 <td><?php echo $location_detail->job_code; ?></td>
-                <td><?php echo ($i==2)?'<span class="text-danger">20 Days</span>':''; ?></td>
+                <td><?php echo ($i==2)?'<span style="color:green">in 20 days</span>':''; ?></td>
                 <td><?php echo ($location_detail->status==0)?'Open':'Closed' ; ?></td>                
                 <td><?php echo $location_detail->sdt; ?></td>
-                <td><button type="button" data-toggle="modal" data-target="#job_setup<?php echo $i; ?>" class="btn btn-xs btn-info" style="padding: 5px;">Post Job</button></td>
+                 
+                <td> 
+                      <button type="button" data-toggle="modal" data-target="#job_setup<?php echo $i; ?>" class="btn btn-xs btn-info" style="padding: 5px;">Post Job</button>
+                </td>
                 <td> 
 <?php 
 
-        $reserveJobId='';
-        $checkJobsApplication='';
-        $checkAllReserveJobs='';
-        $checkAllReserveJobs = $this->Job_longlisted_model->checkReserveJobs($location_detail->location_id);
 
-        foreach($checkAllReserveJobs as $carj){
-                     //echo  $job_id = $carj->job_id;
 
-         $checkJobsApplication = $this->Job_longlisted_model->checkReserveJobs2($carj->job_id);
+/* 
 
-              $count = 0;
-              foreach($checkJobsApplication as $japp){ $count++;
-                             $reserveJobId = $japp->application_id;
+    $this->load->model("Designation_model");
 
-               }  
+    $this->load->model("Job_post_model");*/
 
-        }
+    //echo $location_detail->location_id;
+$reserveJobId='';
+$checkAllReserveJobs = $this->Job_longlisted_model->checkReserveJobs($location_detail->location_id);
 
-if(!empty($reserveJobId)){ ?>
-    <button type="button" data-toggle="modal" data-target="#reserve_position<?php echo $i; ?>" class="btn btn-success" style="padding: 5px;">Reserve(<?php echo $count; ?>)</button>
-<?php }else{ ?>
-    <button type="button" class="btn btn-warning" style="padding: 5px;">NIL</button>
-<?php } ?>        
+foreach($checkAllReserveJobs as $carj){
+             //echo  $job_id = $carj->job_id;
 
-      <div class="modal fade" id="reserve_position<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="reservePositionModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #F5F5F5">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="reservePositionModalLabel"> All Reserve Applicants ... </h4>
-            </div>      
-                <div class="table-responsive">
-                    <table id="area_positions_listing" class="table table-striped table-bordered" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Date</th>
-                                <!-- <th>Action</th> -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                  <?php  
-                  
-                      $k = 0;
-                      foreach($checkJobsApplication as $rjobs){   
-                            $k++;
-                             
-                ?>
-                            <tr>
-                                <td><?php echo $k; ?></td>   
-                                <td><?php echo $rjobs->fullname;?></td>
-                                <td><?php echo $rjobs->email;?></td>           
-                                <td><?php echo $rjobs->created_at; ?></td> 
-                               
-                            </tr>
-                            <?php  } ?>
-                        </tbody>
-                    </table>
-                </div>
-            <div class="table-responsive text-center">
-                <a href="job_longlisted/activateReserve/<?php echo $carj->job_id; ?>/<?php echo $location_detail->id; ?>">
-                  <button type="button" data-toggle="modal" data-target="#hkhjhjhhhj<?php echo $i; ?>" class="btn btn-warning" style="padding: 5px;">Select From Reserve</button>
-                </a>
-            </div> 
-            <br>   
+ $checkJobsApplication = $this->Job_longlisted_model->checkReserveJobs2($carj->job_id);
 
-          </div>
-        </div>
-      </div>
+      $count = 0;
+      foreach($checkJobsApplication as $japp){ $count++;
+                     $reserveJobId = $japp->application_id;
 
-</td>
+
+       } //echo 'Total:' . $count;
+
+}
+
+//$reserveJobId=10; 
+
+  if(!empty($reserveJobId)){?>
+    <a href="job_longlisted/getReservedRecords/<?php echo $carj->job_id; ?>">
+      <button type="button" class="btn btn-success" style="padding: 5px;">Reserve(<?php echo $count; ?>)</button>
+    </a>  
+  <?php }else{ ?>
+  <button type="button" class="btn btn-warning" style="padding: 5px;">No Reserve</button>
+  <?php } ?>        
+
+ </td>
                  
                  
 </tr>
@@ -349,7 +260,6 @@ if(!empty($reserveJobId)){ ?>
       </div>
       <form action="<?php echo site_url("job_post/add_job") ?>" method="post" name="add_job" id="xin-form">
         <input type="hidden" value="job" name="add_type">
-        <input type="hidden" value="<?php echo $location_detail->id; ?>" name="id"> 
         <input type="hidden" value="<?php echo $location_detail->location_id; ?>" name="location_id"> 
         <input type="hidden" value="<?php echo $location_detail->company_id; ?>" name="company_id"> 
         <input type="hidden" value="<?php echo $location_detail->designation_id; ?>" name="designation_id"> 
@@ -374,7 +284,7 @@ if(!empty($reserveJobId)){ ?>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="gender"><?php echo $this->lang->line('xin_employee_gender');?></label>
-                        <select class="form-control" name="gender" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>" >
+                        <select class="form-control" name="gender" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>" required="required">
                           <option value="0"><?php echo $this->lang->line('xin_gender_male');?></option>
                           <option value="1"><?php echo $this->lang->line('xin_gender_female');?></option>
                           <option value="2"><?php echo $this->lang->line('xin_job_no_preference');?></option>
@@ -385,7 +295,7 @@ if(!empty($reserveJobId)){ ?>
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="experience" class="control-label"><?php echo $this->lang->line('xin_job_minimum_experience');?></label>
-                        <select class="form-control" name="experience" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_job_minimum_experience');?>" >
+                        <select class="form-control" name="experience" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_job_minimum_experience');?>" required="required">
                           <option value="0"><?php echo $this->lang->line('xin_job_fresh');?></option>
                           <option value="1"><?php echo $this->lang->line('xin_job_experience_define_1year');?></option>
                           <option value="2"><?php echo $this->lang->line('xin_job_experience_define_2years');?></option>
@@ -407,8 +317,8 @@ if(!empty($reserveJobId)){ ?>
                         <div class="col-md-6">    
                             <div class="form-group">
                               <label for="domicile">Domicile</label>
-                              <select class="form-control" name="domicile" data-plugin="select_hrm" data-placeholder="Domicile" >
-                                <option value="0">Select Domicile</option>
+                              <select class="form-control" name="domicile" data-plugin="select_hrm" data-placeholder="Domicile" required="required">
+                                <option value="">Select Domicile</option>
                                 <option value="1"> swat</option>
                                 <option value="2"> banu</option>
                                 <option value="3"> kohat</option>
@@ -420,7 +330,7 @@ if(!empty($reserveJobId)){ ?>
                           <div class="form-group">
                             <label for="cnic">CNIC</label>
                              
-                              <select name="cnic" class="form-control" tabindex="-1" >
+                              <select name="cnic" class="form-control" tabindex="-1" required="required">
                                   <option value="">Select Type</option>
                                   <option value="0" selected="selected">CNIC</option>
                                   <option value="1">Afghan Card</option>
@@ -437,9 +347,9 @@ if(!empty($reserveJobId)){ ?>
                       <div class="col-md-6">    
                           <div class="form-group">
                             <label for="education_name">Education</label>
-                            <select class="form-control" name="education" data-plugin="select_hrm" data-placeholder="Education">
-                              <option value="0">Select Education</option>
-                              <option value="1" selected="selected"> MA</option>
+                            <select class="form-control" name="education" data-plugin="select_hrm" data-placeholder="Education" required="required">
+                              <option value="">Select Education</option>
+                              <option value="1"> MA</option>
                               <option value="2"> BA</option>
                               <option value="3"> FA</option>
                             </select>
@@ -448,8 +358,8 @@ if(!empty($reserveJobId)){ ?>
                        <div class="col-md-6">    
                           <div class="form-group">
                             <label for="age">Age</label>
-                            <select class="form-control" name="age" data-plugin="select_hrm" data-placeholder="Age">
-                              <option value="0">Select Age</option>
+                            <select class="form-control" name="age" data-plugin="select_hrm" data-placeholder="Age" required="required">
+                              <option value="">Select Age</option>
                               <option value="1"> 20 - 25</option>
                               <option value="2"> 25-30</option>
                               <option value="3"> 30-35</option>
@@ -479,16 +389,16 @@ if(!empty($reserveJobId)){ ?>
                     </div>
                   </div>
 
-            
+                  
 
                 </div>
 
                 <div class="row">
 
-                  <div class="col-md-8">
+                  <div class="col-md-6">
                       <div class="form-group">
                           <label for="job_title">Job Title</label>
-                          <input readonly="readonly" class="form-control" placeholder="" name="job_title" type="text" value="<?php echo $proj_name; ?>—<?php echo $designation_name; ?><?php echo ($province_name!='--')? '—'.$province_name:''; ?><?php echo ($district_name!='--')? '—'.$district_name:''; ?><?php echo ($tehsil_name!='--')? '—'.$tehsil_name:''; ?><?php echo ($uc_name!='--')? '—'.$uc_name:''; ?><?php echo ($area_name!='--')? '—'.$area_name:''; ?><?php echo ($sub_area_name!='--')? '—'.$sub_area_name:''; ?>(<?php echo $location_detail->job_code; ?>)">
+                          <input class="form-control" placeholder="" name="job_title" type="text" value="<?php echo $proj_name; ?>-<?php echo $province_name; ?>-<?php echo $district_name; ?>-<?php echo $tehsil_name; ?>-<?php echo $uc_name; ?> <?php echo $area_name; ?>-<?php echo $sub_area_name; ?> (<?php echo $designation_name; ?>)">
                       </div>
                   </div>
                    

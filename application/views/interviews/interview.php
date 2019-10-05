@@ -630,7 +630,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                                         $date2=date_create(date('Y-m-d', strtotime($row->assigned_date)));
                                         $diff=date_diff($date1, $date2); ?>
                                     <td>Interview Date</td>
-                                    <td><?= date('M d, Y', strtotime($row->assigned_date)) .', scheduled '.$diff->format('%a days ago.'); ?>
+                                    <td><?= date('M d, Y', strtotime($row->assigned_date)) .', '.$diff->format('%a days passed.'); ?>
                                     </td>
                                   </tr>
                                   <tr>

@@ -30,7 +30,7 @@
 						<div class="col-md-5">
 							<div class="tabelTopBtn">
 								<a class="btn" href="<?php echo base_url('tests/add_questions'); ?>">
-									<img src="<?php echo base_url('dashboardDesign/assets/img/plus.png'); ?>" alt=""> 
+									<img src="<?php echo base_url('assets/img/plus.png'); ?>" alt=""> 
 									Create Exam
 								</a>
 							</div>
@@ -114,7 +114,7 @@
 												<th>project</th>
 												<th>email</th>
 												<th>date applied</th>
-												<th>exam taken</th>
+												<th>initial date</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -136,7 +136,7 @@
 													<?php echo date('M d, Y', strtotime($app->created_at)); ?>
 												</td>
 												<td>
-													<?php echo date('M d, Y', strtotime($app->exam_date)); ?>
+													<?php echo date('M d, Y', strtotime($app->created_at)); ?>
 												</td>
 											</tr>
 											<?php endforeach; ?>
@@ -175,7 +175,7 @@
 				<div class="col-md-6">
 					<div class="tabelTopBtn">
 						<a class="btn" href="<?php echo base_url('tests/jobs'); ?>">
-							<img src="<?php echo base_url('dashboardDesign/assets/img/icon2.png'); ?>" alt=""> 
+							<img src="<?php echo base_url('assets/img/icon2.png'); ?>" alt=""> 
 							View All
 						</a>
 					</div>

@@ -105,11 +105,11 @@ h4 {
                                 <thead>
                                     <tr>
                                         <th>sr #</th>
-        				                        <th>manager</th>
-        				                        <th>type</th>
-        				                        <th>days left</th>
-        				                        <th>status</th>
-        				                        <th>actions</th>
+				                        <th>manager</th>
+				                        <th>type</th>
+				                        <th>days left</th>
+				                        <th>status</th>
+				                        <th>actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

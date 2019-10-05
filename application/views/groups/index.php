@@ -85,7 +85,7 @@
 															<td><?= $count; ?></td>
 															<td><?= ucwords($r->name); ?></td>
 															<td>
-																<a href="<?= base_url(); ?>Permissions/view/<?= $r->id; ?>" class="label label-primary">View</a>
+																<a href="<?= base_url(); ?>Permissions/view/<?= $r->id; ?>" class="label label-primary">View / Update</a>
 															</td>
 														</tr>
 														<?php $count++; endforeach; ?>

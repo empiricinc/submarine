@@ -49,9 +49,9 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="submitBtn">
-							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-							<button type="reset" class="btn btnSubmit">Reset</button>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
+							<button id="save" type="submit" class="btn btn-success btn-sm">Submit</button>
+							<button type="reset" class="btn btn-info btn-sm">Reset</button>
+							<a href="javascript:history.go(-1);" class="btn btn-default btn-sm">Cancel</a>
 						</div>
 					</div>
 				</form>
@@ -76,8 +76,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php if($sl3['accessLevel3']): // Check Access Level.
-					if(!empty($hotels)):
+					<?php if(!empty($hotels)):
 					foreach($hotels as $hotel): ?>
 					<tr>
 						<td><?php echo $hotel->name; ?></td>
@@ -85,11 +84,11 @@
 						<td><?php echo $hotel->hotel_name; ?></td>
 						<td>
 							<div class="submitBtn">
-								<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>">
+								<a href="" class="btn btn-info btn-xs" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>">
 								<i class="fa fa-plus"></i> Room Charges</a>
-								<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>">
+								<a href="" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>">
 								<i class="fa fa-plus"></i> Amenities</a>
-								<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit">
+								<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btn-success btn-xs">
 								<i class="fa fa-eye"></i> View Prices</a>
 							</div>
 						</td>
@@ -108,7 +107,7 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Add amenities here</h4>
+					        <h4 class="modal-title">Add amenities</h4>
 					      </div>
 					      <div class="modal-body">
 					      	<div class="row">
@@ -141,8 +140,8 @@
 									</div>
 									<div class="col-lg-12">
 										<div class="submitBtn">
-											<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-											<button type="reset" class="btn btnSubmit">Reset</button>
+											<button id="save" type="submit" class="btn btn-success">Submit</button>
+											<button type="reset" class="btn btn-info">Reset</button>
 										</div>
 									</div>
 						      	</form>
@@ -150,7 +149,7 @@
 					      </div>
 					      <div class="modal-footer">
 					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					      	</div>
 					      </div>
 					    </div>
@@ -163,7 +162,7 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Add prices here</h4>
+					        <h4 class="modal-title">Add room charges</h4>
 					      </div>
 					      <div class="modal-body">
 					      	<div class="row">
@@ -186,8 +185,8 @@
 								</div>
 								<div class="col-lg-12">
 									<div class="submitBtn">
-										<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-										<button type="reset" class="btn btnSubmit">Reset</button>
+										<button id="save" type="submit" class="btn btn-success">Submit</button>
+										<button type="reset" class="btn btn-info">Reset</button>
 									</div>
 								</div>
 					      	</form>
@@ -195,7 +194,7 @@
 					      </div>
 					      <div class="modal-footer">
 					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					      	</div>
 					      </div>
 					    </div>
@@ -208,7 +207,7 @@
 					    <div class="modal-content">
 					      <div class="modal-header">
 					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Modify room prices or type here</h4>
+					        <h4 class="modal-title">Modify hotel name</h4>
 					      </div>
 					      <div class="modal-body">
 					      	<div class="row">
@@ -221,8 +220,8 @@
 								</div>
 								<div class="col-lg-12">
 									<div class="submitBtn">
-										<button id="save" type="submit" class="btn btnSubmit">Update</button>
-										<button type="reset" class="btn btnSubmit">Reset</button>
+										<button id="save" type="submit" class="btn btn-success">Update</button>
+										<button type="reset" class="btn btn-info">Reset</button>
 									</div>
 								</div>
 					      	</form>
@@ -230,13 +229,13 @@
 					      </div>
 					      <div class="modal-footer">
 					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					      		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					      	</div>
 					      </div>
 					    </div>
 					  </div>
 					</div>
-					<?php endforeach; endif; // IF condition for Access Level check.  ?>
+					<?php endforeach;  ?>
 				</tbody>
 			</table>
 			<div class="row">
@@ -254,8 +253,7 @@
 								<h3><?php if(!empty($prices)){ echo $prices[0]->hotel_name; }?> | <small> Amenities & Prices list</small></h3>
 							</div>
 							<div class="panel-body">
-								<?php if($sl3['accessLevel3']): 
-								if(!empty($prices)): foreach($prices as $price): ?>
+								<?php if(!empty($prices)): foreach($prices as $price): ?>
 								<div class="row">
 									<div class="col-lg-3">
 										<strong>Room Type: </strong><?php echo $price->room_type; ?>
@@ -271,7 +269,7 @@
 									</div>
 									<hr>
 								</div>
-								<?php endforeach; endif; endif; ?>
+								<?php endforeach; endif; ?>
 							</div>
 							<div class="panel-footer text-right">
 								<p>

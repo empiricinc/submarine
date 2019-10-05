@@ -144,11 +144,11 @@ class Profile extends MY_Controller {
 
 			'user_role_id' => $result[0]->user_role_id,
 
-		//	'date_of_birth' => $result[0]->date_of_birth,
+			'date_of_birth' => $result[0]->date_of_birth,
 
 			'date_of_leaving' => $result[0]->date_of_leaving,
 
-		//	'gender' => $result[0]->gender,
+			'gender' => $result[0]->gender,
 
 			'marital_status' => $result[0]->marital_status,
 

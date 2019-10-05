@@ -92,44 +92,43 @@ class tests_model extends CI_Model{
 	}
 	// Count applicants' marks on the basis of answers submitted.
 	public function count_applicants($appli_id, $date_from ='', $date_to='', $designation, $name, $job_id, $project){
-		$this->db->select('test_result.rollnumber,
-							test_result.obtain_marks,
-							test_result.total_marks,
-							test_result.sdt,
-							xin_job_applications.application_id,
-							xin_job_applications.fullname,
-							xin_job_applications.job_id,
-							xin_companies.company_id,
-							xin_companies.name,
-							xin_designations.designation_id,
-							xin_designations.designation_name,
-							xin_jobs.job_id,
-							xin_jobs.job_title,
-							xin_jobs.company,
-							xin_jobs.designation_id');
-		$this->db->from('test_result');
-		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id', 'left');
-		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
-		$this->db->join('xin_companies' , 'xin_jobs.company = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->where(array('test_result.rollnumber' => $appli_id));
-		$this->db->or_where('test_result.sdt >=', $date_from);
-		$this->db->where('test_result.sdt <=', $date_to);
-		$this->db->or_where('xin_jobs.designation_id', $designation);
+		$this->db->select('COUNT(ex_applicants.applicant_id) as marks,
+							ex_applicants.applicant_id,
+								ex_applicants.question_id,
+								ex_applicants.answer_id,
+								ex_applicants.exam_date,
+								ex_questions.id,
+								ex_questions.project_id,
+								ex_questions.designation_id,
+								ex_answers.ans_id,
+								ex_answers.status,
+								xin_job_applications.application_id,
+								xin_job_applications.fullname,
+								xin_companies.company_id,
+								xin_companies.name,
+								xin_designations.designation_id,
+								xin_designations.designation_name,
+								xin_jobs.job_id,
+								xin_jobs.job_title');
+		$this->db->from('ex_applicants');
+		$this->db->join('ex_answers', 'ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1');
+		$this->db->join('ex_questions', 'ex_applicants.question_id = ex_questions.id');
+		$this->db->join('xin_job_applications', 'ex_applicants.applicant_id = xin_job_applications.application_id');
+		$this->db->join('xin_companies'
+			, 'ex_questions.project_id = xin_companies.company_id');
+		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
+		$this->db->where(array('ex_answers.status' => 1, 'applicant_id' => $appli_id));
+		$this->db->or_where('ex_applicants.exam_date >=', $date_from);
+		$this->db->where('ex_applicants.exam_date <=', $date_to);
+		$this->db->or_where('ex_questions.designation_id', $designation);
 		$this->db->or_where('xin_job_applications.fullname', $name);
-		$this->db->or_where(array('xin_jobs.company' => $project));
+		$this->db->or_where(array('ex_questions.project_id' => $project));
 		$this->db->or_where('xin_job_applications.job_id', $job_id);
-		$this->db->order_by('test_result.rollnumber', 'DESC');
+		$this->db->group_by('ex_applicants.applicant_id');
 		$query = $this->db->get();
-		// echo $this->db->last_query();
 		return $query->result();
 	}
-	// Insert the applicant's total marks into another table.
-	// public function save_test_result(){
-	// 	$query = $this->db->query('SELECT COUNT(ex_applicants.applicant_id) AS marks FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = 1');
-	// 	echo $this->db->last_query();
-	// 	return $query->row_array();
-	// }
 	// Calculate the applicant's marks and show it on the page to the applicant or admin.
 	function applicant_result_search($appli_id){ // Passed $app_id as argument to search for result
 		$this->db->select('ex_applicants.applicant_id');
@@ -286,6 +285,7 @@ class tests_model extends CI_Model{
 		$this->db->select('xin_job_applications.user_id,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
+							 
 							xin_job_applications.created_at,
 							xin_job_applications.job_id,
 							xin_job_applications.email,
@@ -294,7 +294,6 @@ class tests_model extends CI_Model{
 		$this->db->from('xin_job_applications');
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
 		$this->db->order_by('xin_job_applications.created_at', 'DESC');
-		$this->db->where('application_id NOT IN (SELECT applicant_id FROM ex_applicants)');
 		$this->db->limit($limit, $offset);
 		$exams = $this->db->get();
 		return $exams->result();
@@ -435,7 +434,7 @@ class tests_model extends CI_Model{
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							ex_applicants.exam_date,
+							 
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
@@ -454,11 +453,11 @@ class tests_model extends CI_Model{
 	// applicants appeared in exam .
 	public function appeared_applicants(){
 		$this->db->select('ex_applicants.applicant_id,
-							ex_applicants.exam_date,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
+							 
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
@@ -479,11 +478,11 @@ class tests_model extends CI_Model{
 	// all appeared applicants
 	public function all_appeared($limit='', $offset=''){
 		$this->db->select('ex_applicants.applicant_id,
-							ex_applicants.exam_date,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
+							 
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
@@ -593,14 +592,11 @@ class tests_model extends CI_Model{
 							xin_jobs.company,
 							xin_jobs.designation_id,
 							xin_companies.company_id,
-							xin_companies.name as compName,
-							assign_test.rollnumber,
-							assign_test.test_date as exam_date');
+							xin_companies.name as compName');
 		$this->db->from('xin_job_applications');
-		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
-		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('assign_test', 'xin_job_applications.application_id = assign_test.rollnumber', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id');
 		$this->db->where('xin_job_applications.created_at >=', $date_from);
 		$this->db->where('xin_job_applications.created_at <=', $date_to);
 		$this->db->or_where('xin_job_applications.job_id', $job_id);

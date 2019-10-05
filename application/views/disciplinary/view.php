@@ -112,16 +112,16 @@
 												
 												<?php $count=1; foreach($complaints AS $c): 
 													$label = '';
-													if($c->status_id == "1") 
-														$label = "label label-warning";
-													elseif($c->status_id == "2")
-														$label = "label label-primary";
-													elseif($c->status_id == "3")
-														$label = "label label-success";
-													elseif($c->status_id == "4")
-														$label = "label label-info";
-													elseif($c->status_id == "5")
-														$label = "label label-danger";
+													// if($c->status_id == "1") 
+													// 	$label = "label label-warning";
+													// elseif($c->status_id == "2")
+													// 	$label = "label label-primary";
+													// elseif($c->status_id == "3")
+													// 	$label = "label label-success";
+													// elseif($c->status_id == "4")
+													// 	$label = "label label-info";
+													// elseif($c->status_id == "5")
+													// 	$label = "label label-danger";
 												?>
 
 													<tr data="<?= $c->id; ?>">
@@ -135,7 +135,7 @@
 														</td>
 														<td><?= date('d-m-Y', strtotime($c->reported_date)); ?></td>
 														<td>
-															<label class="<?= $label; ?>"><?= $c->status_text; ?></label>
+															<label class="label label-primary"><?= $c->status_text; ?></label>
 														</td>
 													</tr>
 												<?php $count++; endforeach; ?>

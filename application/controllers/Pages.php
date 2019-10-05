@@ -5,10 +5,23 @@
  */
 class Pages extends MY_Controller
 {
-	
+	var $session_data;
 	function __construct()
 	{
 		parent::__construct();
+		if(empty($this->session->username))
+            redirect(base_url());
+
+        $roles = array(1);
+        if(!in_array($this->session->username['user_role'], $roles))
+			redirect(base_url().'dashboard');
+
+		$this->session_data = array(
+					        	'user_id' => $this->session->username['employee_id'], 
+					        	'project_id' => $this->session->username['project_id'], 
+					        	'province_id' => $this->session->username['province_id']
+					        );
+		
 		$this->load->model(array(
 							'Groups_model',
 							'Pages_model',
@@ -26,20 +39,20 @@ class Pages extends MY_Controller
 
 	function add()
 	{
-		// $employee_id = $this->session->user_id;
-		$employee_id = 1;
+		$employee_id = $this->session->user_id;
+
 		if(isset($_POST))
 		{
 			$name = $this->input->post('page_name');
 			$url = $this->input->post('url');
 			$parent = $this->input->post('parent');
 			$slug = str_replace(' ', '_', trim(strtolower($name)));
-			// var_dump($_POST); exit;
+
 			$data = array(
 				'name' => strtolower($name), 
 				'slug' => $slug,
 				'parent' => $parent,
-				'url' => $url,
+				'url' => strtolower($url),
 				'created_by' => $employee_id
 			);
 

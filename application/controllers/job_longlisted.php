@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-class Job_longlisted extends MY_Controller {
+class job_longlisted extends MY_Controller {
 
 	
 
@@ -76,12 +76,9 @@ class Job_longlisted extends MY_Controller {
 
 		$this->load->model("Designation_model");
 
-		$this->load->model("Job_criteria_model");
+$this->load->model("job_criteria_model");
 
-		$this->load->model('Job_longlisted_model'); 
-
-		$this->load->model("Department_model");
-		
+$this->load->model('job_longlisted_model'); // load model
 
 	}
 
@@ -152,7 +149,7 @@ class Job_longlisted extends MY_Controller {
 
  public function longlisttoshortlist($jobId) {
 
-    if($this->Job_longlisted_model->updatelonglist($jobId)) // call the method from the controller
+    if($this->job_longlisted_model->updatelonglist($jobId)) // call the method from the controller
 	    {
 	       // echo 'update successful...';  	
 	       $this->session->set_flashdata('message', 'Information Has been Successfully Inserted');
@@ -176,35 +173,20 @@ class Job_longlisted extends MY_Controller {
   public function addapplicationtoReserve($jobId) {   
 
     
-      $job_id =  $this->uri->segment(3);
+    //echo $job_id =  $this->uri->segment(3);
 	  $application_id =  $this->uri->segment(4);  
  
-		 $this->Job_longlisted_model->addjobtoReserve($job_id);
-		 $this->Job_longlisted_model->addapplicationtoReserve($application_id);
-
+		 $this->job_longlisted_model->addapplicationtoReserve($application_id);
 		 $this->session->set_flashdata('userselectedmessage', 'Applicant Reserved Successfully');
+
+		 
+
+		
 
 		redirect($_SERVER['HTTP_REFERER']); 
 
 
  }
-
-
-	  public function activateReserve() {   
-
-	    
-	        $job_id =  $this->uri->segment(3);
-		    $locationId =  $this->uri->segment(4);  
-	 
-			 $this->Job_longlisted_model->openReserve($job_id);
-			 $this->Job_longlisted_model->locationClosed($locationId);
-
-			 $this->session->set_flashdata('message', 'Reserved Applicant Activated Successfully');
-
-			redirect($_SERVER['HTTP_REFERER']); 
-
-
-	 }
 
 
 
@@ -231,8 +213,8 @@ class Job_longlisted extends MY_Controller {
 
         }else{	 
 
-		 $this->Job_longlisted_model->select_candidate($data);
-		 $this->Job_longlisted_model->update_user_to_select($application_id);
+		 $this->job_longlisted_model->select_candidate($data);
+		 $this->job_longlisted_model->update_user_to_select($application_id);
 		 $this->session->set_flashdata('userselectedmessage', 'User Selected Successfully');
 
 		}
@@ -246,50 +228,9 @@ class Job_longlisted extends MY_Controller {
 
 
 
-  public function selectedtopermanantR($jobId) {   
-
-    
-     $job_id =  $this->uri->segment(3);
-	 $application_id =  $this->uri->segment(4);
-	 $total_positions =  $this->uri->segment(5);
-
-   	$data = array(
-					'job_id' => $job_id,
-					'user_id' => $application_id, 
-					'sdt' => date('Y-m-d h:i:s'),
-					);
-
-	
-		$this->db->where(" job_id =" . $job_id);
-        $this->db->from('selected_candidates');
-      
-      /*  $TuserSelected = $this->db->count_all_results();
-
-        if($TuserSelected>=$total_positions){
-
-        	$this->session->set_flashdata('positionsLimitMessage', 'Positions Limit Completeted');	
-
-        }else{	*/ 
-
-		 $this->Job_longlisted_model->select_candidate($data);
-		 $this->Job_longlisted_model->update_user_to_select2($application_id);
-		 $this->session->set_flashdata('userselectedmessage', 'User Selected Successfully');
-
-		//}
-
-		
-
-		redirect($_SERVER['HTTP_REFERER']); 
-
-
- }
-
-
-
-
  public function addtolonglisted($jobId) {
 
-    if($this->Job_longlisted_model->addtolonglist($jobId)) // call the method from the controller
+    if($this->job_longlisted_model->addtolonglist($jobId)) // call the method from the controller
 	    {
 	       // echo 'update successful...';  	
 	       $this->session->set_flashdata('message', 'Information Has been Successfully Inserted');
@@ -309,51 +250,27 @@ class Job_longlisted extends MY_Controller {
  }
 
 
-
- public function closethisjob($jobId) {
-
-    if($this->Job_longlisted_model->addtoclosedjob($jobId)) // call the method from the controller
-	    {
-	       // echo 'update successful...';  	
-	       $this->session->set_flashdata('contactmessage', 'Job Closed Successfully');
-
-	       //echo $_SERVER['HTTP_REFERER']; // $this->agent->referrer();
-
-			redirect($_SERVER['HTTP_REFERER']); 
-
-
-	    }
-	    else
-	    {
-	        echo 'update not successful...';
-	    }
-
-
- }
-
-
  public function getlonglistedsinglerecord($jobId) {
 
-			 $jobdetails = $this->Job_longlisted_model->read_postedjob_information($jobId);
+			 $jobdetails = $this->job_longlisted_model->getjobdetails($jobId);
 
-				 $gender = $jobdetails[0]->gender;
-				 $age = $jobdetails[0]->age;
-				 $education = $jobdetails[0]->education;
-				 $minimum_experience = $jobdetails[0]->minimum_experience;
-				 $domicile = $jobdetails[0]->domicile;
-				 $province = $jobdetails[0]->province;
-				 $city_name = $jobdetails[0]->city_name;
+			  foreach($jobdetails as $jobdetails){
+	                       $gender = $jobdetails->gender;
+	                       $age = $jobdetails->age;
+	                       $education = $jobdetails->education;
+	                       $exp = $jobdetails->minimum_experience;
+	                       $domicile = $jobdetails->domicile;
+	                       $province = $jobdetails->province;
+	                       $city_name = $jobdetails->city_name;
+                       }
 
-
-				 $data['allCandidates'] = $this->Job_longlisted_model->getCandidatesAuto($jobId,$gender,$age,$education,$minimum_experience,$province,$city_name);
-
-
-				 $data['allCandidatesnn'] = $this->Job_longlisted_model->getCandidatesnn($jobId);                            
-				 $data['getage'] = $this->Job_criteria_model->getAge($age);
-				 $data['getEducation'] = $this->Job_criteria_model->education($education);
-				 $data['getDomicile'] = $this->Job_criteria_model->domicile($domicile);
-				 $data['getProvince'] = $this->Job_criteria_model->province($province);
-				 $data['getcityName'] = $this->Job_criteria_model->getcity($city_name);
+				 $data['allCandidates'] = $this->job_longlisted_model->getCandidates($jobId,$gender,$age,$education,$exp,$domicile,$province,$city_name);
+				 $data['allCandidatesnn'] = $this->job_longlisted_model->getCandidatesnn($jobId,$gender,$age,$education,$exp,$domicile,$province,$city_name);                            
+				 $data['getage'] = $this->job_criteria_model->getAge($age);
+				 $data['getEducation'] = $this->job_criteria_model->education($education);
+				 $data['getDomicile'] = $this->job_criteria_model->domicile($domicile);
+				 $data['getProvince'] = $this->job_criteria_model->province($province);
+				 $data['getcityName'] = $this->job_criteria_model->getcity($city_name);
 				    //print_r($data['allCandidates']);
 				        $data['breadcrumbs'] = $this->lang->line('left_job_posts');
 						$data['path_url'] = 'job_longlisted';
@@ -367,7 +284,7 @@ class Job_longlisted extends MY_Controller {
 
 public function getsinglejoballapplication($jobId) {
 
-			 $jobdetails = $this->Job_longlisted_model->getjobdetails($jobId);
+			 $jobdetails = $this->job_longlisted_model->getjobdetails($jobId);
 
 			  foreach($jobdetails as $jobdetails){
 	                       $gender = $jobdetails->gender;
@@ -379,12 +296,12 @@ public function getsinglejoballapplication($jobId) {
 	                       $city_name = $jobdetails->city_name;
                        }
 
-				 $data['allCandidates'] = $this->Job_longlisted_model->singlejoballCandidates($jobId);                            
-				 $data['getage'] = $this->Job_criteria_model->getAge($age);
-				 $data['getEducation'] = $this->Job_criteria_model->education($education);
-				 $data['getDomicile'] = $this->Job_criteria_model->domicile($domicile);
-				 $data['getProvince'] = $this->Job_criteria_model->province($province);
-				 $data['getcityName'] = $this->Job_criteria_model->getcity($city_name);
+				 $data['allCandidates'] = $this->job_longlisted_model->singlejoballCandidates($jobId);                            
+				 $data['getage'] = $this->job_criteria_model->getAge($age);
+				 $data['getEducation'] = $this->job_criteria_model->education($education);
+				 $data['getDomicile'] = $this->job_criteria_model->domicile($domicile);
+				 $data['getProvince'] = $this->job_criteria_model->province($province);
+				 $data['getcityName'] = $this->job_criteria_model->getcity($city_name);
 				    //print_r($data['allCandidates']);
 				        $data['breadcrumbs'] = $this->lang->line('left_job_posts');
 						$data['path_url'] = 'job_longlisted';
@@ -400,7 +317,7 @@ public function getsinglejoballapplication($jobId) {
  public function getshortlistedrecord($jobId) {
   
 
- $jobdetails = $this->Job_longlisted_model->getjobdetails($jobId);
+ $jobdetails = $this->job_longlisted_model->getjobdetails($jobId);
   
   foreach($jobdetails as $jobdetails){
                                $gender = $jobdetails->gender;
@@ -415,18 +332,18 @@ public function getsinglejoballapplication($jobId) {
                             }
  
 
- //$data['allCandidates'] = $this->Job_longlisted_model->getShortlistCandidates($jobId,$gender,$age,$education,$exp,$domicile,$province,$city_name);
- $data['allCandidates'] = $this->Job_longlisted_model->getShortlistCandidatesnn($jobId);                            
+ //$data['allCandidates'] = $this->job_longlisted_model->getShortlistCandidates($jobId,$gender,$age,$education,$exp,$domicile,$province,$city_name);
+ $data['allCandidates'] = $this->job_longlisted_model->getShortlistCandidatesnn($jobId);                            
 
- $data['getage'] = $this->Job_criteria_model->getAge($age);
+ $data['getage'] = $this->job_criteria_model->getAge($age);
  
- $data['getEducation'] = $this->Job_criteria_model->education($education);
+ $data['getEducation'] = $this->job_criteria_model->education($education);
  
- $data['getDomicile'] = $this->Job_criteria_model->domicile($domicile);
+ $data['getDomicile'] = $this->job_criteria_model->domicile($domicile);
   
- $data['getProvince'] = $this->Job_criteria_model->province($province);
+ $data['getProvince'] = $this->job_criteria_model->province($province);
 
- $data['getcityName'] = $this->Job_criteria_model->getcity($city_name);
+ $data['getcityName'] = $this->job_criteria_model->getcity($city_name);
    
     //print_r($data['allCandidates']);
         
@@ -441,48 +358,6 @@ public function getsinglejoballapplication($jobId) {
 
 
 
-
-
-
- public function getReservedRecords($jobId) {
-  
-
- $jobdetails = $this->Job_longlisted_model->getjobdetails($jobId);
-  
-  foreach($jobdetails as $jobdetails){
-                               $gender = $jobdetails->gender;
-                               $age = $jobdetails->age;
-                               $education = $jobdetails->education;
-                               $exp = $jobdetails->minimum_experience;
-
-                               $domicile = $jobdetails->domicile;
-                               $province = $jobdetails->province;
-                               $city_name = $jobdetails->city_name;
-
-                            }
- 
- $data['allCandidates'] = $this->Job_longlisted_model->getReservedCandidates($jobId);                            
-
- $data['getage'] = $this->Job_criteria_model->getAge($age);
- 
- $data['getEducation'] = $this->Job_criteria_model->education($education);
- 
- $data['getDomicile'] = $this->Job_criteria_model->domicile($domicile);
-  
- $data['getProvince'] = $this->Job_criteria_model->province($province);
-
- $data['getcityName'] = $this->Job_criteria_model->getcity($city_name);
-   
-    //print_r($data['allCandidates']);
-        
-        $data['breadcrumbs'] = $this->lang->line('left_job_posts');
-
-		$data['path_url'] = 'job_longlisted';
-
-        $data['subview'] = $this->load->view("job_post/job_longlisted", $data, TRUE);
-
-			$this->load->view('layout_main', $data); //page load 
-    }
 
 
 
@@ -492,7 +367,7 @@ public function getsinglejoballapplication($jobId) {
  public function getselectedrecord($jobId) {
   
 
- $jobdetails = $this->Job_longlisted_model->getjobdetails($jobId);
+ $jobdetails = $this->job_longlisted_model->getjobdetails($jobId);
   
   foreach($jobdetails as $jobdetails){
                                
@@ -511,20 +386,17 @@ $department_id = $jobdetails->department_id;
 $data = array('company_id' => $company_id, 'designation_id' => $designation_id, 'department_id' => $department_id);
  
 
- //$data['allCandidates'] = $this->Job_longlisted_model->getSelectedCandidates($jobId,$gender,$age,$education,$exp,$domicile,$province,$city_name);                            
-$data['allCandidates'] = $this->Job_longlisted_model->getSelectedCandidatesnn2($jobId);
- $data['getage'] = $this->Job_criteria_model->getAge($age);
+ //$data['allCandidates'] = $this->job_longlisted_model->getSelectedCandidates($jobId,$gender,$age,$education,$exp,$domicile,$province,$city_name);                            
+$data['allCandidates'] = $this->job_longlisted_model->getSelectedCandidatesnn2($jobId);
+ $data['getage'] = $this->job_criteria_model->getAge($age);
  
- $data['getEducation'] = $this->Job_criteria_model->education($education);
+ $data['getEducation'] = $this->job_criteria_model->education($education);
  
- $data['getDomicile'] = $this->Job_criteria_model->domicile($domicile);
+ $data['getDomicile'] = $this->job_criteria_model->domicile($domicile);
   
- $data['getProvince'] = $this->Job_criteria_model->province($province);
+ $data['getProvince'] = $this->job_criteria_model->province($province);
 
- $data['getcityName'] = $this->Job_criteria_model->getcity($city_name);
-
- $data['all_job_types'] = $this->Job_post_model->all_job_types();
-
+ $data['getcityName'] = $this->job_criteria_model->getcity($city_name);
    
     //print_r($data['allCandidates']);
         
@@ -538,52 +410,6 @@ $data['allCandidates'] = $this->Job_longlisted_model->getSelectedCandidatesnn2($
     }
 
 
-
-
- public function reserveselectedrecord($jobId) {
-  
-
- $jobdetails = $this->Job_longlisted_model->getjobdetails($jobId);
-  
-  foreach($jobdetails as $jobdetails){
-                               
-$company_id = $jobdetails->company;
-$designation_id = $jobdetails->designation_id;
-$department_id = $jobdetails->department_id;
-                               $gender = $jobdetails->gender;
-                               $age = $jobdetails->age;
-                               $education = $jobdetails->education;
-                               $exp = $jobdetails->minimum_experience;
-                               $domicile = $jobdetails->domicile;
-                               $province = $jobdetails->province;
-                               $city_name = $jobdetails->city_name;
-
-                            }
-$data = array('company_id' => $company_id, 'designation_id' => $designation_id, 'department_id' => $department_id);
- 
-
-                            
- $data['allCandidates'] = $this->Job_longlisted_model->getReserveSelectedCandidates($jobId);
- $data['getage'] = $this->Job_criteria_model->getAge($age);
- 
- $data['getEducation'] = $this->Job_criteria_model->education($education);
- 
- $data['getDomicile'] = $this->Job_criteria_model->domicile($domicile);
-  
- $data['getProvince'] = $this->Job_criteria_model->province($province);
-
- $data['getcityName'] = $this->Job_criteria_model->getcity($city_name);
-   
-    //print_r($data['allCandidates']);
-        
-        $data['breadcrumbs'] = $this->lang->line('left_job_posts');
-
-		$data['path_url'] = 'job_longlisted';
-
-        $data['subview'] = $this->load->view("job_post/job_longlisted", $data, TRUE);
-
-			$this->load->view('layout_main', $data); //page load 
-    }
 
 
 

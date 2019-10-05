@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-class Vacant_position extends MY_Controller {
+class vacant_position extends MY_Controller {
 
 	
 
@@ -68,6 +68,11 @@ class Vacant_position extends MY_Controller {
 
 		$this->load->library('form_validation');
 
+		
+
+
+		//load the model
+
 		$this->load->model("Job_post_model");
 
 		$this->load->model("Xin_model");
@@ -78,9 +83,9 @@ class Vacant_position extends MY_Controller {
 
 		$this->load->model("Department_model");
 
-        $this->load->model('ProvinceCity');
+        $this->load->model('provinceCity');
 
-        $this->load->model('Job_longlisted_model'); // load model
+        $this->load->model('job_longlisted_model'); // load model
         
 		$this->load->model("Company_model");
 
@@ -123,28 +128,13 @@ class Vacant_position extends MY_Controller {
 		}
 
 
-		$data['projid'] = $session['project_id'];
-		$data['provid'] = $session['provience_id'];
-
-		//$data['sl1'] = $this->session->userdata('accessLevel');
-		$data['sl2'] = $this->session->userdata('accessLevel');
-		$data['sl3'] = $this->session->userdata('accessLevel'); //echo $data['sl3']['accessLevel3']; exit();
 
 		$data['title'] = $this->Xin_model->site_title();
 
-        $data['geProvinces'] = $this->ProvinceCity->getAllProvinces();   
-        $data['getakcity'] = $this->ProvinceCity->getCity();   
-		        
-		/*if($_POST){ ($this->input->post('province_id')=='all') ?  $data['location_job_position'] = $this->Location_model->all_location_job_positionCondiall($_POST['company_id']) : $data['location_job_position'] = $this->Location_model->all_location_job_positionCondi($_POST['company_id'],$_POST['province_id']);
-		}else{
-			//if($data['sl2']['accessLevel2']){
-			if(isset($data['sl2']['accessLevel2'])  &&  !empty($data['sl2']['accessLevel2'])){	
-				        $data['location_job_position'] = $this->Location_model->all_location_job_position();
-				 }else{ 
-			            $data['location_job_position'] = $this->Location_model->all_location_job_positionn($projid,$provid);
-			          }			 			 
-		}
-		*/
+        $data['geProvinces'] = $this->provinceCity->getAllProvinces();   
+        $data['getakcity'] = $this->provinceCity->getCity();   
+
+		$data['location_job_position'] = $this->Location_model->all_location_job_position();
 
 
 

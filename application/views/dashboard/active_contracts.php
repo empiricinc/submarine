@@ -101,12 +101,6 @@ $(document).ready(function() {
     $('#contact_list2').DataTable();
 });
 </script>
-<?php
-  $active = $this->Contract_model->count_active_contracts();
-  $printed = $this->Contract_model->count_printed_contracts();
-  $distributed = $this->Contract_model->count_distributed_contracts();
-  $attached = $this->Contract_model->count_attached_contracts();
-?>
 <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
   <section class="secIndexTable">
     <div class="mainTableWhite">
@@ -118,17 +112,15 @@ $(document).ready(function() {
         </div>
         <div class="col-md-5 text-right">
           <div class="tabelTopBtn status-btns">
-            <span id="active" class="btn"><b><?= $active; ?></b> Active</span>
-            <span id="printed" class="btn"><b><?= $printed; ?></b> Printed</span>
-            <span id="distributed" class="btn"><b><?= $distributed; ?></b> Distributed</span>
-            <span id="attached" class="btn"><b><?= $attached; ?></b> Attached to File</span>
+            <span id="active" class="btn">Active</span>
+            <span id="printed" class="btn">Printed</span>
+            <span id="distributed" class="btn">Distributed</span>
+            <span id="attached" class="btn">Attached to File</span>
           </div>
         </div>
         <div class="col-md-3 text-right" id="printBtn" style="display: none; font-size: 30px; margin-top: 5px; margin-left: -14px;">
           <a data-toggle="tooltip" title="Activated contracts, no further action needed, you can print them if not printed !" data-placement="left" href="javascript:void(0)"><i class="fa fa-arrow-circle-right" style="color: green;"></i></a>
-          <a target="blank" data-toggle="tooltip" title="Print Contracts" data-placement="left" href="<?= base_url('contract/print_all_contracts'); ?>"><i class="fa fa-print"></i></a>
-          <a target="blank" data-toggle="tooltip" title="Add to distributed" data-placement="left" href="<?= base_url('contract/bulk_distribute'); ?>"><i class="fa fa-share"></i></a>
-          <a target="blank" data-toggle="tooltip" title="Attach to personal file" data-placement="left" href="<?= base_url('contract/bulk_attach'); ?>"><i class="fa fa-forward"></i></a>
+          <a target="blank" data-toggle="tooltip" title="Print Contracts" href="<?= base_url('contract/print_all_contracts'); ?>"><i class="fa fa-print"></i></a>
         </div>
       </div>
       <div class="row">
@@ -139,7 +131,6 @@ $(document).ready(function() {
                 <thead>
                   <tr>
                     <th><input type="checkbox" name="checkPrint" id="checkAll"></th>
-                    <th>emp iD</th>
                     <th>name</th>
                     <th>project</th>
                     <th>designation</th>
@@ -155,14 +146,11 @@ $(document).ready(function() {
                 <?php
                   foreach ($active_contracts as $contract){
                   $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
-                  if($contract->status == 1){
+                  if($contract->status == 1 OR $contract->status == 2 OR $contract->status == 3 OR $contract->status == 4){
                 ?>
                   <tr>
                     <td>
                       <input type="checkbox" name="print" id="checkPrint">
-                    </td>
-                    <td>
-                      CTC-<?= $contract->name.'-'.$contract->employee_id; ?>
                     </td>
                     <td>
                       <?php echo $contract->first_name.' '.$contract->last_name;?>
@@ -195,7 +183,8 @@ $(document).ready(function() {
                         <a href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>"><i class="fa fa-check-circle"></i></a>
                         <a href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
                       <?php elseif($contract->status == 1): ?>
-                        <a data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
+                        <i class="fa fa-check-circle" data-toggle="tooltip" title="Activated, but no further actions performed yet."></i>
+                        <a href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>"><i class="fa fa-print"></i></a>
                       <?php elseif($contract->status == 2): ?>
                         <a data-toggle="tooltip" title="Add to distributed." href="<?= base_url(); ?>contract/distribute/<?= $contract->user_id; ?>"><i class="fa fa-share"></i></a>
                       <?php elseif($contract->status == 3): ?>
@@ -272,80 +261,25 @@ $(document).ready(function() {
         success: function(res){
           result = "";
           $.each(res, function(key, val){
-            var fromDate = new Date(val.from_date).toDateString();
-            var toDate = new Date(val.to_date).toDateString();
-            var subDate = new Date(val.sdt).toDateString();
-            if(val.status == 1){
-              result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${val.address}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td>
-                  <a data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/${val.user_id}" class="btn btn-primary btn-xs">Print</a>
-                </td>
-              </tr>
-            `;
-            }else if(val.status == 2){
-              result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${val.address}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td>
-                  <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.user_id}" class="btn btn-primary btn-xs">Distribute</a>
-                </td>
-              </tr>
-            `;
-          }else if(val.status == 3){
             result += `
               <tr>
                 <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
                 <td>${val.first_name} ${val.last_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
                 <td>${val.address}</td>
-                <td>${fromDate} - ${toDate}</td>
+                <td>${val.from_date} - ${val.to_date}</td>
                 <td>${val.contract_manager}</td>
                 <td>${val.cont_type}</td>
-                <td>${subDate}</td>
+                <td>${val.sdt}</td>
                 <td>
-                  <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.user_id}" class="btn btn-primary btn-xs">Attach to File</a>
+                  <i data-toggle="tooltip" title="Activated" class="fa fa-check-circle" style="color: green;"></i>
+                  <i data-toggle="tooltip" title="Printed" class="fa fa-print" style="color: green;"></i>
+                  <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>/contract/distribute/${val.user_id}"><i class="fa fa-share"></i></a>
+                  <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>/contract/attach/${val.user_id}"><i class="fa fa-forward"></i></a>
                 </td>
               </tr>
             `;
-          }else if(val.status == 4){
-            result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${val.address}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td><button data-toggle="tooltip" title="Attached to personal file, no further actions needed!" class="btn btn-success btn-xs">Completed !</button></td>
-              </tr>
-            `;
-          }
           });
           $('#filter_results').append(result);
         }

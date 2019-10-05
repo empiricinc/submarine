@@ -2,7 +2,7 @@
 
 	defined('BASEPATH') OR exit('No direct script access allowed');
 
-	class Payroll_model extends CI_Model
+	class payroll_model extends CI_Model
 
 	{
 
@@ -34,50 +34,6 @@
 	// get payroll templates
 
 	public function get_employee_template($id) {
-
-		return $query = $this->db->query("SELECT * from xin_employees where user_id='".$id."'");
-
-	}
-
-
- 
-
-
-	public function get_user_payroll($id,$dat) {
-	
-		$date = new DateTime($dat);
-		$dt2=$date->format('Y-m-d');
-
-		$condition = "user_id =" . "'" . $id . "' AND sdt = " . "'" . $dt2 . "' ";
-
-		$this->db->select('*');
-
-		$this->db->from('payroll');
-
-		$this->db->where($condition);
-
-		$this->db->limit(1);
-
-		$query = $this->db->get();
-
-		//echo $this->db->last_query();
-
-		if ($query->num_rows() > 0) {
-
-			return $query->result();
-
-		} else {
-
-			return null;
-
-		}
-
-	}
-
-
-	// get payroll templates
-
-	public function get_all_employee($id) {
 
 		return $query = $this->db->query("SELECT * from xin_employees where user_id='".$id."'");
 
@@ -159,11 +115,11 @@
 
 	// get payslips of single employee
 
-	/*public function get_payroll_slip($id) {
+	public function get_payroll_slip($id) {
 
 		return $query = $this->db->query("SELECT * from xin_make_payment where employee_id='".$id."'");
 
-	}*/
+	}
 
 	
 
@@ -459,11 +415,11 @@
 
 	
 
-	// Function to add payroll in table
+	// Function to add record in table
 
-	public function add_payroll($data){
+	public function add_hourly_payment_payslip($data){
 
-		$this->db->insert('payroll', $data);
+		$this->db->insert('xin_make_payment', $data);
 
 		if ($this->db->affected_rows() > 0) {
 
@@ -472,7 +428,9 @@
 		} else {
 
 			return false;
+
 		}
+
 	}
 
 	

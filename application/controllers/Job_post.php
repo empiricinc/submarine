@@ -127,16 +127,11 @@ class Job_post extends MY_Controller {
 
 		}
 
-		$data['projid'] = $session['project_id'];
-		$data['provid'] = $session['provience_id'];
-		//$data['sl1'] = $this->session->userdata('accessLevel');
-		$data['sl2'] = $this->session->userdata('accessLevel');
-		//$data['sl3'] = $this->session->userdata('accessLevel');
+
 
 		$data['title'] = $this->Xin_model->site_title();
 
         $data['geProvinces'] = $this->ProvinceCity->getAllProvinces();   
-
         $data['getakcity'] = $this->ProvinceCity->getCity();   
 
 		$data['location_job_position'] = $this->Location_model->all_location_job_position();
@@ -515,9 +510,6 @@ public function getDistrict() {
 
 		$result = $this->Job_post_model->add($data);
 
-		$data2 = array('status' => '1');
-		$result = $this->Job_post_model->update_location_job_position($data2,$id=$this->input->post('id'));
-
 
 		$this->session->set_flashdata('message', 'Job Created Successfully');
 
@@ -645,24 +637,20 @@ public function getDistrict() {
 
 
 
-	public function assign_employee_contract() { 
+	public function assign_employee_contract() {
 	
 		$data = array(
 						'user_id' => $this->input->post('rollnumber'), 
 						//'basic_salery' => $this->input->post('basic_salery'), 
-						//'from_date' => date('Y-m-d h:i:s'), //
-						 'from_date' =>  date('Y-m-d', strtotime($this->input->post('from_date'))).date(' H:i:s'),
-						//'to_date' => date('Y-m-d h:i:s'), //
-						 'to_date' => date('Y-m-d', strtotime($this->input->post('to_date'))).date(' H:i:s'),
-						//'contract_manager' => $this->input->post('contract_manager'),
-						'contract_type' => $this->input->post('contract_type'),
+						'from_date' => $this->input->post('from_date'),
+						'to_date' => $this->input->post('to_date'),
+						'contract_manager' => $this->input->post('contract_manager'),
+						//'contract_type' => $this->input->post('contract_type'),
 						'status' => '0',
 						//'long_description' => $this->input->post('long_description'),
 
 						'sdt' => date('Y-m-d h:i:s'),
 					);
-
-		//print_r($data); exit();
 
 		$result = $this->Job_post_model->add_employee_contract($data);
 
@@ -673,28 +661,9 @@ public function getDistrict() {
 
 
 
-	public function send_offer_letter() {
-		
-			$data = array(
-							'user_id' => $this->input->post('rollnumber'), 							
-							'status' => '0',
-							'sdt' => date('Y-m-d h:i:s'),
-						);
-
-			$result = $this->Job_post_model->send_offer_letter($data);
-
-			$this->session->set_flashdata('contactmessage', 'Offer Letter Sent Successfully');
-
-			redirect($_SERVER['HTTP_REFERER']); 
-		}
-
 
 
 	public function add_application_form() {
-
-				$obsalry = $this->input->post('basic_salary');
-				$obtaxdeduc = $this->input->post('tax_deduction');
-				$taxcalcu = $obtaxdeduc*100/$obsalry;
 	
 //print_r($_POST); exit();
 
@@ -705,17 +674,13 @@ public function getDistrict() {
 						'employee_id' => $this->input->post('application_id'), 
 						'first_name' => $this->input->post('emp_name'),
 						'last_name' => $this->input->post('last_name'),
-						'username' => $this->input->post('username'),
+						'username' => $this->input->post('emp_name'),
 						'email' => $this->input->post('email_address'),
-						'password' => $this->input->post('password'),
+						'password' => '123456',
 						'company_id' => $this->input->post('company_id'), 
 						'designation_id' => $this->input->post('designation_id'), 
-						'department_id' => $this->input->post('department_id'),
-						'provience_id' => $this->input->post('provience_id'), 
-						'city_id' => $this->input->post('city_id'),
-						'status' => '1',
-						'is_active' => '1',
-						'user_role_id' => '5', // user role 5 for employee only
+						'department_id' => $this->input->post('department_id'), 
+
 						'created_at' => date('Y-m-d h:i:s'),
 					);
 					
@@ -730,14 +695,11 @@ public function getDistrict() {
 						'father_name' => $this->input->post('father_name'),
 						'relation_id' => $this->input->post('relation_id'),
 						'gender' => $this->input->post('gender'),
-						//'date_of_birth' => $this->input->post('date_of_birth'),
-						'date_of_birth' =>  date('Y-m-d', strtotime($this->input->post('date_of_birth'))).date(' H:i:s'),
+						'date_of_birth' => $this->input->post('date_of_birth'),
 						'marital_status' => $this->input->post('marital_status'),
-						//'date_of_joining' => $this->input->post('date_of_joining'),
-						'date_of_joining' =>  date('Y-m-d', strtotime($this->input->post('date_of_joining'))).date(' H:i:s'),
+						'date_of_joining' => $this->input->post('date_of_joining'),
 						'cnic' => $this->input->post('cnic'),
-						//'cnic_expiry_date' => $this->input->post('cnic_expiry_date'),
-						'cnic_expiry_date' =>  date('Y-m-d', strtotime($this->input->post('cnic_expiry_date'))).date(' H:i:s'),
+						'cnic_expiry_date' => $this->input->post('cnic_expiry_date'),
 						'other_cnic_type_id' => $this->input->post('other_cnic_type_id'),
 						'employee_contract_type' => $this->input->post('employee_contract_type'),
 						'other_id_name' => $this->input->post('other_id_name'),
@@ -753,8 +715,7 @@ public function getDistrict() {
 						'contact_other' => $this->input->post('contact_other'),
 						'bloodgroup' => $this->input->post('bloodgroup'),
 						'email_address' => $this->input->post('email_address'),
-						//'contract_expiry_date' => $this->input->post('contract_expiry_date'),
-						'contract_expiry_date' =>  date('Y-m-d', strtotime($this->input->post('contract_expiry_date'))).date(' H:i:s'),
+						'contract_expiry_date' => $this->input->post('contract_expiry_date'),
 						'remarks' => $this->input->post('remarks'),
 
 						'sdt' => date('Y-m-d h:i:s'),
@@ -841,13 +802,12 @@ $employeeallowance = array( //Total Experience
 					);
 				$result = $this->Job_post_model->add_employee_allowance_details($employeeallowance);
 
-				 
 
 $employeeDeductions = array( //Total Experience
 						'user_id' => $this->input->post('application_id'), 
 						'eobi' => $this->input->post('eobi'),
 						'provident_fund' => $this->input->post('provident_fund'),
-						'tax_deduction' => $taxcalcu,
+						'tax_deduction' => $this->input->post('tax_deduction'),
 						'sdt' => date('Y-m-d h:i:s'),
 					);
 				$result = $this->Job_post_model->add_employee_deductions_details($employeeDeductions);
@@ -855,22 +815,16 @@ $employeeDeductions = array( //Total Experience
 
 
 
-		$employeecards = array( // employee_cards
-								'employee_id' => $this->input->post('application_id'), 					
-								'card_status' => 'pending', 	
-								'receive_date' => date('Y-m-d'),
-							);
-						$result = $this->Job_post_model->add_employee_cards($employeecards);
 
 
 
 
 
-		$employeeinsurance = array( // employee_cards
-								'employee_id' => $this->input->post('application_id'), 						
-								'updated_at' => date('Y-m-d'),
-							);
-						$result = $this->Job_post_model->add_employee_insurance($employeeinsurance);
+
+
+
+
+
 
 
 
