@@ -818,7 +818,7 @@ class Trainings extends CI_Controller{
 		$female = 0;
 		for ($j = 0; $j < count($trainees); $j++ ) {
 		 	$this->db->select('xin_employees.employee_id,
-		 						xin_employees.gender,
+		 						
 		 						xin_employees.first_name,
 		 						xin_employees.last_name,
 		 						xin_employees.designation_id,
@@ -827,7 +827,7 @@ class Trainings extends CI_Controller{
 		 						xin_designations.designation_name,
 		 						xin_companies.company_id,
 		 						xin_companies.name,
-								xin_trainings.trg_id');
+								xin_trainings.trg_id'); // xin_employees.gender,
 			$this->db->join('xin_trainings', 'xin_employees.employee_id = xin_trainings.trainee_employees', 'left');
 			$this->db->join('xin_activity_reporting', 'xin_trainings.trg_id = xin_activity_reporting.trg_id', 'left');
 			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');

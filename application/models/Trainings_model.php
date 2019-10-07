@@ -1283,7 +1283,6 @@ class Trainings_model extends CI_Model{
 		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
 		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
 		$query = $this->db->get();
-		echo $this->db->last_query();
 		return $query->result_array();
 	}
 }
