@@ -6,7 +6,7 @@
 
 if(! defined("BASEPATH")) exit ("No direct script access allowed!");
 
-class tests_model extends CI_Model{
+class Tests_model extends CI_Model{
 	public function __construct(){
 		parent::__construct();
 		$this->load->database();
@@ -132,10 +132,9 @@ class tests_model extends CI_Model{
 	// }
 	// Calculate the applicant's marks and show it on the page to the applicant or admin.
 	function applicant_result_search($appli_id){ // Passed $app_id as argument to search for result
-		$this->db->select('ex_applicants.applicant_id');
-		$this->db->from('ex_answers');
-		$this->db->join('ex_applicants', 'ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1', 'right');
-		$this->db->where(array('applicant_id' => $appli_id, 'ex_answers.status' => 1)); // Added ID and status match here... (if status in the answers table is 1, it'll add a mark to the applicant's result else not).
+		$this->db->select('rollnumber');
+		$this->db->from('test_result');
+		$this->db->where(array('rollnumber' => $appli_id)); // Added ID and status match here... (if status in the answers table is 1, it'll add a mark to the applicant's result else not).
 		// $this->db->group_by('applicant_id');
 		$query = $this->db->get();
 		return $query->result();
@@ -174,7 +173,7 @@ class tests_model extends CI_Model{
 							xin_designations.designation_id,
 							xin_designations.designation_name');
 		$this->db->from('xin_companies');
-		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
 		$this->db->where('xin_companies.company_id', $proj_id);
 		return $this->db->get()->result();
 	}
@@ -187,7 +186,7 @@ class tests_model extends CI_Model{
 							xin_designations.designation_id as desig_id,
 							xin_designations.designation_name');
 		$this->db->from('ex_questions');
-		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id', 'left');
 		$this->db->where('ex_questions.project_id', $project_id);
 		$this->db->group_by('designation_id'); // To view the desig_id once in the DD.
 		$result = $this->db->get();
@@ -279,11 +278,13 @@ class tests_model extends CI_Model{
 	}
 	// count all applicants...
 	public function count_all_records(){
-		return $this->db->count_all('xin_job_applications');
+		return $this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)')->from('assign_test')->count_all_results();
 	}
 	// Total applicants, get all applicants and display them on the dashboard.
 	public function total_applicants($limit ='', $offset=''){
-		$this->db->select('xin_job_applications.user_id,
+		$this->db->select('assign_test.rollnumber,
+							assign_test.test_date,
+							xin_job_applications.user_id,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.created_at,
@@ -291,17 +292,17 @@ class tests_model extends CI_Model{
 							xin_job_applications.email,
 							xin_jobs.job_id,
 							xin_jobs.job_title');
-		$this->db->from('xin_job_applications');
-		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
-		$this->db->order_by('xin_job_applications.created_at', 'DESC');
-		$this->db->where('application_id NOT IN (SELECT applicant_id FROM ex_applicants)');
+		$this->db->from('assign_test');
+		$this->db->join('xin_job_applications', 'assign_test.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->where('rollnumber NOT IN (SELECT rollnumber FROM test_result)');
 		$this->db->limit($limit, $offset);
 		$exams = $this->db->get();
 		return $exams->result();
 	}
 	// count all jobs and return them.
 	public function count_all_jobs(){
-		return $this->db->count_all('xin_jobs');
+		return $this->db->where('status', 1)->from('xin_jobs')->count_all_results();
 	}
 	// Jobs list. In progress jobs
 	public function jobs_list($limit = '', $offset =''){
@@ -313,9 +314,9 @@ class tests_model extends CI_Model{
 							xin_companies.company_id,
 							xin_companies.name as comp_name');
 		$this->db->from('xin_jobs');
-		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id');
-		$this->db->join('provinces', 'provinces.id = xin_jobs.province');
-		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company');
+		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id', 'left');
+		$this->db->join('provinces', 'provinces.id = xin_jobs.province', 'left');
+		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company', 'left');
 		$this->db->where(array('xin_jobs.status' => 1));
 		$this->db->order_by('xin_jobs.created_at', 'DESC');
 		$this->db->limit($limit, $offset);
@@ -332,9 +333,9 @@ class tests_model extends CI_Model{
 							xin_companies.company_id,
 							xin_companies.name as comp_name');
 		$this->db->from('xin_jobs');
-		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id');
-		$this->db->join('provinces', 'provinces.id = xin_jobs.province');
-		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company');
+		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id', 'left');
+		$this->db->join('provinces', 'provinces.id = xin_jobs.province', 'left');
+		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company', 'left');
 		$this->db->where(array('xin_jobs.status' => 1));
 		$this->db->order_by('xin_jobs.created_at', 'DESC');
 		$this->db->limit(10);
@@ -351,21 +352,8 @@ class tests_model extends CI_Model{
 							xin_company_type.type_id,
 							xin_company_type.name as type_name');
 		$this->db->from('xin_companies');
-		$this->db->join('xin_company_type', 'xin_companies.type_id = xin_company_type.type_id');
+		$this->db->join('xin_company_type', 'xin_companies.type_id = xin_company_type.type_id', 'left');
 		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
-	}
-	// applicant results
-	public function results_of_applicants(){
-		$this->db->select('*');
-		$this->db->from('xin_applicants');
-		$this->db->where(array('company_id' => $project_id,
-								'designation_id' => $designation_id,
-								'job_id' => $job_id,
-								'username' => $username,
-								'employee_id' => $employee_id,
-								'created_at' => $date
-								));
 		return $this->db->get()->result();
 	}
 	// search projects
@@ -380,7 +368,7 @@ class tests_model extends CI_Model{
 							xin_company_type.type_id,
 							xin_company_type.name as type_name');
 		$this->db->from('xin_companies');
-		$this->db->join('xin_company_type', 'xin_companies.type_id = xin_company_type.type_id');
+		$this->db->join('xin_company_type', 'xin_companies.type_id = xin_company_type.type_id', 'left');
 		$this->db->like('xin_companies.name', $project);
 		$this->db->or_like('registration_no', $project);
 		$this->db->or_like('email', $project);
@@ -395,11 +383,10 @@ class tests_model extends CI_Model{
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							 
 							xin_jobs.job_id,
 							xin_jobs.job_title');
 		$this->db->from('xin_job_applications');
-		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->like('fullname', $applicant);
 		$this->db->or_like('email', $applicant);
 		$this->db->or_like('xin_job_applications.created_at', $applicant);
@@ -416,9 +403,9 @@ class tests_model extends CI_Model{
 							xin_companies.company_id,
 							xin_companies.name as comp_name');
 		$this->db->from('xin_jobs');
-		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id');
-		$this->db->join('provinces', 'provinces.id = xin_jobs.province');
-		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company');
+		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id', 'left');
+		$this->db->join('provinces', 'provinces.id = xin_jobs.province', 'left');
+		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company', 'left');
 		$this->db->where(array('xin_jobs.status' => 1));
 		$this->db->like('xin_jobs.job_title', $job);
 		$this->db->or_like('provinces.name', $job);
@@ -430,31 +417,30 @@ class tests_model extends CI_Model{
 	}
 	// Search appeared.
 	public function search_appeared($appeared){
-		$this->db->select('ex_applicants.applicant_id,
+		$this->db->select('test_result.rollnumber,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
-							ex_applicants.exam_date,
+							test_result.sdt as exam_date,
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
 							xin_companies.name as compName');
-		$this->db->from('ex_applicants');
-		$this->db->join('xin_job_applications', 'ex_applicants.applicant_id = xin_job_applications.application_id');
-		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
-		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
+		$this->db->from('test_result');
+		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->like('xin_job_applications.fullname', $appeared);
 		$this->db->or_like('xin_job_applications.email', $appeared);
 		$this->db->or_like('xin_jobs.job_title', $appeared);
 		$this->db->or_like('xin_companies.name', $appeared);
-		$this->db->group_by('ex_applicants.applicant_id');
 		return $this->db->get()->result();
 	}
 	// applicants appeared in exam .
 	public function appeared_applicants(){
-		$this->db->select('ex_applicants.applicant_id,
-							ex_applicants.exam_date,
+		$this->db->select('test_result.rollnumber,
+							test_result.sdt as exam_date,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -463,23 +449,21 @@ class tests_model extends CI_Model{
 							xin_jobs.job_title,
 							xin_companies.company_id,
 							xin_companies.name as compName');
-		$this->db->from('ex_applicants');
-		$this->db->join('xin_job_applications', 'ex_applicants.applicant_id = xin_job_applications.application_id');
+		$this->db->from('test_result');
+		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id');
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
-		$this->db->group_by('ex_applicants.applicant_id');
-		//$this->db->order_by('xin_job_applications.exam_date', 'DESC');
 		$this->db->limit(10);
 		return $this->db->get()->result();
 	}
 	// count all appeared
 	public function count_all_appeared(){
-		return $this->db->count_all('ex_applicants');
+		return $this->db->count_all('test_result');
 	}
 	// all appeared applicants
 	public function all_appeared($limit='', $offset=''){
-		$this->db->select('ex_applicants.applicant_id,
-							ex_applicants.exam_date,
+		$this->db->select('test_result.rollnumber,
+							test_result.sdt as exam_date,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -488,12 +472,10 @@ class tests_model extends CI_Model{
 							xin_jobs.job_title,
 							xin_companies.company_id,
 							xin_companies.name as compName');
-		$this->db->from('ex_applicants');
-		$this->db->join('xin_job_applications', 'ex_applicants.applicant_id = xin_job_applications.application_id');
+		$this->db->from('test_result');
+		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id');
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
-		$this->db->group_by('ex_applicants.applicant_id');
-		//$this->db->order_by('xin_job_applications.exam_date', 'DESC');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
@@ -505,8 +487,8 @@ class tests_model extends CI_Model{
 							xin_company_type.type_id,
 							xin_company_type.name as type_name');
 		$this->db->from('xin_companies');
-		$this->db->join('xin_countries', 'xin_companies.country = xin_countries.country_id');
-		$this->db->join('xin_company_type', 'xin_companies.type_id = xin_company_type.type_id');
+		$this->db->join('xin_countries', 'xin_companies.country = xin_countries.country_id', 'left');
+		$this->db->join('xin_company_type', 'xin_companies.type_id = xin_company_type.type_id', 'left');
 		$this->db->where('company_id', $proj_id);
 		return $this->db->get()->row_array();
 	}
@@ -526,12 +508,12 @@ class tests_model extends CI_Model{
 							domicile.id,
 							domicile.name as dom_name');
 		$this->db->from('xin_job_applications');
-		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id');
-		$this->db->join('age', 'xin_job_applications.age = age.id');
-		$this->db->join('education', 'xin_job_applications.education = education.id');
-		$this->db->join('city', 'xin_job_applications.city_name = city.id');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id');
-		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('age', 'xin_job_applications.age = age.id', 'left');
+		$this->db->join('education', 'xin_job_applications.education = education.id', 'left');
+		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
+		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
 		$this->db->where('xin_job_applications.application_id', $applicant_id);
 		$exams = $this->db->get();
 		return $exams->row_array();
@@ -558,15 +540,15 @@ class tests_model extends CI_Model{
 							age.id,
 							age.name as ageName');
 		$this->db->from('xin_jobs');
-		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id');
-		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id');
-		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
-		$this->db->join('provinces', 'xin_jobs.province = provinces.id');
-		$this->db->join('city', 'xin_jobs.city_name = city.id');
-		$this->db->join('areas', 'xin_jobs.area_name = areas.id');
-		$this->db->join('domicile', 'xin_jobs.domicile = domicile.id');
-		$this->db->join('education', 'xin_jobs.education = education.id');
-		$this->db->join('age', 'xin_jobs.age = age.id');
+		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_jobs.city_name = city.id', 'left');
+		$this->db->join('areas', 'xin_jobs.area_name = areas.id', 'left');
+		$this->db->join('domicile', 'xin_jobs.domicile = domicile.id', 'left');
+		$this->db->join('education', 'xin_jobs.education = education.id', 'left');
+		$this->db->join('age', 'xin_jobs.age = age.id', 'left');
 		$this->db->where('xin_jobs.job_id', $job_id);
 		$result = $this->db->get();
 		return $result->row_array();
@@ -579,8 +561,8 @@ class tests_model extends CI_Model{
 							xin_designations.designation_id,
 							xin_designations.designation_name');
 		$this->db->from('ex_questions');
-		$this->db->join('xin_companies', 'ex_questions.project_id = xin_companies.company_id');
-		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id');
+		$this->db->join('xin_companies', 'ex_questions.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id', 'left');
 		$this->db->order_by('ex_questions.id', 'DESC');
 		$this->db->limit(5);
 		return $this->db->get()->result();

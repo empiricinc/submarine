@@ -135,7 +135,7 @@ h4 {
             </div>
             <div class="col-md-3">
               <div class="tabelTopBtn">
-                <a href="javascript:void(0)" class="btn">View All</a>
+                <a href="<?= base_url('contract/list_pending_letters'); ?>" class="btn">View All</a>
               </div>
             </div>
           </div>
@@ -156,7 +156,7 @@ h4 {
                   </thead>
                   <tbody>
                     <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Level.
-                    foreach ($letters as $letter){
+                    foreach ($pen_letters as $letter){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($letter->user_id);
                       if($letter->status == 0){
@@ -221,7 +221,7 @@ h4 {
               </div>
               <div class="col-md-7">
                 <div class="tabelTopBtn">
-                  <a href="javascript:void(0)" class="btn">View All</a>
+                  <a href="<?= base_url('contract/offer_letters'); ?>" class="btn">View All</a>
                 </div>
               </div>
             </div>
@@ -266,6 +266,13 @@ h4 {
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-md-1"></div>
+              <div class="col-md-10 text-center">
+                <?php echo $this->pagination->create_links(); ?>
+              </div>
+              <div class="col-md-1"></div>
+            </div>
         </div>
       </div>
 <div class="col-md-12">
@@ -278,7 +285,7 @@ h4 {
               </div>
               <div class="col-md-7">
                 <div class="tabelTopBtn">
-                  <a href="javascript:void(0)" class="btn">View All</a>
+                  <a href="<?php echo base_url('contract/list_rejected_letters'); ?>" class="btn">View All</a>
                 </div>
               </div>
             </div>

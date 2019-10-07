@@ -24,10 +24,10 @@
 	<meta name="og:image" content="" />
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700,800|Roboto:400,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/bootstrap.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/style.css'); ?>">
-	<script src="<?php echo base_url('dashboardDesign/assets/js/jquery.js'); ?>"></script>
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+	<script src="<?php echo base_url('assets/js/jquery.js'); ?>"></script>
 </head>
 <style type="text/css">
 	ul{
@@ -84,8 +84,8 @@
 			</div>
 		</section>
 	</section>
-	<script src="<?php echo base_url('dashboardDesign/assets/js/bootstrap.min.js'); ?>"></script>
-	<script src="<?php echo base_url('dashboardDesign/assets/js/custom.js'); ?>"></script>
+	<script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
+	<script src="<?php echo base_url('assets/js/custom.js'); ?>"></script>
 	<script type="text/javascript">
 // Countdown Timer for test paper. 
 function startTimer(duration, display) {
