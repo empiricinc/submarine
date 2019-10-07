@@ -332,7 +332,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <td>Rs <?php echo $netSallery = ($basic_salary+$TAllwnc)-($Tdeductn);
                                   $TnetSallery[] = ($basic_salary+$TAllwnc)-($Tdeductn); ?></td>
                 <td><?php echo date('Y-m-d'); ?></td>
-                <td><a class="text-success" href="<?php echo base_url(); ?>payroll/pdf_create/sl/1/">Payslip</a></td>
+                <td><a class="text-success" href="<?php echo base_url(); ?>payroll/pdf_create/sl/<?php echo $empdetail->employee_id; ?>/">Payslip</a></td>
 
 </tr>
 

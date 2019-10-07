@@ -269,7 +269,7 @@
 
 	
 
-		$condition = "make_payment_id =" . "'" . $id . "'";
+		$condition = "employee_id =" . "'" . $id . "'";
 
 		$this->db->select('*');
 
@@ -475,6 +475,23 @@
 		}
 	}
 
+
+
+	// Function to add payroll in table
+
+	public function add_payroll_master_sheet($data){
+
+		$this->db->insert('xin_make_payment', $data);
+
+		if ($this->db->affected_rows() > 0) {
+
+			return true;
+
+		} else {
+
+			return false;
+		}
+	}
 	
 
 	// Function to Delete selected record from table

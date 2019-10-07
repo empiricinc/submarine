@@ -231,7 +231,7 @@ if($_POST){
 
 										);
 
-										$result = $this->Payroll_model->add_payroll($data); 
+										$result = $this->Payroll_model->add_payroll_master_sheet($data); 
 
 										
 			}

@@ -64,7 +64,7 @@ $user = $this->Xin_model->read_user_info($session['user_id']);
 
               <label for="contact"><?php echo $this->lang->line('dashboard_email');?></label>
 
-              <input type="email" name="email" class="form-control" value="<?php //echo $user[0]->email;?>" placeholder="email">
+              <input type="email" name="email" class="form-control" value="<?php //echo $user[0]->email;?>" placeholder="Email">
 
             </div>
 

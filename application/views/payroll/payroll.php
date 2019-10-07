@@ -229,7 +229,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
     $('#job_avail_position').DataTable();
 } );
 </script>
-<style type="text/css"> .no-padding{ padding: 0px !important; } .allowance-tabl{ width: 100%; } .allowance-tabl td{ border: 1px solid #ddd !important; } </style>
+<style type="text/css"> .no-padding{ padding: 0px !important; } .allowance-tabl{ width: 100%; } .allowance-tabl td{ border: 0px solid #ddd !important; } </style>
 
 <?php if($payrollempName){?>
 <form action="<?php echo base_url(); ?>payroll/add_employee_payroll" method="post" name="employee_payroll">
@@ -492,7 +492,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <td><?php //echo $proj_name;?></td>
                 <td><?php //echo $designation_name;?></td>
                 <td><?php //echo $department_name;?></td>
-                <td><?php //echo $district_name;?></td>
+                <td><?php //echo $district_name;?>Total</td>
                 <td>Rs <?php echo array_sum($TbasicSalary); ?></td>
                 <td>Rs <?php echo array_sum($Tallowance); ?></td>
                 <td>Rs <?php echo array_sum($Tdeduction); ?></td>

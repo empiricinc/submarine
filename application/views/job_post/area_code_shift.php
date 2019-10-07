@@ -17,6 +17,8 @@ if ($message) {
 
 ?>
 
+<link rel="stylesheet" href="<?php base_url(); ?>assets/css/fieldsearch.css">
+
 <div class="box box-block bg-white">
 
   <!-- <h2><strong><?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_jobs');?>
@@ -266,12 +268,13 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
 
 
 <div class="modal fade" id="job_setup<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="jobsetupModalLabel">
-  <div class="modal-dialog" role="document" style="width: 900px; max-width: 900px;">
+  <div class="modal-dialog" role="document" style="width: 95%; max-width: 100%;">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #F5F5F5">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="jobsetupModalLabel"> Job Posting... </h4>
+        <h4 class="modal-title" id="jobsetupModalLabel"> Shift Your Area Code... </h4>
       </div>
+
       <form action="<?php echo site_url("area_code_shift/shift_areas_code") ?>" method="post" name="add_job" id="xin-form">
          
         <input type="hidden" value="<?php echo $location_detail->id; ?>" name="id"> 
@@ -295,11 +298,72 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                     <textarea class="form-control textarea" placeholder="<?php echo $this->lang->line('xin_long_description');?>" name="long_description" cols="30" rows="15" id="long_description" required="required"></textarea>
                   </div> -->
                   <!-- <div class="form-group"> -->
+
+
+<div class="col-md-4">
+<div class="modal-body">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente magnam, sunt, ea dolore eum quod.
+              Minima fugiat
+              enim aut soluta est reprehenderit reiciendis quos, qui, amet possimus laborum assumenda voluptate.
+            </p>
+
+            <ul class="list-group z-depth-0">
+              <li class="list-group-item justify-content-between">
+                Project: <?php echo $proj_name;?>
+                <span class="badge badge-primary badge-pill">1</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                Designation: <?php echo $designation_name;?>
+                <span class="badge badge-primary badge-pill">2</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                Department: <?php echo $department_name;?>
+                <span class="badge badge-primary badge-pill">3</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                Province: <?php echo $province_name;?>
+                <span class="badge badge-primary badge-pill">4</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                District: <?php echo $district_name;?>
+                <span class="badge badge-primary badge-pill">5</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                Tehsil: <?php echo $tehsil_name;?>
+                <span class="badge badge-primary badge-pill">6</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                UC: <?php echo $uc_name;?>
+                <span class="badge badge-primary badge-pill">7</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                Area: <?php echo $area_name;?>
+                <span class="badge badge-primary badge-pill">8</span>
+              </li>
+              <li class="list-group-item justify-content-between">
+                Sub Area: <?php echo $sub_area_name;?>
+                <span class="badge badge-primary badge-pill">9</span>
+              </li>
+            </ul>
+
+          </div>
+
+</div>
+
+
+
+
+
+
+<div class="col-md-8">
+
+
                   <div class="row">
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Project</label>
-                        <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->
+                         <select class="form-control form-control-xs selectpicker" name="company_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">                          
                           <?php foreach($all_companies as $proj) {?>
                           <option value="<?php echo $proj->company_id; ?>" <?php echo ($proj->company_id == $location_detail->company_id) ? 'selected' : ''; ?>  ><?php echo $proj->name; ?></option>
                           <?php } ?>
@@ -310,7 +374,9 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Designation</label>
-                        <select class="form-control" name="designation_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="designation_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->   
+                        <select class="form-control form-control-xs selectpicker" name="designation_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">
+
                           <?php foreach($all_designations as $desig) {?>
                           <option value="<?php echo $desig->designation_id; ?>" <?php echo ($desig->designation_id == $location_detail->designation_id) ? 'selected' : ''; ?>  ><?php echo $desig->designation_name; ?></option>
                           <?php } ?>
@@ -324,7 +390,9 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Department</label>
-                        <select class="form-control" name="department_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="department_id" data-plugin="select_hrm" data-placeholder="Project" required="required">  --> 
+                        <select class="form-control form-control-xs selectpicker" name="department_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">
+
                           <?php foreach($all_departments as $deptt) {?>
                           <option value="<?php echo $deptt->department_id; ?>" <?php echo ($deptt->department_id == $location_detail->department_id) ? 'selected' : ''; ?>  ><?php echo $deptt->department_name?></option>
                           <?php } ?>
@@ -335,7 +403,9 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Province</label>
-                        <select class="form-control" name="province_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="province_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->
+                        <select class="form-control form-control-xs selectpicker" name="province_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">
+
                           <?php foreach($all_provinces as $provi) {?>
                           <option value="<?php echo $provi['id']; ?>" <?php echo ($provi['id'] == $location_detail->province_id) ? 'selected' : ''; ?>  ><?php echo $provi['name']; ?></option>
                           <?php } ?>
@@ -349,7 +419,9 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">District</label>
-                        <select class="form-control" name="district_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="district_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->  
+                        <select class="form-control form-control-xs selectpicker" name="district_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">
+
                           <?php foreach($all_district as $disti) {?>
                           <option value="<?php echo $disti['id']; ?>" <?php echo ($disti['id'] == $location_detail->district_id) ? 'selected' : ''; ?>  ><?php echo $disti['name']; ?></option>
                           <?php } ?>
@@ -360,7 +432,9 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Tehsil</label>
-                        <select class="form-control" name="tehsil_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="tehsil_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->
+                        <select class="form-control form-control-xs selectpicker" name="tehsil_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">
+
                           <?php foreach($all_tehsil as $tehs) {?>
                           <option value="<?php echo $tehs['id']; ?>" <?php echo ($tehs['id'] == $location_detail->tehsil_id) ? 'selected' : ''; ?>  ><?php echo $tehs['name']; ?></option>
                           <?php } ?>
@@ -371,11 +445,13 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                   </div>
 
 
-                <div class="row">
+                  <div class="row">
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">UC</label>
-                        <select class="form-control" name="uc_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="uc_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->
+                        <select class="form-control form-control-xs selectpicker" name="uc_id" data-size="7" data-live-search="true" data-title="Location" id="state_list">
+
                           <?php foreach($all_uc as $ucd) {?>
                           <option value="<?php echo $ucd['id']; ?>" <?php echo ($ucd['id'] == $location_detail->uc_id) ? 'selected' : ''; ?>  ><?php echo $ucd['name']; ?></option>
                           <?php } ?>
@@ -386,7 +462,9 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Area</label>
-                        <select class="form-control" name="area_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="area_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->
+                        <select class="form-control form-control-xs selectpicker" name="area_id" data-size="7" data-live-search="true" data-title="Location1" id="state_list1">
+
                           <?php foreach($allareas as $alarea) {?>
                           <option value="<?php echo $alarea['id']; ?>" <?php echo ($alarea['id'] == $location_detail->area_id) ? 'selected' : ''; ?>  ><?php echo $alarea['name']; ?></option>
                           <?php } ?>
@@ -394,16 +472,15 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                       </div>
                      </div>
                      
-                  </div>
-
-                 
-                 
+                  </div>                
             
-               <div class="row">
+                  <div class="row">
                      <div class="col-md-6">
                       <div class="form-group">
                         <label for="Project">Sub Area</label>
-                        <select class="form-control" name="sub_area_id" data-plugin="select_hrm" data-placeholder="Project" required="required">                          
+                        <!-- <select class="form-control" name="sub_area_id" data-plugin="select_hrm" data-placeholder="Project" required="required"> -->
+                        <select class="form-control form-control-xs selectpicker" name="sub_area_id" data-size="7" data-live-search="true" data-title="Location2" id="state_list2">
+
                           <?php foreach($all_sub_areas as $sarea) {?>
                           <option value="<?php echo $sarea['id']; ?>" <?php echo ($sarea['id'] == $location_detail->sub_area_id) ? 'selected' : ''; ?> ><?php echo substr($sarea['name'], 0, 40); ?></option>
                           <?php } ?>
@@ -411,10 +488,8 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
                       </div>
                      </div>
 
-                      
-                     
                   </div>
-
+</div>
             </div>  
         </div> 
          
@@ -444,3 +519,4 @@ if($_POST){ ($this->input->post('job_code')) ? $location_area_by_code = $this->L
 
 </div>
 
+<script src="<?php base_url(); ?>assets/js/fieldsearch.js"></script> 
