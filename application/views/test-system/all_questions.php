@@ -32,7 +32,7 @@
 					</div>
 					<form method="get" action="<?php echo base_url('tests/search'); ?>">
 						<div class="filterSelect">
-							<input type="text" name="keyword" class="form-control" placeholder="Search for questions..." required="">
+							<input type="text" name="keyword" class="form-control" placeholder="Search for keyword..." required="">
 						</div>
 						<div class="filterSelectBtn">
 							<button class="btn btnSubmit">Search</button>

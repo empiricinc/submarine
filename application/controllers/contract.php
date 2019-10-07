@@ -678,26 +678,6 @@ class Contract extends MY_Controller {
 			echo "Attachment wasn't successful, try again !";
 		}
 	}
-// Offer letters
-	public function offer_letters($offset = NULL){
-	$session = $this->session->userdata('username');
-		if(empty($session)){
-			redirect('');
-		}
-		$limit = 10;
-		if(!empty($offset)){
-			$this->uri->segment(3);
-		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
-
-		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');
-	    $data['letters'] = $this->Contract_model->offer_letters();
-	    $data['subview'] = $this->load->view('dashboard/offer_letters', $data, TRUE);
-	    $this->load->view('layout_main', $data); // Page load.
-	}
 
 	// get opened and closed tickets for chart
 
@@ -738,6 +718,137 @@ class Contract extends MY_Controller {
 	    }
  }
  //---------------------------- Offer Letters ----------------------------//
+ // Offer letters (All offer letters -- Accepted)
+	public function offer_letters($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+	    $this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/offer_letters');
+		$config['total_rows'] = $this->Contract_model->count_offer_letters();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
+	    $data['pen_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
+	    $data['subview'] = $this->load->view('dashboard/offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
+	}
+	// View all pending offer letters.
+	public function list_pending_letters($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+	    $this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/list_pending_letters');
+		$config['total_rows'] = $this->Contract_model->count_pending_letters();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+		$data['pend_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
+		$data['subview'] = $this->load->view('dashboard/pending_offer_letters', $data, TRUE);
+    	$this->load->view('layout_main', $data); // Page load.
+
+	}
+	// List of all rejected letters.
+	public function list_rejected_letters($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+	    $this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/list_rejected_letters');
+		$config['total_rows'] = $this->Contract_model->count_rejected_letters();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+		$data['rejected_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
+		$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
+    	$this->load->view('layout_main', $data); // Page load.
+	}
 // Accept Offer letter
   public function accept_offer_letter($user_id){
     if($this->Contract_model->accept_letter($user_id)){
