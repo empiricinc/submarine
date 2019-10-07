@@ -51,7 +51,7 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<select name="reason" id="inv-reason" class="form-control" required="required">
+								<select name="reason" id="inv-reason" class="form-control reason" required="required">
 									<option value="">Select Reason</option>
 									<?php foreach($reasons AS $r): ?>
 									<?php if($r->parent_id == '0') { ?>
@@ -66,24 +66,15 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="other_reason" value="" id="inv-other-reason" class="form-control" placeholder="Other Reason"  data-toggle="tooltip" title="Other Reason" disabled>
+								<input type="text" name="other_reason" value="" id="inv-other-reason" class="form-control other-reason" placeholder="Other Reason"  data-toggle="tooltip" title="Other Reason" disabled>
 							</div>
 						</div>
+						
 						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<select name="complaint_mode" id="complaint-mode" class="form-control" required="required">
-									<option value="">Select Complaint Mode</option>
-									<option value="email">Email</option>
-									<option value="post">Through Post</option>
-									<option value="phone">Phone Call/SMS</option>
-								</select>
-							</div>
-						</div>
-						<!-- <div class="col-lg-6">
 							<div class="inputFormMain">
 								<input type="text" name="reported_by" value="" id="inv-reported-by" class="form-control" placeholder="Reported By"  data-toggle="tooltip" title="Reported By" >
 							</div>
-						</div> -->
+						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
 								<input type="text" name="reported_date" value="" id="inv-reported-date" class="form-control date" placeholder="Reporting Date"  data-toggle="tooltip" title="Reporting Date">
@@ -103,6 +94,18 @@
 								<input type="text" name="evidence_date" value="" id="inv-evidence-date" class="form-control date" placeholder="Evidence Date"  data-toggle="tooltip" title="Evidence Date" disabled>
 							</div>
 						</div>
+
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<select name="complaint_mode" id="complaint-mode" class="form-control" required="required">
+									<option value="">Select Complaint Mode</option>
+									<option value="email">Email</option>
+									<option value="post">Through Post</option>
+									<option value="phone">Phone Call/SMS</option>
+								</select>
+							</div>
+						</div>
+
 						<div class="col-lg-6">
 							<div class="inputFormMain">
 								<select name="intensity" id="complaint-intensity" class="form-control" required="required">
@@ -139,7 +142,7 @@
 				</div>
 			</div>
 			<div class="col-lg-5">
-				<div id="basic-info" style="height: 500px; margin-right: 15px; border: 1px solid #e1e4e7; background: #f6f7f8; border-radius: 3px; overflow-y: scroll; padding: 15px;">
+				<div id="basic-info" style="height: 570px; margin-right: 15px; border: 1px solid #e1e4e7; background: #f6f7f8; border-radius: 3px; overflow-y: scroll; padding: 15px;">
 					 	
 					 	<div class="row text-center">
 					 		<?php $profile_img = ($basic_info->profile_picture == '') ? base_url().'assets/img/no-photo.png' : base_url().'uploads/profile/'.$basic_info->profile_picture; ?>

@@ -4,6 +4,11 @@
 *  File location: views / test-system / reports.php
 */
 ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.date').datepicker();
+	});
+</script>
 <section class="secMainWidthFilter">
 	<div class="row marg">
 		<div class="col-lg-2 no-leftPad">
@@ -46,10 +51,10 @@
 							<span></span>
 						</div>
 						<div class="filterSelect">
-							<input type="date" name="date_from" class="form-control">
+							<input type="text" name="date_from" class="form-control date" placeholder="From date...">
 						</div>
 						<div class="filterSelect">
-							<input type="date" name="date_to" class="form-control">
+							<input type="text" name="date_to" class="form-control date" placeholder="To date...">
 						</div>
 						<div class="filterSelectBtn">
 							<button type="submit" class="btn btnSubmit">Search</button>

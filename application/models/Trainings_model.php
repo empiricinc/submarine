@@ -11,12 +11,12 @@ class Trainings_model extends CI_Model{
 	}
 	// Count all records in the trainigs table to create pagination.
 	public function count_trainings(){
-		return $this->db->count_all('xin_trainings');
+		return $this->db->where('trg_type', 1)->from('xin_trainings')->count_all_results();
 	}
 	// Get data from database and list them on the dashboard (Induction trainings only)
 	public function get_trainings($limit = '', $offset = ''){
-		$this->db->select('SUM(LENGTH(trainee_employees) - LENGTH(REPLACE(trainee_employees, ",", ""))+1) as no_of_employees,
-							xin_trainings.*,
+		//SUM(LENGTH(trainee_employees) - LENGTH(REPLACE(trainee_employees, ",", ""))+1) as no_of_employees,
+		$this->db->select('xin_trainings.*,
 							xin_trainers.trainer_id,
 							xin_trainers.first_name,
 							xin_trainers.last_name,
@@ -31,7 +31,7 @@ class Trainings_model extends CI_Model{
 		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
 		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
 		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
+		$this->db->where(array('xin_trainings.trg_type' => 1 , 'xin_trainings.status' => 1));
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
 		return $query->result();

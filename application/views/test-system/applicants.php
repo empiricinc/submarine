@@ -54,7 +54,7 @@
 											<th>applicant's name</th>
 											<th>job title</th>
 											<th>email</th>
-											<th>date applied</th>
+											<th>exam date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -71,7 +71,7 @@
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
 											</td>
 											<td>
-												<?=date('M d, Y', strtotime($applicant->created_at)); ?>
+												<?=date('M d, Y', strtotime($applicant->test_date)); ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
