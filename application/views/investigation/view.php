@@ -12,6 +12,14 @@
 							<div class="filterSelect">
 								<input type="text" name="case_no" class="form-control" placeholder="Case No">
 							</div>
+
+							<div class="filterSelect">
+								<input type="text" name="employee_name" class="form-control" placeholder="Employee Name">
+							</div>
+
+							<div class="filterSelect">
+								<input type="text" name="cnic" class="form-control" placeholder="CNIC No">
+							</div>
 							
 							<div class="filterSelect">
 								<input type="text" name="from_date" class="form-control date" placeholder="From Date">
@@ -82,7 +90,7 @@
 										<h3><?= $title; ?><span></span>
 											<br>
 											<small class="" id="inv-status-btn">
-												<a href="javascript:void(0);" data-status="pending" class="label label-warning">initiated</a>
+												<a href="javascript:void(0);" data-status="initiated" class="label label-warning">initiated</a>
 												<a href="javascript:void(0);" data-status="in-progress" class="label label-info">in progress</a>
 												<a href="javascript:void(0);" data-status="completed" class="label label-success">completed</a>
 												<a href="javascript:void(0);" data-status="submitted" class="label label-primary">submitted</a>
@@ -104,6 +112,7 @@
 												<tr>
 													<th>Case No</th>
 													<th>Employee</th>
+													<th>CNIC</th>
 													<th>Project</th>
 													<th>Department</th>
 													<th>Designation</th>
@@ -131,6 +140,7 @@
 													<tr data-id="<?= $i->id; ?>">
 														<td><?= $i->case_no; ?></td>
 														<td><?= ucwords($i->emp_name); ?></td>
+														<td><?= $i->cnic; ?></td>
 														<td><?= $i->project_name; ?></td>
 														<td><?= $i->department_name; ?></td>
 														<td><?= $i->designation_name; ?></td>
