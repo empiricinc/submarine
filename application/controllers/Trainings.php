@@ -71,9 +71,9 @@ class Trainings extends CI_Controller{
 		}
 		
 		if($data['sl2']){
-			$data['completed_trainings'] = $this->Trainings_model->trainings_completed();
+			$data['completed_trainings'] = $this->Trainings_model->trainings_completed($limit, $offset);
 		}else{
-			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid);
+			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid, $limit, $offfset);
 		}
 		$this->load->view('training-files/components/template', $data);
 	}
@@ -180,6 +180,55 @@ class Trainings extends CI_Controller{
 		}
 		$this->load->view('training-files/components/template', $data);
 	}
+	// All completed trainings...
+	public function all_completed($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('trainings/all_completed');
+		$config['total_rows'] = $this->Trainings_model->count_completed();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['title'] = 'Trainigs | Completed Trainings';
+		$data['content'] = 'training-files/completed_list';
+		if($data['sl2']){
+			$data['completed_trainings'] = $this->Trainings_model->trainings_completed($limit, $offset);
+		}else{
+			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid, $limit, $offfset);
+		}
+		$this->load->view('training-files/components/template', $data);
+	}
 	// Get by training's status.
 	public function get_by_trg_status($status = ''){
 		$data = $this->Trainings_model->get_by_status($status);
@@ -257,6 +306,25 @@ class Trainings extends CI_Controller{
 		}
 		$data['title'] = 'Trainings | Search Results';
 		$data['content'] = 'training-files/trainings_list';
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Completed trainings search.
+	public function completed_search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+		$provid = $session['provience_id'];
+
+		$data['sl3'] = $this->session->userdata('accessLevel');
+		$data['sl2'] = $this->session->userdata('accessLevel');
+		$training = $this->input->get('search_training');
+		if($data['sl2']){
+			$data['results'] = $this->Trainings_model->search_completed($training);
+		}
+		$data['title'] = 'Trainings | Search Results';
+		$data['content'] = 'training-files/completed_list';
 		$this->load->view('training-files/components/template', $data);
 	}
 	// View training detail.

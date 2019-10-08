@@ -20,6 +20,18 @@
 						<?php endif; ?>
 					</div>
 				<form method="post" action="<?php echo base_url('trainings/create_training'); ?>">
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="">
+								<option value="" >Select Project</option>
+								<?php foreach($projects as $project): ?>
+									<option value="<?php echo $project->company_id; ?>">
+										<?php echo $project->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
 							<select name="location" id="location" class="form-control" style="color: #aeafaf;" required="">
@@ -50,18 +62,6 @@
 						<div class="inputFormMain">
 							<select name="uc" id="uc" class="form-control" style="color: #aeafaf;">
 								<option value="" >Select UC</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select Project</option>
-								<?php foreach($projects as $project): ?>
-									<option value="<?php echo $project->company_id; ?>">
-										<?php echo $project->name; ?>
-									</option>
-								<?php endforeach; ?>
 							</select>
 						</div>
 					</div>
