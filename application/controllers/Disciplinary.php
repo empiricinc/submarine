@@ -362,7 +362,7 @@ class Disciplinary extends MY_Controller
 		$data['files'] = $this->Disciplinary_model->disciplinary_files()->result();
 		$data['type'] = $this->Disciplinary_model->get_disciplinary_type(); 
 		
-		$data['content'] = $this->load->view('disciplinary/investigation-detail', $data, TRUE);
+		$data['content'] = $this->load->view('disciplinary/detail', $data, TRUE);
 		$this->load->view('disciplinary/_template', $data);
 	}
 

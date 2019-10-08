@@ -204,7 +204,7 @@
 
 <div class="modal fade" id="disciplinary-modal">
 	<div class="modal-dialog">
-		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST">
+		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST" novalidate>
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -213,63 +213,51 @@
 				<div class="modal-body">
 					<input type="hidden" name="status_text" id="status-text" value="<?= $detail->status_text; ?> ">
 					<input type="hidden" name="disciplinary_id" value="<?= $detail->id; ?>">
-					<?php if($detail->status_text == 'open'): ?>
+					<?php if($detail->status_text != 'dpcr') { ?>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="inputFormMain">
+									<label>Date</label>
+									<input type="text" name="added_date" class="form-control date">
+								</div>
+							</div>
+						</div>
+					<?php } elseif($detail->status_text == 'dpcr') { ?>
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="inputFormMain">
+									<label>Action Approval Date</label>
+									<input type="text" name="approval_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="inputFormMain">
+									<label>Approval Receive Date</label>
+									<input type="text" name="approval_receive_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="inputFormMain">
+									<label>Approved By</label>
+									<input type="text" name="approved_by" class="form-control">
+								</div>
+							</div>
+
+							<div class="col-lg-6">
+								<div class="inputFormMain">
+									<label>Approved Action</label>
+									<select name="approved_action" class="form-control" required="required">
+										<option value="">SELECT ACTION</option>
+										<?php foreach($type AS $t): ?>
+											<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+						</div>
+					<?php } ?>
+
 					<div class="row">
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Action Approval Date</label>
-								<input type="text" name="approval_date" class="form-control date">
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Approval Receive Date</label>
-								<input type="text" name="approval_receive_date" class="form-control date">
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Approved By</label>
-								<input type="text" name="approved_by" class="form-control">
-							</div>
-						</div>
-
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Approved Action</label>
-								<select name="approved_action" class="form-control" required="required">
-									<option value="">SELECT ACTION</option>
-									<?php foreach($type AS $t): ?>
-										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-					</div>
-					<?php endif; ?>
-
-					<div class="row">
-						<?php if($detail->status_text != 'open'): ?>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<label>Date</label>
-								<input type="text" name="added_date" class="form-control date">
-							</div>
-						</div>
-						<?php endif; ?>
-
-						<div class="col-lg-12 hide" id="next-action">
-							<div class="inputFormMain">
-								<label>Next Action</label>
-								<select name="approved_action" class="form-control" required="required">
-									<option value="">SELECT ACTION</option>
-									<?php foreach($type AS $t): ?>
-										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-
 						<div class="col-lg-12">
 							<div class="inputFormMain">
 								<label>Comments</label>
