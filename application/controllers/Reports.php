@@ -47,7 +47,8 @@ class Reports extends MY_Controller
 							'Departments_model',
 							'Designations_model',
 							'Projects_model',
-							'Locations_model'
+							'Locations_model',
+							'Complaint_model'
 						));
 
 
@@ -221,7 +222,8 @@ class Reports extends MY_Controller
 	{
 		$conditions = [
 					'c.project_id' => $this->session_data['project_id'],
-					'c.province_id' => $this->session_data['province_id']
+					'c.province_id' => $this->session_data['province_id'],
+					'c.status' => 'resolved'
 				];
 
 		if(isset($_GET['search']))
@@ -518,15 +520,15 @@ class Reports extends MY_Controller
 	{
 		$search_query = $data['search_query'] = $_SERVER['QUERY_STRING'];
 		$conditions = $this->sc_complaints($search_query);
-		
-		$total_rows = $this->Investigation_model->get_complaints($conditions)->num_rows();
+
+		$total_rows = $this->Complaint_model->get_complaints($conditions)->num_rows();
 		$url = 'Reports/complaints';
 
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
 		
 
 		$data['title'] = 'List of Complaints';
-		$data['complaints'] = $this->Investigation_model->get_complaints($conditions, $this->limit, $offset)->result();
+		$data['complaints'] = $this->Complaint_model->get_complaints($conditions, $this->limit, $offset)->result();
 		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['province'] = $this->Province_model->get_by_project($this->session_data['project_id']);
@@ -541,9 +543,9 @@ class Reports extends MY_Controller
 
 	function complaint_detail($id)
 	{
-		$data['title'] = 'Investigation Detail';
+		$data['title'] = 'Complaint Detail & Remarks';
 
-		$data['project_head'] = $this->Investigation_model->get_project_head($id);
+		$data['project_head'] = $this->Complaint_model->get_project_head($id);
 
 		$conditions = [
 						'c.project_id' => $this->session_data['project_id'],
@@ -553,13 +555,13 @@ class Reports extends MY_Controller
 
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
-		$data['detail'] = $this->Investigation_model->get_complaints($filtered_conditions);
+		$data['detail'] = $this->Complaint_model->get_complaints($filtered_conditions);
 		if(empty($data['detail']))
 		{
 			show_404();
 		}
 		//get_files_and_reviews($complint_id, $sender, $receiver) takes these three arguments
-		$data['remarks'] = $this->Investigation_model->get_remarks($id);
+		$data['remarks'] = $this->Complaint_model->get_remarks($id);
 		
 		if(!empty($data['remarks']))
 		{
@@ -570,7 +572,7 @@ class Reports extends MY_Controller
 				$file_counter = 0;
 
 				$data['remarks_and_files'][$i] = $data['remarks'][$i];
-				$files = $this->Investigation_model->get_files($investigation_id);
+				$files = $this->Complaint_model->get_files($investigation_id);
 
 				for ($j=0; $j < count($files); $j++) {
 					$data['remarks_and_files'][$i][$j] = $files[$j];
@@ -582,9 +584,7 @@ class Reports extends MY_Controller
 		}
 		
 
-		// var_dump($data['detail']); exit;
-		$data['content'] = $this->load->view('reports/print-complaint', $data, TRUE);
-
+		$data['content'] = $this->load->view('reports/complaint-detail', $data, TRUE);
 
 		$this->load->view('reports/_template', $data);
 		
@@ -1043,7 +1043,7 @@ class Reports extends MY_Controller
         $conditions = $this->sc_complaints($_SERVER['QUERY_STRING']);
 
         // var_dump($conditions); exit;
-        $complaints = $this->Investigation_model->get_complaints($conditions)->result();
+        $complaints = $this->Complaint_model->get_complaints($conditions)->result();
 
         if(count($complaints) == 0)
         	exit('No Records found');

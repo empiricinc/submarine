@@ -82,7 +82,7 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<select name="evidence" id="inv-evidence" class="form-control" required="required">
+								<select name="evidence" id="inv-evidence" class="form-control evidence" required="required">
 									<option value="">Evidence</option>
 									<option value="1">Yes</option>
 									<option value="0">No</option>
@@ -91,7 +91,7 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="evidence_date" value="" id="inv-evidence-date" class="form-control date" placeholder="Evidence Date"  data-toggle="tooltip" title="Evidence Date" disabled>
+								<input type="text" name="evidence_date" value="" id="inv-evidence-date" class="form-control date evidence-date" placeholder="Evidence Date"  data-toggle="tooltip" title="Evidence Date" disabled>
 							</div>
 						</div>
 

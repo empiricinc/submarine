@@ -16,6 +16,12 @@ class Investigation_model extends CI_Model
 		return $this->db->insert('investigation', $data);
 	}
 
+	function update($inv_id, $data)
+	{
+		$this->db->where('id', $inv_id);
+		return $this->db->update('investigation', $data);
+	}
+
 	function upload_files($files = array())
 	{
 		return $this->db->insert_batch('investigation_files', $files);
@@ -88,39 +94,43 @@ class Investigation_model extends CI_Model
 	{
 		if(array_key_exists('i.id', $conditions))
 		{
-			$this->db->select('i.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS action_taken_by');
+			$this->db->select('i.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS action_taken_by, ebi.cnic');
 			$this->db->join('xin_companies AS xc', 'i.project_id = xc.company_id', 'left');
 			$this->db->join('xin_designations AS xd', 'i.designation_id = xd.designation_id', 'left');
 			$this->db->join('xin_departments AS xds', 'i.department_id = xds.department_id', 'left');
 			$this->db->join('investigation_reasons AS ir', 'i.reason_id = ir.id', 'left');
 			$this->db->join('xin_employees xe', 'i.employee_id = xe.employee_id', 'left');
+			$this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
 					
 			$this->db->join('xin_employees atb', 'i.action_by = atb.employee_id', 'left');
 			$this->db->where($conditions);
 			return $this->db->get('investigation AS i');
 		}
 
-		$this->db->select('i.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name');
+		$this->db->select('i.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ebi.cnic');
 		$this->db->join('xin_companies AS xc', 'i.project_id = xc.company_id', 'left');
 		$this->db->join('xin_designations AS xd', 'i.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments AS xds', 'i.department_id = xds.department_id', 'left');
 		$this->db->join('investigation_reasons AS ir', 'i.reason_id = ir.id', 'left');
 		$this->db->join('xin_employees xe', 'i.employee_id = xe.employee_id', 'left');
+		$this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
 		
 		$this->db->limit($limit, $offset);
 
 		if(!empty($conditions))
 			$this->db->where($conditions);
 
+		$this->db->order_by('i.id', 'desc');
 		return $this->db->get('investigation AS i');
 	}
 
 
-	public function get_comments($id)
+	public function get_comments($id, $type)
 	{
 		$this->db->select('ic.id, ic.comment_text, ic.status, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ic.added_date');
 		$this->db->join('xin_employees xe', 'ic.added_by = xe.employee_id', 'left');
-		$this->db->where('ic.investigation_id', $id);
+		$this->db->where(array('ic.investigation_id' => $id, 'ic.type' => $type));
+
 		return $this->db->get('investigation_comments ic')->result();
 
 	}
