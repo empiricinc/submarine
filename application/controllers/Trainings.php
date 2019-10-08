@@ -1013,6 +1013,34 @@ class Trainings extends CI_Controller{
     	$this->Trainings_model->delete_event($event_id);
     	redirect('trainings/get_calendar');
     }
+    // Modify an event.
+    public function modify_event($event_id){
+    	$data['title'] = 'Trainings | Modify Event';
+    	$data['content'] = 'training-files/events_calendar';
+    	$data['projects'] = $this->Trainings_model->get_projects();
+		$data['training_types'] = $this->Trainings_model->get_training_types();
+		$data['locations'] = $this->Trainings_model->get_locations();
+		$data['designations'] = $this->Trainings_model->get_designations();
+    	$data['edit'] = $this->Trainings_model->modify_event($event_id);
+    	$this->load->view('training-files/components/template', $data);
+    }
+    // Send the udpated data back to the database.
+    public function update_calendar(){
+    	$event_id = $this->input->post('event_id');
+    	$data = array(
+    		'title'	   => $this->input->post('title'),
+			'province' => $this->input->post('province'),
+			'district' => $this->input->post('district'),
+			'project'  => $this->input->post('project'),
+			'designation' => $this->input->post('designation'),
+			'trg_type' => $this->input->post('trg_type'),
+			'start_date' => $this->input->post('start_date'),
+			'end_date' => $this->input->post('end_date')
+    	);
+    	$this->Trainings_model->update_event($event_id, $data);
+    	$this->session->set_flashdata('success', '<strong>Success !</strong> Event has been updated successfully!');
+    	return redirect('trainings/events_calendar');
+    }
     // Event detail.
     public function event_detail($event_id){
     	$data['title'] = 'Trainings | Event Detail';

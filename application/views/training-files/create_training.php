@@ -91,14 +91,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<select name="trainer_2" id="trainer_2" class="form-control" style="color: #aeafaf;">
-								<option value="">Select Trainer 2</option>
-								<?php foreach($trainers as $trainer): ?>
-									<option value="<?php echo $trainer->trainer_id; ?>">
-										<?php echo $trainer->first_name." ".$trainer->last_name; ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
+							<input type="text" name="trainer_2" id="trainer_2" class="form-control" style="color: #aeafaf;" placeholder="Trainer 2...">
 						</div>
 					</div>
 					<div class="col-lg-6">

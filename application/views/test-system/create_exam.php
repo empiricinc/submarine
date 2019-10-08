@@ -102,7 +102,7 @@
 			var designation = $('#designation').val();
 			var question = $('#question').val();
 			if(project == '' || designation == ''){
-				alert('Please fill out the required fields');
+				alert('Please fill up the required fields');
 				return false;
 			}else{
 			// AJAX function call to post data into database.

@@ -1281,6 +1281,42 @@ class Trainings_model extends CI_Model{
 		$this->db->where('events_calendar.event_id', $event_id);
 		return $this->db->get()->row_array();
 	}
+	// Modify an event.... [Get data to form for edit...]
+	public function modify_event($event_id){
+		$this->db->select('events_calendar.event_id,
+    						events_calendar.title,
+    						events_calendar.province,
+    						events_calendar.district,
+    						events_calendar.project,
+    						events_calendar.designation,
+    						events_calendar.trg_type,
+    						events_calendar.start_date,
+    						events_calendar.end_date,
+    						provinces.id,
+    						provinces.name as provName,
+    						district.id,
+    						district.name as cityName,
+    						xin_companies.company_id,
+    						xin_companies.name as compName,
+    						xin_designations.designation_id,
+    						xin_designations.designation_name,
+    						xin_training_types.training_type_id,
+    						xin_training_types.type');
+		$this->db->from('events_calendar');
+    	$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
+    	$this->db->join('district', 'events_calendar.district = district.id', 'left');
+    	$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
+    	$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
+    	$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
+    	$this->db->where('events_calendar.event_id', $event_id);
+    	return $this->db->get()->row();
+	}
+	// Update the edited event.
+	public function update_event($event_id, $data){
+		$this->db->where('event_id', $event_id);
+		$this->db->update('events_calendar', $data);
+		return true;
+	}
 	// Delete an event.
 	public function delete_event($event_id){
 		$this->db->where('event_id', $event_id);
