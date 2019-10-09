@@ -229,7 +229,7 @@ h4 {
                     </td>
                     <td align="center">
                       <?php if($contract->status == 0): ?>
-                      <a data-toggle="tooltip" title="Click to view all pending contracts." data-placement="left" href="<?= base_url('contract/pending_contracts'); ?>">
+                      <a data-toggle="tooltip" title="Pending" data-placement="top" href="<?= base_url('contract/pending_contracts'); ?>">
                         <i class="fa fa-spinner"></i>
                         <?php else: ?>
                         <div class="label label-danger">
