@@ -394,7 +394,7 @@ h4 {
                       </td>
                       <td>
                         <?php if($contract->status != 0): ?>
-                          <button class="btn btn-success btn-xs">Active</button>
+                          <button class="btn btn-success btn-xs">Active <i class="fa fa-check-circle"></i></button>
                             <?php else: ?>
                           <button class="btn btn-info btn-xs">Inactive</button>
                         <?php endif; ?>
