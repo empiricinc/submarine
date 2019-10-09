@@ -236,7 +236,39 @@ class Investigation extends MY_Controller
 
 	function update_investigation()
 	{
-		var_dump($_POST);
+		if(!isset($_POST))
+			show_404();
+
+		$entry_by = $this->session_data['user_id'];
+		$title = $this->input->post('subject');
+		$desc = $this->input->post('description');
+		$reason = $this->input->post('reason');
+		$other_reason = $this->input->post('other_reason');
+		$evidence = $this->input->post('evidence');
+		$evidence_date = $this->input->post('evidence_date');
+		$reported_by = $this->input->post('reported_by');
+		$reported_date = $this->input->post('reported_date');
+
+		$investigation_id = $this->input->post('investigation_id');
+
+		$data = array(
+					'title' => $title,
+					'description' => $desc,
+					'reason_id' => $reason,
+					'other_reason' => $other_reason,
+					'evidence' => $evidence,
+					'evidence_date' => $evidence_date,
+					'reported_by' => $reported_by,
+					'reported_date' => $reported_date
+				);
+
+		if($this->Investigation_model->update($investigation_id, $data))
+			$this->session->set_flashdata('success', 'Investigation Update Successfully');
+		else
+			$this->session->set_flashdata('error', 'Investigation Updation failed');
+
+		redirect('Investigation/detail/'.$investigation_id, 'refresh');
+
 	}
 
 
@@ -250,6 +282,8 @@ class Investigation extends MY_Controller
 		if(isset($_GET['search']))
 		{
 			$caseNo = $this->input->get('case_no');
+			$employee_name = $this->input->get('employee_name');
+			$cnic_no = $this->input->get('cnic');
 			$fromDate = $this->input->get('from_date');
 			$toDate = $this->input->get('to_date');
 			$project = (int) $this->input->get('project');
@@ -262,6 +296,9 @@ class Investigation extends MY_Controller
 				$caseNo = '%'.$caseNo.'%';
 			
 			$conditions['i.case_no LIKE'] = $caseNo;
+			if($employee_name != '')
+				$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = '%'.$employee_name.'%';
+			$conditions['ebi.cnic'] = $cnic_no;
 			$conditions['i.reported_date >='] = $fromDate;
 			$conditions['i.reported_date <='] = $toDate;
 			$conditions['i.department_id'] = $department;
@@ -312,7 +349,8 @@ class Investigation extends MY_Controller
 			show_404();
 		}
 	
-		$data['comments'] = $this->Investigation_model->get_comments($investigation_id);
+		$data['status_comment'] = $this->Investigation_model->get_comments($investigation_id, 'status');
+		$data['comment'] = $this->Investigation_model->get_comments($investigation_id, 'comment');
 		$data['files'] = $this->Investigation_model->investigation_files($investigation_id)->result();
 		$data['reason'] = $this->Investigation_model->get_reasons();		
 		$data['content'] = $this->load->view('investigation/investigation-detail', $data, TRUE);
@@ -372,7 +410,8 @@ class Investigation extends MY_Controller
 					'comment_text' => $comments,
 					'added_by' => $employee_id,
 					'added_date' => $date,
-					'status' => $status
+					'status' => $status,
+					'type' => 'comment'
 				);
 	
 		$res = $this->Investigation_model->add_comments($data);
@@ -407,7 +446,10 @@ class Investigation extends MY_Controller
     			break;
 			case 'completed':
 				$status = 'submitted';
-			break;
+				break;
+			case 'cancel':
+				$status = 'cancelled';
+				break;
     	}
 
 		$data = array(
@@ -415,7 +457,8 @@ class Investigation extends MY_Controller
 					'comment_text' => $comments,
 					'added_by' => $employee_id,
 					'added_date' => $added_date,
-					'status' => $status
+					'status' => $status,
+					'type' => 'status'
 				);
 		
 		$res = $this->Investigation_model->add_comments($data);

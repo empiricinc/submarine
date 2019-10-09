@@ -7,8 +7,8 @@
 					<h4 class="modal-title">Status Modal</h4>
 				</div>
 				<div class="modal-body">
-					<input type="hidden" name="status" id="updated-status" value="<?= $detail->status; ?>">
-					<input type="hidden" name="investigation_id" value="<?= $detail->id; ?>">
+					<input type="hidden" name="status" id="inv-status" value="">
+					<input type="hidden" name="investigation_id" id="inv-id" value="<?= $detail->id; ?>">
 
 					<div class="row">
 						<?php if($detail->status == 'completed'): ?>
@@ -95,6 +95,7 @@
 </div>
 
 
+<?php if(isset($detail)): ?>
 <div class="modal fade" id="edit-investigation-modal">
 	<div class="modal-dialog modal-lg">
 		<form action="<?= base_url(); ?>Investigation/update_investigation" method="POST">
@@ -111,6 +112,7 @@
 					<div class="col-lg-12">
 						<label>Subject</label>
 						<div class="inputFormMain">
+							<input type="hidden" name="investigation_id" value="<?= $detail->id; ?>">
 							<input type="text" name="subject" class="form-control" value="<?= $detail->title; ?>">
 						</div>
 					</div>
@@ -134,38 +136,51 @@
 												><?= $r->reason_text; ?></option>
 									<?php } ?>
 									<?php endforeach; ?>
-								<option value="other">Other</option>
+								<option value="other" 
+									<?php if($detail->reason_id == 0) { ?> selected <?php } ?>
+								>Other</option>
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<label>Other Reason</label>
 						<div class="inputFormMain">
-							<input type="text" name="other_reason" id="other-reason" class="form-control other-reason" readonly>
+							<input type="text" name="other_reason" id="other-reason" class="form-control other-reason" value="<?= $detail->other_reason; ?>"
+							<?php if($detail->reason_id != 0) { ?> disabled <?php } ?>
+							>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<label>Evidence</label>
 						<div class="inputFormMain">
-							<input type="text" name="evidence" class="form-control">
+							<select name="evidence" id="evidence" class="form-control evidence" required="required">
+								<option value="1"
+									<?php if($detail->evidence == 1) { ?> selected <?php } ?>
+								>Yes</option>
+								<option value="0"
+									<?php if($detail->evidence == 0) { ?> selected <?php } ?>
+								>No</option>
+							</select>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<label>Evidence Date</label>
 						<div class="inputFormMain">
-							<input type="text" name="evidence_date" class="form-control">
+							<input type="text" name="evidence_date" class="form-control evidence-date" value="<?= $detail->evidence_date; ?>"
+								<?php if($detail->evidence == 0) { ?> disabled <?php } ?>
+							>
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<label>Reported By</label>
 						<div class="inputFormMain">
-							<input type="text" name="reported_by" class="form-control">
+							<input type="text" name="reported_by" class="form-control" value="<?= $detail->reported_by; ?>">
 						</div>
 					</div>
 					<div class="col-lg-4">
 						<label>Reported Date</label>
 						<div class="inputFormMain">
-							<input type="text" name="reported_date" class="form-control date">
+							<input type="text" name="reported_date" class="form-control date" value="<?= $detail->reported_date; ?>">
 						</div>
 					</div>
 				</div>
@@ -182,6 +197,7 @@
 		</form>
 	</div>
 </div>
+<?php endif; ?>
 
 
 
@@ -446,13 +462,14 @@
 
 		$('#inquires-handler').on('click', '#previous-investigations-table>tbody>tr', function() {
 			var id = $(this).data('id');
-			window.open('<?= base_url(); ?>Investigation/print_detail/'+id, '_blank');
+			window.open('<?= base_url(); ?>Investigation/detail/'+id, '_blank');
 		});
 	</script>
 
 	<script type="text/javascript">
 		$('.reason').on('change', function() {
 			var reason = $(this).val();
+			console.log(reason);
 			if(reason == 'other')
 				$('.other-reason').prop('disabled', false);
 			else
@@ -461,11 +478,16 @@
 	</script>
 
 	<script type="text/javascript">
-		$('#inv-evidence').on('change', function() {
-			if($('#inv-evidence').val() == '1')
-				$('#inv-evidence-date').prop('disabled', false);
+		$('.evidence').on('change', function() {
+			if($('.evidence').val() == '1')
+			{
+				$('.evidence-date').prop('disabled', false);
+			}
 			else
-				$('#inv-evidence-date').prop('disabled', true);
+			{
+				$('.evidence-date').prop('disabled', true);
+				$('.evidence-date').val('');
+			}
 		});
 	</script>
 
@@ -516,7 +538,12 @@
 	</script>
 
 	<script type="text/javascript">
-		$()
+		$('.status-modal-btn').on('click', function(e) {
+			var status = $(this).data('status');
+			console.log(status);
+			$('#inv-status').val(status);
+			$('#investigation-status-modal').modal('show');
+		});
 	</script>
 
 

@@ -9,7 +9,7 @@
 							<?= $title; ?>
 							<br><br>
 							<div class="btn-group">
-								<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+								<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
 									<i class="fa fa-cog"></i> ADMIN <i class="fa fa-angle-down"></i>
 								</button>
 								<ul class="dropdown-menu">
@@ -22,26 +22,31 @@
 							</div>
 							
 
-							<button type="button" class="btn btn-sm btn-default" onclick="document.getElementById('comments-form').scrollIntoView();">
+							<button type="button" class="btn btn-sm btn-warning" onclick="document.getElementById('comments-form').scrollIntoView();">
 								<i class="fa fa-comment"></i> COMMENT
 							</button>
-							<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#confirm-delete-modal">
-								<i class="fa fa-trash"></i> DELETE
+							
+						<?php if($detail->status != 'cancel'): ?>
+							<?php if($detail->status == 'initiated' OR $detail->status == 'in-progress') { ?>
+							<button type="button" class="btn btn-sm btn-danger status-modal-btn" data-status="cancel">
+							<i class="fa fa-trash"></i> DELETE
 							</button>
+							<?php } ?>
 
 							<?php if($detail->status == 'initiated') { ?>
-							<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#investigation-status-modal">
+							<button type="button" class="btn btn-sm btn-default status-modal-btn" data-status="<?= $detail->status; ?>">
 								<i class="fa fa-arrow-down"></i> IN-PROGRESS
 							</button>
 							<?php } elseif($detail->status == 'in-progress') {  ?>
-							<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#investigation-status-modal">
+							<button type="button" class="btn btn-sm btn-default status-modal-btn" data-status="<?= $detail->status; ?>">
 								<i class="fa fa-magic"></i> COMPLETED
 							</button>
 							<?php } elseif($detail->status == 'completed') { ?>
-							<button type="button" class="btn btn-sm btn-default" data-toggle="modal" data-target="#investigation-status-modal">
+							<button type="button" class="btn btn-sm btn-default status-modal-btn" data-status="<?= $detail->status; ?>">
 								<i class="fa fa-archive"></i> SUBMITTED
 							</button>
 							<?php } ?>
+						<?php endif; ?>
 						</h3>
 					</div>
 				</div>
@@ -93,15 +98,15 @@
 
 					<div class="col-lg-12 ptb-5">
 						<div class="col-lg-2"><strong>Status</strong></div>
-						<div class="col-lg-4"><label class="label <?= $label; ?>"><?= $detail->status; ?></label></div>
+						<div class="col-lg-4"><label class="<?= $label; ?>"><?= $detail->status; ?></label></div>
 					</div>
 
 					<!-- <div class="col-lg-12"><hr></div> -->
 					<div class="col-lg-12 ptb-5">
 						<div class="col-lg-2"><strong>Reason</strong></div>
-						<div class="col-lg-4"><?= $detail->reason_text; ?></div>
+						<div class="col-lg-4"><?= ($detail->reason_id == '0') ? 'None' : $detail->reason_text; ?></div>
 						<div class="col-lg-2"><strong>Other Reason</strong></div>
-						<div class="col-lg-4"><?= $detail->other_reason; ?></div>
+						<div class="col-lg-4"><?= ($detail->other_reason == '') ? 'None' : $detail->other_reason; ?></div>
 					</div>
 
 					<!-- <div class="col-lg-12"><hr></div> -->
@@ -124,7 +129,9 @@
 
 					<div class="col-lg-12 ptb-5">
 						<div class="col-lg-2"><strong>Description</strong></div>
-						<div class="col-lg-10"><?= $detail->description; ?></div>
+					</div>
+					<div class="col-lg-12">
+						<div class="col-lg-10 text-justify"><?= $detail->description; ?></div>
 					</div>
 					
 				</div>
@@ -218,12 +225,12 @@
 							</thead>
 							<tbody>
 								<tr>
-									<td>Open</td>
+									<td>Initiate</td>
 									<td width="50%"><?= $detail->description; ?></td>
 									<td><?= ucwords($detail->emp_name); ?></td>
 									<td><?= date('d-m-Y', strtotime($detail->entry_at)); ?></td>
 								</tr>
-								<?php foreach ($comments as $c): ?>
+								<?php foreach ($status_comment as $c): ?>
 								<tr>
 									<td><?= ucwords($c->status); ?></td>
 									<td width="50%"><?= $c->comment_text; ?></td>
@@ -241,10 +248,22 @@
 
 				<div class="row">
 					<div class="col-lg-12">
+						<div class="col-lg-12">
+							<h3><i class="fa fa-comment"></i> Comments</h3>
+						</div>
+
+						<div class="col-lg-12" id="comments">
+							<?php foreach($comment AS $c): ?>
+							<blockquote style="font-size: 14px;">
+								<small> Comment By: <?= $c->emp_name; ?>, Date: <?= $c->added_date; ?></small>
+								<div>
+									<?= $c->comment_text; ?>
+								</div>
+							</blockquote>	
+							<?php endforeach; ?>
+						</div>
+
 						<form action="<?= base_url(); ?>Investigation/add_comments" method="POST" enctype="multipart/form-data" id="comments-form">
-							<div class="col-lg-12">
-								<h3><i class="fa fa-comment"></i> Comments</h3>
-							</div>
 							<div class="inputFormMain col-lg-12">
 								<input type="hidden" name="status" value="<?= $detail->status; ?>">
 								<input type="hidden" name="investigation_id" value="<?= $detail->id; ?>">
