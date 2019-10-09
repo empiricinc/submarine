@@ -190,7 +190,7 @@
 <div class="col-lg-8 col-lg-offset-2">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="text-right">Job Detail</h3>
+			<h3>Job Detail</h3>
 		</div>
 		<div class="panel-body">
 			<div class="row">

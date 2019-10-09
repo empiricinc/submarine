@@ -153,7 +153,7 @@
 <div class="col-lg-10 col-lg-offset-1">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="text-right">Project Detail</h3>
+			<h3>Project Detail</h3>
 		</div>
 			<div class="panel-body">
 				<div class="row">

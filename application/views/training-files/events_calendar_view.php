@@ -33,7 +33,7 @@
         <?php if(!empty($event_detail)): ?>
           <div class="col-lg-8 col-lg-offset-2">
              <div class="panel panel-primary">
-               <div class="panel-heading text-right">
+               <div class="panel-heading">
                     <h3>
                       <?php echo $event_detail['title']; ?> 
                     </h3>
