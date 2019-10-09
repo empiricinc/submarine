@@ -166,6 +166,13 @@ if($_POST){
            	//$data['payrollempName'] = $this->Employees_model->payrollempName2($projid,$provid); 
            }
 
+if($this->input->post('company_id') && $this->input->post('province_id')){
+					$data['payrollempName'] = $this->Employees_model->process_payroll($this->input->post('company_id'),$this->input->post('province_id')); 
+				}elseif ($this->input->post('company_id')) {
+					$data['payrollempName'] = $this->Employees_model->payrollempName($this->input->post('company_id')); 
+				}
+           
+
 		$data['breadcrumbs'] = $this->lang->line('left_job_posts');
 
 	    $data['path_url'] = 'payroll';
