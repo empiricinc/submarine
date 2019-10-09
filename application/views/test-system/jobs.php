@@ -62,7 +62,7 @@
 									foreach($jobs_list as $job): ?>
 									<tr>
 										<td>
-											<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo $job->job_title; ?></a>
+											<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25).' ...'; ?></a>
 										</td>
 										<td>
 											<?php echo $job->prov_name; ?>
