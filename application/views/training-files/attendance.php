@@ -49,6 +49,7 @@
 															<option value="Absent">
 																Absent
 															</option>
+															<option value="Leave">Leave</option>
 														</select>
 													</div>
 													<input type="hidden" name="project[]" value="<?= $trainee_employees->project; ?>">

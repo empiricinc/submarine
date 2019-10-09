@@ -81,17 +81,13 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-1">
-							
-						</div>
+						<div class="col-md-1"></div>
 						<div class="col-md-10">
 							<div class="tabelSideListing text-center">
 								<?php echo $this->pagination->create_links(); ?>
 							</div>
 						</div>
-						<div class="col-md-1">
-							
-						</div>
+						<div class="col-md-1"></div>
 					</div>
 				</div>
 			</div>
@@ -153,24 +149,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-3">
-							
-						</div>
-						<div class="col-md-6">
-							<div class="tabelSideListing text-center">
-								
-							</div>
-						</div>
-						<div class="col-md-3">
-							
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
 	</section>
-
 	<section class="secIndexTable">
 		<div class="mainTableWhite">
 			<div class="row">
@@ -245,18 +227,6 @@
 								</tbody>
 							</table>
 						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-4">
-					<div class="tabelSideListing">
-						
-					</div>
-				</div>
-				<div class="col-md-4">
-					<div class="tabelCenterListing">
-						<?php //echo $pagination_link_two; ?>
 					</div>
 				</div>
 			</div>
