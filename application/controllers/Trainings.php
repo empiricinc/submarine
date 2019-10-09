@@ -118,7 +118,7 @@ class Trainings extends CI_Controller{
 					); // insert data in array into database.
 		$this->Trainings_model->create_training($data);
 		for($i = 0; $i < count($tEmployees); $i++){ 
-			$this->db->where('user_id', $tEmployees[$i]);
+			$this->db->where('employee_id', $tEmployees[$i]);
 			$status = $this->db->select('status')->from('xin_employees')->get()->row();
 			if($status->status == 1)
 			$this->db->update('xin_employees', array('status' => '2'));
@@ -308,6 +308,26 @@ class Trainings extends CI_Controller{
 		$data['content'] = 'training-files/trainings_list';
 		$this->load->view('training-files/components/template', $data);
 	}
+	public function refresher_search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+		$training = $this->input->get('search_training');
+		if($data['sl2']){
+			$data['results'] = $this->Trainings_model->search_refresher($training);
+		}
+		$data['title'] = 'Trainings | Search Results';
+		$data['content'] = 'training-files/all_refresher';
+		$this->load->view('training-files/components/template', $data);
+	}
 	// Completed trainings search.
 	public function completed_search(){
 		$session = $this->session->userdata('username');
@@ -364,7 +384,7 @@ class Trainings extends CI_Controller{
 								xin_designations.designation_name');
 			$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
 			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-			$row = $this->db->get_where('xin_employees', array('user_id' => $employee_detail[$i]))->row();
+			$row = $this->db->get_where('xin_employees', array('employee_id' => $employee_detail[$i]))->row();
 			// Print the data in HTML view.
 			$employee_names .= "<div class='row'><div class='col-lg-2'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-2'>".$row->name."</div><div class='col-lg-2'>".$row->contact_no."</div><div class='col-lg-3'>".$row->address."</div><hr></div>";
 		}

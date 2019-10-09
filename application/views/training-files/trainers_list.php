@@ -184,7 +184,7 @@
 <div class="col-lg-8 col-lg-offset-1">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="text-right">Trainer's Detail</h3>
+			<h3>Trainer's Detail</h3>
 		</div>
 			<div class="panel-body">
 				<div class="row">
@@ -210,7 +210,7 @@
 					</div>
 				</div>
 			</div>
-		<div class="panel-footer">
+		<div class="panel-footer text-right">
 			<?php echo date('Y') . " - " . $trainer_detail['first_name']; ?> | <a href="javascript:history.go(-1);">Go Back &laquo;</a>
 		</div>
 	</div>

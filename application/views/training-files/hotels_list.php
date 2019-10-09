@@ -49,7 +49,7 @@
 											<th>province</th>
 											<th>district</th>
 											<th>actions | add amenities & prices</th>
-											<th>more actions | edit | delete</th>
+											<th>more actions | modify | delete</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -68,12 +68,8 @@
 												</div>
 											</td>
 											<td>
-												<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>">
-													<div class="label label-primary">Modify</div>
-												</a>
-												<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');">
-													<div class="label label-danger">Delete</div>
-												</a>
+												<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>" class="btn btn-primary btn-xs">Modify</a>
+												<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');" class="btn btn-danger btn-xs">Delete</a>
 											</td>
 										</tr>
 										<div id="myModal<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
@@ -132,87 +128,87 @@
 										  </div>
 										</div>
 										<!-- Amenities modal ends here. -->
-					<!-- Prices modal, here we can add prices for hotels. -->
-					<div id="prices<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
-					  <div class="modal-dialog">
-					    <!-- Modal content-->
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Add prices here</h4>
-					      </div>
-					      <div class="modal-body">
-					      	<div class="row">
-					      		<form action="<?php echo base_url('trainings/add_room_charges'); ?>" method="post">
-					      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
-					      		<div class="col-lg-6">
-									<div class="inputFormMain">
-										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
-									</div>
-								</div>
-								<div class="col-lg-6">
-									<div class="inputFormMain">
-										<input type="text" name="room_type" id="room_type" class="form-control" placeholder="Room type i,e. 1, 2, seat or VIP ... ">
-									</div>
-								</div><br><br><br>
-								<div class="col-lg-6">
-									<div class="inputFormMain">
-										<input type="text" name="charges" id="charges" class="form-control" placeholder="Room charges for staying ... ">
-									</div>
-								</div><br><br><br>
-								<div class="col-lg-12">
-									<div class="submitBtn">
-										<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-										<button type="reset" class="btn btnSubmit">Reset</button>
-									</div>
-								</div>
-					      	</form>
-					      	</div>
-					      </div>
-					      <div class="modal-footer">
-					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
-					      	</div>
-					      </div>
-					    </div>
-					  </div>
-					</div>
-					<!-- Prices modal ends here... -->
-					<!-- Modifying rooms and charges in hotels... -->
-					<div id="modify<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
-					  <div class="modal-dialog">
-					    <!-- Modal content-->
-					    <div class="modal-content">
-					      <div class="modal-header">
-					        <button type="button" class="close" data-dismiss="modal">&times;</button>
-					        <h4 class="modal-title">Modify room prices or type here</h4>
-					      </div>
-					      <div class="modal-body">
-					      	<div class="row">
-					      		<form action="<?php echo base_url('trainings/modify_hotel'); ?>" method="post">
-					      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
-					      		<div class="col-lg-12">
-									<div class="inputFormMain">
-										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
-									</div>
-								</div><br><br><br>
-								<div class="col-lg-12">
-									<div class="submitBtn">
-										<button id="save" type="submit" class="btn btnSubmit">Update</button>
-										<button type="reset" class="btn btnSubmit">Reset</button>
-									</div>
-								</div>
-					      	</form>
-					      	</div>
-					      </div>
-					      <div class="modal-footer">
-					      	<div class="submitBtn">
-					      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
-					      	</div>
-					      </div>
-					    </div>
-					  </div>
-					</div>
+										<!-- Prices modal, here we can add prices for hotels. -->
+										<div id="prices<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
+										  <div class="modal-dialog">
+										    <!-- Modal content-->
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <button type="button" class="close" data-dismiss="modal">&times;</button>
+										        <h4 class="modal-title">Add prices here</h4>
+										      </div>
+										      <div class="modal-body">
+										      	<div class="row">
+										      		<form action="<?php echo base_url('trainings/add_room_charges'); ?>" method="post">
+										      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
+										      		<div class="col-lg-6">
+														<div class="inputFormMain">
+															<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
+														</div>
+													</div>
+													<div class="col-lg-6">
+														<div class="inputFormMain">
+															<input type="text" name="room_type" id="room_type" class="form-control" placeholder="Room type i,e. 1, 2, seat or VIP ... ">
+														</div>
+													</div><br><br><br>
+													<div class="col-lg-6">
+														<div class="inputFormMain">
+															<input type="text" name="charges" id="charges" class="form-control" placeholder="Room charges for staying ... ">
+														</div>
+													</div><br><br><br>
+													<div class="col-lg-12">
+														<div class="submitBtn">
+															<button id="save" type="submit" class="btn btnSubmit">Submit</button>
+															<button type="reset" class="btn btnSubmit">Reset</button>
+														</div>
+													</div>
+										      	</form>
+										      	</div>
+										      </div>
+										      <div class="modal-footer">
+										      	<div class="submitBtn">
+										      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+										      	</div>
+										      </div>
+										    </div>
+										  </div>
+										</div>
+										<!-- Prices modal ends here... -->
+										<!-- Modifying rooms and charges in hotels... -->
+										<div id="modify<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
+										  <div class="modal-dialog">
+										    <!-- Modal content-->
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <button type="button" class="close" data-dismiss="modal">&times;</button>
+										        <h4 class="modal-title">Modify room prices or type here</h4>
+										      </div>
+										      <div class="modal-body">
+										      	<div class="row">
+										      		<form action="<?php echo base_url('trainings/modify_hotel'); ?>" method="post">
+										      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
+										      		<div class="col-lg-12">
+														<div class="inputFormMain">
+															<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
+														</div>
+													</div><br><br><br>
+													<div class="col-lg-12">
+														<div class="submitBtn">
+															<button id="save" type="submit" class="btn btnSubmit">Update</button>
+															<button type="reset" class="btn btnSubmit">Reset</button>
+														</div>
+													</div>
+										      	</form>
+										      	</div>
+										      </div>
+										      <div class="modal-footer">
+										      	<div class="submitBtn">
+										      		<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+										      	</div>
+										      </div>
+										    </div>
+										  </div>
+										</div>
 										<?php endforeach; endif; ?>
 									</tbody>
 								</table>
@@ -224,7 +220,7 @@
 					<div class="col-md-1"></div>
 					<div class="col-md-10">
 						<div class="tabelSideListing text-center">
-							<span><?php echo $this->pagination->create_links(); 
+							<span><?php if(empty($hotel_detail)){ echo $this->pagination->create_links(); } 
 							endif; ?></span>
 						</div>
 					</div>
@@ -302,29 +298,34 @@
 </section>
 <?php endif; ?>
 <?php if(isset($hotel_detail)): ?>
-<div class="col-lg-8 col-lg-offset-1">
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="text-right">Hotel's Detail</h3>
-		</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-lg-8">
-						<p>
-							<strong>Hotel's Name: </strong> <?php echo $hotel_detail['hotel_name']; ?>
-						</p>
-						<p>
-							<strong>Province: </strong> <?php echo $hotel_detail['name']; ?>
-						</p>
-						<p>
-							<strong>City: </strong> <?php echo $hotel_detail['cityName']; ?>
-						</p>
+<section class="secMainWidthFilter">
+	<div class="col-lg-12">
+		<div class="row">
+			<div class="col-lg-4 col-md-offset-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3>Hotel's Detail</h3>
+					</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-4"><strong>Hotel's Name: </strong></div>
+								<div class="col-lg-8"><?php echo $hotel_detail['hotel_name']; ?></div>
+							</div>
+							<div class="row">
+								<div class="col-md-4"><strong>Province: </strong></div>
+								<div class="col-md-8"><?php echo $hotel_detail['name']; ?></div>
+							</div>
+							<div class="row">
+								<div class="col-md-4"><strong>City: </strong></div>
+								<div class="col-md-8"> <?php echo $hotel_detail['cityName']; ?></div>
+							</div>
+						</div>
+					<div class="panel-footer text-right">
+						<?php echo date('Y') . " - " . $hotel_detail['hotel_name']; ?> | <a href="javascript:history.go(-1);">Go Back &laquo;</a>
 					</div>
 				</div>
 			</div>
-		<div class="panel-footer">
-			<?php echo date('Y') . " - " . $hotel_detail['hotel_name']; ?> | <a href="javascript:history.go(-1);">Go Back &laquo;</a>
 		</div>
 	</div>
-</div>
+</section>
 <?php endif; ?>
