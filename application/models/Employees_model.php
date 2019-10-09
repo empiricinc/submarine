@@ -64,6 +64,38 @@ class Employees_model extends CI_Model {
     }
 
 
+    public function payrollprojprov($projid,$provid) {
+		$condition1 = "company_id =" . "'" . $projid . "'";
+		$condition2 = "provience_id =" . "'" . $provid . "'";
+
+        $this->db->select('employee_id,company_id,provience_id,designation_id,department_id,first_name,last_name');
+        $this->db->from('xin_employees');
+        $this->db->where($condition1);
+        $this->db->where($condition2);
+        
+        $query = $this->db->get();
+        	//echo $this->db->last_query();
+        return $query->result();
+    }
+
+
+ 
+		public function process_payroll($projid,$provid) {
+				$condition1 = "company_id =" . "'" . $projid . "'";
+				$condition2 = "provience_id =" . "'" . $provid . "'";
+
+		        $this->db->select('employee_id,company_id,provience_id,designation_id,department_id,first_name,last_name');
+		        $this->db->from('xin_employees');
+		        $this->db->where($condition1);
+		        $this->db->where($condition2);
+		        
+		        $query = $this->db->get();
+		        	//echo $this->db->last_query();
+		        return $query->result();
+		    }
+
+
+
      public function read_employee_salary($id) {	
 
 		$condition = "user_id =" . "'" . $id . "'";

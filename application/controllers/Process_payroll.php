@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-class Payroll extends MY_Controller {
+class Process_payroll extends MY_Controller {
 
 	
 
@@ -160,18 +160,9 @@ class Payroll extends MY_Controller {
 
 		//$data['all_job_types'] = $this->Job_post_model->all_job_types();
 
-/*echo $this->input->post('company_id');
-echo $this->input->post('province_id'); exit();
-*/
-		if($_POST){
-				if($this->input->post('company_id') && $this->input->post('province_id')){
-					$data['payrollempName'] = $this->Employees_model->payrollprojprov($this->input->post('company_id'),$this->input->post('province_id')); 
-				}elseif ($this->input->post('company_id')) {
-					$data['payrollempName'] = $this->Employees_model->payrollempName($this->input->post('company_id')); 
-				}
-					
+if($_POST){
+		$data['payrollempName'] = $this->Employees_model->process_payroll($this->input->post('company_id'),$this->input->post('province_id')); 
            }else{
-           	$data['payrollempName'] = 1; 
            	//$data['payrollempName'] = $this->Employees_model->payrollempName2($projid,$provid); 
            }
 
@@ -185,7 +176,7 @@ echo $this->input->post('province_id'); exit();
 
 			if(!empty($session)){ 
 
-			$data['subview'] = $this->load->view("payroll/payroll", $data, TRUE);
+			$data['subview'] = $this->load->view("payroll/Process_payroll", $data, TRUE);
 
 			$this->load->view('layout_main', $data); //page load
 
