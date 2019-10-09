@@ -79,6 +79,58 @@ class Employees_model extends CI_Model {
     }
 
 
+    public function payrollprojprovMonth($projid,$provid,$yearmonth) {
+		$condition1 = "company_id =" . "'" . $projid . "'";
+		$condition2 = "provience_id =" . "'" . $provid . "'";
+		$condition3 = "payment_date =" . "'" . $yearmonth . "'";
+
+        $this->db->select('*');
+        $this->db->from('xin_make_payment');
+        $this->db->where($condition1);
+        $this->db->where($condition2);
+        $this->db->where($condition3);
+        
+        $query = $this->db->get();
+        	//echo $this->db->last_query();
+        return $query->result();
+    }
+
+
+     public function payrollprojprovmatersheet($projid,$provid) {
+		$condition1 = "company_id =" . "'" . $projid . "'";
+		$condition2 = "provience_id =" . "'" . $provid . "'";
+		 
+
+        $this->db->select('*');
+        $this->db->from('xin_make_payment');
+        $this->db->where($condition1);
+        $this->db->where($condition2);
+         
+        
+        $query = $this->db->get();
+        	//echo $this->db->last_query();
+        return $query->result();
+    }
+
+
+
+     public function payrollprojMastersheet($projid) {
+		$condition1 = "company_id =" . "'" . $projid . "'";
+		 
+		 
+
+        $this->db->select('*');
+        $this->db->from('xin_make_payment');
+        $this->db->where($condition1);
+         
+         
+        
+        $query = $this->db->get();
+        	//echo $this->db->last_query();
+        return $query->result();
+    }
+
+
  
 		public function process_payroll($projid,$provid) {
 				$condition1 = "company_id =" . "'" . $projid . "'";

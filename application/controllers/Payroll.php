@@ -205,11 +205,16 @@ echo $this->input->post('province_id'); exit();
 
 	  
  
-	public function add_employee_payroll() {  //echo "<pre>"; print_r($_POST); echo "</pre>"; 
+	public function add_employee_payroll() {  
+
+
+		//var_dump($session['employee_id']); exit();
+
+		 //echo "<pre>"; print_r($_POST); echo "</pre>"; exit(); 
 
 	
 
-		 foreach ($_POST['user_id'] as $key => $val) {
+		 foreach ($_POST['employee_id'] as $key => $val) { 
 						//$data =	$data['user_id'] = $val;
 						 
 						//$data =	$_POST['basic_salary'][$key]; 
@@ -222,21 +227,62 @@ echo $this->input->post('province_id'); exit();
 						
 						$data = array(
 
-										'user_id' => $val, 
+										'employee_id' => $val, 
 										
 										'basic_salary' => $_POST['basic_salary'][$key], 
 
-										'total_allowance' => $_POST['total_allowance'][$key],
+										'total_allowances' => $_POST['total_allowances'][$key],
+										
+										'company_id' => $_POST['company_id'][$key],
 
-										'total_deduction' => $_POST['total_deduction'][$key],
+										'location_id' => $_POST['location_id'][$key],
 
+										'department_id' => $_POST['department_id'][$key],
+										
+										'designation_id' => $_POST['designation_id'][$key],
+
+										'payment_date' => date('Y-m'),
+										
+										'house_rent_allowance' => $_POST['house_rent_allowance'][$key],
+										
+										'medical_allowance' => $_POST['medical_allowance'][$key],
+
+										'dearness_allowance' => 0,
+										
+										'security_deposit' => 0,
+
+										'overtime_rate' => 0,
+										'is_advance_salary_deduct' => 0,
+										'advance_salary_amount' => 0,
+										'is_payment' => 0,
+										'payment_method' => 0,
+										'hourly_rate' => 0,
+										'total_hours_work' => 0,
+										'comments' => 0,
+										'status' => 1,
+
+
+
+
+										'travelling_allowance' => $_POST['travelling_allowance'][$key],
+
+										'total_deductions' => $_POST['total_deductions'][$key],
+
+										'eobi' => $_POST['eobi'][$key],
+										
+										'provident_fund' => $_POST['provident_fund'][$key],
+										
+										'tax_deduction' => $_POST['tax_deduction'][$key],
+										
 										'net_salary' => $_POST['net_salary'][$key],
+										'payment_amount' => $_POST['net_salary'][$key],
+										'gross_salary' => $_POST['net_salary'][$key],
 
 										'created_by' => $_POST['created_by'][$key],
 
-										'sdt' => date('Y-m-d'),
+										 
 										
-										'edt' => date('Y-m-d h:i:s'),
+										'created_at' => date('Y-m-d h:i:s'),
 
 										);
 
@@ -245,11 +291,11 @@ echo $this->input->post('province_id'); exit();
 										
 			}
 
-			if ($result == TRUE) {   $this->session->set_flashdata('msg', 'Payroll Added Successfully');
+			if ($result == TRUE) {   $this->session->set_flashdata('message', ' Payroll Created Successfully');
 															
-						  } else {   $this->session->set_flashdata('msg', 'Payroll Error!'); }
+						  } else {   $this->session->set_flashdata('message', ' Payroll Error!'); }
  						
- 						              redirect($_SERVER['HTTP_REFERER']); 
+ 						              redirect('payroll'); 
 
 	}
 
@@ -295,11 +341,25 @@ echo $this->input->post('province_id'); exit();
 
 		//$data['payrollempName'] = $this->Employees_model->payrollempName($this->input->post('company_id')); 
 
-		if($_POST){
+		/*if($_POST){
 			$data['payrollempName'] = $this->Employees_model->payrollempName($this->input->post('company_id')); 
            }else{
            	$data['payrollempName'] = $this->Employees_model->payrollempName2($projid,$provid); 
-           }
+           }*/
+
+        if($_POST){
+        	if($this->input->post('company_id') && $this->input->post('province_id')){
+					$data['payrollempName'] = $this->Employees_model->payrollprojprovMonth($this->input->post('company_id'),$this->input->post('province_id',$this->input->post('month_year')));
+				}elseif($this->input->post('company_id') && $this->input->post('province_id')){
+					$data['payrollempName'] = $this->Employees_model->payrollprojprovmatersheet($this->input->post('company_id'),$this->input->post('province_id')); 
+				}elseif ($this->input->post('company_id')) {
+					$data['payrollempName'] = $this->Employees_model->payrollprojMastersheet($this->input->post('company_id')); 
+				}
+					
+           }else{
+           	$data['payrollempName'] = 1; 
+           	//$data['payrollempName'] = $this->Employees_model->payrollempName2($projid,$provid); 
+           }   
 
 		$data['breadcrumbs'] = $this->lang->line('left_payment_history');
 

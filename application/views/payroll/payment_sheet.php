@@ -1,6 +1,6 @@
 <?php $session = $this->session->userdata('username');?>
 <?php 
-
+$this->load->model("Xin_model");
 $message = $this->session->flashdata('message');
 
 if ($message) {
@@ -130,85 +130,75 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
 ?>
 
 
-
+<!-- 
 <script type="text/javascript">
   $(document).ready(function() {
     $('#job_avail_position').DataTable();
 } );
 </script>
-<style type="text/css"> .no-padding{ padding: 0px !important; } .allowance-tabl{ width: 100%; } .allowance-tabl td{ border: 1px solid #ddd !important; } </style>
+<style type="text/css"> .no-padding{ padding: 0px !important; } .allowance-tabl{ width: 100%; } .allowance-tabl td{ border: 1px solid #ddd !important; } </style> -->
 
-<?php if($payrollempName){?>
+<?php require_once('dtpaysheet.php'); ?>
+
+<?php if($payrollempName != 1){?>
  
 
 <div class="table-responsive">
-    <table id="job_avail_position" class="table table-striped table-bordered" style="width:100%">
+    
+
+<table id="ejemplo" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Employee Name</th>
                 <th>Project</th>
+                <th>Province</th>
                 <th>Designation</th>
-                <th>Department</th>
-                <th>Location</th>
+                <th>Department</th>                 
                 <th>Basic Salary</th>
-                <th>Allowances</th>
-                <th>Deductions</th>
-                <th>Net Salary</th>
-                <th>Date</th>
-                <th>Action</th> 
+                <th>payment_amount</th> 
+                <th>Gross Salary</th> 
+                <th>Total Allowances</th> 
+                <th>Total Deductions</th> 
+                <th>Net Salary</th> 
+                <th>House Rent Allowance</th> 
+                <th>Medical Allowance</th> 
+                <th>Travelling Allowance</th> 
+                <th>Dearness Allowance</th> 
+                <th>Provident Fund</th> 
+                <th>EOBI</th> 
+                <th>Tax Deduction</th> 
+                <th>Advance Salary</th>                  
+                <th>Month</th>
+                <th>Action</th>                 
+                
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><?php //echo $i; ?></td>   
-                <td><?php  //echo $empdetail->first_name; ?></td>
-                <td><?php //echo $proj_name;?></td>
-                <td><?php //echo $designation_name;?></td>
-                <td><?php //echo $department_name;?></td>
-                <td><?php //echo $district_name;?></td>
-                <td><?php //echo $province_name; ?></td>
-                <td class="no-padding"><table class="allowance-tabl"><tr><td>H.Rent</td><td>Medical</td><td>Travel</td></tr></table></td>
-                <td class="no-padding"><table class="allowance-tabl"><tr><td>EOBI</td><td>Pro.Fund</td><td>Tax</td></tr></table></td>
-                <td><?php //echo $district_name; ?></td>
-                <td><?php //echo $location_detail->sdt; ?></td>
-                <td><?php //echo $location_detail->sdt; ?></td>
-            </tr>
+            
 
 <?php 
 
-  $TbasicSalary = array();
-  $Tallowance = array();
-  $Tdeduction = array();
-  $TnetSallery = array();
-  $TAllwnc=0;
-  $basic_salary=0;
-  $Tdeductn=0;
-  $netSallery=0;
+  
  
-    $location_detail=0;
+    
     $i = 0;
-    foreach($payrollempName as $empdetail){   
+    foreach($payrollempName as $empdetail){  // echo $location_detail->company_id;
       $i++;
      
 
+     //$data['emp_details'] = $this->Xin_model->read_user_info($payment[0]->employee_id);
 
-
-
-    $check_user_month = $this->Payroll_model->get_user_payroll($empdetail->employee_id,$dat=date('Y-m-d'));
-          /*if($check_user_month){ 
-                if(is_null($check_user_month)){
-                          $availableSallery = "yah";
-                      echo    '(--hahahha--)<br>';
-                           
+     $emp_details = $this->Xin_model->read_user_info($empdetail->employee_id);
+          if($emp_details){ 
+                if(!is_null($emp_details)){
+                          $fname = $emp_details[0]->first_name;
+                          $lname = $emp_details[0]->last_name;
                 } else {
-                         //echo '(----emp not exist-----)<br>'; // $designation_name = '--';
+                          $designation_name = '--';
                 }
-          }*/ //else{ $check_user_month = '--'; }  
+          }else{ $designation_name = '--'; } 
 
-
-     if (is_null($check_user_month)) {
-        
 
 
     $designation = $this->Designation_model->read_designation_information($empdetail->designation_id);
@@ -241,114 +231,61 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                     }
            }else{ $proj_name = '--'; }    
 
-     /*$province_data = $this->ProvinceCity->read_province_information($location_detail->province_id);
+    /*$province_data = $this->ProvinceCity->read_province_information($empdetail->location_id);
           if($province_data){ 
                     if(!is_null($province_data)){
                               $province_name = $province_data[0]->name;
                     } else {
                               $province_name = '--';
                     }   
-          }else{ $province_name = '--'; }    */   
-        
-     $district_data = $this->ProvinceCity->read_district_information($empdetail->district_id=10);
-        if($district_data){ 
-            if(!is_null($district_data)){
-                      $district_name = $district_data[0]->name;
-            } else {
-                      $district_name = '--';
-            } 
-        }else{ $district_name = '--'; }    
+          }else{ $province_name = '--'; }*/         
 
-
-        $emp_salary = $this->Employees_model->read_employee_salary($empdetail->employee_id);
-          if($emp_salary){ 
-                    if(!is_null($emp_salary)){
-                              $basic_salary = $emp_salary[0]->basic_salary;
-                    } else {
-                              $basic_salary = '0';
-                    }
-           }else{ $basic_salary = '0'; } 
-
-
-       $emp_allowances = $this->Employees_model->read_employee_allowances($empdetail->employee_id);
-          if($emp_allowances){ 
-                    if(!is_null($emp_allowances)){
-                              $house_rent_allowance = $emp_allowances[0]->house_rent_allowance;
-                              $medical_allowance = $emp_allowances[0]->medical_allowance;
-                              $travelling_allowance = $emp_allowances[0]->travelling_allowance;
-                    } else {
-                              $house_rent_allowance = '0';
-                              $medical_allowance = '0';
-                              $travelling_allowance = '0';
-                    }
-           }else{ $house_rent_allowance = '0';
-                              $medical_allowance = '0';
-                              $travelling_allowance = '0'; }   
-           
-
-      $deductions = $this->Employees_model->read_employee_deductions($empdetail->employee_id);
-          if($deductions){ 
-                    if(!is_null($deductions)){
-                              $eobi = $deductions[0]->eobi;
-                              $provident_fund = $deductions[0]->provident_fund;
-                              $tax_deduction = $deductions[0]->tax_deduction;
-                    } else {
-                              $eobi = '0';
-                              $provident_fund = '0';
-                              $tax_deduction = '0';
-                    }
-           }else{ $eobi = '0';
-                              $provident_fund = '0';
-                              $tax_deduction = '0'; }              
+                 
           
-      
 
             ?>
      
 
             <tr>
                 <td><?php echo $i; ?></td>   
-                <td><?php  echo $empdetail->first_name.''.$empdetail->last_name; ?></td>
+                <td><?php echo $fname.' '.$lname;; ?></td>
                 <td><?php echo $proj_name;?></td>
+                <td><?php //echo $province_name;?></td>
                 <td><?php echo $designation_name;?></td>
                 <td><?php echo $department_name;?></td>
-                <td><?php echo $district_name;?></td>
-                <td>Rs <?php echo $basic_salary;  
-                                 $TbasicSalary[] = $basic_salary; ?></td>
-                <td class="no-padding"><table class="allowance-tabl"><tr>
-                  <td><?php echo $house_rent_allowance; ?></td>
-                  <td><?php echo $medical_allowance; ?></td>
-                  <td><?php echo $travelling_allowance; 
-                                 $TAllwnc = $house_rent_allowance+$medical_allowance+$travelling_allowance;
-                                 $Tallowance[] = $house_rent_allowance+$medical_allowance+$travelling_allowance;  ?></td></tr></table>
+                <td><?php echo $empdetail->basic_salary; $TbasicSalary[] = $empdetail->basic_salary;?> </td>
+                <td><?php echo $empdetail->payment_amount;?> </td>
+                <td><?php echo $empdetail->gross_salary;?> </td>
+                <td><?php echo $empdetail->total_allowances; $Tallowance[] = $empdetail->total_allowances; ?> </td>
+                <td><?php echo $empdetail->total_deductions; $Tdeduction[] = $empdetail->total_deductions; ?> </td>
+                <td><?php echo $empdetail->net_salary; $TnetSallery[] = $empdetail->net_salary; ?> </td>
+                <td><?php echo $empdetail->house_rent_allowance;?> </td>
+                <td><?php echo $empdetail->medical_allowance;?> </td>
+                <td><?php echo $empdetail->travelling_allowance;?> </td>
+                <td><?php echo $empdetail->dearness_allowance;?> </td>
+                <td><?php echo $empdetail->provident_fund;?> </td>
+                <td><?php echo $empdetail->eobi;?> </td>
+                <td><?php echo $empdetail->tax_deduction;?> </td>                 
+                <td><?php echo $empdetail->advance_salary_amount;?> </td> 
+                <td><?php echo $empdetail->payment_date;?> </td>
+                <td><a class="text-success" href="<?php echo base_url(); ?>payroll/pdf_create/sl/<?php echo $empdetail->employee_id; ?>/">Payslip</a>
                 </td>
-                <td class="no-padding"><table class="allowance-tabl"><tr>
-                  <td><?php echo $eobi; ?></td>
-                  <td><?php echo $provident_fund; ?></td>
-                  <td><?php echo $tax_deduction;  
-                                $Tdeductn = $eobi+$provident_fund+$tax_deduction;
-                                $Tdeduction[] = $eobi+$provident_fund+$tax_deduction; ?></td></tr></table>
-                </td>
-                <td>Rs <?php echo $netSallery = ($basic_salary+$TAllwnc)-($Tdeductn);
-                                  $TnetSallery[] = ($basic_salary+$TAllwnc)-($Tdeductn); ?></td>
-                <td><?php echo date('Y-m-d'); ?></td>
-                <td><a class="text-success" href="<?php echo base_url(); ?>payroll/pdf_create/sl/<?php echo $empdetail->employee_id; ?>/">Payslip</a></td>
 
 </tr>
 
-       
-            <?php  } } ?>
 
+            
+            <?php   } ?>
 
+ 
 
         </tbody>
       </table>
-
 <table id="job_avail_position" class="table table-striped table-bordered" style="width:100%">
 
 <tbody>
   <tr>
-                <th>Project Name:</th>  
+                <th><!-- Project Name: --></th>  
                 <td><?php //echo ($proj_name) ? $proj_name : '--'; ?></td>
                 <th>Total Basic Salaries:</th>
                 <td>Rs <?php echo array_sum($TbasicSalary); ?></td>
