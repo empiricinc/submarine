@@ -84,7 +84,7 @@ if ($message) {
   <div class="col-md-3">
             <div class="form-group">
                 <label for="date_of_closing" class="control-label">Province</label>
-                <select title="Select province" name="province_id" class="form-control" id="preven-name">      
+                <select title="Select province" name="province_id" class="form-control">      
                     <option value="">Select Province</option>
                     <?php
                     foreach ($geProvinces as $key => $element) {
@@ -231,14 +231,14 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                     }
            }else{ $proj_name = '--'; }    
 
-    /*$province_data = $this->ProvinceCity->read_province_information($empdetail->location_id);
+    $province_data = $this->ProvinceCity->read_province_information($empdetail->location_id);
           if($province_data){ 
                     if(!is_null($province_data)){
                               $province_name = $province_data[0]->name;
                     } else {
                               $province_name = '--';
                     }   
-          }else{ $province_name = '--'; }*/         
+          }else{ $province_name = '--'; }         
 
                  
           
@@ -250,7 +250,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <td><?php echo $i; ?></td>   
                 <td><?php echo $fname.' '.$lname;; ?></td>
                 <td><?php echo $proj_name;?></td>
-                <td><?php //echo $province_name;?></td>
+                <td><?php echo $province_name;?></td>
                 <td><?php echo $designation_name;?></td>
                 <td><?php echo $department_name;?></td>
                 <td><?php echo $empdetail->basic_salary; $TbasicSalary[] = $empdetail->basic_salary;?> </td>
@@ -281,6 +281,9 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
 
         </tbody>
       </table>
+
+<?php if($payrollempName){ ?>
+
 <table id="job_avail_position" class="table table-striped table-bordered" style="width:100%">
 
 <tbody>
@@ -301,6 +304,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
 </tr>
 </tbody>
 </table>
+<?php } ?>
 
     </div>
  

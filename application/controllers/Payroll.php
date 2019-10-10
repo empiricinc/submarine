@@ -346,12 +346,13 @@ echo $this->input->post('province_id'); exit();
            }else{
            	$data['payrollempName'] = $this->Employees_model->payrollempName2($projid,$provid); 
            }*/
+//echo $this->input->post('month_year'); exit();
 
         if($_POST){
-        	if($this->input->post('company_id') && $this->input->post('province_id')){
-					$data['payrollempName'] = $this->Employees_model->payrollprojprovMonth($this->input->post('company_id'),$this->input->post('province_id',$this->input->post('month_year')));
-				}elseif($this->input->post('company_id') && $this->input->post('province_id')){
-					$data['payrollempName'] = $this->Employees_model->payrollprojprovmatersheet($this->input->post('company_id'),$this->input->post('province_id')); 
+        	if($this->input->post('company_id') && $this->input->post('province_id') && $this->input->post('month_year')){
+					$data['payrollempName'] = $this->Employees_model->payrollprojprovMonth($this->input->post('company_id'),$this->input->post('province_id'),$this->input->post('month_year'));
+				}elseif($this->input->post('company_id') && $this->input->post('month_year')){
+					$data['payrollempName'] = $this->Employees_model->payrollprojdatematersheet($this->input->post('company_id'),$this->input->post('month_year')); 
 				}elseif ($this->input->post('company_id')) {
 					$data['payrollempName'] = $this->Employees_model->payrollprojMastersheet($this->input->post('company_id')); 
 				}

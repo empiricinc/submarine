@@ -81,7 +81,7 @@ class Employees_model extends CI_Model {
 
     public function payrollprojprovMonth($projid,$provid,$yearmonth) {
 		$condition1 = "company_id =" . "'" . $projid . "'";
-		$condition2 = "provience_id =" . "'" . $provid . "'";
+		$condition2 = "location_id =" . "'" . $provid . "'";
 		$condition3 = "payment_date =" . "'" . $yearmonth . "'";
 
         $this->db->select('*');
@@ -109,6 +109,24 @@ class Employees_model extends CI_Model {
         
         $query = $this->db->get();
         	//echo $this->db->last_query();
+        return $query->result();
+    }
+
+
+
+     public function payrollprojdatematersheet($projid,$yearmonth) {
+		$condition1 = "company_id =" . "'" . $projid . "'";
+		$condition2 = "payment_date =" . "'" . $yearmonth . "'";
+		 
+
+        $this->db->select('*');
+        $this->db->from('xin_make_payment');
+        $this->db->where($condition1);
+        $this->db->where($condition2);
+         
+        
+        $query = $this->db->get();
+        	echo $this->db->last_query();
         return $query->result();
     }
 

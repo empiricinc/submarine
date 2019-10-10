@@ -132,7 +132,7 @@ div.dataTables_wrapper div.dataTables_filter {
                 "sProcessing":     "Procesando...",
                 "sLengthMenu":     "Mostrar _MENU_ Payroll Records",
                 "sZeroRecords":    "No se encontraron resultados",
-                "sEmptyTable":     "NingÃºn dato disponible en esta tabla",
+                "sEmptyTable":     "No Records Founds",
                 "sInfo":           "Showing _START_ to _END_ From Total _TOTAL_ Payroll Records",
                 "sInfoEmpty":      "Showing 0 to 0 de un total de 0 Payroll Records",
                 "sInfoFiltered":   "(filtrado de un total de _MAX_ Payroll Records)",
