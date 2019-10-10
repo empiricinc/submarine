@@ -31,7 +31,24 @@
 							</select>
 							<span></span>
 						</div>
-						
+						<div class="filterSelect">
+							<select name="location" class="form-control">
+								<option value="">Location</option>
+								<?php foreach($locations AS $l): ?>
+								<option value="<?= $l->location_id; ?>"><?= $l->location_name; ?></option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<!-- <div class="filterSelect">
+							<select name="employee_type" class="form-control">
+								<option value="current">Employee Type</option>
+								<option value="current">Current</option>
+								<option value="resigned">Resigned</option>
+								<option value="terminated">Terminated</option>
+							</select>
+							<span></span>
+						</div> -->
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>

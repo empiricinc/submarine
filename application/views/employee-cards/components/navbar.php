@@ -16,7 +16,7 @@
                 Reports <span class="fa fa-caret"></span>
               </a>
               <ul class="dropdown-menu"> -->
-                <li class=""><a href="<?= base_url(); ?>dashboard">Home</a></li>
+                <li class=""><a href="<?= base_url(); ?>">Home</a></li>
                 <li class=""><a href="<?= base_url(); ?>Employee_cards/index">Dashboard</a></li>
 
                 <li class=""><a href="<?= base_url(); ?>Employee_cards/received">Received Cards</a></li>

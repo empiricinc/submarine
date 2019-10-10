@@ -42,6 +42,7 @@ class Investigation extends MY_Controller
 						'Departments_model',
 						'Designations_model',
 						'Projects_model',
+						'Locations_model',
 						'Disciplinary_model'
 					));
 
@@ -113,6 +114,7 @@ class Investigation extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 		$data['reasons'] = $this->Investigation_model->get_reasons(); 
 
 		$data['content'] = $this->load->view('investigation/employees', $data, TRUE);
@@ -351,7 +353,7 @@ class Investigation extends MY_Controller
 		$data['comment'] = $this->Investigation_model->get_comments($investigation_id, 'comment');
 		$data['files'] = $this->Investigation_model->investigation_files($investigation_id)->result();
 		$data['reason'] = $this->Investigation_model->get_reasons();		
-		$data['content'] = $this->load->view('investigation/detail', $data, TRUE);
+		$data['content'] = $this->load->view('investigation/investigation-detail', $data, TRUE);
 		$this->load->view('investigation/_template', $data);
 	}
 
