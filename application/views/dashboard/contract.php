@@ -463,46 +463,6 @@ h4 {
                   <!-- Extend contract modal ends. -->
                 </div>
               </div>
-               <!--Extend contract modal starts. -->
-              <div class="modal fade" id="extendContracts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                      <!--Header-->
-                    <div class="modal-header">
-                      <h4 style="display: inline;">Reason to Finish contract... </h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                      </button>
-                    </div>
-                    <!--Body-->
-                    <div class="modal-body">
-                      <form action="<?= base_url('contract/extend_all'); ?>" method="post">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <label>Date From</label>
-                            <input type="date" name="date_from" class="form-control date">
-                          </div>
-                          <div class="col-md-6">
-                            <label>Date To</label>
-                            <input type="date" name="date_to" class="form-control date">
-                          </div>
-                        </div><br>
-                        <div class="row">
-                          <div class="col-md-6 text-left">
-                            <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Submit">
-                            <input type="reset" name="reset" class="btn btn-warning btn-sm" value="Reset">
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <!--Footer-->
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Extend contract modal ends. -->
             </div>
             <div class="row">
               <div class="col-md-12">
