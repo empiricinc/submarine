@@ -23,7 +23,7 @@
 					<div class="col-lg-12">
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Save Changes</button>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
+							<a href="<?php echo base_url('tests/all_questions');?>" class="btn btnSubmit">Cancel</a>
 						</div>
 					</div>
 				</form>
