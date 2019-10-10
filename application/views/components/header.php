@@ -190,7 +190,7 @@ if($system[0]->system_skin=='skin-6'){
                     <a href="#" data-toggle="dropdown" class="dropdown-toggle"> Payroll </a>
                     <ul class="dropdown-menu">
                       <li><a href="<?php echo base_url(); ?>payroll">Payroll</a></li>
-                      <li><a href="<?php echo base_url(); ?>payroll/payment_sheet">Payment Sheet</a></li> 
+                      <li><a href="<?php echo base_url(); ?>payroll/payment_sheet">Payroll Master Sheet</a></li> 
                     </ul>
                 </li>
 

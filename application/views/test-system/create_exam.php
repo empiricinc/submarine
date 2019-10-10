@@ -43,6 +43,7 @@
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
 							<button type="reset" class="btn btnSubmit">Reset</button>
+							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
 						</div>
 					</div>
 				</form>
@@ -100,24 +101,19 @@
 			var project = $('#project').val();
 			var designation = $('#designation').val();
 			var question = $('#question').val();
-			if(project == '' || designation == ''){
-				alert('Please fill up the required fields');
-				return false;
-			}else{
 			// AJAX function call to post data into database.
-				$.ajax({
-					type: "post",
-					url: "<?php echo base_url('tests/upload'); ?>", // URL to submit data to DB.
-					data: {project: project, designation: designation, question: question},
-					dataType: 'json', // dataType should be 'json' or it won't work.
-					cache: false,
-					success: function(res){ // Alert something to let the user know something happened.
-						alert('Your data has been stored successfully !');
-						$('#question').val(''); // Clear the textarea to add new data.
-						console.log(res); // Log 'true' to the console as well.
-					}
-				});
-			}
+			$.ajax({
+				type: "post",
+				url: "<?php echo base_url('tests/upload'); ?>", // URL to submit data to DB.
+				data: {project: project, designation: designation, question: question},
+				dataType: 'json', // dataType should be 'json' or it won't work.
+				cache: false,
+				success: function(res){ // Alert something to let the user know something happened.
+					alert('Your data has been stored successfully !');
+					$('#question').val(''); // Clear the textarea to add new data.
+					console.log(res); // Log 'true' to the console as well.
+				}
+			})
 		});
 	});
 	// select project from the list and get the designations associated with the project_id.

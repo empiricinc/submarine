@@ -13,30 +13,9 @@
         <ul class="nav navbar-nav">
           <li class=""><a href="<?= base_url(); ?>">Home</a></li>
           <li class=""><a href="<?= base_url(); ?>Investigation/dashboard">Dashboard</a></li>
-          <li class=""><a href="<?= base_url(); ?>Investigation/index">Add Complaint</a></li>
-          <li class="dropdown">
-            <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true"> Complaints </a>
-              <ul class="dropdown-menu">
-                  
-                  <li class=""><a href="<?= base_url(); ?>Investigation/view">Manager</a></li>
-                  <li class=""><a href="<?= base_url(); ?>Investigation/legal_view">Legal</a></li>
-                  <li class=""><a href="<?= base_url(); ?>Investigation/local_view">local</a></li>
-              </ul>
-          </li>
-
           <li class=""><a href="<?= base_url(); ?>Investigation/employees">Add Investigation</a></li>
-          <li class="dropdown">
-              <a href="javascript:void(0);" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true"> Investigations </a>
-              <ul class="dropdown-menu">
-                  
-                  <li class=""><a href="<?= base_url(); ?>Investigation/view_internal">Manager</a></li>
-                  <li class=""><a href="<?= base_url(); ?>Investigation/legal_internal">Legal</a></li>
-                  <li class=""><a href="<?= base_url(); ?>Investigation/local_internal">local</a></li>
-              </ul>
-          </li>
-          
-          
-          
+          <li class=""><a href="<?= base_url(); ?>Investigation/view">View Investigation</a></li>
+              
           <li>
             <a href="#">
               <span class="dot"></span>

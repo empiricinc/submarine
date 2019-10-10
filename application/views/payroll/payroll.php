@@ -100,7 +100,7 @@ if ($message) {
   <div class="col-md-3">
             <div class="form-group">
                 <label for="date_of_closing" class="control-label">Province</label>
-                <select title="Select province" name="province_id" class="form-control" required="required">      
+                <select title="Select province" name="province_id" class="form-control">      
                     <option value="">Select Province</option>
                     <?php
                     foreach ($geProvinces as $key => $element) {
@@ -111,7 +111,7 @@ if ($message) {
             </div>
   </div> 
 
-  <div class="col-md-3">
+  <!-- <div class="col-md-3">
 
     <div class="form-group">
     <label for="month_year"><?php echo $this->lang->line('xin_select_month');?></label>
@@ -119,7 +119,7 @@ if ($message) {
 
     </div>
 
-  </div>
+  </div> -->
   <div class="col-md-3">
 
     <div class="form-group" style="margin-top: 8%;">
@@ -181,7 +181,7 @@ if ($message) {
             </div>
   </div>  -->
 
-  <div class="col-md-3">
+  <!-- <div class="col-md-3">
 
     <div class="form-group">
     <label for="month_year"><?php echo $this->lang->line('xin_select_month');?></label>
@@ -189,7 +189,7 @@ if ($message) {
 
     </div>
 
-  </div>
+  </div> -->
   <div class="col-md-3">
 
     <div class="form-group" style="margin-top: 8%;">
@@ -229,16 +229,28 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
     $('#job_avail_position').DataTable();
 } );
 </script>
-<style type="text/css"> .no-padding{ padding: 0px !important; } .allowance-tabl{ width: 100%; } .allowance-tabl td{ border: 1px solid #ddd !important; } </style>
+<style type="text/css"> .no-padding{ padding: 0px !important; } .allowance-tabl{ width: 100%; } .allowance-tabl td{ border: 0px solid #ddd !important; } </style>
 
-<?php if($payrollempName){?>
-<form action="<?php echo base_url(); ?>payroll/add_employee_payroll" method="post" name="employee_payroll">
+<?php if($payrollempName != 1){?>
+
+<form action="<?php echo base_url(); ?>process_payroll" method="post" name="process_payroll">
+  <input type="hidden" name="company_id" value="<?php echo $this->input->post('company_id'); ?>">
+  <input type="hidden" name="province_id" value="<?php echo $this->input->post('province_id'); ?>">
  <div class="col-md-9"></div>
+ <div class="col-md-3 text-right">
+    <div class="form-group" style="margin-top: 8%;">
+      <button type="submit" class="btn btn-primary save">Process Payroll</button>
+    </div>
+  </div> 
+</form>
+
+<!-- <form action="<?php echo base_url(); ?>payroll/add_employee_payroll" method="post" name="employee_payroll"> -->
+ <!-- <div class="col-md-9"></div>
  <div class="col-md-3 text-right">
     <div class="form-group" style="margin-top: 8%;">
       <button type="submit" class="btn btn-primary save">Save Payroll</button>
     </div>
-  </div> 
+  </div> --> 
 
 <div class="table-responsive">
     <table id="job_avail_position0" class="table table-striped table-bordered" style="width:100%">
@@ -477,12 +489,12 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
 
 </tr>
 
-<input type="hidden" name="user_id[]" value="<?php echo $empdetail->employee_id; ?>">
+<!-- <input type="hidden" name="user_id[]" value="<?php echo $empdetail->employee_id; ?>">
 <input type="hidden" name="basic_salary[]" value="<?php echo $basic_salary; ?>">
 <input type="hidden" name="total_allowance[]" value="<?php echo $TAllwnc; ?>">
 <input type="hidden" name="total_deduction[]" value="<?php echo $Tdeductn; ?>">
 <input type="hidden" name="net_salary[]" value="<?php echo $netSallery; ?>">
-<input type="hidden" name="created_by[]" value="1<?php //echo $user; ?>">
+<input type="hidden" name="created_by[]" value="1<?php //echo $user; ?>"> -->
             
             <?php  } } ?>
 
@@ -492,7 +504,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <td><?php //echo $proj_name;?></td>
                 <td><?php //echo $designation_name;?></td>
                 <td><?php //echo $department_name;?></td>
-                <td><?php //echo $district_name;?></td>
+                <td><?php //echo $district_name;?>Total</td>
                 <td>Rs <?php echo array_sum($TbasicSalary); ?></td>
                 <td>Rs <?php echo array_sum($Tallowance); ?></td>
                 <td>Rs <?php echo array_sum($Tdeduction); ?></td>
@@ -505,7 +517,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
         </tbody>
       </table>
     </div>
-  </form>
+  <!-- </form> -->
 
   <?php }else{ echo '<div class="alert alert-warning text-center"><strong>Warning!</strong> No Records Found</div>'; } ?>
 

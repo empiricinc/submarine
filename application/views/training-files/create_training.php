@@ -20,18 +20,6 @@
 						<?php endif; ?>
 					</div>
 				<form method="post" action="<?php echo base_url('trainings/create_training'); ?>">
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select Project</option>
-								<?php foreach($projects as $project): ?>
-									<option value="<?php echo $project->company_id; ?>">
-										<?php echo $project->name; ?>
-									</option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
 							<select name="location" id="location" class="form-control" style="color: #aeafaf;" required="">
@@ -67,6 +55,18 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
+							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="">
+								<option value="" >Select Project</option>
+								<?php foreach($projects as $project): ?>
+									<option value="<?php echo $project->company_id; ?>">
+										<?php echo $project->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="inputFormMain">
 							<select name="trg_type" id="trg_type" class="form-control" style="color: #aeafaf;" required="">
 								<option value="" >Select Type</option>
 								<?php foreach($training_types as $type): ?>
@@ -91,7 +91,14 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="trainer_2" id="trainer_2" class="form-control" style="color: #aeafaf;" placeholder="Trainer 2...">
+							<select name="trainer_2" id="trainer_2" class="form-control" style="color: #aeafaf;">
+								<option value="">Select Trainer 2</option>
+								<?php foreach($trainers as $trainer): ?>
+									<option value="<?php echo $trainer->trainer_id; ?>">
+										<?php echo $trainer->first_name." ".$trainer->last_name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
 						</div>
 					</div>
 					<div class="col-lg-6">
@@ -198,6 +205,7 @@
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
 							<button type="reset" class="btn btnSubmit">Reset</button>
+							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
 						</div>
 					</div>
 				</form>

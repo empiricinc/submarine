@@ -145,7 +145,7 @@ $active_group = 'default';
 
 $query_builder = TRUE;
 
-
+// for Local Acess
  
 $db['default'] = array(
 	'dsn'	=> '',
@@ -168,3 +168,33 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+
+/*
+
+
+// for Dev Acess
+
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'ctcorgco_dev',
+	'password' => 'R]10b96~6vRS',
+	'database' => 'ctcorgco_dev',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+*/

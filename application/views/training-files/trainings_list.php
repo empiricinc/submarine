@@ -19,33 +19,33 @@
 						<div class="tabelHeading">
 							<?php if(empty($training_detail)): ?>
 							<h3>
-								all trainings
-								<span>
-									(list of trainings to be held & done) 
-								</span> |
-								<small>
-									<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
-									<a href="<?php echo base_url('trainings/export_trainings'); ?>" class="btn btn-success btn-xs">Export Excel</a>
-								</small><br>
-								<small id="status-btns">
-									<a href="<?= base_url('trainings/all_trainings'); ?>">
-										<span class="label label-danger">
-											All Trainings
+									all trainings
+									<span>
+										(list of trainings to be held & done) 
+									</span> |
+									<small>
+										<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
+										<a href="<?php echo base_url('trainings/export_trainings'); ?>" class="btn btn-success btn-xs">Export Excel</a>
+									</small><br>
+									<small id="status-btns">
+										<a href="<?= base_url('trainings/all_trainings'); ?>">
+											<span class="label label-danger">
+												All Trainings
+											</span> &nbsp;
+										</a>
+										<span id="progress" class="label label-info">
+											In Progress
 										</span> &nbsp;
-									</a>
-									<span id="progress" class="label label-info">
-										In Progress
-									</span> &nbsp;
-									<span id="induction" class="label label-warning">
-										Induction
-									</span> &nbsp;
-									<span id="refresher" class="label label-success">
-										Refresher
-									</span> &nbsp;
-									<span id="complete" class="label label-primary">
-										Completed
-									</span>
-								</small>
+										<span id="induction" class="label label-warning">
+											Induction
+										</span> &nbsp;
+										<span id="refresher" class="label label-success">
+											Refresher
+										</span> &nbsp;
+										<span id="complete" class="label label-primary">
+											Completed
+										</span>
+									</small>
 							</h3>
 							<?php else: ?> 
 								<h3>training detail <span>(see training's detail & move to attendance)</span></h3>

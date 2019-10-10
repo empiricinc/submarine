@@ -100,7 +100,7 @@
 						<div class="tabelHeading">
 							<div class="col-md-10">
 								<h3><?= $title; ?> <span></span></h3>
-								<small>(Click on row to create investigation)</small>
+								<small></small>
 							</div>
 
 						</div>
@@ -125,10 +125,10 @@
 					<div class="col-md-12">
 						<div class="tableMain">
 							<div class="table-responsive">
-								<table class="table table-hover" id="investigation-table" style="cursor: pointer;">
+								<table class="table table-hover" id="employees-table" style="cursor: pointer;">
 									<thead>
 										<tr>
-											<!-- <th>#</th> -->
+											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
 											<!-- <th>Email</th> -->
@@ -141,10 +141,9 @@
 									<tbody>
 										<?php $count=1; foreach($employees AS $e): ?>
 										<tr data-id="<?= $e->employee_id; ?>">
-											<!-- <td><?= $count; ?></td> -->
+											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
 											<td><?= $e->contact_number; ?></td>
-											<!-- <td><?= $e->email; ?></td> -->
 											<td><?= $e->company_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
