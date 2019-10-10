@@ -51,7 +51,6 @@
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
 							<button type="reset" class="btn btnSubmit">Reset</button>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
 						</div>
 					</div>
 				</form>

@@ -97,7 +97,7 @@
 							<?php else: ?>
 								<button id="update" type="submit" class="btn btnSubmit">Update</button>
 							<?php endif; ?>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
+							<button type="reset" class="btn btnSubmit">Reset</button>
 						</div>
 					</div>
 				</form>

@@ -536,6 +536,13 @@ class Contract extends MY_Controller {
 		$this->session->set_flashdata('messageactive', 'Contract has been extended successfully!');
 		redirect('contract');
 	}
+	// Extend All contracts at once.
+	public function extend_all(){
+		$data = array(
+			'from_date' => $this->input->post('date_from'),
+			'to_date' => $this->input->post('date_to')
+		);
+	}
 	// View printed contracts by status.
 	public function get_printed($status = ''){
 		$session = $this->session->userdata('username');
