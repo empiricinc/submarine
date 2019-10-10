@@ -143,16 +143,22 @@
 							</label>
 						</div>
 						<div class="col-lg-2">
-							<?= ($detail->issue_reporting_date) ? date('d-m-Y', strtotime($detail->issue_reporting_date)) : '' ?>
+							<?= ($detail->issue_reporting_date) ? date('d-m-Y', strtotime($detail->issue_reporting_date)) : 'N/A' ?>
 						</div>
 						<div class="col-lg-2">
 							<label class="default-label">
 							<?= ($detail->salary_hold) ? 'Yes' : 'No'; ?>
 							</label>
 						</div>
-						<div class="col-lg-2"></div>
-						<div class="col-lg-2"></div>
-						<div class="col-lg-2"></div>
+						<div class="col-lg-2">
+							<?= ($detail->salary_deduction_days) ? $detail->salary_deduction_days : 'N/A'; ?>
+						</div>
+						<div class="col-lg-2">
+							<?= ($detail->salary_deduction_month) ? $detail->salary_deduction_month : 'N/A'; ?>
+						</div>
+						<div class="col-lg-2">
+							<?= ($detail->last_working_date) ? $detail->last_working_date : 'N/A'; ?>
+						</div>
 					</div>
 
 					<div class="col-lg-12 pt-5">
@@ -188,19 +194,21 @@
 						<div class="col-lg-2"><strong>Date of joining</strong></div>
 					</div>
 					<div class="col-lg-12 pb-5">
-						<div class="col-lg-2"></div>
+						<div class="col-lg-2">
+							<?= ($detail->letter_no) ? $detail->letter_no : 'N/A'; ?>
+						</div>
 						<div class="col-lg-2"><?= ucwords($detail->created_by); ?></div>
 						<div class="col-lg-2">
-							<?= ($detail->created_date) ? date('d-m-Y', strtotime($detail->created_date)) : ''; ?>
+							<?= ($detail->created_date) ? date('d-m-Y', strtotime($detail->created_date)) : 'N/A'; ?>
 						</div>
 						<div class="col-lg-2">
-							<?= ($detail->issued_date) ? date('d-m-Y', strtotime($detail->issued_date)) : ''; ?>
+							<?= ($detail->issued_date) ? date('d-m-Y', strtotime($detail->issued_date)) : 'N/A'; ?>
 						</div>
 						<div class="col-lg-2">
-							<?= ($detail->delivered_date) ? date('d-m-Y', strtotime($detail->delivered_date)) : ''; ?>
+							<?= ($detail->delivered_date) ? date('d-m-Y', strtotime($detail->delivered_date)) : 'N/A'; ?>
 						</div>
 						<div class="col-lg-2">
-							<?= ($detail->date_of_joining) ? date('d-m-Y', strtotime($detail->date_of_joining)) : ''; ?>
+							<?= ($detail->date_of_joining) ? date('d-m-Y', strtotime($detail->date_of_joining)) : 'N/A'; ?>
 						</div>
 					</div>
 
@@ -208,7 +216,9 @@
 						<div class="col-lg-2"><strong>Security Deposit Paid</strong></div>
 					</div>
 					<div class="col-lg-12 pb">
-						<div class="col-lg-2"></div>
+						<div class="col-lg-2">
+							
+						</div>
 					</div>
 
 					<div class="col-lg-12 pt-5">
