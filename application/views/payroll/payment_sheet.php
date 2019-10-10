@@ -160,7 +160,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <th>Gross Salary</th> 
                 <th>Total Allowances</th> 
                 <th>Total Deductions</th> 
-                <th>Net Salary</th> 
+                
                 <th>House Rent Allowance</th> 
                 <th>Medical Allowance</th> 
                 <th>Travelling Allowance</th> 
@@ -168,7 +168,8 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <th>Provident Fund</th> 
                 <th>EOBI</th> 
                 <th>Tax Deduction</th> 
-                <th>Advance Salary</th>                  
+                <th>Advance Salary</th>  
+                <th>Net Salary</th>                 
                 <th>Month</th>
                 <th>Action</th>                 
                 
@@ -258,7 +259,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <td><?php echo $empdetail->gross_salary;?> </td>
                 <td><?php echo $empdetail->total_allowances; $Tallowance[] = $empdetail->total_allowances; ?> </td>
                 <td><?php echo $empdetail->total_deductions; $Tdeduction[] = $empdetail->total_deductions; ?> </td>
-                <td><?php echo $empdetail->net_salary; $TnetSallery[] = $empdetail->net_salary; ?> </td>
+                
                 <td><?php echo $empdetail->house_rent_allowance;?> </td>
                 <td><?php echo $empdetail->medical_allowance;?> </td>
                 <td><?php echo $empdetail->travelling_allowance;?> </td>
@@ -267,6 +268,7 @@ echo ($this->session->flashdata('msg')) ? '<div class="alert alert-success text-
                 <td><?php echo $empdetail->eobi;?> </td>
                 <td><?php echo $empdetail->tax_deduction;?> </td>                 
                 <td><?php echo $empdetail->advance_salary_amount;?> </td> 
+                <td><?php echo $empdetail->net_salary; $TnetSallery[] = $empdetail->net_salary; ?> </td>
                 <td><?php echo $empdetail->payment_date;?> </td>
                 <td><a class="text-success" href="<?php echo base_url(); ?>payroll/pdf_create/sl/<?php echo $empdetail->employee_id; ?>/">Payslip</a>
                 </td>

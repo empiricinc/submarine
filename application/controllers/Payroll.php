@@ -488,12 +488,13 @@ echo $this->input->post('province_id'); exit();
 
 		$department = $this->Department_model->read_department_information($user[0]->department_id);
 
-		$location = $this->Xin_model->read_location_info($department[0]->location_id);
+		//$location = $this->Xin_model->read_location_info($department[0]->location_id);
 
-		// company info
+		// company info 
+//echo $location[0]->company_id; exit();
+		//$company = $this->Xin_model->read_company_info($location[0]->company_id);
 
-		$company = $this->Xin_model->read_company_info($location[0]->company_id);
-
+		$company = $this->Xin_model->read_company_info($payment[0]->company_id);
 		
 
 		
@@ -540,7 +541,8 @@ echo $this->input->post('province_id'); exit();
 
 		$country = $this->Xin_model->read_country_info($company[0]->country);
 
-		$c_info_address = $company[0]->address_1.' '.$company[0]->address_2.', '.$company[0]->city.' - '.$company[0]->zipcode.', '.$country[0]->country_name;
+		//$c_info_address = $company[0]->address_1.' '.$company[0]->address_2.', '.$company[0]->city.' - '.$company[0]->zipcode.', '.$country[0]->country_name;
+		$c_info_address = 'My Full Address';
 
 		$email_phone_address = "".$this->lang->line('dashboard_email')." : $c_info_email | ".$this->lang->line('xin_phone')." : $c_info_phone \n".$this->lang->line('xin_address').": $c_info_address";
 

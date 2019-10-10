@@ -269,7 +269,7 @@
 
 	
 
-		$condition = "employee_id =" . "'" . $id . "'";
+		$condition = "employee_id =" . $id;
 
 		$this->db->select('*');
 
@@ -281,7 +281,7 @@
 
 		$query = $this->db->get();
 
-		
+		//echo $this->db->last_query();
 
 		if ($query->num_rows() > 0) {
 

@@ -183,7 +183,7 @@ if($this->input->post('company_id') && $this->input->post('province_id')){
 
 			if(!empty($session)){ 
 
-			$data['subview'] = $this->load->view("payroll/Process_payroll", $data, TRUE);
+			$data['subview'] = $this->load->view("payroll/process_payroll", $data, TRUE);
 
 			$this->load->view('layout_main', $data); //page load
 
