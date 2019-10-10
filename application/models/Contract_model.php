@@ -614,6 +614,13 @@ function applicantdetails($id){
 		$this->db->update('employee_contract', $data);
 		return true;
 	}
+	// Extend multiple contracts at once.
+	public function extend_bulk($date, $data){
+		$this->db->where('to_date <=', $date);
+		// $this->db->where('status !=', 5);
+		$this->db->update('employee_contract', $data);
+		return true;
+	}
 	// Finish contract
 	public function finish_contract($id = '', $data = ''){
 		$this->db->where('user_id', $id);

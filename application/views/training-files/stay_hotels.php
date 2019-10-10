@@ -25,7 +25,7 @@
 				<form method="post" action="">
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<select name="location" id="location" class="form-control" style="color: #aeafaf;">
+							<select name="location" id="location" class="form-control" style="color: #aeafaf;" required="">
 								<option value="">Select Province</option>
 								<?php foreach ($locations as $location): ?>
 									<option value="<?php echo $location->id ?>">
@@ -44,14 +44,13 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="hotel" id="hotel" class="form-control" placeholder="Hotel name ... ">
+							<input type="text" name="hotel" id="hotel" class="form-control" placeholder="Hotel name ... " required="">
 						</div>
 					</div>
 					<div class="col-lg-12">
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
 							<button type="reset" class="btn btnSubmit">Reset</button>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
 						</div>
 					</div>
 				</form>
@@ -72,11 +71,11 @@
 						<th>District</th>
 						<th>Hotel Name</th>
 						<th>Actions | Add Prices & Amenities</th>
-						<th>More Actions | Edit | Delete</th>
+						<th>More Actions | Modify | Delete</th>
 					</tr>
 				</thead>
 				<tbody>
-					<?php if($sl3['accessLevel3']): // Check Access Level.
+					<?php if(@$sl3['accessLevel3']): // Check Access Level.
 					if(!empty($hotels)):
 					foreach($hotels as $hotel): ?>
 					<tr>
@@ -85,21 +84,17 @@
 						<td><?php echo $hotel->hotel_name; ?></td>
 						<td>
 							<div class="submitBtn">
-								<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>">
+								<a href="" class="btn btn-info btn-xs" data-toggle="modal" data-target="#prices<?php echo $hotel->hotel_id; ?>">
 								<i class="fa fa-plus"></i> Room Charges</a>
-								<a href="" class="btn btnSubmit" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>">
+								<a href="" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal<?php echo $hotel->hotel_id; ?>">
 								<i class="fa fa-plus"></i> Amenities</a>
-								<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btnSubmit">
-								<i class="fa fa-eye"></i> View Prices</a>
+								<a href="<?php echo base_url(); ?>trainings/prices_detail/<?php echo $hotel->hotel_id; ?>" class="btn btn-success btn-xs">
+								View Prices</a>
 							</div>
 						</td>
 						<td>
-							<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>">
-								<div class="label label-primary">Modify</div>
-							</a>
-							<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');">
-								<div class="label label-danger">Delete</div>
-							</a>
+							<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>" class="btn btn-primary btn-xs">Modify</a>
+							<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');" class="btn btn-danger btn-xs">Delete</a>
 						</td>
 					</tr>
 					<div id="myModal<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
@@ -171,7 +166,7 @@
 					      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
 					      		<div class="col-lg-6">
 									<div class="inputFormMain">
-										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
+										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>" required="">
 									</div>
 								</div>
 								<div class="col-lg-6">
@@ -216,7 +211,7 @@
 					      		<input type="hidden" name="hotel_id" value="<?php echo $hotel->hotel_id; ?>">
 					      		<div class="col-lg-12">
 									<div class="inputFormMain">
-										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>">
+										<input type="text" name="hotel_name" class="form-control" value="<?php echo $hotel->hotel_name; ?>" required>
 									</div>
 								</div>
 								<div class="col-lg-12">
@@ -254,8 +249,7 @@
 								<h3><?php if(!empty($prices)){ echo $prices[0]->hotel_name; }?> | <small> Amenities & Prices list</small></h3>
 							</div>
 							<div class="panel-body">
-								<?php if($sl3['accessLevel3']): 
-								if(!empty($prices)): foreach($prices as $price): ?>
+								<?php if(!empty($prices)): foreach($prices as $price): ?>
 								<div class="row">
 									<div class="col-lg-3">
 										<strong>Room Type: </strong><?php echo $price->room_type; ?>
@@ -269,9 +263,8 @@
 									 	echo rtrim($price->amenities, ', ') . '.';
 									 	?>
 									</div>
-									<hr>
-								</div>
-								<?php endforeach; endif; endif; ?>
+								</div><hr>
+								<?php endforeach; endif; ?>
 							</div>
 							<div class="panel-footer text-right">
 								<p>
@@ -311,7 +304,7 @@
 					$('#hotel').val('');
 					console.log(res); // Log 'true' to the console as well.
 				}
-			})
+			});
 		}
 		});
 	});

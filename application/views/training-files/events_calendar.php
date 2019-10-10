@@ -12,35 +12,42 @@
 					<div class="tabelHeading">
 						<h3>tentative training calendar <span style="text-transform: lowercase;">(fill all the inputs)</span>
 					</div>
-				<form method="post" action="<?php echo base_url('trainings/create_calendar'); ?>">
+				<form method="post" action="<?php if(empty(@$edit)){ echo base_url('trainings/create_calendar');}else{ echo base_url('trainings/update_calendar'); } ?>">
+					<input type="hidden" name="event_id" value="<?php echo $this->uri->segment(3); ?>">
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="title" class="form-control" id="title" placeholder="Enter Title here..." required="" style="color: #aeafaf;">
+							<input type="text" name="title" class="form-control" id="title" placeholder="Enter Title here..." required="" style="color: #aeafaf;" value="<?php if(!empty(@$edit)){ echo @$edit->title; } ?>">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<select name="province" id="location" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select Province</option>
+								<?php if(!empty(@$edit)): ?>
+								<option value="<?php echo 'selected'; ?>" selected><?php echo @$edit->provName; endif; ?></option>
+								<option value="">Selecte Province...</option>
 								<?php foreach($locations as $location): ?>
 									<option value="<?php echo $location->id; ?>">
 										<?php echo $location->name; ?>
 									</option>
-								<?php endforeach; ?>
+								<?php endforeach;?>
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<select name="district" id="city" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select District</option>
+								<?php if(!empty(@$edit)): ?>
+								<option value="<?php echo 'selected'; ?>" ><?php echo @$edit->cityName; endif; ?></option>
+								<option value="">Select District...</option>
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<select name="project" id="project" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select Project</option>
+								<?php if(!empty(@$edit)): ?>
+								<option value="<?php echo 'selected';  ?>" selected><?php echo @$edit->compName; endif; ?></option>
+								<option value="">Select Project...</option>
 								<?php foreach($projects as $project): ?>
 									<option value="<?php echo $project->company_id; ?>">
 										<?php echo $project->name; ?>
@@ -52,13 +59,17 @@
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<select name="designation" id="designation" class="form-control" style="color: #aeafaf;" required="">
-								<option value="" >Select Designation</option>
+								<?php if(!empty(@$edit)): ?>
+								<option value="<?php echo 'selected'; ?>" selected><?php echo @$edit->designation_name; endif; ?></option>
+								<option value="">Select Designation...</option>
 							</select>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<select name="trg_type" id="trg_type" class="form-control" style="color: #aeafaf;" required="">
+								<?php if(!empty(@$edit)): ?>
+								<option value="<?php echo 'selected'; ?>"selected><?php echo $edit->type; endif; ?></option>
 								<option value="" >Select Training Type</option>
 								<?php foreach($training_types as $type): ?>
 									<option value="<?php echo $type->training_type_id; ?>">
@@ -70,19 +81,23 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="date" name="start_date" class="form-control" required="" style="color: #aeafaf;">
+							<input type="date" name="start_date" class="form-control" required="" style="color: #aeafaf;" value="<?php if(!empty(@$edit)){ echo $edit->start_date; } ?>">
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="date" name="end_date" class="form-control" required="" style="color: #aeafaf;">
+							<input type="date" name="end_date" class="form-control" required="" style="color: #aeafaf;" value="<?php if(!empty(@$edit)){ echo $edit->end_date; } ?>">
 						</div>
 					</div>
 					<input type="hidden" name="created_at" value="<?php echo date('Y-m-d'); ?>">
 					<div class="col-lg-12">
 						<div class="submitBtn">
-							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
+							<?php if(empty(@$edit)): ?>
+								<button id="save" type="submit" class="btn btnSubmit">Submit</button>
+							<?php else: ?>
+								<button id="update" type="submit" class="btn btnSubmit">Update</button>
+							<?php endif; ?>
+							<button type="reset" class="btn btnSubmit">Reset</button>
 						</div>
 					</div>
 				</form>
@@ -112,7 +127,7 @@
 		                    </tr>
 		                  </thead>
 		                  <tbody>
-		                    <?php foreach($events_list as $event): ?>
+		                    <?php if(empty(@$edit)): foreach($events_list as $event): ?>
 		                    <tr>
 		                      <td><?= $event->title; ?></td>
 		                      <td><?= $event->provName; ?></td>
@@ -123,13 +138,12 @@
 		                      <td><?= date('M d, y', strtotime($event->start_date)); ?></td>
 		                      <td><?= date('M d, y', strtotime($event->end_date)); ?></td>
 		                      <td>
-		                        <div class="label label-primary">Modify</div>
-		                        <a href="<?php echo base_url(); ?>trainings/delete_event/<?php echo $event->event_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');">
-		                            <div class="label label-danger">Delete</div>
-		                        </a>
+		                        <a href="<?php echo base_url(); ?>trainings/modify_event/<?php echo 
+		                        $event->event_id; ?>" class="btn btn-primary btn-xs">Modify</a>
+		                        <a href="<?php echo base_url(); ?>trainings/delete_event/<?php echo $event->event_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');" class="btn btn-danger btn-xs">Delete</a>
 		                      </td>
 		                    </tr>
-		                    <?php endforeach; ?>
+		                    <?php endforeach; endif; ?>
 		                  </tbody>
 		                </table>
 		              </div>
@@ -141,7 +155,7 @@
 				<div class="col-md-10">
 					<div class="tabelSideListing text-center">
 						<span>
-							<?php echo $this->pagination->create_links(); ?>
+							<?php if(empty(@$edit)){ echo $this->pagination->create_links(); } ?>
 						</span>
 					</div>
 				</div>
