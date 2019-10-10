@@ -220,44 +220,6 @@ class Trainings_model extends CI_Model{
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
-	// Search in refresher trainings...
-	public function search_refresher($training){
-		$this->db->select('xin_trainings.*,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_training_locations.location_id,
-							xin_training_locations.location,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							provinces.id,
-							provinces.name as prov_name,
-							district.id as city_id,
-							district.name as city_name');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->join('district', 'xin_trainings.district = district.id', 'left');
-		$this->db->where('xin_trainings.trg_type', 2);
-		$this->db->like('xin_training_types.type', $training);
-		$this->db->or_like('provinces.name', $training);
-		$this->db->where('xin_trainings.trg_type', 2);
-		$this->db->or_like('district.name', $training);
-		$this->db->where('xin_trainings.trg_type', 2);
-		$this->db->or_like('xin_training_locations.location', $training);
-		$this->db->where('xin_trainings.trg_type', 2);
-		$this->db->or_like('xin_trainers.first_name', $training);
-		$this->db->where('xin_trainings.trg_type', 2);
-		$this->db->or_like('xin_trainings.target_group', $training);
-		$this->db->where('xin_trainings.trg_type', 2);
-		$this->db->or_like('xin_trainings.facilitator_name', $training);
-		$this->db->where('xin_trainings.trg_type', 2);
-		return $this->db->get()->result();
-	}
 	// Search completed trainigs.
 	public function search_completed($training){
 		$this->db->select('COUNT(training_attendance.emp_id) as attendees,

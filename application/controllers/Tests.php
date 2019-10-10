@@ -314,7 +314,7 @@ class Tests extends MY_Controller{
 		);
 		$this->Tests_model->update_answers($ans_id, $data);
 		$this->session->set_flashdata('success', '<strong>Nice Job! </strong> Answer has been updated successfully!'); // Display a message on success.
-		return redirect("tests/view_single/{$_POST['question_id']}"); // Page redirection.
+		return redirect('tests/all_questions'); // Page redirection.
 	}
 	// Delete the answer.
 	public function delete_answer($ans_id){

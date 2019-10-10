@@ -72,7 +72,7 @@
 						<th>District</th>
 						<th>Hotel Name</th>
 						<th>Actions | Add Prices & Amenities</th>
-						<th>More Actions | Modify | Delete</th>
+						<th>More Actions | Edit | Delete</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -94,8 +94,12 @@
 							</div>
 						</td>
 						<td>
-							<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>" class="btn btn-primary btn-xs">Modify</a>
-							<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');" class="btn btn-danger btn-xs">Delete</a>
+							<a href="" data-toggle="modal" data-target="#modify<?php echo $hotel->hotel_id; ?>">
+								<div class="label label-primary">Modify</div>
+							</a>
+							<a href="<?php echo base_url(); ?>trainings/delete_hotel/<?php echo $hotel->hotel_id; ?>" onclick="javascript: return confirm('Are you sure to delete ?');">
+								<div class="label label-danger">Delete</div>
+							</a>
 						</td>
 					</tr>
 					<div id="myModal<?php echo $hotel->hotel_id; ?>" class="modal fade" role="dialog" data-backdrop = 'false'>
@@ -264,7 +268,8 @@
 									 	echo rtrim($price->amenities, ', ') . '.';
 									 	?>
 									</div>
-								</div><hr>
+									<hr>
+								</div>
 								<?php endforeach; endif; ?>
 							</div>
 							<div class="panel-footer text-right">
