@@ -11,7 +11,7 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li class=""><a href="<?= base_url(); ?>">Home</a></li>
+          <li class=""><a href="<?= base_url(); ?>dashboard">Home</a></li>
           <li class=""><a href="<?= base_url(); ?>Insurance/dashboard">Dashboard</a></li>
           <li class=""><a href="<?= base_url(); ?>Insurance/list_employees">Employee Insurances</a></li>
           <li class=""><a href="<?= base_url(); ?>Insurance/view_claims">Insurance Claims</a></li>

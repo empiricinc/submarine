@@ -40,8 +40,7 @@ class Insurance extends MY_Controller
 							'Province_model',
 							'Departments_model',
 							'Designations_model',
-							'Projects_model',
-							'Locations_model'
+							'Projects_model'
 						));
 
 
@@ -73,12 +72,7 @@ class Insurance extends MY_Controller
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
-			// $district = (int) $this->input->get('district');
-			// $tehsil = (int) $this->input->get('tehsil');
-			// $uc = (int) $this->input->get('uc');
-			$project = (int) $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
-			// $location = (int) $this->input->get('location');
 			$status = $this->input->get('status');
 			
 			if($employeeName != '')
@@ -129,7 +123,6 @@ class Insurance extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
-		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['content'] = $this->load->view('insurance/index', $data, TRUE);
 		$this->load->view('insurance/_template', $data);
@@ -185,7 +178,6 @@ class Insurance extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
-		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['content'] = $this->load->view('insurance/claims', $data, TRUE);
 		$this->load->view('insurance/_template', $data);
@@ -581,13 +573,12 @@ class Insurance extends MY_Controller
         $sheet->SetCellValue('B1', 'Name');
         $sheet->SetCellValue('C1', 'Project');
         $sheet->SetCellValue('D1', 'Department');
-        $sheet->SetCellValue('E1', 'Designation');   
-        $sheet->SetCellValue('F1', 'Location'); 
-        $sheet->SetCellValue('G1', 'Contact No'); 
-        $sheet->SetCellValue('H1', 'DOB'); 
-        $sheet->SetCellValue('I1', 'From Date'); 
-        $sheet->SetCellValue('J1', 'To Date'); 
-        $sheet->SetCellValue('K1', 'Status'); 
+        $sheet->SetCellValue('E1', 'Designation');  
+        $sheet->SetCellValue('F1', 'Contact No'); 
+        $sheet->SetCellValue('G1', 'DOB'); 
+        $sheet->SetCellValue('H1', 'From Date'); 
+        $sheet->SetCellValue('I1', 'To Date'); 
+        $sheet->SetCellValue('J1', 'Status'); 
 
         // set Row
         $rowCount = 2;
@@ -598,12 +589,11 @@ class Insurance extends MY_Controller
             $sheet->SetCellValue('C' . $rowCount, ucwords($element->project_name));
             $sheet->SetCellValue('D' . $rowCount, ucwords($element->department_name));
             $sheet->SetCellValue('E' . $rowCount, ucwords($element->designation_name));
-            $sheet->SetCellValue('F' . $rowCount, ucwords($element->location_name));
-            $sheet->SetCellValue('G' . $rowCount, $element->contact_number);
-            $sheet->SetCellValue('H' . $rowCount, $element->date_of_birth);
-            $sheet->SetCellValue('I' . $rowCount, $element->from_date);
-            $sheet->SetCellValue('J' . $rowCount, $element->to_date);
-            $sheet->SetCellValue('K' . $rowCount, $element->status);
+            $sheet->SetCellValue('F' . $rowCount, $element->contact_number);
+            $sheet->SetCellValue('G' . $rowCount, $element->date_of_birth);
+            $sheet->SetCellValue('H' . $rowCount, $element->from_date);
+            $sheet->SetCellValue('I' . $rowCount, $element->to_date);
+            $sheet->SetCellValue('J' . $rowCount, $element->status);
             
             $rowCount++;
         }
@@ -655,21 +645,20 @@ class Insurance extends MY_Controller
         $sheet->SetCellValue('I1', 'Project');
         $sheet->SetCellValue('J1', 'Department');
         $sheet->SetCellValue('K1', 'Designation');   
-        $sheet->SetCellValue('L1', 'Location'); 
-        $sheet->SetCellValue('M1', 'Incident Type'); 
-        $sheet->SetCellValue('N1', 'Incident Date'); 
-        $sheet->SetCellValue('O1', 'Reported By'); 
-        $sheet->SetCellValue('P1', 'Reporting Date'); 
-        $sheet->SetCellValue('Q1', 'Subject'); 
-        $sheet->SetCellValue('R1', 'Description'); 
-        $sheet->SetCellValue('S1', 'Remarks'); 
-        $sheet->SetCellValue('T1', 'Remarks By'); 
-        $sheet->SetCellValue('U1', 'Remarks Date'); 
-        $sheet->SetCellValue('V1', 'Decision'); 
-        $sheet->SetCellValue('W1', 'Decision Detail'); 
-        $sheet->SetCellValue('X1', 'Decision By'); 
-        $sheet->SetCellValue('Y1', 'Decision Date'); 
-        $sheet->SetCellValue('Z1', 'Status'); 
+        $sheet->SetCellValue('L1', 'Incident Type'); 
+        $sheet->SetCellValue('M1', 'Incident Date'); 
+        $sheet->SetCellValue('N1', 'Reported By'); 
+        $sheet->SetCellValue('O1', 'Reporting Date'); 
+        $sheet->SetCellValue('P1', 'Subject'); 
+        $sheet->SetCellValue('Q1', 'Description'); 
+        $sheet->SetCellValue('R1', 'Remarks'); 
+        $sheet->SetCellValue('S1', 'Remarks By'); 
+        $sheet->SetCellValue('T1', 'Remarks Date'); 
+        $sheet->SetCellValue('U1', 'Decision'); 
+        $sheet->SetCellValue('V1', 'Decision Detail'); 
+        $sheet->SetCellValue('W1', 'Decision By'); 
+        $sheet->SetCellValue('X1', 'Decision Date'); 
+        $sheet->SetCellValue('Y1', 'Status'); 
 
         // set Row
         $rowCount = 2;
@@ -686,21 +675,20 @@ class Insurance extends MY_Controller
             $sheet->SetCellValue('I' . $rowCount, ucwords($element->project_name));
             $sheet->SetCellValue('J' . $rowCount, ucwords($element->department_name));
             $sheet->SetCellValue('K' . $rowCount, ucwords($element->designation_name));
-            $sheet->SetCellValue('L' . $rowCount, ucwords($element->location_name));
-            $sheet->SetCellValue('M' . $rowCount, ucwords($element->type));
-            $sheet->SetCellValue('N' . $rowCount, date('d-m-Y', strtotime($element->incident_date)));
-            $sheet->SetCellValue('O' . $rowCount, ucwords($element->reported_by));
-            $sheet->SetCellValue('P' . $rowCount, date('d-m-Y', strtotime($element->reporting_date)));
-            $sheet->SetCellValue('Q' . $rowCount, $element->subject);
-            $sheet->SetCellValue('R' . $rowCount, $element->description);
-            $sheet->SetCellValue('S' . $rowCount, $element->remarks);
-            $sheet->SetCellValue('T' . $rowCount, ucwords($element->remarks_by_name));
-            $sheet->SetCellValue('U' . $rowCount, date('d-m-Y', strtotime($element->remarks_date)));
-            $sheet->SetCellValue('V' . $rowCount, '');
-            $sheet->SetCellValue('W' . $rowCount, $element->decision);
-            $sheet->SetCellValue('X' . $rowCount, ucwords($element->decision_by_name));
-            $sheet->SetCellValue('Y' . $rowCount, date('d-m-Y', strtotime($element->decision_date)));
-            $sheet->SetCellValue('Z' . $rowCount, $element->status);
+            $sheet->SetCellValue('L' . $rowCount, ucwords($element->type));
+            $sheet->SetCellValue('M' . $rowCount, date('d-m-Y', strtotime($element->incident_date)));
+            $sheet->SetCellValue('N' . $rowCount, ucwords($element->reported_by));
+            $sheet->SetCellValue('O' . $rowCount, date('d-m-Y', strtotime($element->reporting_date)));
+            $sheet->SetCellValue('P' . $rowCount, $element->subject);
+            $sheet->SetCellValue('Q' . $rowCount, $element->description);
+            $sheet->SetCellValue('R' . $rowCount, $element->remarks);
+            $sheet->SetCellValue('S' . $rowCount, ucwords($element->remarks_by_name));
+            $sheet->SetCellValue('T' . $rowCount, date('d-m-Y', strtotime($element->remarks_date)));
+            $sheet->SetCellValue('U' . $rowCount, '');
+            $sheet->SetCellValue('V' . $rowCount, $element->decision);
+            $sheet->SetCellValue('W' . $rowCount, ucwords($element->decision_by_name));
+            $sheet->SetCellValue('X' . $rowCount, date('d-m-Y', strtotime($element->decision_date)));
+            $sheet->SetCellValue('Y' . $rowCount, $element->status);
             
             $rowCount++;
         }

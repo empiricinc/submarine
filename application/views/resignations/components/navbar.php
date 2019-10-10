@@ -11,7 +11,7 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li class=""><a href="<?= base_url(); ?>">Home</a></li>
+          <li class=""><a href="<?= base_url(); ?>dashboard">Home</a></li>
           <li><a href="<?= base_url(); ?>Resignations/requests">Resignation Requests</a></li>
           <li><a href="<?= base_url(); ?>Resignations/view">Resigned List</a></li>
           <li>

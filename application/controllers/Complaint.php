@@ -40,8 +40,7 @@ class Complaint extends MY_Controller
 						'Province_model',
 						'Departments_model',
 						'Designations_model',
-						'Projects_model',
-						'Locations_model'
+						'Projects_model'
 					));
 
 		$this->load->helper(array('form', 'url'));

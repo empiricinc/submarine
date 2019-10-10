@@ -1,275 +1,28 @@
-<!-- Select Inquirer Modal -->
-<div class="modal fade animated" id="select-inquirer-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-        	<div class="modal-header">
-    			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
-    				<span aria-hidden="true">×</span> 
-    			</button>
-
-    			<strong class="modal-title">Select Investigator</strong> 
-    		</div>
-    		<div class="modal-body" id="inquirer-handler">
-    			<div class="row">
-    			
-	    			<div class="col-lg-7">
-	    				<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="project" id="project" class="form-control project" data-toggle="" title="Project" >
-									<option value="">Select Projects</option>
-									<?php foreach($projects as $p): ?>
-									<option value="<?= $p->company_id; ?>"><?= $p->name; ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-	    				<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="province" id="province" class="form-control province" data-toggle="" title="Province" >
-									<option value="">Select Province</option>
-									<?php foreach($province as $p): ?>
-									<option value="<?= $p->id; ?>"><?= $p->name; ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="district" id="district" class="form-control district" data-toggle="" title="District" >
-									<option value="">Select District</option>
-									
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="tehsil" id="tehsil" class="form-control tehsil" data-toggle="" title="Tehsil" >
-									<option value="">Select Tehsil</option>
-									
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="uc" id="uc" class="form-control union-council uc-investigation" data-toggle="" title="Union council" required>
-									<option value="">Select Union Council</option>
-									
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="designation" id="designation" class="form-control" data-toggle="" title="Designation" required>
-									<option value="">Select Designation</option>
-									<?php foreach($designations AS $d): ?>
-									<option value="<?= $d->designation_id; ?>"><?= $d->designation_name; ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<select name="employee" id="employee" class="form-control" data-toggle="" title="Employee" required>
-									<option value="">Select Employee</option>
-									
-								</select>
-							</div>
-						</div>
-	    			</div>
-	    			<div class="col-lg-5" style="padding-left: 0px;">
-	    				<div id="project-employees" style="border: 1px solid #e1e4e7; background: #f6f7f8; height: 375px; margin-top: 10px; margin-right: 15px; border-radius: 3px; overflow-y: scroll; padding: 10px">
-	    					<div class="new"></div>
-	    				</div>
-	    			</div>
-
-    			</div>
-    		</div>
-    		<div class="modal-footer">
-    			<div class="col-lg-12">
-    				<button type="button" class="btn btnSubmit" id="forward-local"> 
-	    				Forward Inquiry
-	    			</button>
-    			</div>
-    			
-    		</div>
-    		
-        </div>
-    </div>
-</div>
-<!-- ./Select Inquirer Modal -->
-
-<!-- Investigation Modal -->
-<div class="modal fade animated" id="investigation-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" style="width: 60%; margin: 3% auto;">
-    	<form action="<?= base_url(); ?>Disciplinary/add" method="POST">
-	        <div class="modal-content">
-	        	<div class="modal-header">
-	    			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
-	    				<span aria-hidden="true">×</span> 
-	    			</button>
-
-	    			<strong class="modal-title">Create Investigation</strong> 
-	    		</div>
-	    		<div class="modal-body">
-	    			<div class="row">
-	    				<div class="col-lg-4">
-	    					<input type="hidden" name="employee_id" id="employee-id" value="">
-	    					<input type="hidden" name="project_id" id="project-id" value="">
-	    					<input type="hidden" name="province_id" id="province-id" value="">
-	    					<input type="hidden" name="department_id" id="department-id" value="">
-	    					<input type="hidden" name="designation_id" id="designation-id" value="">
-							<div class="inputFormMain">
-								<label>Employee Name</label>
-								<input type="text" name="employee_name" id="employee-name" class="form-control" readonly>
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Designation</label>
-								<input type="text" name="designation_name" id="designation-name" class="form-control" readonly>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Type</label>
-								<select name="type" id="type" class="form-control" required="required">
-									<option value="">SELECT TYPE</option>
-									<?php foreach($type AS $t): ?>
-										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Reason</label>
-								<select name="reason" id="reason" class="form-control" required="required">
-									<option value="">SELECT REASON</option>
-									<?php foreach($reasons AS $r): ?>
-										<?php if($r->parent_id == '0') { ?>
-											<optgroup label="<?= $r->reason_text; ?>">
-										<?php } else { ?>
-												<option value="<?= $r->id; ?>"><?= $r->reason_text; ?></option>
-										<?php } ?>
-										<?php endforeach; ?>
-									<option value="other">Other</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Other Reason</label>
-								<input type="text" name="other_reason" id="other-reason" class="form-control" disabled>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Reported By</label>
-								<input type="text" name="reported_by" class="form-control">
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Reporting Date</label>
-								<input type="text" name="reporting_date" class="form-control date">
-							</div>
-						</div>
-						
-					
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<label>Subject</label>
-								<input type="text" name="subject" class="form-control">
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<label>Description</label>
-							<textarea name="description" id="description" class="form-control" rows="3" required="required"></textarea>
-						</div>
-	    			</div>
-	    		</div>
-	    		<div class="modal-footer">
-	    			<button type="submit" class="btn btnSubmit" name="submit"> 
-	    				Add 
-	    			</button>
-	    		</div>    		
-	        </div>
-    	</form>
-    </div>
-</div>
-<!-- ./Previous Investigation Modal -->
-
 <div class="modal fade" id="disciplinary-modal">
 	<div class="modal-dialog">
-		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST">
+		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST" novalidate>
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Status Modal</h4>
 				</div>
 				<div class="modal-body">
-					<input type="hidden" name="status_text" id="status-text" value="<?= $detail->status_text; ?> ">
 					<input type="hidden" name="disciplinary_id" value="<?= $detail->id; ?>">
-					<?php if($detail->status_text == 'open'): ?>
-					<div class="row">
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Action Approval Date</label>
-								<input type="text" name="approval_date" class="form-control date">
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Approval Receive Date</label>
-								<input type="text" name="approval_receive_date" class="form-control date">
-							</div>
-						</div>
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Approved By</label>
-								<input type="text" name="approved_by" class="form-control">
-							</div>
-						</div>
-
-						<div class="col-lg-6">
-							<div class="inputFormMain">
-								<label>Approved Action</label>
-								<select name="approved_action" class="form-control" required="required">
-									<option value="">SELECT ACTION</option>
-									<?php foreach($type AS $t): ?>
-										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
+					
+					<div id="disciplinaryHandler">
+						
 					</div>
-					<?php endif; ?>
+						<!-- <div class="row">
+							<div class="col-lg-12">
+								<div class="inputFormMain">
+									<label>Date</label>
+									<input type="text" name="added_date" class="form-control date">
+								</div>
+							</div>
+						</div> -->
+
 
 					<div class="row">
-						<?php if($detail->status_text != 'open'): ?>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<label>Date</label>
-								<input type="text" name="added_date" class="form-control date">
-							</div>
-						</div>
-						<?php endif; ?>
-
-						<div class="col-lg-12 hide" id="next-action">
-							<div class="inputFormMain">
-								<label>Next Action</label>
-								<select name="approved_action" class="form-control" required="required">
-									<option value="">SELECT ACTION</option>
-									<?php foreach($type AS $t): ?>
-										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-
 						<div class="col-lg-12">
 							<div class="inputFormMain">
 								<label>Comments</label>
@@ -332,8 +85,6 @@
 	});	
 
 
-
-
 	$(document).ready(function(){
 	  $('[data-toggle="tooltip"]').tooltip();   
 	});
@@ -355,7 +106,7 @@
 		$('#investigations-list>tr').on('click', function() {
 			var id = $(this).attr('data');
 
-			window.location = "<?= base_url(); ?>Disciplinary/view_detail/" + id;
+			window.location = "<?= base_url(); ?>Disciplinary/detail/" + id;
 			return;
 			
 		});
@@ -477,7 +228,7 @@
 	<script type="text/javascript">
 		$('#investigation-table tr').on('click', function() {
 
-			 var employee_id = $(this).data('id');
+			var employee_id = $(this).data('id');
 			if(employee_id == undefined)
 				return;
 
@@ -815,19 +566,43 @@
 		
 		$('.disciplinary-status-btn').on('click', function() {
 			var status_text = $(this).data('text');
-			$('#status-text').val(status_text);
+			var disciplinaryHandler = $('#disciplinaryHandler').html('');
+			$.ajax({
+				url: '<?= base_url(); ?>Disciplinary/status_fields',
+				type: 'POST',
+				dataType: 'json',
+				data: {status_text: status_text},
+				success: function(response) {
+					
+					disciplinaryHandler.append(response.data.output);
+					$('#disciplinary-modal').modal('show');
 
-			if(status_text == 'not received')
-				$('#next-action').removeClass('hide');
-			else
-				$('#next-action').addClass('hide');
+					$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+				}
 
-			$('#disciplinary-modal').modal('show');
+			});
 			
 		});
-
 		
 	</script> 
+
+	<script type="text/javascript">
+		$('#load-template-btn').on('click', function() {
+			var type_id = $(this).data('type');
+
+			$.ajax({
+				url: '<?= base_url(); ?>Disciplinary/load_template',
+				type: 'POST',
+				dataType: 'json',
+				data: {type_id: type_id},
+				success: function(response) {
+					console.log(response.data.description);
+					tinymce.get('template').setContent(response.data.description);
+				}
+			});
+			
+		});
+	</script>
 
 
 
