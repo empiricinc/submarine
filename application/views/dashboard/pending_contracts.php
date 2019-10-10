@@ -119,7 +119,7 @@ h4 {
           <div class="col-md-4">
             <div class="tabelHeading">
               <?php $count = $this->Contract_model->count_contracts(); ?>
-              <h3>list of all pending contracts | <small><a href="javascript:history.go(-1);">Back &laquo;</a>
+              <h3>list of all pending contracts | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a>
                 <div class="label label-info">total no. of contracts pending currently: <?php echo $count; ?></div>
               </small></h3>
             </div>
