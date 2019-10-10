@@ -15,13 +15,11 @@ class Insurance_model extends CI_Model
 
 	function get_employees($conditions=array(), $limit="", $offset="")
 	{
-		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name as project_name, xe.date_of_joining, xdd.department_name, xd.designation_name, xol.location_name, ebi.contact_number, ebi.date_of_birth, ebi.cnic, ebi.email_address, i.from_date, i.to_date, i.status");
+		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name as project_name, xe.date_of_joining, xdd.department_name, xd.designation_name, ebi.contact_number, ebi.date_of_birth, ebi.cnic, ebi.email_address, i.from_date, i.to_date, i.status");
 
 		$this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
 		$this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-        $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
-        $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
 
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
@@ -43,7 +41,7 @@ class Insurance_model extends CI_Model
 
     function get_insurance_claims($conditions=array(), $limit="", $offset="")
     {
-        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, xol.location_name, ic.*, ebi.contact_number, ebi.personal_contact, cnic, ebi.date_of_birth, ebi.father_name, g.gender_name, CONCAT(rb.first_name, ' ', rb.last_name) AS remarks_by_name, CONCAT(db.first_name, ' ', db.last_name) AS decision_by_name");
+        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, ic.*, ebi.contact_number, ebi.personal_contact, cnic, ebi.date_of_birth, ebi.father_name, g.gender_name, CONCAT(rb.first_name, ' ', rb.last_name) AS remarks_by_name, CONCAT(db.first_name, ' ', db.last_name) AS decision_by_name");
 
         $this->db->join('xin_employees xe', 'ic.employee_id = xe.employee_id', 'left');
         $this->db->join('xin_employees rb', 'ic.remarks_by = rb.employee_id', 'left');
@@ -52,8 +50,6 @@ class Insurance_model extends CI_Model
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
         $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-        $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
-        $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
 
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');

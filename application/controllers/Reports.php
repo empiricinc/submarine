@@ -17,8 +17,7 @@ class Reports extends MY_Controller
 
         $project_id = $this->session->username['project_id'];
         $province_id = $this->session->username['provience_id'];
-        // echo $this->session->username['user_role'];
-        // var_dump($this->session->accessLevel);
+
         if(!in_array($user_role, $roles))
             redirect(base_url().'User_panel');
 
@@ -47,7 +46,6 @@ class Reports extends MY_Controller
 							'Departments_model',
 							'Designations_model',
 							'Projects_model',
-							'Locations_model',
 							'Complaint_model'
 						));
 
@@ -347,7 +345,6 @@ class Reports extends MY_Controller
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']);
-		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 		$data['content'] = $this->load->view('reports/employees', $data, TRUE);
 		$this->load->view('reports/_template', $data);
 	}
@@ -364,7 +361,6 @@ class Reports extends MY_Controller
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']);
-		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 		$data['content'] = $this->load->view('reports/employee-cards', $data, TRUE);
 		$this->load->view('reports/_template', $data);
 	}
@@ -532,7 +528,6 @@ class Reports extends MY_Controller
 		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['province'] = $this->Province_model->get_by_project($this->session_data['project_id']);
-		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 		 
 		$data['complaints_table'] = $this->load->view('reports/tables/complaints-table', $data, TRUE);
 		$data['content'] = $this->load->view('reports/complaints', $data, TRUE);
