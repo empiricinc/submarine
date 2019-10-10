@@ -42,7 +42,8 @@ class Employee_cards extends MY_Controller
 							'User_panel_model',
 							'Designations_model',
 							'Province_model',
-							'Projects_model'
+							'Projects_model',
+							'Locations_model'
 						));
 
 
@@ -114,8 +115,12 @@ class Employee_cards extends MY_Controller
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
+			// $district = $this->input->get('district');
+			// $tehsil = $this->input->get('tehsil');
+			// $uc = $this->input->get('uc');
 			$project = (int) $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
+			$location = (int) $this->input->get('location');
 
 			$employee_type = $this->input->get('employee_type');
 			
@@ -125,6 +130,7 @@ class Employee_cards extends MY_Controller
 			$conditions['xe.employee_id'] = $employeeID;
 			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
 			$conditions['xe.designation_id'] = $designation;
+			$conditions['xol.location_id'] = $location;
 
 			if($project != 0)
 				$conditions['xe.company_id'] = $project;
@@ -146,6 +152,7 @@ class Employee_cards extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['card_status'] = $card_status;
 		$data['content'] = $this->load->view('employee-cards/view', $data, TRUE);
@@ -191,6 +198,7 @@ class Employee_cards extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['content'] = $this->load->view('employee-cards/print-view', $data, TRUE);
 		$this->load->view('employee-cards/_template', $data);
@@ -215,7 +223,12 @@ class Employee_cards extends MY_Controller
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
+			// $district = $this->input->get('district');
+			// $tehsil = $this->input->get('tehsil');
+			// $uc = $this->input->get('uc');
+			$project = (int) $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
+			$location = (int) $this->input->get('location');
 
 			$employee_type = $this->input->get('employee_type');
 			
@@ -225,6 +238,7 @@ class Employee_cards extends MY_Controller
 			$conditions['xe.employee_id'] = $employeeID;
 			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
 			$conditions['xe.designation_id'] = $designation;
+			$conditions['xol.location_id'] = $location;
 
 		} 
 		
@@ -241,6 +255,8 @@ class Employee_cards extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
+
 		$data['card_status'] = $card_status;
 		$data['content'] = $this->load->view('employee-cards/card-received', $data, TRUE);
 		$this->load->view('employee-cards/_template', $data);

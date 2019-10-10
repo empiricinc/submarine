@@ -42,6 +42,7 @@ class Disciplinary extends MY_Controller
 						'Departments_model',
 						'Designations_model',
 						'Projects_model',
+						'Locations_model',
 						'Disciplinary_model'
 					));
 
@@ -77,6 +78,7 @@ class Disciplinary extends MY_Controller
 			$province = (int) $this->input->get('province');
 			$project = (int) $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
+			$location = (int) $this->input->get('location');
 
 			$employee_type = $this->input->get('employee_type');
 			
@@ -86,6 +88,7 @@ class Disciplinary extends MY_Controller
 			$conditions['xe.employee_id'] = $employeeID;
 			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
 			$conditions['xe.designation_id'] = $designation;
+			$conditions['xol.location_id'] = $location;
 
 			if($project != 0)
 				$conditions['xe.company_id'] = $project;
@@ -111,8 +114,9 @@ class Disciplinary extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
-		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+		$data['type'] = $this->Disciplinary_model->get_disciplinary_type(); 
 
 		$data['content'] = $this->load->view('disciplinary/employees', $data, TRUE);
 		$this->load->view('disciplinary/_template', $data);
@@ -137,8 +141,9 @@ class Disciplinary extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $provinces = $this->Province_model->get_by_project($this->session_data['project_id']);
+		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
-		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+		$data['type'] = $this->Disciplinary_model->get_disciplinary_type(); 
 		$province_string = '';
 
 		foreach ($provinces as $p) {
@@ -335,7 +340,7 @@ class Disciplinary extends MY_Controller
 	}
 
 	
-	function detail($id=FALSE)
+	function view_detail($id=FALSE)
 	{
 		$conditions = [
 			'di.project_id' => $this->session_data['project_id'],
@@ -352,103 +357,13 @@ class Disciplinary extends MY_Controller
 			show_404();
 		}
 	
-		$data['status_comments'] = $this->Disciplinary_model->get_comments($id, 'status');
-		$data['comments'] = $this->Disciplinary_model->get_comments($id, 'comment');
-
+		$data['comments'] = $this->Disciplinary_model->get_comments($id);
 		$data['status'] = $this->Disciplinary_model->disciplinary_status()->result();
 		$data['files'] = $this->Disciplinary_model->disciplinary_files()->result();
-		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+		$data['type'] = $this->Disciplinary_model->get_disciplinary_type(); 
 		
-		$data['content'] = $this->load->view('disciplinary/detail', $data, TRUE);
+		$data['content'] = $this->load->view('disciplinary/investigation-detail', $data, TRUE);
 		$this->load->view('disciplinary/_template', $data);
-	}
-
-
-	public function status_fields()
-	{
-		$this->ajax_check();
-
-		$status = $this->input->post('status_text');
-		$type = $this->Disciplinary_model->get_disciplinary_type()->result();
-		$status_row = $this->Disciplinary_model->get_status_id($status);
-		$status_id = $status_row->id;
-		
-		$status_group = array('dpcr', 'issued', 'printed', 'delivered', 'received', 'satisfactory', 're open', 'no action');
-		$output = '<input type="hidden" name="status_id" id="status-id" value="'.$status_id.'">';
-		if($status == 'pending')
-		{
-			$output .= '
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<label>Action Approval Date</label>
-							<input type="text" name="approval_date" class="form-control date" required>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<label>Approval Receive Date</label>
-							<input type="text" name="approval_receive_date" class="form-control date" required>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<label>Approved By</label>
-							<input type="text" name="approved_by" class="form-control" required>
-						</div>
-					</div>
-
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<label>Approved Action</label>
-							<select name="approved_action" class="form-control" required="required">
-								<option value="">SELECT ACTION</option>';
-	
-							foreach($type AS $t) {
-								$output .= '<option value="'.$t->id.'">'.ucwords($t->type_name).'</option>';
-							}
-
-			$output .= '</select>
-						</div>
-					</div>
-				</div>';
-		} 
-		elseif(in_array($status, $status_group))
-		{
-			$output .= '<div class="row">
-							<div class="col-lg-12">
-								<div class="inputFormMain">
-									<label>Date</label>
-									<input type="text" name="added_date" class="form-control date" required>
-								</div>
-							</div>
-						</div>';
-		}
-		elseif($status == 'not received' OR $status == 'unsatisfactory' OR $status == 'admitted')
-		{
-			$output .= '<div class="row">
-							<div class="col-lg-6">
-								<div class="inputFormMain">
-									<label>Date</label>
-									<input type="text" name="added_date" class="form-control date" required>
-								</div>
-							</div>
-							<div class="col-lg-6">
-								<div class="inputFormMain">
-									<label>Next Action</label>
-									<select name="approved_action" class="form-control" required="required">
-										<option value="">SELECT ACTION</option>';
-	
-							foreach($type AS $t) {
-								$output .= '<option value="'.$t->id.'">'.ucwords($t->type_name).'</option>';
-							}
-
-					$output .= '</div>
-							</div>
-						</div>';
-		}
-
-		$this->json_response(array('output' => $output, 'error' => '0'));
 	}
 
 
@@ -498,28 +413,6 @@ class Disciplinary extends MY_Controller
     }
 
 
-    public function upload_attachments()
-	{
-		$employee_id = $this->session_data['user_id'];
-		$disciplinary_id = $this->input->post('disciplinary_id');
-
-		if(!empty($_FILES['files']) && $_FILES['files']['size'][0] != 0)
-		{
-			$uploaded = $this->upload_files($_FILES, $disciplinary_id, $employee_id);
-
-			if($uploaded)
-				$this->session->set_flashdata('success', 'Files uploaded successfully.');
-			else
-				$this->session->set_flashdata('error', 'Files uploading failed.');
-				
-		} else {
-			$this->session->set_flashdata('error', 'There is a problem on server.');
-		}
-
-		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
-	}
-
-
     function add_comments()
     {
     	$employee_id = $this->session_data['user_id'];
@@ -537,8 +430,7 @@ class Disciplinary extends MY_Controller
 					'comment_text' => $comments,
 					'added_by' => $employee_id,
 					'added_date' => $date,
-					'status_id' => $status_id,
-					'type' => 'comment'
+					'status_id' => $status_id
 				);
 	
 		$res = $this->Disciplinary_model->add_comments($data);
@@ -550,30 +442,53 @@ class Disciplinary extends MY_Controller
 			$this->session->set_flashdata('error', 'Disciplinary initiatitation Failed.');
 
 
-		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
+		redirect('Disciplinary/view_detail/'.$disciplinary_id, 'refresh');
     }
+
+
+    // function update_disciplinary()
+    // {
+    // 	$employee_id = $this->session_data['user_id'];
+
+    // 	$action_approval_date = $this->input->post('approval_date');
+    // 	$approval_receive_date = $this->input->post('approval_receive_date');
+    // 	$approved_by = $this->input->post('approved_by');
+    // 	$approved_action = $this->input->post('approved_action');
+
+    // 	$data = array(
+    // 				'approval_date' => $approval_date,
+    // 				'approval_receive_date' => $approval_receive_date,
+    // 				'approved_by' => $approved_by,
+    // 				'approved_action' => $approved_action
+    // 			);
+    // 	var_dump($data); exit;
+    // 	$update = $this->Disciplinary_model->update($disciplinary_id, $data);
+
+    // }
 
 
     function update_disciplinary_status()
     {
     	$employee_id = $this->session_data['user_id'];
 
-    	$status_id = $this->input->post('status_id');
+    	$status_text = $this->input->post('status_text');
     	$disciplinary_id = $this->input->post('disciplinary_id');
     	$comments = $this->input->post('comments');
     	$date = $this->input->post('added_date');
 
+
+    	$status = $this->Disciplinary_model->get_status_id($status_text);
 
     	$data = array(
 					'disciplinary_id' => $disciplinary_id,
 					'comment_text' => $comments,
 					'added_by' => $employee_id,
 					'added_date' => $date,
-					'status_id' => $status_id,
-					'type' => 'status'
+					'status_id' => $status->id
 				);
-
+		
 		$res = $this->Disciplinary_model->add_comments($data);
+
 
 		$action_approval_date = $this->input->post('approval_date');
     	$approval_receive_date = $this->input->post('approval_receive_date');
@@ -585,13 +500,13 @@ class Disciplinary extends MY_Controller
     				'approval_receive_date' => $approval_receive_date,
     				'approved_by' => $approved_by,
     				'approved_action' => $approved_action,
-    				'status_id' => $status_id
+    				'status_id' => $status->id
     			);
 
     	if($action_approval_date != '')
 			$update = $this->Disciplinary_model->update($disciplinary_id, $approval_data);
 		else
-			$update = $this->Disciplinary_model->update($disciplinary_id, array('status_id' => $status_id));
+			$update = $this->Disciplinary_model->update($disciplinary_id, array('status_id' => $status->id));
 
 		if($update)
 		{
@@ -603,18 +518,10 @@ class Disciplinary extends MY_Controller
 		}
 
 
-		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
+		redirect('Disciplinary/view_detail/'.$disciplinary_id, 'refresh');
+
     }
 
-    function load_template()
-    {
-    	$this->ajax_check();
-
-    	$type_id = $this->input->post('type_id');
-
-    	$data = $this->Disciplinary_model->get_template($type_id);
-    	$this->json_response($data);
-    }
 
 
 

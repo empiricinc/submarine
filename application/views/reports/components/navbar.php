@@ -11,7 +11,7 @@
       </div>
       <div class="collapse navbar-collapse" id="myNavbar">
         <ul class="nav navbar-nav">
-          <li><a href="<?= base_url(); ?>dashboard">Home</a></li>
+          <li><a href="<?= base_url(); ?>">Home</a></li>
           <!-- <li class="dropdown">
               <a href="#" data-toggle="dropdown" class="dropdown-toggle">
                 Reports <span class="fa fa-caret"></span>

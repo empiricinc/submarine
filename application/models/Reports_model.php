@@ -162,6 +162,8 @@ class Reports_model extends CI_Model
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
 
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+        $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
+        $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
 
         $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
         $this->db->join('provinces pp', 'epli.permanent_province = pp.id', 'left');

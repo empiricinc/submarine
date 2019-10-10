@@ -46,14 +46,13 @@ class Disciplinary_model extends CI_Model
 	{
 		if(array_key_exists('di.id', $conditions))
 		{
-			$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(c_by.first_name, " ", IFNULL(c_by.last_name, "")) AS created_by, ebi.cnic, ebi.date_of_joining, di.status_id, ds.status_text, dt.type_name');
+			$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, di.status_id, ds.status_text, dt.type_name');
 			$this->db->join('xin_companies AS xc', 'di.project_id = xc.company_id', 'left');
 			$this->db->join('xin_designations AS xd', 'di.designation_id = xd.designation_id', 'left');
 			$this->db->join('xin_departments AS xds', 'di.department_id = xds.department_id', 'left');
 			$this->db->join('investigation_reasons AS ir', 'di.reason_id = ir.id', 'left');
-			$this->db->join('xin_employees c_by', 'di.created_by = c_by.employee_id', 'left');
-			$this->db->join('xin_employees xe', 'di.employee_id = xe.employee_id', 'left');
 			$this->db->join('employee_basic_info ebi', 'di.employee_id = ebi.user_id', 'left');
+			$this->db->join('xin_employees xe', 'di.employee_id = xe.employee_id', 'left');
 			$this->db->join('disciplinary_status ds', 'di.status_id = ds.id', 'left');
 			$this->db->join('disciplinary_type dt', 'di.type_id = dt.id', 'left');
 					
@@ -66,6 +65,7 @@ class Disciplinary_model extends CI_Model
 		$this->db->join('xin_designations AS xd', 'di.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments AS xds', 'di.department_id = xds.department_id', 'left');
 		$this->db->join('investigation_reasons AS ir', 'di.reason_id = ir.id', 'left');
+		$this->db->join('employee_basic_info ebi', 'di.employee_id = ebi.user_id', 'left');
 		$this->db->join('xin_employees xe', 'di.employee_id = xe.employee_id', 'left');
 		$this->db->join('disciplinary_status ds', 'di.status_id = ds.id', 'left');
 		$this->db->join('disciplinary_type dt', 'di.type_id = dt.id', 'left');
@@ -104,13 +104,12 @@ class Disciplinary_model extends CI_Model
 	}
 
 
-	function get_comments($id, $type="")
+	function get_comments($id)
 	{
 		$this->db->select('dc.id, dc.comment_text, ds.status_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, dc.added_date');
 		$this->db->join('disciplinary_status ds', 'dc.status_id = ds.id', 'left'); 
 		$this->db->join('xin_employees xe', 'dc.added_by = xe.employee_id', 'left');
 		$this->db->where('dc.disciplinary_id', $id);
-		$this->db->where('dc.type', $type);
 		return $this->db->get('disciplinary_comments dc')->result();
 
 	}
@@ -126,20 +125,16 @@ class Disciplinary_model extends CI_Model
 
 	function get_disciplinary_type()
 	{
-		return $this->db->get('disciplinary_type');
+		return $this->db->get('disciplinary_type')->result();
 	}
 
-	function get_status_id($status_text="")
+	function get_status_id($status_text)
 	{
 		$this->db->where('status_text', $status_text);
     	return $this->db->get('disciplinary_status')->row();
 	}
 
-	function get_template($type_id)
-	{
-		$this->db->where('disciplinary_type_id', $type_id);
-		return $this->db->get('disciplinary_documents')->row();
-	}
+
 
 
 }
