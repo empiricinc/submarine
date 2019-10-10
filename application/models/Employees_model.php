@@ -126,7 +126,7 @@ class Employees_model extends CI_Model {
          
         
         $query = $this->db->get();
-        	echo $this->db->last_query();
+        	//echo $this->db->last_query();
         return $query->result();
     }
 

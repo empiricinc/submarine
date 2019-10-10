@@ -71,9 +71,9 @@ class Trainings extends CI_Controller{
 		}
 		
 		if($data['sl2']){
-			$data['completed_trainings'] = $this->Trainings_model->trainings_completed();
+			$data['completed_trainings'] = $this->Trainings_model->trainings_completed($limit, $offset);
 		}else{
-			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid);
+			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid, $limit, $offfset);
 		}
 		$this->load->view('training-files/components/template', $data);
 	}
@@ -118,7 +118,7 @@ class Trainings extends CI_Controller{
 					); // insert data in array into database.
 		$this->Trainings_model->create_training($data);
 		for($i = 0; $i < count($tEmployees); $i++){ 
-			$this->db->where('user_id', $tEmployees[$i]);
+			$this->db->where('employee_id', $tEmployees[$i]);
 			$status = $this->db->select('status')->from('xin_employees')->get()->row();
 			if($status->status == 1)
 			$this->db->update('xin_employees', array('status' => '2'));
@@ -177,6 +177,55 @@ class Trainings extends CI_Controller{
 			$data['list_trainings'] = $this->Trainings_model->get_all_trainings($limit, $offset);
 		}else{
 			$data['list_trainings'] = $this->Trainings_model->get_all_trainings_manager($provid, $limit, $offset);
+		}
+		$this->load->view('training-files/components/template', $data);
+	}
+	// All completed trainings...
+	public function all_completed($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('trainings/all_completed');
+		$config['total_rows'] = $this->Trainings_model->count_completed();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['title'] = 'Trainigs | Completed Trainings';
+		$data['content'] = 'training-files/completed_list';
+		if($data['sl2']){
+			$data['completed_trainings'] = $this->Trainings_model->trainings_completed($limit, $offset);
+		}else{
+			 $data['completed_trainings'] = $this->Trainings_model->trainings_completed_manager($provid, $limit, $offfset);
 		}
 		$this->load->view('training-files/components/template', $data);
 	}
@@ -259,6 +308,45 @@ class Trainings extends CI_Controller{
 		$data['content'] = 'training-files/trainings_list';
 		$this->load->view('training-files/components/template', $data);
 	}
+	public function refresher_search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+
+		$training = $this->input->get('search_training');
+		if($data['sl2']){
+			$data['results'] = $this->Trainings_model->search_refresher($training);
+		}
+		$data['title'] = 'Trainings | Search Results';
+		$data['content'] = 'training-files/all_refresher';
+		$this->load->view('training-files/components/template', $data);
+	}
+	// Completed trainings search.
+	public function completed_search(){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$projid = $session['project_id'];
+		$provid = $session['provience_id'];
+
+		$data['sl3'] = $this->session->userdata('accessLevel');
+		$data['sl2'] = $this->session->userdata('accessLevel');
+		$training = $this->input->get('search_training');
+		if($data['sl2']){
+			$data['results'] = $this->Trainings_model->search_completed($training);
+		}
+		$data['title'] = 'Trainings | Search Results';
+		$data['content'] = 'training-files/completed_list';
+		$this->load->view('training-files/components/template', $data);
+	}
 	// View training detail.
 	public function detail_training($trg_id){
 		$session = $this->session->userdata('username');
@@ -296,7 +384,7 @@ class Trainings extends CI_Controller{
 								xin_designations.designation_name');
 			$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
 			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-			$row = $this->db->get_where('xin_employees', array('user_id' => $employee_detail[$i]))->row();
+			$row = $this->db->get_where('xin_employees', array('employee_id' => $employee_detail[$i]))->row();
 			// Print the data in HTML view.
 			$employee_names .= "<div class='row'><div class='col-lg-2'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-2'>".$row->name."</div><div class='col-lg-2'>".$row->contact_no."</div><div class='col-lg-3'>".$row->address."</div><hr></div>";
 		}
@@ -818,7 +906,7 @@ class Trainings extends CI_Controller{
 		$female = 0;
 		for ($j = 0; $j < count($trainees); $j++ ) {
 		 	$this->db->select('xin_employees.employee_id,
-		 						xin_employees.gender,
+		 						
 		 						xin_employees.first_name,
 		 						xin_employees.last_name,
 		 						xin_employees.designation_id,
@@ -827,7 +915,7 @@ class Trainings extends CI_Controller{
 		 						xin_designations.designation_name,
 		 						xin_companies.company_id,
 		 						xin_companies.name,
-								xin_trainings.trg_id');
+								xin_trainings.trg_id'); // xin_employees.gender,
 			$this->db->join('xin_trainings', 'xin_employees.employee_id = xin_trainings.trainee_employees', 'left');
 			$this->db->join('xin_activity_reporting', 'xin_trainings.trg_id = xin_activity_reporting.trg_id', 'left');
 			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
@@ -944,6 +1032,34 @@ class Trainings extends CI_Controller{
     public function delete_event($event_id){
     	$this->Trainings_model->delete_event($event_id);
     	redirect('trainings/get_calendar');
+    }
+    // Modify an event.
+    public function modify_event($event_id){
+    	$data['title'] = 'Trainings | Modify Event';
+    	$data['content'] = 'training-files/events_calendar';
+    	$data['projects'] = $this->Trainings_model->get_projects();
+		$data['training_types'] = $this->Trainings_model->get_training_types();
+		$data['locations'] = $this->Trainings_model->get_locations();
+		$data['designations'] = $this->Trainings_model->get_designations();
+    	$data['edit'] = $this->Trainings_model->modify_event($event_id);
+    	$this->load->view('training-files/components/template', $data);
+    }
+    // Send the udpated data back to the database.
+    public function update_calendar(){
+    	$event_id = $this->input->post('event_id');
+    	$data = array(
+    		'title'	   => $this->input->post('title'),
+			'province' => $this->input->post('province'),
+			'district' => $this->input->post('district'),
+			'project'  => $this->input->post('project'),
+			'designation' => $this->input->post('designation'),
+			'trg_type' => $this->input->post('trg_type'),
+			'start_date' => $this->input->post('start_date'),
+			'end_date' => $this->input->post('end_date')
+    	);
+    	$this->Trainings_model->update_event($event_id, $data);
+    	$this->session->set_flashdata('success', '<strong>Success !</strong> Event has been updated successfully!');
+    	return redirect('trainings/events_calendar');
     }
     // Event detail.
     public function event_detail($event_id){
