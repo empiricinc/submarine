@@ -160,7 +160,7 @@
 										<div class="col-md-12">
 											<div class="submitBtn">
 												<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-												<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
+												<button type="reset" class="btn btnSubmit">Reset</button>
 											</div>
 										</div>
 									</div>

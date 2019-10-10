@@ -9,6 +9,11 @@
 		<div class="mainInputBg">
 			<div class="row">
 				<div class="col-lg-12">
+					<?php if($success = $this->session->flashdata('success')): ?>
+						<div class="alert alert-success text-center">
+							<?php echo $success; ?>
+						</div>
+					<?php endif; ?>
 					<div class="tabelHeading">
 						<h3>question detail</h3>
 					</div>

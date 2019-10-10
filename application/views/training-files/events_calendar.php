@@ -94,10 +94,10 @@
 						<div class="submitBtn">
 							<?php if(empty(@$edit)): ?>
 								<button id="save" type="submit" class="btn btnSubmit">Submit</button>
+								<button type="reset" class="btn btnSubmit">Reset</button>
 							<?php else: ?>
 								<button id="update" type="submit" class="btn btnSubmit">Update</button>
 							<?php endif; ?>
-							<button type="reset" class="btn btnSubmit">Reset</button>
 						</div>
 					</div>
 				</form>
