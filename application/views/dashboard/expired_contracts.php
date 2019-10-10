@@ -181,34 +181,34 @@ h4 {
 			                            <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>
 			                            <a href="#finishContract" data-toggle="modal" data-target="#finishModal<?= $exp_cont->id; ?>" class="btn btn-danger btn-xs">Finish</a>
                                   <!-- Finish contract modal starts. -->
-                              <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                      <!--Header-->
-                                    <div class="modal-header">
-                                      <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                      </button>
+                                  <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <!--Header-->
+                                        <div class="modal-header">
+                                          <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                          </button>
+                                        </div>
+                                        <!--Body-->
+                                        <div class="modal-body">
+                                          <form action="<?= base_url('contract/finish'); ?>" method="post">
+                                            <input type="hidden" name="id" value="<?= $exp_cont->id; ?>">
+                                            <label for="reason">Reason to finish contract.</label>
+                                            <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
+                                            <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                                            <input type="reset" name="reset" class="btn btn-warning" value="Reset">
+                                          </form>
+                                        </div>
+                                        <!--Footer-->
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <!--Body-->
-                                    <div class="modal-body">
-                                      <form action="<?= base_url('contract/finish'); ?>" method="post">
-                                        <input type="hidden" name="id" value="<?= $exp_cont->id; ?>">
-                                        <label for="reason">Reason to finish contract.</label>
-                                        <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
-                                        <input type="submit" name="submit" class="btn btn-primary" value="Submit">
-                                        <input type="reset" name="reset" class="btn btn-warning" value="Reset">
-                                      </form>
-                                    </div>
-                                    <!--Footer-->
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                  </div>
                                 </div>
-                            </div>
-                            <!-- Finish contract modal ends. -->
+                                <!-- Finish contract modal ends. -->
 			                          </td>
 			                        </tr>
 			                          <?php endif; endforeach; ?>
