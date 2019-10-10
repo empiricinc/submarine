@@ -530,11 +530,29 @@ class Contract extends MY_Controller {
 		$data = array(
 			'from_date' => $this->input->post('from_date'),
 			'to_date' => $this->input->post('to_date'),
-			'long_description' => $this->input->post('long_description')
+			'long_description' => $this->input->post('long_description'),
+			'status' => 1
 		);
 		$this->Contract_model->contract_extension($id, $data);
 		$this->session->set_flashdata('messageactive', 'Contract has been extended successfully!');
 		redirect('contract');
+	}
+		// Extend All contracts at once.
+	public function extend_all(){
+		$date_0 = date('Y-m-d');
+		$date_1 = strtotime($date_0. '+ 15 days');
+		$date = date('Y-m-d', $date_1);
+		$data = array(
+			'from_date' => $this->input->post('date_from'),
+			'to_date' => $this->input->post('date_to'),
+			'status' => 1
+		);
+		if($this->Contract_model->extend_bulk($date, $data)){
+			$this->session->set_flashdata('messageactive', '<strong>Woohoo ! </strong> Contracts have been extended successfully!');
+			redirect('contract');
+		}else{
+			echo "The operation wasn't successful, try again!" ."<a href='javascript:history.go(-1);'>Go Back &laquo;</a>";
+		}
 	}
 	// View printed contracts by status.
 	public function get_printed($status = ''){

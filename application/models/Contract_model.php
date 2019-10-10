@@ -5,23 +5,13 @@
 * Author: Saddam
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-
-
 class Contract_model extends CI_Model {
-
  
-
     public function __construct()
-
     {
-
         parent::__construct();
-
         $this->load->database();
-
     }
-
 	 public function contract_information($limit, $offset) {
 	 	$this->db->select('employee_contract.*,
 			 	 					xin_contract_type.contract_type_id,
@@ -548,7 +538,6 @@ class Contract_model extends CI_Model {
 		// $this->db->limit(10);
 		return $this->db->get()->result();
 	}
-
 function applicantdetails($id){
   
  		$condition = " application_id =" . $id . " ";
@@ -585,8 +574,6 @@ function applicantdetails($id){
  			$this->db->where('user_id', $this->uri->segment(3));
  			return $this->db->get()->row_array();
  		}
-
-
 	public function addtoAcctiveContract($id) {
 	    //extract($data);
 	    $this->db->where('user_id', $id);
@@ -611,6 +598,13 @@ function applicantdetails($id){
 	// Contract extension
 	public function contract_extension($id = '', $data = ''){
 		$this->db->where('user_id', $id);
+		$this->db->update('employee_contract', $data);
+		return true;
+	}
+	// Extend multiple contracts at once.
+	public function extend_bulk($date, $data){
+		$this->db->where('to_date <=', $date);
+		// $this->db->where('status !=', 5);
 		$this->db->update('employee_contract', $data);
 		return true;
 	}
@@ -662,7 +656,6 @@ function applicantdetails($id){
 		$this->db->from('employee_contract');
 		$this->db->where('user_id', $user_id);
 		return $this->db->get()->result();
-
 	}
 	// Printing contracts. Print multiple having status equals 0 (Pending...)
 	public function print_bulk(){
@@ -811,5 +804,4 @@ function applicantdetails($id){
 		 return true;
 	 }
 }
-
 ?>
