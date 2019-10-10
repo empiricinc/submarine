@@ -91,58 +91,11 @@ h4 {
     <section class="secIndexTable">
         <div class="mainTableWhite">
             <div class="row">
-              <div class="col-md-10"><br>
-                <div class="tabelHeading">
-                    <h3>list of all expired contracts | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="tabelHeading">
-                  <div class="tabelTopBtn">
-                    <a data-toggle="modal" data-target="#extendContracts" href="#extendContracts" class="btn">Extend</a>
+                <div class="col-md-12">
+                  <div class="tabelHeading">
+                      <h3>list of all expired contracts | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
                   </div>
                 </div>
-              </div>
-               <!--Extend contract modal starts. -->
-              <div class="modal fade" id="extendContracts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                      <!--Header-->
-                    <div class="modal-header">
-                      <h4 style="display: inline;">Reason to Finish contract... </h4>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                      </button>
-                    </div>
-                    <!--Body-->
-                    <div class="modal-body">
-                      <form action="<?= base_url('contract/extend_all'); ?>" method="post">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <label>Date From</label>
-                            <input type="date" name="date_from" class="form-control date">
-                          </div>
-                          <div class="col-md-6">
-                            <label>Date To</label>
-                            <input type="date" name="date_to" class="form-control date">
-                          </div>
-                        </div><br>
-                        <div class="row">
-                          <div class="col-md-6 text-left">
-                            <input type="submit" name="submit" class="btn btn-primary btn-sm" value="Submit">
-                            <input type="reset" name="reset" class="btn btn-warning btn-sm" value="Reset">
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                    <!--Footer-->
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- Extend contract modal ends. -->
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -181,34 +134,34 @@ h4 {
 			                            <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>
 			                            <a href="#finishContract" data-toggle="modal" data-target="#finishModal<?= $exp_cont->id; ?>" class="btn btn-danger btn-xs">Finish</a>
                                   <!-- Finish contract modal starts. -->
-                                  <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                      <div class="modal-content">
-                                          <!--Header-->
-                                        <div class="modal-header">
-                                          <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
-                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">×</span>
-                                          </button>
-                                        </div>
-                                        <!--Body-->
-                                        <div class="modal-body">
-                                          <form action="<?= base_url('contract/finish'); ?>" method="post">
-                                            <input type="hidden" name="id" value="<?= $exp_cont->id; ?>">
-                                            <label for="reason">Reason to finish contract.</label>
-                                            <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
-                                            <input type="submit" name="submit" class="btn btn-primary" value="Submit">
-                                            <input type="reset" name="reset" class="btn btn-warning" value="Reset">
-                                          </form>
-                                        </div>
-                                        <!--Footer-->
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </div>
-                                      </div>
+                              <div class="modal fade" id="finishModal<?php echo $exp_cont->id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                      <!--Header-->
+                                    <div class="modal-header">
+                                      <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to Finish contract... </h4>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                      </button>
                                     </div>
+                                    <!--Body-->
+                                    <div class="modal-body">
+                                      <form action="<?= base_url('contract/finish'); ?>" method="post">
+                                        <input type="hidden" name="id" value="<?= $exp_cont->id; ?>">
+                                        <label for="reason">Reason to finish contract.</label>
+                                        <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...."></textarea><br>
+                                        <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                                        <input type="reset" name="reset" class="btn btn-warning" value="Reset">
+                                      </form>
+                                    </div>
+                                    <!--Footer-->
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
                                 </div>
-                                <!-- Finish contract modal ends. -->
+                            </div>
+                            <!-- Finish contract modal ends. -->
 			                          </td>
 			                        </tr>
 			                          <?php endif; endforeach; ?>
