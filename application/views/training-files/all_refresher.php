@@ -40,7 +40,7 @@
 					</div>
 					<div class="col-md-4">
 						<div class="tabelTopBtn">
-							<form class="form-inline" action="<?php echo base_url('trainings/training_search'); ?>" method="get">
+							<form class="form-inline" action="<?php echo base_url('trainings/refresher_search'); ?>" method="get">
 								<div class="inputFormMain">
 									<div class="input-group">
 										<input type="text" name="search_training" class="form-control" placeholder="Search trainings..." required="" autocomplete="off">
@@ -161,7 +161,7 @@
 					</div>
 					<div class="col-md-4">
 						<div class="tabelTopBtn">
-							<form class="form-inline" action="<?php echo base_url('tests/training_search'); ?>" method="get">
+							<form class="form-inline" action="<?php echo base_url('trainings/refresher_search'); ?>" method="get">
 								<div class="inputFormMain">
 									<a href="javascript:history.go(-1);" class="form-control">Go back</a>
 									<div class="input-group">
@@ -184,16 +184,16 @@
 								<table class="table">
 									<thead>
 										<tr>
-											<th>training type</th>
+											<th>trg type</th>
 											<th>location</th>
-											<th>trainer</th>
-											<th>facilitator name</th>
+											<th>trainer one</th>
+											<th>trainer two</th>
+											<th>facilitator</th>
 											<th>starts on</th>
 											<th>ends on</th>
 											<th>venue</th>
 											<th>hall detail</th>
-											<th>session</th>
-											<th>approval type</th>
+											<th>status</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -210,6 +210,9 @@
 												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $result->trainer_id; ?>"><?=$result->first_name." ".$result->last_name; ?></a>
 											</td>
 											<td>
+												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $result->trainer_id; ?>"><?=$result->first_name." ".$result->last_name; ?></a>
+											</td>
+											<td>
 												<?=$result->facilitator_name; ?>
 											</td>
 											<td>
@@ -219,16 +222,25 @@
 												<?=date('M d, Y', strtotime($result->end_date)); ?>
 											</td>
 											<td>
-												<?= $result->location; ?>
+												<?=$result->location; ?>
 											</td>
 											<td>
-												<?= $result->hall_detail; ?>
+												<?=$result->hall_detail; ?>
 											</td>
 											<td>
-												<?= $result->session; ?>
-											</td>
-											<td>
-												<?= $result->approval_type; ?>
+												<?php if($result->status == 2): ?>
+													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $result->trg_id; ?>">
+														<span class="label label-warning">Complete</span>
+													</a>
+												<?php elseif($result->status == 3): ?>
+													<a href="<?php echo base_url(); ?>trainings/detail_training/<?php echo $result->trg_id; ?>">
+														<span class="label label-success">Complete</span>
+													</a>
+												<?php elseif($result->status == 4): ?>
+													<a href="<?php echo base_url(); ?>trainings/expenses/<?php echo $result->trg_id; ?>">
+														<span class="label label-primary">Completed</span>
+													</a>
+												<?php endif; ?>
 											</td>
 										</tr>
 										<?php endforeach; endif; ?>

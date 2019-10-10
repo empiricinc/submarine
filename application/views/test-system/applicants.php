@@ -65,7 +65,7 @@
 												<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $applicant->application_id; ?>"><?=$applicant->fullname; ?></a>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?=$applicant->job_title; ?></a>
+												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?= substr($applicant->job_title, 0, 25).' ...'; ?></a>
 											</td>
 											<td>
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
@@ -149,7 +149,7 @@
 												<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $applicant->application_id; ?>"><?=$applicant->fullname; ?></a>
 											</td>
 											<td>
-												<?=$applicant->job_title; ?>
+												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?= substr($applicant->job_title, 0, 25).' ...'; ?></a>
 											</td>
 											<td>
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
@@ -174,7 +174,7 @@
 	<div class="col-lg-8 col-lg-offset-2">
 		<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="text-right">Applicant Detail</h3>
+			<h3>Applicant Detail</h3>
 		</div>
 		<div class="panel-body">
 			<div class="row">

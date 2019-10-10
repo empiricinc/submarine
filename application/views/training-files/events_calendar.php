@@ -81,8 +81,13 @@
 					<input type="hidden" name="created_at" value="<?php echo date('Y-m-d'); ?>">
 					<div class="col-lg-12">
 						<div class="submitBtn">
-							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
-							<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
+							<?php if(empty(@$edit)): ?>
+								<button id="save" type="submit" class="btn btnSubmit">Submit</button>
+								<button type="reset" class="btn btnSubmit">Reset</button>
+							<?php else: ?>
+								<button id="update" type="submit" class="btn btnSubmit">Update</button>
+							<?php endif; ?>
+
 						</div>
 					</div>
 				</form>

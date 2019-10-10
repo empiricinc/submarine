@@ -379,18 +379,24 @@ class Tests_model extends CI_Model{
 	}
 	// search applicants
 	public function search_applicants($applicant){
-		$this->db->select('xin_job_applications.application_id,
+		$this->db->select('assign_test.rollnumber,
+							assign_test.test_date,
+							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
 							xin_job_applications.created_at,
 							xin_jobs.job_id,
 							xin_jobs.job_title');
-		$this->db->from('xin_job_applications');
+		$this->db->from('assign_test');
+		$this->db->join('xin_job_applications', 'assign_test.rollnumber = xin_job_applications.application_id');
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
-		$this->db->like('fullname', $applicant);
-		$this->db->or_like('email', $applicant);
+		$this->db->like('xin_job_applications.fullname', $applicant);
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
+		$this->db->or_like('xin_job_applications.email', $applicant);
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
 		$this->db->or_like('xin_job_applications.created_at', $applicant);
 		$this->db->or_like('xin_jobs.job_title', $applicant);
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
 		return $this->db->get()->result();
 	}
 	// Search Jobs
