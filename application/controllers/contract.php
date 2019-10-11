@@ -888,6 +888,7 @@ class Contract extends MY_Controller {
   // Upload offer letters.
   public function upload_offer_letter($user_id){
   	$data['letters'] = $this->Contract_model->get_offer_letters();
+  	$data['letter_exists'] = $this->Contract_model->offer_letter_exists(); // If letter exists, put in textarea.
   	$data['subview'] = $this->load->view('dashboard/upload_letter', $data, TRUE);
     $this->load->view('layout_main', $data); // Page load.
   }

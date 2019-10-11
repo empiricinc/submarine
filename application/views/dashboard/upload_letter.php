@@ -28,10 +28,14 @@
                 </select>
               </div><br><br><br>
               <div class="col-lg-12">
-                <textarea class='editor' name='offer_letter' id='letter_type'></textarea><br><br>
+                <textarea class='editor' name='offer_letter' id='letter_type'><?php if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?></textarea><br><br>
               </div>
               <div class="col-lg-12">
-                <input type='submit' value='Send Letter' name='submit' class="btn btn-primary">
+                <?php if(empty($letter_exists)): ?>
+                  <input type='submit' value='Send Letter' name='submit' class="btn btn-primary">
+                <?php else: ?>
+                  <input type="submit" name="submit" value="Update Letter" class="btn btn-primary">
+                <?php endif; ?>
                 <a href="javascript:history.go(-1);" class="btn btn-warning">Back</a>
                 <br><br>
               </div>

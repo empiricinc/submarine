@@ -785,6 +785,13 @@ function applicantdetails($id){
 	public function get_offer_letters(){
 		return $this->db->from('offer_letter_formats')->get()->result();
 	}
+	// Check if the offer letter exists.
+	public function offer_letter_exists(){
+		$this->db->select('id, user_id, attachment, sdt');
+		$this->db->from('employee_offer_letter');
+		$this->db->where('user_id', $this->uri->segment(3));
+		return $this->db->get()->row_array();
+	}
 	// Upload offer letter
 	public function upload_offer_letter($user_id = '', $data = ''){
 		$this->db->where('user_id', $user_id);
