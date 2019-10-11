@@ -294,7 +294,7 @@ class Tests extends MY_Controller{
 		}else{
 			$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
 		}
-		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will informed about the result shortly !');
+		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will be informed about the result shortly !');
 		redirect('tests/test_submitted');
 	}
 	// Redirect the user to the test submitted page, where he can check his/her result, marks, failed/passed and more...
