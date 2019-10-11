@@ -277,9 +277,23 @@ class Tests extends MY_Controller{
 			'answer_id'   => $_POST['answer'][$j],
 			'applicant_id' => $_POST['applicant_id']
 			);
-			$this->Tests_model->submit_paper($data);
+			// Check for already existing applicant id in database. If exists, stop inserting again.
+			$exists_applicant = $this->db->get_where('ex_applicants', array('applicant_id' => $applicant_id));
+			if($exists_applicant->num_rows() > 0){
+				echo "You've already taken the exam. Try applying next time!";
+				return FALSE;
+			}else{
+				$this->Tests_model->submit_paper($data);
+			}
 		}
-		$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
+		// Check the applicant's id twice, so that there's no chance of duplicate entry.
+		$exists = $this->db->get_where('test_result', array('rollnumber' => $applicant_id));
+		if($exists->num_rows() > 0){
+			echo "You've already taken the exam !";
+			return FALSE;
+		}else{
+			$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
+		}
 		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will informed about the result shortly !');
 		redirect('tests/test_submitted');
 	}
