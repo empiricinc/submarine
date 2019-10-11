@@ -266,7 +266,7 @@ $(document).ready(function(){
 		// $('#countcheckboxes').html(counCheckbox);
 		// $('#total').html(counCheckbox)--;
 		if($('.select_max:checked').length > limit){
-			alert('Your limit to select employees has exceeded, you can select 3 employees in one training. Please adjust the rest in another training !');
+			alert('Your limit to select employees has exceeded, you can select 25 employees in one training. Please adjust the rest in another training !');
 			this.checked = false; // will not allow the checkbox to be checked.
 		}
 
