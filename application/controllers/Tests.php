@@ -165,7 +165,9 @@ class Tests extends MY_Controller{
 		$post_data = $this->input->post();
 		$validate = $this->Tests_model->validate_applicant($post_data);
 		if($validate){
-			redirect("tests/questions_for_test/{$post_data['roll_no']}");
+			$url_send = "tests/questions_for_test/{$post_data['roll_no']}";
+			echo $url_send;
+			redirect($url_send);
 		} elseif($validate['test_date'] > date('Y-m-d', strtotime($post_data['test_date']))) {
 			$this->session->set_flashdata('failed', '<strong>Aww Snap !</strong> Your exam date is over, you are not allowed to take the exam.');
 			redirect('tests/exam_login');
@@ -277,19 +279,15 @@ class Tests extends MY_Controller{
 			'answer_id'   => $_POST['answer'][$j],
 			'applicant_id' => $_POST['applicant_id']
 			);
-			// Check for already existing applicant id in database. If exists, stop inserting again.
-			$exists_applicant = $this->db->get_where('ex_applicants', array('applicant_id' => $applicant_id));
-			if($exists_applicant->num_rows() > 0){
-				echo "You've already taken the exam. Try applying next time!";
-				return FALSE;
-			}else{
 				$this->Tests_model->submit_paper($data);
-			}
 		}
 		// Check the applicant's id twice, so that there's no chance of duplicate entry.
 		$exists = $this->db->get_where('test_result', array('rollnumber' => $applicant_id));
 		if($exists->num_rows() > 0){
-			echo "You've already taken the exam !";
+			echo "You've already taken the exam. Try applying next time !";
+			// $this->db->select('exam_date')->from('ex_applicants')->get()->result();
+			// $this->db->where(array('exam_date' => date('Y-m-d'), 'applicant_id' => $applicant_id));
+			// $this->db->delete('ex_applicants');
 			return FALSE;
 		}else{
 			$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');

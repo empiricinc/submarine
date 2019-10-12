@@ -56,13 +56,15 @@
 				</form>
 			</div>
 			<div class="solidLine"></div>
-			<div class="col-lg-6">
-				<h4>Recently added...</h4>
-			</div>
-			<div class="col-lg-6 text-right">
-				<a href="<?php echo base_url('trainings/all_stay_hotels'); ?>">
-					<h4><i class="fa fa-eye"></i> View All</h4>
-				</a>
+			<div class="row">
+				<div class="col-lg-6">
+					<h4>Recently added...</h4>
+				</div>
+				<div class="col-lg-6 text-right">
+					<a href="<?php echo base_url('trainings/all_stay_hotels'); ?>">
+						<h4><i class="fa fa-eye"></i> View All</h4>
+					</a>
+				</div>
 			</div>
 			<table class="table">
 				<thead>

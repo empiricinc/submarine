@@ -68,7 +68,7 @@
 								<strong>
 									<?php echo $i++; // Print alphabetical numbers before the options. ?>
 								-</strong>
-								<input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> 
+								<input type="radio" name="answer[]<?php echo $ans->ques_id; ?>" value="<?=$ans->ans_id; ?>"> 
 								<?= $ans->ans_name; ?>
 							</li>
 						<?php endif;
@@ -115,7 +115,7 @@ function startTimer(duration, display) {
 }
 window.onload = function () {
     var testTime = 60 * 60,
-        display = document.querySelector('#time');
+    	display = document.querySelector('#time');
     startTimer(testTime, display);
 };
 </script>
