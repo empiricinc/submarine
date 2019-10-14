@@ -165,9 +165,7 @@ class Tests extends MY_Controller{
 		$post_data = $this->input->post();
 		$validate = $this->Tests_model->validate_applicant($post_data);
 		if($validate){
-			$url_send = "tests/questions_for_test/{$post_data['roll_no']}";
-			echo $url_send;
-			redirect($url_send);
+			redirect("tests/questions_for_test/{$post_data['roll_no']}");
 		} elseif($validate['test_date'] > date('Y-m-d', strtotime($post_data['test_date']))) {
 			$this->session->set_flashdata('failed', '<strong>Aww Snap !</strong> Your exam date is over, you are not allowed to take the exam.');
 			redirect('tests/exam_login');
