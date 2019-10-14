@@ -837,11 +837,11 @@ class Trainings extends CI_Controller{
 		}
 			$status = $this->db->select('status')->from('xin_trainings');
 			$this->db->where('trg_id', $training_id[0]);
-			if($status == 1)
+			if($status == '1')
 				$this->db->update('xin_trainings', array('status' => '2'));
-			elseif($status == 2)
+			elseif($status == '2')
 				$this->db->update('xin_trainings', array('status' => '3'));
-			elseif($status == 3)
+			elseif($status == '3')
 				$this->db->update('xin_trainings', array('status' => '4'));
 			else
 				$this->db->update('xin_trainings', array('status' => '2'));
