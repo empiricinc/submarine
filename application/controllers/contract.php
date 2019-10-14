@@ -451,6 +451,10 @@ class Contract extends MY_Controller {
 		$this->session->set_flashdata('messageactive', 'File uploaded successfully!');
 		return redirect('contract');
 	}
+	// Activate contract first, then activate it.
+	public function activate_first(){
+		echo "You need to create the contract first, then activate it !";
+	}
 	// Multiple files upload. Contract copies upload.
 	function contract_upload(){
         $data = array();

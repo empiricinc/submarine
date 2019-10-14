@@ -372,7 +372,8 @@ class Trainings extends CI_Controller{
 		$serial = 1;
 		$employee_names = '';
 		for ($i = 0; $i < count($employee_detail); $i++) {
-			$this->db->select('xin_employees.first_name,
+			$this->db->select('xin_employees.employee_id,
+								xin_employees.first_name,
 								xin_employees.last_name,
 								xin_employees.designation_id,
 								xin_employees.company_id,

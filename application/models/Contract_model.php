@@ -236,24 +236,24 @@ class Contract_model extends CI_Model {
 	}
 	public function get_pending_contracts($limit, $offset){
 		$this->db->select('employee_contract.*,
-	 	 					xin_contract_type.contract_type_id,
-	 	 					xin_contract_type.name as cont_type,
-	 	 					xin_job_applications.application_id,
-	 	 					xin_job_applications.fullname,
-	 	 					xin_job_applications.province,
-	 	 					xin_job_applications.city_name,
-	 	 					xin_job_applications.gender,
-	 	 					xin_job_applications.email,
-	 	 					xin_job_applications.message,
-	 	 					xin_job_applications.created_at,
-	 	 					gender.gender_id,
-	 	 					gender.gender_name,
-	 	 					provinces.id,
-	 	 					provinces.name,
-	 	 					city.id,
-	 	 					city.name as city_name,
-	 	 					domicile.id,
-	 	 					domicile.name as dom_name');
+			 	 					xin_contract_type.contract_type_id,
+			 	 					xin_contract_type.name as cont_type,
+			 	 					xin_job_applications.application_id,
+			 	 					xin_job_applications.fullname,
+			 	 					xin_job_applications.province,
+			 	 					xin_job_applications.city_name,
+			 	 					xin_job_applications.gender,
+			 	 					xin_job_applications.email,
+			 	 					xin_job_applications.message,
+			 	 					xin_job_applications.created_at,
+			 	 					gender.gender_id,
+			 	 					gender.gender_name,
+			 	 					provinces.id,
+			 	 					provinces.name,
+			 	 					city.id,
+			 	 					city.name as city_name,
+			 	 					domicile.id,
+			 	 					domicile.name as dom_name');
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
 		$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
@@ -538,16 +538,16 @@ class Contract_model extends CI_Model {
 		// $this->db->limit(10);
 		return $this->db->get()->result();
 	}
-function applicantdetails($id){
+		function applicantdetails($id){
   
- 		$condition = " application_id =" . $id . " ";
-        $this->db->select("application_id, job_id, user_id, fullname, email, gender, age, education, minimum_experience, domicile, province, city_name, message, job_resume, application_status, application_remarks, created_at"); 
-        $this->db->from('xin_job_applications');
-        $this->db->where($condition);
-        $this->db->order_by('application_id', 'DESC');
-        $this->db->limit(1);
-		$query = $this->db->get();
-		  return $query->result(); 
+	 		$condition = " application_id =" . $id . " ";
+	      $this->db->select("application_id, job_id, user_id, fullname, email, gender, age, education, minimum_experience, domicile, province, city_name, message, job_resume, application_status, application_remarks, created_at"); 
+	      $this->db->from('xin_job_applications');
+	      $this->db->where($condition);
+	      $this->db->order_by('application_id', 'DESC');
+	      $this->db->limit(1);
+			$query = $this->db->get();
+			return $query->result(); 
  		}	 
  		// Get contract info by segment 3 id.
  		public function get_contract_byID(){
