@@ -31,7 +31,7 @@
 									<tbody>
 										<form action="<?php echo base_url('trainings/save_attendance'); ?>" method="post">
 											<?php $today = date('Y-m-d');
-										$att_date = $this->db->select('training_id, attendance_date')->from('training_attendance')->where('training_id', $this->uri->segment(3))->get()->result(); ?>
+										$att_date = $this->db->select('training_id, attendance_date')->from('training_attendance')->where('training_id', $this->uri->segment(3))->order_by('attendance_date', 'DESC')->get()->result(); ?>
 										<?php for ($i = 0; $i < count($names); $i++): ?>
 											<tr>
 												<td>
@@ -61,7 +61,7 @@
 											<tr>
 												<td>
 													<div class="submitBtn">
-														<button class="btn btnSubmit" type="submit">Save</button>
+														<button class="btn btnSubmit" type="submit" <?php if($today == date('Y-m-d', strtotime($att_date[0]->attendance_date))): ?> disabled <?php endif; ?>>Save</button>
 														<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
 													</div>
 												</td>

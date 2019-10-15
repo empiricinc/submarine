@@ -833,7 +833,15 @@ class Trainings extends CI_Controller{
 					'emp_id' => $_POST['employee_id'][$j],
 					'project_id' => $_POST['project'][$j]
 					);
-			$this->Trainings_model->store_attendance($data); // Send the data to the DB.
+			$date = date('Y-m-d');
+			$date_check = $this->db->select('attendance_date, training_id')->where('training_id', $training_id[0])->from('training_attendance')->get()->row();
+			$return = $date_check->attendance_date;
+			if($date_check->attendance_date == $date){
+				echo "You've already saved the attencance. Try doing it tomorrow !";
+				return false;
+			}else{
+				$this->Trainings_model->store_attendance($data); // Send the data to the DB.
+			}
 		}
 			$status = $this->db->select('status')->from('xin_trainings');
 			$this->db->where('trg_id', $training_id[0]);
