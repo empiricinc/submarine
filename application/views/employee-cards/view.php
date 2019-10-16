@@ -48,15 +48,6 @@
 							<span></span>
 						</div>
 
-						<!-- <div class="filterSelect">
-							<select name="employee_type" class="form-control">
-								<option value="all">Card status</option>
-								<option value="pending">Pending</option>
-								<option value="deliver">Deliver</option>
-								<option value="received">Received</option>
-							</select>
-							<span></span>
-						</div> -->
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>
@@ -66,28 +57,6 @@
 							</select>
 							<span></span>
 						</div>
-						<!-- <div class="filterSelect hide">
-							<select name="district" class="form-control district" id="district">
-								<option value="">District</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="tehsil" class="form-control tehsil" id="tehsil">
-								<option value="">Tehsil</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="uc" class="form-control uc" id="uc">
-								<option value="">UC</option>
-								
-							</select>
-							<span></span>
-						</div> -->
-						
 
 						<div class="filterSelectBtn">
 							<button type="submit" name="search" class="btn btnSubmit" id="search">Search</button>
@@ -163,7 +132,7 @@
 												<?php elseif($card_status == 'received'): ?>
 													<th>Received Date</th>
 											<?php endif; ?>
-											<?php if($card_status == 'pending' OR $card_status == 'printed' OR $card_status == 'delivered'): ?>
+											<?php if($card_status == 'pending' OR $card_status == 'printed'): ?>
 											<th>Action</th>
 											<?php endif; ?>
 										</tr>
@@ -181,7 +150,7 @@
 											<td><?= $e->contact_number; ?></td>
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
-											<td><?= date('d-m-Y', strtotime($e->date_of_joining)); ?></td>
+											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
 											<?php if($card_status == 'printed'): ?>
 											<td><?= date('d-m-Y', strtotime($e->print_date)); ?></td>
 												<?php elseif($card_status == 'delivered'): ?>
@@ -200,10 +169,6 @@
 												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->card_id; ?>/2" class="label label-danger">deliver</a>
 											</td>
 
-											<?php elseif($card_status == 'delivered'): ?>
-											<td>
-												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->card_id; ?>/3" class="label label-success">receive</a>
-											</td>
 											<?php endif; ?>
 										</tr>
 										<?php $count++; endforeach; ?>

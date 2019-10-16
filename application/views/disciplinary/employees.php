@@ -111,7 +111,7 @@
 								<table class="table table-hover" id="investigation-table" style="cursor: pointer;">
 									<thead>
 										<tr>
-											<!-- <th>#</th> -->
+											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
 											<!-- <th>Email</th> -->
@@ -124,7 +124,7 @@
 									<tbody>
 										<?php $count=1; foreach($employees AS $e): ?>
 										<tr data-id="<?= $e->employee_id; ?>">
-											<!-- <td><?= $count; ?></td> -->
+											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
 											<td><?= $e->contact_number; ?></td>
 											<!-- <td><?= $e->email; ?></td> -->

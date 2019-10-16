@@ -387,14 +387,11 @@
 
 
 
-		$('.date').datepicker({
+	$('.date').datepicker({
 
 		changeMonth: true,
-
 		changeYear: true,
-
 		dateFormat:'yy-mm-dd',
-
 		yearRange: '1900:' + (new Date().getFullYear() + 15),
 
 		beforeShow: function(input) {
@@ -406,6 +403,10 @@
 		});
 
 	});	
+
+	$('.date-onward').datepicker({
+		minDate: 0
+	});
 
 	$('.dataTable').DataTable();
 
@@ -438,63 +439,6 @@
 			
 		});
 
-		$('#resg-submit').on('click', function() {
-			var reason = $('#resg-reason').val();
-			var other_reason = $('#resg-other-reason').val();
-			var subject = $('#resg-subject').val();
-			var desc = $('#resg-desc').val();
-
-			if(reason == "" || other_reason == "")
-			{
-				toastr.error("Provide reason of resignation");
-				return;
-			} 
-			if(subject == "")
-			{
-				toastr.error("Subject field is required");
-				return;
-			}
-			if(desc == "")
-			{
-				toastr.error("Description is required");
-				return;
-			}
-
-
-			$.ajax({
-				url: '<?= base_url(); ?>User_panel/send_resignation',
-				type: 'POST',
-				dataType: 'html',
-				data: {reason: reason, other_reason: other_reason, subject: subject, desc: desc},
-				success: function(response) 
-				{
-					if(response == '1' || response == '2')
-					{
-						if(response == '1')
-						{
-							$('.alert').css('display', 'block');
-							toastr.success('Your resignation was submitted');
-						}
-						else if(response == '2')
-						{
-							toastr.error('Resignation already in queue');
-						}
-						
-						// $('#resg-reason').select2("val", "All");
-						$('#resg-reason').val('');
-						$('#resg-other-reason').val('');
-						$('#resg-subject').val('');
-						$('#resg-desc').val('');
-
-					}
-					else
-					{
-						toastr.error("Error! Problem in server");
-					}
-				}
-			});
-				
-		});
 
 		/* If user click on leave application row */
 		$('.leave-application-table tr').on('click', function() {
@@ -621,6 +565,13 @@
 
 	<script type="text/javascript">
 
+		/* Enabling Update Buttons */
+		$('.form-control').on('change paste keyup', function() {
+			$formID = $(this).closest('form').attr('id');
+			$('#'+$formID+' .btnSubmit').prop('disabled', false);
+		});
+
+
 		$('#basic-information-form').on('submit', function(e) {
 			e.preventDefault();
 
@@ -696,7 +647,10 @@
 			var to_date = $('#qToDate').val();
 
 			if(institute_name == "" || qualification_id == "" || discipline == "" || from_date == "" || to_date == "")
+			{
 				toastr.error('Error! All fields are requird');
+				return;
+			}
 
 			var row_count = $('#education-table').DataTable().column(0).data().length + 1;
 
@@ -729,6 +683,13 @@
 			var account_no = $('#account').val();
 			var branch_code = $('#branch-code').val();
 			var bank = $('#bank option:selected').text();
+
+			if(account_title == "" || account_no == "" || branch_code == "" || bank == "")
+			{
+				toastr.error('Error! All fields are required');
+				return;
+			}
+			
 			var row_count = $('#bank-detail-table').DataTable().column(0).data().length + 1;
 
 
@@ -1045,6 +1006,18 @@
 
 		$('#work-experience-form').on('submit', function(e) {
 			e.preventDefault();
+
+			var company = $('#company').val();
+			var designation = $('#designation').val();
+			var from_date = $('#from-date').val();
+			var to_date = $('#to-date').val();
+			var description = $('#description').val();
+
+			if(company == "" || designation == "" || from_date == "" || to_date == "" || description == "")
+			{
+				toastr.error('Error! All fields are required');
+				return;
+			}
 
 			var row_count = job_table.DataTable().column(0).data().length + 1;
 

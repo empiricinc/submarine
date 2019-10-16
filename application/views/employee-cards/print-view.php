@@ -33,6 +33,16 @@
 						<?php if(!empty($employees[0])): ?>
 					
 						<?php foreach($employees AS $e): ?>
+						<?php 
+
+							$job_title = explode('—', $e->job_title);
+						
+							$province = (isset($job_title[2])) ? $job_title[2] : '';
+							$district = (isset($job_title[3])) ? $job_title[3] : '';
+							$uc = (isset($job_title[5])) ? $job_title[5] : '';
+							$area_code = (isset($job_title[7])) ? strstr($job_title[7], '(') : '';
+							
+						 ?>
 						<tr>
 							<td id="tdColumn1" style="width:50%;vertical-align: top; padding: 20px;" class="no-padding-print no-border">
 									<div class="card-container" id="dvColumn_1_9595">
@@ -45,8 +55,8 @@
 									<div class="card-province-logo"><img src="<?= base_url(); ?>assets/img/FATA_logo.png" style="position: relative; width: 57px;height: 67px;"></div>
 				                    <div class="card-district-heading">District :</div>
 				                    <div class="card-tehsil-uc-area-heading">UC/Area :</div>
-									<div class="card-district"><?= strtoupper($e->p_province); ?></div>
-									<div class="card-uc"><?= strtoupper($e->p_uc); ?></div>
+									<div class="card-district"><?= strtoupper($district); ?></div>
+									<div class="card-uc"><?= strtoupper($uc). '—' . $area_code; ?></div>
 									<div class="card-job-type"><?= ucwords($e->designation_name); ?></div>
 									<div class="card-emp-id"></div>
 									<div class="card-sign-authority">( Regional Manager )</div>
@@ -64,7 +74,7 @@
 										<?= date('d-m-Y', strtotime($e->date_of_birth)); ?>
 									</div>
 									<div class="card-emergency"><?= $e->contact_number; ?></div>
-									<div class="card-issue-date">Jan,2019</div>
+									<div class="card-issue-date"><?= ($e->receive_date) ? date('d-m-Y', strtotime($e->receive_date)) : ''; ?></div>
 				                    <div class="temporary-card-issue-date"></div>
 				                    <div class="card-expiry-date"></div>
 									<div class="card-lost-location">Any District Polio control room of KP-TD</div>

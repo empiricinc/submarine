@@ -26,12 +26,10 @@ class User_panel_model extends CI_Model
 
 
 		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.email AS email_address, xe.profile_picture,
-		 xc.name as company_name, xdd.department_name, xd.designation_name, xol.location_name, xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, 
+		 xc.name as company_name, xdd.department_name, xd.designation_name, xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, 
             epli.permanent_address_details, permanent_province, permanent_district, permanent_tehsil, permanent_uc,
             eri.resident_address_details, resident_province, resident_district, resident_tehsil, resident_uc $employee_basic_info_fileds");
 		      
-        $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
-        $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
 
         $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
         $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
@@ -391,13 +389,6 @@ class User_panel_model extends CI_Model
         return $this->db->get('xin_leave_type')->result();
     }
 
-    // public function leaves_available_count($emp_id)
-    // {
-    //     $query = $this->db->query("SELECT xlt.*, (SELECT SUM(DATEDIFF(xla.to_date, xla.from_date)) AS leave_count FROM `xin_leave_applications` xla WHERE xla.employee_id = $emp_id AND xla.leave_type_id = xlt.leave_type_id AND xla.status = '2') AS leave_taken FROM `xin_leave_type` AS xlt");
-    //     return $query->result();
-        
-    // }
-
     
     public function leaves_available_count($emp_id, $gender)
     {
@@ -539,6 +530,13 @@ class User_panel_model extends CI_Model
         $this->db->or_where('ci.complainee_reply', '');
         $this->db->join('investigation_reasons ir', 'ci.reason_id = ir.id', 'left');
         return $this->db->get('complaint_internal ci');
+    }
+
+    public function contract_print($user_id){
+        $this->db->select('*');
+        $this->db->from('employee_contract');
+        $this->db->where('user_id', $user_id);
+        return $this->db->get()->result();
     }
 
 }

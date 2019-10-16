@@ -34,7 +34,6 @@ class Investigation extends MY_Controller
                             );
         
 		$this->load->model(array(
-						'User_panel_model',
 						'Investigation_model',
 						'Designation_model',
 						'Reports_model',
@@ -73,6 +72,7 @@ class Investigation extends MY_Controller
 		if(isset($_GET['search']))
 		{
 			$employeeID = $this->input->get('employee_id');
+			$cnicNo = $this->input->get('cnic_no');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
 			$project = (int) $this->input->get('project');
@@ -87,7 +87,7 @@ class Investigation extends MY_Controller
 			$conditions['xe.employee_id'] = $employeeID;
 			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
 			$conditions['xe.designation_id'] = $designation;
-			$conditions['xol.location_id'] = $location;
+			$conditions['ebi.cnic'] = $cnicNo;
 
 			if($project != 0)
 				$conditions['xe.company_id'] = $project;
@@ -100,14 +100,14 @@ class Investigation extends MY_Controller
 		$exclude_user_roles = array(1, 2);
 		/* Pagination */
 
-		$total_rows = $this->Investigation_model->employee_info($filtered_conditions, "", "", $exclude_user_roles)->num_rows();
+		$total_rows = $this->Investigation_model->get_employees($filtered_conditions, "", "", $exclude_user_roles)->num_rows();
 		$url = 'Investigation/employees';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
 		/* end pagination */
 
 		$data['title'] = 'List of Employees';
-		$data['employees'] = $this->Investigation_model->employee_info($filtered_conditions, $this->limit, $offset, $exclude_user_roles)->result();
+		$data['employees'] = $this->Investigation_model->get_employees($filtered_conditions, $this->limit, $offset, $exclude_user_roles)->result();
 		
 		$data['department'] = $this->Departments_model->get_by_project($this->session_data['project_id']); 
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 

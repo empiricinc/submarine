@@ -595,6 +595,8 @@
 			window.location = url+res+status;
 
 		});
+
+
 	</script>
 
 </body>

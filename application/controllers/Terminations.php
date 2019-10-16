@@ -72,7 +72,7 @@ class Terminations extends MY_Controller
 
 		$this->form_validation->set_rules('employee', 'Employee', 'required');
 		$this->form_validation->set_rules('reason', 'Reason', 'required');
-		// $this->form_validation->set_rules('other_reason', 'Other reason', 'required');
+		$this->form_validation->set_rules('notice_date', 'Notice Date', 'required');
 		$this->form_validation->set_rules('termination_date', 'Termination Date', 'required');
 		$this->form_validation->set_rules('description', 'Description', 'required');
 
@@ -86,6 +86,7 @@ class Terminations extends MY_Controller
 		$reason = $this->input->post('reason');
 		$other_reason_text = $this->input->post('other_reason');
 		$termination_date = $this->input->post('termination_date');
+		$notice_date = $this->input->post('notice_date');
 		$description = $this->input->post('description');
 
 
@@ -94,6 +95,7 @@ class Terminations extends MY_Controller
 					'reason_id' => $reason,
 					'other_reason' => $other_reason_text,
 					'termination_date' => $termination_date,
+					'notice_date' => $notice_date,
 					'description' => $description,
 					'terminated_by' => $terminated_by				
 				);
@@ -159,52 +161,6 @@ class Terminations extends MY_Controller
 	}
 
 
-	// function requests($offset="")
-	// {
-	// 	$conditions = [
-	// 				'xe.company_id' => $this->session_data['project_id'],
-	// 				'xe.provience_id' => $this->session_data['province_id']
-	// 			];
-
-	// 	if(isset($_GET['search']))
-	// 	{
-	// 		$fromDate = $this->input->get('from_date');
-	// 		$toDate = $this->input->get('to_date');
-	// 		$employeeName = $this->input->get('employee_name');
-	// 		$project = $this->input->get('project');
-	// 		$designation = $this->input->get('designation');
-
-	// 		if($employeeName != '')
-	// 			$employeeName = '%'.$employeeName.'%';
-
-	// 		$conditions['t.confirmed_date >='] = $fromDate;
-	// 		$conditions['t.confirmed_date <='] = $toDate;
-	// 		$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
-	// 		$conditions['xe.designation_id'] = $designation;
-			
-	// 		if($project != 0)
-	// 			$conditions['xe.company_id'] = $project;
-
-	// 	} 
-
-	// 	$filtered_conditions = $this->remove_empty_entries($conditions);
-
-	// 	$total_rows = $this->Terminations_model->get_requests($filtered_conditions)->num_rows();
-	// 	$url = 'Terminations/requests';
-
-	// 	$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
-	// 	$data['title'] = "Termination Requests";
-	// 	$data['query_string'] = $_SERVER['QUERY_STRING'];
-
-	// 	$data['terminated'] = $this->Terminations_model->get_requests($filtered_conditions, $this->limit, $offset)->result();
-
-	// 	$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
-	// 	$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
-	// 	$data['content'] = $this->load->view("terminations/requests", $data, TRUE);
-	// 	$this->load->view('terminations/_template', $data);
-	// }
-
-
 	function detail($termination_id)
 	{
 	
@@ -234,30 +190,5 @@ class Terminations extends MY_Controller
 		
 	}
 
-	// public function confirm($termination_id)
-	// {
-	// 	$employee_id = $this->session_data['user_id'];
-
- //        $date = date('Y-m-d');
-
- //        $data = array(
- //                    'confirmed_by' => $employee_id,
- //                    'confirmed_date' => $date,
- //                    'status' => '1'
- //                );
-
- //        $res = $this->Terminations_model->confirmed_by($termination_id, $data);
-
- //        if($res)
- //        {
- //            $this->session->set_flashdata('success', '<strong>Done!</strong> Employee Terminated');
- //            redirect('Terminations/requests');
- //        }
- //        else
- //        {
- //            $this->session->set_flashdata('success', '<strong>Error!</strong> Server Problem');
- //            redirect('Terminations/requests');
- //        }
-	// }
 
 }

@@ -158,6 +158,51 @@
 							<div class="col-lg-4"><strong>Father Name</strong></div>
 							<div class="col-lg-8"><?= ucwords($basic_info->father_name); ?></div>
 						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>Gender</strong></div>
+							<div class="col-lg-8"><?= ucwords($basic_info->gender_name); ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>CNIC</strong></div>
+							<div class="col-lg-8"><?= $basic_info->cnic; ?></div>
+						</div>
+
+						<div class="row">
+						<div class="col-lg-4"><strong>CNIC Expiry</strong></div>
+							<div class="col-lg-8"><?= ($basic_info->cnic_expiry_date) ? date('d-m-Y', strtotime($basic_info->cnic_expiry_date)) : ''; ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>DOB</strong></div>
+							<div class="col-lg-8"><?= ($basic_info->date_of_birth) ? date('d-m-Y', strtotime($basic_info->date_of_birth)) : ''; ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>Email</strong></div>
+							<div class="col-lg-8"><?= $basic_info->email_address; ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>Contact No</strong></div>
+							<div class="col-lg-8"><?= $basic_info->personal_contact; ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>Other Contact</strong></div>
+							<div class="col-lg-8"><?= $basic_info->contact_other; ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>CTC Mobile No</strong></div>
+							<div class="col-lg-8"><?= $basic_info->contact_number; ?></div>
+						</div>
+
+						<div class="row">
+							<div class="col-lg-4"><strong>Province</strong></div>
+							<div class="col-lg-8"><?= ucwords($basic_info->province); ?></div>
+						</div>
 							
 						<div class="row">
 							<div class="col-lg-4"><strong>Company</strong></div>
@@ -173,81 +218,12 @@
 							<div class="col-lg-4"><strong>Designation</strong></div>
 							<div class="col-lg-8"><?= ucwords($basic_info->designation_name); ?></div>
 						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Gender</strong></div>
-							<div class="col-lg-8"><?= ucwords($basic_info->gender_name); ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Blood Group</strong></div>
-							<div class="col-lg-8"><?= $basic_info->blood_group_name; ?></div>
-						</div>
-
-						<div class="row">
-						<div class="col-lg-4"><strong>DOB</strong></div>
-							<div class="col-lg-8"><?= date('d-m-Y', strtotime($basic_info->date_of_birth)); ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Email</strong></div>
-							<div class="col-lg-8"><?= $basic_info->email_address; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Personal Contact</strong></div>
-							<div class="col-lg-8"><?= $basic_info->personal_contact; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Other Contact</strong></div>
-							<div class="col-lg-8"><?= $basic_info->contact_other; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>CTC Mobile No</strong></div>
-							<div class="col-lg-8"><?= $basic_info->contact_number; ?></div>
-						</div>
-
+						
 						<div class="row">
 							<div class="col-lg-4"><strong>Marital Status</strong></div>
 							<div class="col-lg-8"><?= ucwords($basic_info->marital_name); ?></div>
 						</div>
 
-						<div class="row">
-							<div class="col-lg-4"><strong>CNIC</strong></div>
-							<div class="col-lg-8"><?= $basic_info->cnic; ?></div>
-						</div>
-
-						<div class="row">
-						<div class="col-lg-4"><strong>CNIC Expiry</strong></div>
-							<div class="col-lg-8"><?= date('d-m-Y', strtotime($basic_info->cnic_expiry_date)); ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Ethnicity</strong></div>
-							<div class="col-lg-8"><?= $basic_info->ethnicity_name; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Tribe</strong></div>
-							<div class="col-lg-8"><?= $basic_info->tribe_name; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Language</strong></div>
-							<div class="col-lg-8"><?= $basic_info->language_name; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Nationality</strong></div>
-							<div class="col-lg-8"><?= $basic_info->country_name; ?></div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-4"><strong>Religion</strong></div>
-							<div class="col-lg-8"><?= $basic_info->religion_name; ?></div>
-						</div>
 				</div>
 			</div>
 		</div>

@@ -133,48 +133,20 @@ class Reports_model extends CI_Model
         $this->db->join('blood_group bg', 'ebi.bloodgroup = bg.blood_group_id', 'left');
         $this->db->join('xin_contract_type xct', 'ebi.employee_contract_type = xct.contract_type_id', 'left');
 
-        
-        // $this->db->join('marital_status m', 'ebi.marital_status = m.marital_id', 'left');
-        // $this->db->join('xin_employee_contract xec', 'ebi.employee_contract_type = xec.contract_id', 'left');
-        // $this->db->join('xin_contract_type xct', 'xec.contract_type_id = xct.contract_type_id', 'left');
-        
-        // $this->db->join('blood_group bg', 'ebi.bloodgroup = bg.blood_group_id', 'left');
         $this->db->where($conditions);
 
-        // $this->db->order_by('CAST(xe.employee_id AS UNSIGNED)', 'ASC');
         $this->db->order_by('xe.user_id', 'ASC');
         return $this->db->get('xin_employees xe')->row();
     }
 
     function get_employee_cards($conditions=array(), $limit="", $offset="")
     {
-
         $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.contact_no, xd.designation_name, ebi.cnic, ebi.contact_number, ebi.personal_contact,
-            ebi.date_of_birth,
-            eri.resident_address_details AS r_address, rp.name AS r_province, rd.name AS r_district, rt.name AS r_tehsil, ru.name AS r_uc,
-            epli.permanent_address_details AS p_address, pp.name AS p_province, pd.name AS p_district, pt.name AS p_tehsil, pu.name AS p_uc, ebi.date_of_birth,
-            eri.resident_address_details AS r_address, rp.name AS r_province, rd.name AS r_district, rt.name AS r_tehsil, ru.name AS r_uc,
-             xc.name AS project_name, ec.id AS card_id, ec.card_status, ec.issue_date, ec.expiry_date, xe.date_of_joining, ec.print_date, ec.deliver_date, ec.receive_date");
+            ebi.date_of_birth, ebi.job_title, xc.name AS project_name, ec.id AS card_id, ec.card_status, ec.issue_date, ec.expiry_date, xe.date_of_joining, ec.print_date, ec.deliver_date, ec.receive_date");
 
-        /* Company, Designation, Gender etc would be picked from employee_basic_info */
-        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
-        
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');        
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
-
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
-
-        $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
-        $this->db->join('provinces pp', 'epli.permanent_province = pp.id', 'left');
-        $this->db->join('district pd', 'epli.permanent_district = pd.id', 'left');
-        $this->db->join('tehsil pt', 'epli.permanent_tehsil = pt.id', 'left');
-        $this->db->join('union_councel pu', 'epli.permanent_uc = pu.id', 'left');
-
-        $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
-        $this->db->join('provinces rp', 'eri.resident_province = rp.id', 'left');
-        $this->db->join('district rd', 'eri.resident_district = rd.id', 'left');
-        $this->db->join('tehsil rt', 'eri.resident_tehsil = rt.id', 'left');
-        $this->db->join('union_councel ru', 'eri.resident_uc = ru.id', 'left');
-
         $this->db->join('employee_cards ec', 'xe.employee_id = ec.employee_id', 'left');
 
         $this->db->limit($limit, $offset);
@@ -182,10 +154,8 @@ class Reports_model extends CI_Model
         if(!empty($conditions))
             $this->db->where($conditions);
 
-
-        // $this->db->order_by('CAST(xe.employee_id AS UNSIGNED)', 'ASC');
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
-        $this->db->order_by('xe.user_id', 'ASC');
+        $this->db->order_by('xe.user_id', 'DESC');
         return $this->db->get('xin_employees xe');
     }
 
@@ -210,11 +180,8 @@ class Reports_model extends CI_Model
 	{
         $this->db->select('DISTINCT(xd.designation_id), xd.designation_name');
         $this->db->join('xin_employees xe', 'xd.designation_id = xe.designation_id', 'left');
-        // if($project_id != "")
-        // {
-            // $this->db->join('xin_office_location xol', 'xd.designation_id = xol.designation_id', 'left');
-            $this->db->where('xe.company_id', $project_id);
-        // }
+
+        $this->db->where('xe.company_id', $project_id);
 		return $this->db->get('xin_designations xd')->result();
 	}
 
@@ -290,28 +257,6 @@ class Reports_model extends CI_Model
             $this->db->where('xol.company_id', $project_id);
         return $this->db->get('xin_office_location xol')->result();
     }
-
-    // public function get_resignations()
-    // {
-    //     $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
-    //     $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
-    //     $this->db->join('resignation_reasons rr', 'xer.reason_id = rr.reason_id', 'left');
-    //     // $this->db->join('xin_designations xd', 'xer.designation_id = xd.designation_id', 'left');
-    //     $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
-    //     return $this->db->get('xin_employee_resignations xer')->result();
-    // }
-
-    // public function get_terminations()
-    // {
-    //     $this->db->select('xe.employee_id, CONCAT(xe.first_name," ", xe.last_name) AS employee_name, t.id, tr.reason_text, t.other_reason, t.description, t.notice_date, CONCAT(tby.first_name," ", tby.last_name) AS terminator, xd.designation_name');
-    //     $this->db->join('xin_employees AS xe', 't.employee_id = xe.employee_id', 'left');
-    //     $this->db->join('xin_employees AS tby', 't.terminated_by = tby .user_id', 'left');
-    //     $this->db->join('termination_reasons AS tr', 't.reason_id = tr.id', 'left');
-    //     $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
-    //     $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
-    //     return $this->db->get('termination AS t')->result();
-    // }
-
 
 
     function get_trainings($conditions=array(), $limit="", $offset="")

@@ -103,6 +103,7 @@
 			</div>
 			<form action="<?= base_url(); ?>Insurance/add" method="POST">
 			<input type="hidden" name="employee_id" id="emp-id">
+			<input type="hidden" name="status" id="insurance-status">
 			<div class="row" style="padding-left: 15px; padding-right: 15px;">
 				<div class="modal-body">
 					<div class="col-lg-12">
@@ -306,88 +307,6 @@
 		});
 
 
-		$('.province').on('change', function() {
-			var province = $(this).val();
-			$('#district').parent().removeClass('hide');
-			var districtHandler = $('#district').html('<option value="">Select District</option>');
-			if(province == "")
-				return;
-
-			$.ajax({
-				url: '<?= base_url(); ?>Reports/district_for_province',
-				type: 'POST',
-				dataType: 'json',
-				data: {province_id: province},
-				success: function (response) {
-					var obj = response.data;
-					var district_list = '';
-					$.each(obj, function(index, val) {
-						 district_list += `<option value="${val.id}">${val.name}</option>`;
-					});
-
-					districtHandler.append(district_list);
-				}
-
-			});
-
-		});
-
-
-		$('.district').on('change', function() {
-			var district = $(this).val();
-			var type = $(this).attr('type');
-			$('#tehsil').parent().removeClass('hide');
-			var tehsilHandler = $('#tehsil').html('<option value="">Select Tehsil</option>');
-			if(district == "")
-				return;
-
-			$.ajax({
-				url: '<?= base_url(); ?>Reports/tehsil_for_district',
-				type: 'POST',
-				dataType: 'json',
-				data: {district_id: district},
-				success: function (response) {
-					var obj = response.data;
-					var tehsil_list = '';
-					$.each(obj, function(index, val) {
-						 tehsil_list += `<option value="${val.id}">${val.name}</option>`;
-					});
-
-					tehsilHandler.append(tehsil_list);
-				}
-
-			});
-
-		});
-
-
-		$('.tehsil').on('change', function() {
-			var tehsil = $(this).val();
-			var ucHandler = $('#uc').html('<option value="">Select Union Council</option>');
-			$('#uc').parent().removeClass('hide');
-			if(tehsil == "")
-				return;
-
-			$.ajax({
-				url: '<?= base_url(); ?>Reports/uc_for_tehsil',
-				type: 'POST',
-				dataType: 'json',
-				data: {tehsil_id: tehsil},
-				success: function (response) {
-
-					var obj = response.data;
-					var ucs_list = '';
-					$.each(obj, function(index, val) {
-						 ucs_list += `<option value="${val.id}">${val.name}</option>`;
-					});
-
-					ucHandler.append(ucs_list);
-				}
-
-			});
-
-		});
-
 	</script>
 
 	<script type="text/javascript">
@@ -414,49 +333,12 @@
 
 		$('.update-status').on('click', function() {
 			var emp_id = $(this).data('id');
-			var emp_name = $('#emp-name-'+emp_id).val();
-			var designation = $('#emp-designation-'+emp_id).val();
 			var insurance_status = $('#status-'+emp_id).val();
-			
+		
 			$('#emp-id').val(emp_id);
+			$('#insurance-status').val(insurance_status);
 
-			if(insurance_status == 'uninsured' || insurance_status == '' || insurance_status == 'pending')
-			{
-				$('#status-modal').modal('show');
-			}
-			else
-			{
-			$.ajax({
-				url: '<?= base_url(); ?>Insurance/update_status',
-				type: 'POST',
-				dataType: 'html',
-				data: {employee_id: emp_id, status: insurance_status},
-				success: function(response) {
-					if(response == '1') {
-						if(insurance_status == 'uninsured')
-						{
-							$('#label-'+emp_id).html('insured');
-							$('#label-'+emp_id).removeClass('label-danger').addClass('label-primary');
-							$('#status-'+emp_id).val('insured');
-						}
-						else
-						{
-							$('#label-'+emp_id).html('uninsured');
-							$('#label-'+emp_id).removeClass('label-primary').addClass('label-danger');
-							$('#status-'+emp_id).val('uninsured');
-						}
-
-						toastr.success('Success! Status Updated');
-
-					} else if(response == '0') {
-						toastr.error('Error! Server Problem');
-					}
-					
-				}
-			});
-
-			}
-
+			$('#status-modal').modal('show');
 			
 		});
 	</script>
@@ -469,9 +351,10 @@
 			if($(this).is(':checked'))
 			{
 				ids = [];
-				$('.record').prop('checked', true);
+		
+				$('.record:enabled').prop('checked', true);
 
-				$('.record').each(function(index, el) {
+				$('.record:enabled').each(function(index, el) {
 					ids.push($(this).data('id'));
 				});
 			}
@@ -563,6 +446,7 @@
 		});
 
 	</script>
+
 
 
 </body>

@@ -47,7 +47,6 @@ class Terminations_model extends CI_Model {
         if(!empty($conditions))
             $this->db->where($conditions);
 
-        $this->db->where('t.status', '1');
         $this->db->limit($limit, $offset);
     	return $this->db->get('termination AS t');
     }

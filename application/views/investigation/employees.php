@@ -11,6 +11,9 @@
 							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID">
 						</div>
 						<div class="filterSelect">
+							<input type="text" name="cnic_no" class="form-control" placeholder="CNIC No">
+						</div>
+						<div class="filterSelect">
 							<input type="text" name="employee_name" class="form-control" placeholder="Employee Name">
 						</div>
 						<div class="filterSelect">
@@ -32,42 +35,12 @@
 							<span></span>
 						</div>
 
-						<!-- <div class="filterSelect">
-							<select name="employee_type" class="form-control">
-								<option value="current">Employee Type</option>
-								<option value="current">Current</option>
-								<option value="resigned">Resigned</option>
-								<option value="terminated">Terminated</option>
-							</select>
-							<span></span>
-						</div> -->
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>
 								<?php foreach($provinces AS $p): ?>
 									<option value="<?= $p->id; ?>"><?= $p->name; ?></option>
 								<?php endforeach; ?>
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="district" class="form-control district" id="district">
-								<option value="">District</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="tehsil" class="form-control tehsil" id="tehsil">
-								<option value="">Tehsil</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="uc" class="form-control uc" id="uc">
-								<option value="">UC</option>
-								
 							</select>
 							<span></span>
 						</div>
@@ -122,8 +95,8 @@
 										<tr>
 											<th>ID</th>
 											<th>Name</th>
-											<th>Contact</th>
-											<!-- <th>Email</th> -->
+											<th>CNIC</th>
+											<th>Province</th>
 											<th>Project</th>
 											<th>Department</th>
 											<th>Designation</th>
@@ -135,11 +108,12 @@
 										<tr data-id="<?= $e->employee_id; ?>">
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
-											<td><?= $e->contact_number; ?></td>
+											<td><?= $e->cnic; ?></td>
+											<td><?= ucwords($e->province); ?></td>
 											<td><?= $e->company_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
-											<td><?= date('d-m-Y', strtotime($e->date_of_birth)); ?></td>
+											<td><?= ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : ''; ?></td>
 										</tr>
 										<?php $count++; endforeach; ?>
 									</tbody>

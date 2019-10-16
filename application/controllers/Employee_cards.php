@@ -39,7 +39,6 @@ class Employee_cards extends MY_Controller
 							'Investigation_model',
 							'Resignations_model',
 							'Terminations_model',
-							'User_panel_model',
 							'Designations_model',
 							'Province_model',
 							'Projects_model'
@@ -87,8 +86,6 @@ class Employee_cards extends MY_Controller
 		$status_num = $this->input->get('status');
 		$offset = $this->input->get('page');
 
-		// if($status_num == "")
-		// 	$status = $card_status = $this->input->get('card_status');
 		$card_status = "";
 		if($status_num == '1')
 			$card_status = 'pending';
@@ -98,8 +95,7 @@ class Employee_cards extends MY_Controller
 			$card_status = 'delivered';
 		elseif($status_num == '4')
 			$card_status = 'received';
-		// else
-		// 	show_404();
+
 
 		$this->security->xss_clean($status_num);
 
@@ -141,7 +137,7 @@ class Employee_cards extends MY_Controller
 		$total_rows = $this->Reports_model->get_employee_cards($filtered_conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
-		$this->pagination_initializer_query_string($this->limit, $this->num_links, $total_rows, $url);
+		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
@@ -232,7 +228,7 @@ class Employee_cards extends MY_Controller
 
 		$data['title'] = 'Employee Cards';
 		$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
-		
+	
 		$total_rows = $this->Reports_model->get_employee_cards($filtered_conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		

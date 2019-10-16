@@ -98,6 +98,7 @@
 										<table class="table table-hover" id="">
 											<thead>
 												<tr>
+													<th>ID</th>
 													<th>Employee</th>
 													<th>Project</th>
 													<th>Department</th>
@@ -110,7 +111,7 @@
 											</thead>
 											<tbody id="investigations-list">
 												
-												<?php $count=1; foreach($complaints AS $c): 
+												<?php $count=1; foreach($disciplinary_actions AS $c): 
 													$label = '';
 													// if($c->status_id == "1") 
 													// 	$label = "label label-warning";
@@ -125,6 +126,7 @@
 												?>
 
 													<tr data="<?= $c->id; ?>">
+														<td><?= $c->employee_id; ?></td>
 														<td><?= ucwords($c->emp_name); ?></td>
 														<td><?= $c->project_name; ?></td>
 														<td><?= $c->department_name; ?></td>

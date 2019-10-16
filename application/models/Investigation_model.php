@@ -27,44 +27,46 @@ class Investigation_model extends CI_Model
 		return $this->db->insert_batch('investigation_files', $files);
 	}
 
+	function get_employees($conditions=array(), $limit="", $offset="", $user_roles=array())
+	{
+		$this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name,
+			ebi.cnic, xc.name AS company_name, xdd.department_name, xd.designation_name, p.name AS province, ebi.date_of_birth');
+		$this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
+		$this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
+        $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+        $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
+        $this->db->join('provinces p', 'xe.provience_id = p.id', 'left');
+
+        $this->db->where($conditions);
+        $this->db->where_not_in('xe.user_role_id', $user_roles);
+        $this->db->limit($limit, $offset);
+
+        $this->db->order_by('xe.user_id', 'ASC');
+        return $this->db->get('xin_employees xe');
+	}
+
 	public function employee_info($conditions=array(), $limit="", $offset="", $user_roles=array())
 	{
-		$employee_basic_info_fileds = ", ebi.father_name, ebi.date_of_birth, ebi.cnic, ebi.cnic_expiry_date, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, ebi.tribe, ebi.ethnicity, ebi.language, ebi.nationality, ebi.religion, ebi.bloodgroup, xec.contract_type_id, xec.from_date AS date_of_joining, xec.to_date AS contract_expiry_date, g.gender_name, m.marital_name, c.country_name, r.religion_name, t.tribe_name, e.ethnicity_name, l.language_name, bg.blood_group_name";
+		$employee_basic_info_fileds = ", ebi.father_name, ebi.date_of_birth, ebi.cnic, ebi.cnic_expiry_date, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, g.gender_name, m.marital_name";
 
 
 		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.email AS email_address, xe.profile_picture, xc.company_id, g.gender_name,
-		 xc.name as company_name, xdd.department_id, xdd.department_name, xd.designation_id, xd.designation_name, xol.location_name, xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.provience_id,
-            epli.permanent_address_details, permanent_province, permanent_district, permanent_tehsil, permanent_uc,
-            eri.resident_address_details, resident_province, resident_district, resident_tehsil, resident_uc $employee_basic_info_fileds");
+		 xc.name as company_name, xdd.department_id, xdd.department_name, xd.designation_id, xd.designation_name, xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.provience_id, p.name AS province $employee_basic_info_fileds");
 		      
-        $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
-        $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
-
-        $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
-        $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
 
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
         $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
         
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
-        
-        $this->db->join('xin_employee_contract xec', 'ebi.user_id = xec.employee_id', 'left');
-        $this->db->join('xin_contract_type xct', 'xec.contract_type_id = xct.contract_type_id', 'left');
-
+        $this->db->join('provinces p', 'xe.provience_id = p.id', 'left');
         $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');
         $this->db->join('marital_status m', 'ebi.marital_status = m.marital_id', 'left');
-        $this->db->join('xin_countries c', 'ebi.nationality = c.country_id', 'left');
 
-        $this->db->join('religion r', 'ebi.religion = r.id', 'left');
-        $this->db->join('tribe t', 'ebi.tribe = t.tribe_id', 'left');
-        $this->db->join('ethnicity e', 'ebi.ethnicity = e.ethnicity_id', 'left');
-        $this->db->join('language l', 'ebi.language = l.language_id', 'left');
-        $this->db->join('blood_group bg', 'ebi.bloodgroup = bg.blood_group_id', 'left');
 
         $this->db->where($conditions);
         if(!empty($user_roles))
-        	$this->db->where_not_in('xe.user_role_id', array(1, 2));
+        	$this->db->where_not_in('xe.user_role_id', $user_roles);
         
         $this->db->limit($limit, $offset);
 

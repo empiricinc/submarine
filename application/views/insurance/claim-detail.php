@@ -17,7 +17,6 @@
 							<div class="tabelTopBtn">
 								<div class="btn-group">
 									<a href="javascript:void(0);" onclick="window.print();" class="btn"><i class="fa fa-print"></i> Print</a>
-									<!-- <a href="<?= base_url(); ?>Reports/employee_detail_pdf/<?= $detail->employee_id; ?>" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a> -->
 								</div>
 						
 							</div>
@@ -82,10 +81,10 @@
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">
-								<label>Location</label>
+								
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->location_name); ?>
+								
 							</div>
 						</div>
 					</div>
@@ -102,7 +101,7 @@
 								<label>DOB</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->date_of_birth)); ?>
+								<?= ($detail->date_of_birth) ? date('d-m-Y', strtotime($detail->date_of_birth)) : ''; ?>
 							</div>
 						</div>
 					</div>

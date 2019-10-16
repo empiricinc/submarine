@@ -50,27 +50,6 @@
 							</select>
 							<span></span>
 						</div>
-						<div class="filterSelect hide">
-							<select name="district" class="form-control district" id="district">
-								<option value="">District</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="tehsil" class="form-control tehsil" id="tehsil">
-								<option value="">Tehsil</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="uc" class="form-control uc" id="uc">
-								<option value="">UC</option>
-								
-							</select>
-							<span></span>
-						</div>
 						
 
 						<div class="filterSelectBtn">
@@ -168,24 +147,14 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= ucwords($e->designation_name); ?></td>
-											<td><?= date('d-m-Y', strtotime($e->date_of_birth)); ?></td>
+											<td><?= ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : ''; ?></td>
 											<td>
 												<?= 
 													'<label class="label '.$label.'" id="label-'. $e->employee_id.'">'.$e->status.'</label>'; 
 												?>
 											</td>
 											<td>
-												<!-- <?php if($e->status != 'completed'): ?>
-												<?=
-												 	'<a href="javascript:void(0);" class="label label-primary change-status" data-status="'.$e->status.'" data-id="'.$e->id.'">Update Status</a>'; 
-												?>
-												<?php else: ?>
-											
-												 	<a href="<?= base_url(); ?>Insurance/claim_detail/<?= $e->id; ?>" class="label label-danger">View Record</a> 
-												
-												<?php endif; ?> -->
-
-												<div class="btn-group btn-group-sm dropdown-btns">
+												<div class="btn-group btn-group-sm dropdown-btns custom-dropdown-btn">
 												  	<a class="btn btn-primary dropdown-toggle" href="javscript:void(0);" data-toggle="dropdown">
 												  		<i class="fa fa-cog"></i>
 												  		<i class="fa fa-angle-down"></i>

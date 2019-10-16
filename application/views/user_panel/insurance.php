@@ -41,7 +41,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<select name="type" id="type" class="form-control" required="required">
+								<select name="type" id="type" class="form-control" required>
 									<!-- <option value="">SELECT TYPE</option> -->
 									<option value="accident">Accident</option>
 									<!-- <option value="death">Death</option> -->
@@ -50,7 +50,7 @@
 						</div>
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<input type="text" name="incident_date" value="" id="incident-date" class="form-control date" placeholder="Incident Date" data-toggle="tooltip" title="Incident Date">
+								<input type="text" name="incident_date" value="" id="incident-date" class="form-control date" placeholder="Incident Date" data-toggle="tooltip" title="Incident Date" required>
 							</div>
 						</div>
 					</div>
@@ -58,7 +58,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<input type="text" name="reporting_date" value="" id="reporting-date" class="form-control date" placeholder="Reporting Date" data-toggle="tooltip" title="Reporting Date">
+								<input type="text" name="reporting_date" value="" id="reporting-date" class="form-control date" placeholder="Reporting Date" data-toggle="tooltip" title="Reporting Date" required>
 							</div>
 						</div>
 					</div>
@@ -66,13 +66,13 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<input type="text" name="subject" value="" id="subject" class="form-control" placeholder="Subject" data-toggle="tooltip" title="Subject">
+								<input type="text" name="subject" value="" id="subject" class="form-control" placeholder="Subject" data-toggle="tooltip" title="Subject" required>
 							</div>
 						</div>
 
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<textarea name="description" id="description" class="form-control" rows="5" required></textarea>
+								<textarea name="description" id="description" class="form-control" rows="5" placeholder="Description" required></textarea>
 							</div>
 						</div>
 					</div>

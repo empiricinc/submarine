@@ -8,6 +8,20 @@
 						<h3>
 							<?= $title; ?>
 							<br><br>
+							
+							<div class="btn-group">
+								<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+									<i class="fa fa-cog"></i> ADMIN <i class="fa fa-angle-down"></i>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="dropdown-item" href="#edit-disciplinary-modal" data-toggle="modal">
+											<i class="fa fa-edit"></i> Edit
+										</a>
+									</li>
+								</ul>
+							</div>
+
 							<button type="button" class="btn btn-sm btn-warning" onclick="document.getElementById('comments-form').scrollIntoView();">
 								<i class="fa fa-comments"></i> COMMENTS
 							</button>
@@ -98,7 +112,9 @@
 						<div class="col-lg-4"><strong>Previous Type | Status</strong></div>
 					</div>
 					<div class="col-lg-12 pb-5">
-						<div class="col-lg-2"><?= ucwords($detail->emp_name); ?></div>
+						<div class="col-lg-2">
+							<?= ucwords($detail->emp_name); ?>
+						</div>
 						<div class="col-lg-2"><?= $detail->project_name; ?></div>
 						<div class="col-lg-2"><?= $detail->department_name; ?></div>
 						<div class="col-lg-2"><?= $detail->designation_name; ?></div>
@@ -120,7 +136,7 @@
 							<label class="primary-label"><?= ucwords($detail->type_name); ?></label>
 						</div>
 						<div class="col-lg-2">
-							<label class="warning-label"><?= $detail->status_text; ?></label>
+							<label class="warning-label"><?= ucwords($detail->status_text); ?></label>
 						</div>
 						<div class="col-lg-2"></div>
 						<div class="col-lg-2"><?= ($detail->reason_text) ? '<label class="success-label">'.$detail->reason_text.'</label>' : ''; ?></div>
@@ -173,15 +189,15 @@
 					<div class="col-lg-12 pb-5">
 						<div class="col-lg-2"><?= ($detail->position_abolish) ? 'Yes' : 'No'; ?></div>
 						<div class="col-lg-2">
-							<?= ($detail->abolish_date) ? date('d-m-Y', strtotime($detail->abolish_date)) : ''; ?>
+							<?= ($detail->abolish_date) ? date('d-m-Y', strtotime($detail->abolish_date)) : 'N/A'; ?>
 						</div>
 						<div class="col-lg-2"><?= ucwords($detail->reported_by); ?></div>
 						<div class="col-lg-2"><?= ucwords($detail->approved_by); ?></div>
 						<div class="col-lg-2">
-							<?= ($detail->action_approval_date) ? date('d-m-Y', strtotime($detail->action_approval_date)) : ''; ?>
+							<?= ($detail->action_approval_date) ? date('d-m-Y', strtotime($detail->action_approval_date)) : 'N/A'; ?>
 						</div>
 						<div class="col-lg-2">
-							<?= ($detail->approval_receive_date) ? date('d-m-Y', strtotime($detail->approval_receive_date)) : ''; ?>
+							<?= ($detail->approval_receive_date) ? date('d-m-Y', strtotime($detail->approval_receive_date)) : 'N/A'; ?>
 						</div>
 					</div>
 
@@ -217,7 +233,7 @@
 					</div>
 					<div class="col-lg-12 pb">
 						<div class="col-lg-2">
-							
+							<?= ($detail->security_deposit_paid) ? 'Yes' : 'N/A'; ?>
 						</div>
 					</div>
 
@@ -258,17 +274,23 @@
 
 								<div class="submitBtn">
 									<button type="submit" class="btn btn-primary btn-block" id="save-btn"> 
-										Attach Files </button>
+										Attach Files 
+									</button>
 								</div>	
 							</form>
 						</div>
 
 						<div class="col-lg-12"><hr></div>
-
+						
+						<form action="<?= base_url(); ?>Disciplinary/add_reason_description" method="POST">
 						<div class="col-lg-12 inputFormMain">
+							<input type="hidden" name="disciplinary_id" value="<?= $detail->id; ?>">
 							<label>Reason Description</label>
-							<select name="disciplinary_reason" id="disciplinary-reason" class="form-control" data-plugin="select_hrm">
-								<option value=""></option>
+							<select name="disciplinary_reason_desc" id="disciplinary-reason" class="form-control">
+								<option value="">SELECT REASON</option>
+								<?php foreach($reason_description AS $rd): ?>
+								<option value="<?= $rd->desc_id; ?>"><?= ucwords($rd->name); ?></option>
+								<?php endforeach; ?>
 							</select>
 						</div>
 						<div class="col-lg-12">
@@ -277,20 +299,32 @@
 									<i class=""></i> Add </button>
 							</div>	
 						</div>
+						</form>
 					</div>
 
 					<div class="col-lg-8">
-						<div class="col-lg-6 plr-0">
+						<div class="col-lg-8 plr-0">
 							<h3 class="mt-0"><i class="fa fa-ticket"></i> Template</h3>
 						</div>
-						<div class="col-lg-6 plr-0">
-							<button type="button" class="btn btn-sm btn-primary" id="load-template-btn" data-type="<?= $detail->type_id; ?>" style="float: right;">
-								<i class="fa fa-paste"></i>
-								LOAD <?= strtoupper($detail->type_name); ?> TEMPLATE
-							</button>
+						<div class="col-lg-4 pr-0">
+							<div class="col-lg-6">
+								<button type="button" class="btn btn-sm btn-success" id="save-template-btn" data-type="<?= $detail->type_id; ?>">
+									<i class="fa fa-save"></i>
+									SAVE
+								</button>
+							</div>
+							<div class="col-lg-6 pr-0">
+								<button type="button" class="btn btn-sm btn-primary" id="load-template-btn" data-type="<?= $detail->type_id; ?>" style="float: right;">
+									<i class="fa fa-paste"></i>
+									LOAD TEMPLATE
+								</button>
+							</div>
+							
 						</div>
 						<div class="col-lg-12 plr-0">
-							<textarea name="template" id="template" class="form-control editor" cols="30" rows="15"></textarea>
+							<textarea name="template" id="template" class="form-control editor" cols="30" rows="15">
+								<?= $detail->template_content; ?>
+							</textarea>
 						</div>
 					</div>
 				</div>
@@ -314,7 +348,7 @@
 							<div class="col-lg-12" id="comments">
 								<?php foreach($comments AS $c): ?>
 								<blockquote style="font-size: 14px;">
-									<small> Comment By: <?= $c->emp_name; ?>, Date: <?= $c->added_date; ?></small>
+									<small> Comment By: <?= ucwords($c->emp_name); ?>, Date: <?= date('d-m-Y', strtotime($c->added_date)); ?></small>
 									<div>
 										<?= $c->comment_text; ?>
 									</div>

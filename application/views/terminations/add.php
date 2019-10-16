@@ -56,6 +56,11 @@
 				</div>
 				<div class="col-lg-12">
 					<div class="inputFormMain">
+						<input type="text" name="notice_date" class="form-control date" id="notice-date" placeholder="Notice Date" required>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="inputFormMain">
 						<textarea name="description" id="termination-desc" class="form-control vresize" rows="5" placeholder="Description" required></textarea>
 					</div>
 				</div>

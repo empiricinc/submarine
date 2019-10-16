@@ -229,7 +229,7 @@ if($system[0]->system_skin=='skin-6'){
                       <li><a href="<?php echo base_url(); ?>Field_joining">Field Joining</a></li>
                        <li><a href="<?php echo base_url(); ?>terminations/view">Terminations</a></li>
                       <li><a href="<?php echo base_url(); ?>resignations/view">Resignations</a></li>
-                      <li><a href="<?php echo base_url(); ?>investigation">Investigation</a></li>
+                      <li><a href="<?php echo base_url(); ?>investigation/view">Investigation</a></li>
                       <li><a href="<?php echo base_url(); ?>reports/employees">Reports</a></li>
                     </ul>
                 </li>

@@ -15,16 +15,12 @@ class Insurance_model extends CI_Model
 
 	function get_employees($conditions=array(), $limit="", $offset="")
 	{
-		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name as project_name, xe.date_of_joining, xdd.department_name, xd.designation_name, ebi.contact_number, ebi.date_of_birth, ebi.cnic, ebi.email_address, i.from_date, i.to_date, i.status");
+		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.status AS employee_status, xc.name as project_name, xdd.department_name, xd.designation_name, ebi.date_of_birth, ebi.date_of_joining AS doj, ebi.contact_number, i.from_date, i.to_date, i.status");
 
 		$this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
 		$this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
-        $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
-        $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
-
         $this->db->join('insurance i', 'xe.employee_id = i.employee_id', 'left');
 
 		$this->db->limit($limit, $offset);
@@ -32,38 +28,29 @@ class Insurance_model extends CI_Model
 		if(!empty($conditions))
 			$this->db->where($conditions);
 
-        // $this->db->order_by('CAST(xe.employee_id AS UNSIGNED)', 'ASC');
 
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
-        $this->db->order_by('xe.user_id', 'ASC');
+        $this->db->order_by('xe.user_id', 'DESC');
 		return $this->db->get('xin_employees xe');
 	}
 
     function get_insurance_claims($conditions=array(), $limit="", $offset="")
     {
-        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, ic.*, ebi.contact_number, ebi.personal_contact, cnic, ebi.date_of_birth, ebi.father_name, g.gender_name, CONCAT(rb.first_name, ' ', rb.last_name) AS remarks_by_name, CONCAT(db.first_name, ' ', db.last_name) AS decision_by_name");
+        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, ic.*, ebi.date_of_birth, ebi.contact_number, ebi.father_name, g.gender_name");
 
         $this->db->join('xin_employees xe', 'ic.employee_id = xe.employee_id', 'left');
-        $this->db->join('xin_employees rb', 'ic.remarks_by = rb.employee_id', 'left');
-        $this->db->join('xin_employees db', 'ic.decision_by = db.employee_id', 'left');
-
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
         $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-
-        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');
-        $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
-        $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
 
         $this->db->limit($limit, $offset);
 
         if(!empty($conditions))
             $this->db->where($conditions);
 
-        // $this->db->order_by('CAST(xe.employee_id AS UNSIGNED)', 'ASC');
-        $this->db->where_not_in('xe.user_role_id', array(1, 2));
-        $this->db->order_by('xe.user_id', 'ASC');
+        $this->db->order_by('xe.user_id', 'DESC');
         return $this->db->get('insurance_claims ic');
     }
 
@@ -97,6 +84,7 @@ class Insurance_model extends CI_Model
             $this->db->where($conditions);
 
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
+        $this->db->order_by('xe.user_id', 'DESC');
         return $this->db->get('xin_employees xe');
     }
 
@@ -124,22 +112,11 @@ class Insurance_model extends CI_Model
         return $this->db->get('insurance_files');
     }
 
-    // function get_insurance_claims($conditions="", $limit="", $offset="")
-    // {
-    //     $this->db->select('CONCAT(xe.first_name, " ", xe.last_name) AS emp_name, xc.name AS project_name, xd.department_name, xdd.designation_name, ic.type');
-    //     $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
-    //     $this->db->join('xin_departments xd', 'xe.department_id = xd.department_id', 'left');
-    //     $this->db->join('xin_designations xdd', 'xe.designation_id = xdd.designation_id', 'left');
-
-    //     $this->db->join('insurance_claims ic', 'xe.employee_id = ic.employee_id', 'left');
-
-    //     if($conditions != "")
-    //         $this->db->where($conditions);
-
-    //     if($limit != "")
-    //         $this->db->limit($limit, $offset);
-    //     return $this->db->get('xin_employees xe');
-    // }
+    function get_employee_status($id)
+    {
+        $this->db->select('xe.status');
+        return $this->db->get_where('xin_employees xe', array('xe.employee_id' => $id));
+    }
 
 
 

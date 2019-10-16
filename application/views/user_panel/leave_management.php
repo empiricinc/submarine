@@ -8,11 +8,15 @@
 				</div>
 			</div>
 			<div class="col-lg-12">
-				<?php if($this->session->flashdata('success')): ?>
+				<?php if($this->session->flashdata('success')) { ?>
 				<div class="alert alert-info" data-dismiss="alert">
 					<?php echo $this->session->flashdata('success'); ?>
 				</div>
-				<?php endif; ?>
+				<?php } elseif($this->session->flashdata('error')) { ?>
+				<div class="alert alert-danger" data-dismiss="alert">
+					<?php echo $this->session->flashdata('error'); ?>
+				</div>
+				<?php } ?>
 			</div>
 			
 			<form action="<?= base_url(); ?>User_panel/leave_request" method="POST">
@@ -28,12 +32,12 @@
 				</div>
 				<div class="col-lg-4">
 					<div class="inputFormMain">
-						<input type="text" name="from_date" class="form-control date" value="" placeholder="From Date" autocomplete="off" required>
+						<input type="text" name="from_date" class="form-control date-onward" value="" placeholder="From Date" autocomplete="off" required>
 					</div>
 				</div>
 				<div class="col-lg-4">
 					<div class="inputFormMain">
-						<input type="text" name="to_date" class="form-control date" value="" placeholder="To Date" autocomplete="off" required>
+						<input type="text" name="to_date" class="form-control date-onward" value="" placeholder="To Date" autocomplete="off" required>
 					</div>
 				</div>
 				<div class="col-lg-12">

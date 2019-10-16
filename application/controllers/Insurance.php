@@ -67,12 +67,13 @@ class Insurance extends MY_Controller
 				];
 
 
-		if(isset($_GET['search']))
+		if(isset($_GET))
 		{
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
 			$designation = (int) $this->input->get('designation');
+			$project = (int) $this->input->get('project');
 			$status = $this->input->get('status');
 			
 			if($employeeName != '')
@@ -96,13 +97,12 @@ class Insurance extends MY_Controller
 			
 		} 
 
-			
 		return $this->remove_empty_entries($conditions);
 
 	}
 
 
-	public function list_employees($offset="")
+	public function list_employees()
 	{
 		$this->load->library('pagination');
 
@@ -114,12 +114,13 @@ class Insurance extends MY_Controller
 		$total_rows = $this->Insurance_model->get_employees($conditions)->num_rows();
 		$url = 'Insurance/list_employees';
 		
-		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
+		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 		/* end pagination */
 
+		$offset = $this->input->get('page');
 		$data['title'] = 'Employees Insurance List';
 		$data['employees'] = $this->Insurance_model->get_employees($conditions, $this->limit, $offset)->result();
-
+		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
@@ -170,11 +171,12 @@ class Insurance extends MY_Controller
 		$total_rows = $this->Insurance_model->get_insurance_claims($conditions)->num_rows();
 		$url = 'Insurance/view_claims';
 		
-		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
+		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 		/* end pagination */
 
 		$data['title'] = 'Employees Insurance List';
 		$data['insurance_claims'] = $this->Insurance_model->get_insurance_claims($conditions, $this->limit, $offset)->result();
+		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
@@ -262,75 +264,52 @@ class Insurance extends MY_Controller
 		}
 	}
 
-	public function update_status()
-	{
-		$employee_id = $this->input->post('employee_id');
-		$status = $this->input->post('status');
-
-		if($status == 'insured')
-			$status = 'uninsured';
-		elseif($status == 'uninsured')
-			$status = 'insured';
-
-		$updated_by = $this->session_data['user_id'];
-		$updated_at = date('Y-m-d');
-
-		$data = array(
-				'status' => $status,
-				'updated_by' => $updated_by,
-				'updated_at' => $updated_at
-			);
-
-		$rec_update = $this->Insurance_model->update($data, $employee_id);
-		$insurance = $this->db->get_where('insurance', array('employee_id' => $employee_id))->row();
-
-		if($rec_update) {
-
-				$data = array(
-					'insurance_id' => $insurance->id,
-					'from_date' => $insurance->from_date,
-					'to_date' => $insurance->to_date,
-					'status' => $status,
-					'entry_by' => $updated_by,
-					'entry_at' => $updated_at
-				);
-			$this->Insurance_model->insurance_log($data);
-		}
-
-		if($rec_update)
-			echo '1';
-		else
-			echo '0';
-	}
 
 	public function add()
 	{
 		if(isset($_POST))
 		{
 			$employee_id = $this->input->post('employee_id');
+			$status = $this->input->post('status');
 			$from_date = $this->input->post('from_date');
 			$to_date = $this->input->post('to_date');
 
 			$updated_by = $this->session_data['user_id'];
 			$updated_at = date('Y-m-d');
+			$new_status = '';
+
+			if($status == 'insured')
+				$new_status = 'uninsured';
+			else
+				$new_status = 'insured';
+
+
+			$employee_row = $this->Insurance_model->get_employee_status($employee_id)->row();
+			if($new_status == 'uninsured' && $employee_row->status > 0 && $employee_row->status < 5)
+			{
+				$this->session->set_flashdata('error', 'Active employee\'s can\'t be uninsured');
+				redirect('Insurance/list_employees', 'refresh');
+			}
 
 			$data = array(
 					'from_date' => $from_date,
 					'to_date' => $to_date,
-					'status' => 'insured',
+					'status' => $new_status,
 					'updated_by' => $updated_by,
 					'updated_at' => $updated_at
 				);
 
 			$rec_update = $this->Insurance_model->update($data, $employee_id);
-			$insurance_id = $this->db->get_where('insurance', array('employee_id' => $employee_id))->row()->id;
+			$insurance_row = $this->db->get_where('insurance', array('employee_id' => $employee_id))->row();
+			$insurance_id = $insurance_row->id;
+
 			if($rec_update) {
 
 					$data = array(
 						'insurance_id' => $insurance_id,
 						'from_date' => $from_date,
 						'to_date' => $to_date,
-						'status' => 'insured',
+						'status' => $new_status,
 						'entry_by' => $updated_by,
 						'entry_at' => $updated_at
 					);
@@ -394,32 +373,6 @@ class Insurance extends MY_Controller
 							$this->Insurance_model->insurance_log($data);
 						}
 				} 
-
-				// elseif($status == 'insured') 
-				// {
-				// 	$data = array(
-				// 			'status' => $status,
-				// 			'updated_by' => $updated_by,
-				// 			'updated_at' => $updated_at
-				// 		);
-
-				// 	$rec_update = $this->Insurance_model->update($data, $employee_ids[$i]);
-				// 	$insurance = $this->db->get_where('insurance', array('employee_id' => $employee_ids[$i]))->row();
-
-				// 	if($rec_update) {
-				// 		$data = array(
-				// 			'insurance_id' => $insurance->id,
-				// 			'from_date' => $insurance->from_date,
-				// 			'to_date' => $insurance->to_date,
-				// 			'status' => $status,
-				// 			'entry_by' => $updated_by,
-				// 			'entry_at' => $updated_at
-				// 		);
-
-				// 		$this->Insurance_model->insurance_log($data);
-						
-				// 	}
-				// }
 
 			}
 
@@ -699,6 +652,17 @@ class Insurance extends MY_Controller
         $objWriter->save('php://output'); 
 
     }
+
+    // function populate_insurance()
+    // {
+    // 	$this->db->select('xe.employee_id');
+    // 	$this->db->where_not_in('xe.user_role_id', array(1, 2));
+    // 	$employees = $this->db->get('xin_employees xe')->result();
+
+    // 	foreach ($employees as $employee) {
+    // 		$this->db->insert('insurance', array('employee_id' => $employee->employee_id));
+    // 	}
+    // }
 
 }
 

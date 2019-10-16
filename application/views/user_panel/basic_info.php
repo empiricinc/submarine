@@ -277,7 +277,7 @@
 										<div class="col-lg-12">
 											<div class="col-lg-4">
 												<div class="submitBtn">
-													<button type="submit" class="btn btnSubmit">Update</button>
+													<button type="submit" class="btn btnSubmit" disabled>Update</button>
 												</div>
 											</div>
 										</div>
@@ -348,7 +348,7 @@
 										</div>
 										<div class="col-lg-12">
 											<div class="submitBtn">
-												<button type="submit" class="btn btnSubmit">Update</button>		
+												<button type="submit" class="btn btnSubmit" disabled>Update</button>		
 											</div>
 										</div>
 									</form>
@@ -419,7 +419,7 @@
 
 										<div class="col-lg-12">
 											<div class="submitBtn">
-												<button type="submit" class="btn btnSubmit">Update</button>		
+												<button type="submit" class="btn btnSubmit" disabled>Update</button>		
 											</div>
 										</div>
 									</form>
@@ -470,7 +470,7 @@
 									</div>
 									<div class="col-lg-12">
 										<div class="submitBtn">
-											<button type="submit" class="btn btnSubmit">Save</button>		
+											<button type="submit" class="btn btnSubmit" disabled>Save</button>		
 										</div>
 									</div>
 									</form>
@@ -530,7 +530,7 @@
 										</div>
 										<div class="col-lg-12">
 											<div class="submitBtn">
-												<button type="submit" class="btn btnSubmit">Save</button>		
+												<button type="submit" class="btn btnSubmit" disabled>Save</button>		
 											</div>
 										</div>
 									</form>
@@ -589,7 +589,7 @@
 									</div>
 									<div class="col-lg-12">
 										<div class="submitBtn">
-											<button type="submit" class="btn btnSubmit">Save</button>		
+											<button type="submit" class="btn btnSubmit" disabled>Save</button>		
 										</div>
 									</div>
 									</form>
@@ -761,7 +761,7 @@
 									</div>
 									<div class="col-lg-12 col-lg-offset-1" style="padding-left: 0px; padding-top: 15px;">
 										<div class="submitBtn">
-											<button type="button" class="btn btnSubmit" id="print-contract"><i class="fa fa-print"></i> Print</button>
+											<button type="button" class="btn btnSubmit" disabled id="print-contract"><i class="fa fa-print"></i> Print</button>
 										</div>
 									</div>
 									<?php endif; ?>

@@ -231,21 +231,13 @@ class Reports extends MY_Controller
 			$fromDate = $this->input->get('from_date');
 			$toDate = $this->input->get('to_date');
 			$province = $this->input->get('province');
-			$district = $this->input->get('district');
-			$tehsil = $this->input->get('tehsil');
-			$uc = $this->input->get('uc');
-			$status = $this->input->get('status');
-
 			$project = $this->input->get('project');
-			$location = $this->input->get('location');
 
-			$conditions['c.complaint_no LIKE'] = '%'.$complaintNo.'%';
+			if($complaintNo != "")
+				$conditions['c.complaint_no LIKE'] = '%'.$complaintNo.'%';
 			$conditions['c.created_at >='] = $fromDate;
 			$conditions['c.created_at <='] = $toDate;
-			$conditions['c.tehsil_id'] = $tehsil;
-			$conditions['c.uc_id'] = $uc;
-			$conditions['c.status'] = $status;
-			// $conditions['xol.location_id'] = $location;
+
 
 			if($project != 0)
 				$conditions['c.project_id'] = $project;
@@ -356,7 +348,6 @@ class Reports extends MY_Controller
 
 		$data['title'] = 'Employee Cards';
 		$data['employees'] = $this->Reports_model->get_employee_cards($conditions, $employee_type)->result();
-
 		
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);

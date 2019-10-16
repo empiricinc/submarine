@@ -20,6 +20,16 @@
 	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/select2/dist/js/select2.min.js"></script> 
 
 	<script type="text/javascript" src="<?php echo base_url();?>skin/vendor/toastr/toastr.min.js"></script>
+
+	<script src='<?= base_url(); ?>assets/tinymce/tinymce.min.js'></script>
+	<!-- Script -->
+	<script>
+	tinymce.init({ 
+	  selector:'.editor',
+	  theme: 'modern',
+	  height: 300
+	});
+	</script>
 	
 	<footer></footer>
 
@@ -35,25 +45,4 @@
 		$('input').attr('autocomplete','off');
 	</script>
 
-	<script type="text/javascript">
-		// $('.search-form').on('submit', function(e) {
-		// 	e.preventDefault();
-
-		// 	var query = $(this).serialize();
-		// 	b64_query = window.btoa(query);
-
-		// 	clear_url();
-		// 	window.location = e.target.baseURI + '?query=' + b64_query;
-			
-		// });
-
-		// function clear_url()
-		// {
-		// 	var uri = window.location.toString();
-		// 	if (uri.indexOf("?") > 0) {
-		// 	    var clean_uri = uri.substring(0, uri.indexOf("?"));
-		// 	    window.history.replaceState({}, document.title, clean_uri);
-		// 	}
-		// }
-	</script>
 

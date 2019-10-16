@@ -52,7 +52,7 @@ class Field_joining_model extends CI_Model
 
         // $this->db->order_by('CAST(xe.employee_id AS UNSIGNED)', 'ASC');
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
-        $this->db->order_by('xe.user_id', 'ASC');
+        $this->db->order_by('xe.user_id', 'DESC');
         $this->db->group_by('xe.employee_id');
 		return $this->db->get('xin_employees xe');
 	}

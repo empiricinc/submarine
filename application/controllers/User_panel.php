@@ -27,13 +27,8 @@ class User_panel extends MY_Controller
 		$this->load->model(
 			array(
 				"User_panel_model",
-				"Employees_model",
-				"Xin_model",
 				"Department_model",
 				"Designation_model",
-				"Roles_model",
-				"Location_model",
-				"Contract_model",
 				"Resignations_model"
 			)
 		);
@@ -91,7 +86,7 @@ class User_panel extends MY_Controller
 
 			$data['salary'] = $this->User_panel_model->employee_salary($employee_id);
 		
-			$data['contract_detail'] = $this->Contract_model->contract_print($employee_id);
+			$data['contract_detail'] = $this->User_panel_model->contract_print($employee_id);
 
 			$data['content'] = $this->load->view('user_panel/basic_info', $data, TRUE);
 			$this->load->view('user_panel/_template', $data);
@@ -545,17 +540,18 @@ class User_panel extends MY_Controller
 	}
 
 
-	public function send_resignation()
+	public function add_resignation()
 	{
-		$this->ajax_check();
 
 		$employee_id = $this->session_data['user_id'];
 
 		$title = $this->input->post('title');
 		$reason = $this->input->post('reason');
+		$notice_date = $this->input->post('notice_date');
+		$resignation_date = $this->input->post('resignation_date');
 		$other_reason_text = $this->input->post('other_reason');
 		$subject = $this->input->post('subject');
-		$description = $this->input->post('desc');
+		$description = $this->input->post('description');
 		
 		$resignation_date = $notice_date = date("Y-m-d");
 		$entry_time = date("Y-m-d H:i:s");
@@ -574,18 +570,18 @@ class User_panel extends MY_Controller
 
 		if($this->Resignations_model->check_resignation_status($employee_id))
 		{
-			echo '2';
+			$this->session->set_flashdata('error', 'Resignation already submitted.');
 		}
 		else
 		{
 			$res = $this->User_panel_model->add_resignation($data);
 			if($res)
-				echo '1';
+				$this->session->set_flashdata('success', 'Resignation submitted successfully.');
 			else
-				echo '0';
+				$this->session->set_flashdata('error', 'Resignation submission failed.');
 		}
 			
-
+		redirect('User_panel/resignation', 'refresh');
 	}
 
 

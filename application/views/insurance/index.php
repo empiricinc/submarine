@@ -50,28 +50,6 @@
 							</select>
 							<span></span>
 						</div>
-						<div class="filterSelect hide">
-							<select name="district" class="form-control district" id="district">
-								<option value="">District</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="tehsil" class="form-control tehsil" id="tehsil">
-								<option value="">Tehsil</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="uc" class="form-control uc" id="uc">
-								<option value="">UC</option>
-								
-							</select>
-							<span></span>
-						</div>
-						
 
 						<div class="filterSelectBtn">
 							<button type="submit" name="search" class="btn btnSubmit" id="search-btn">Search</button>
@@ -140,8 +118,8 @@
 											<th>Contact</th>
 											<th>Project</th>
 											<th>Department</th>
-											<th>Designation</th>
-											<th>Date of birth</th>
+											<th>Designation</th>											
+											<th>Date of joining</th>
 											<th>Status</th>	
 											<th>Action</th>	
 										</tr>
@@ -167,7 +145,7 @@
 
 											<input type="hidden" name="insurance_status[]" value="<?= $e->status; ?>">
 											<td>
-												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record">
+												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured') { ?> disabled <?php } ?> >
 											</td>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
@@ -175,13 +153,17 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= ucwords($e->designation_name); ?></td>
-											<td><?= date('d-m-Y', strtotime($e->date_of_birth)); ?></td>
+											<td>
+												<?= $date_of_joining = ($e->doj) ? date('d-m-Y', strtotime($e->doj)) : ''; ?>
+											</td>
+											
 											<td>
 												<?php 
 													echo '<label class="label '.$label.'" id="label-'. $e->employee_id.'">'.$e->status.'</label>'; 
 												?>
 											</td>
 											<td>
+												<?php if($date_of_joining != ""): ?>
 												<div class="btn-group btn-group-sm dropdown-btns">
 												  	<a class="btn btn-primary dropdown-toggle" href="javscript:void(0);" data-toggle="dropdown">
 												  		<i class="fa fa-cog"></i>
@@ -194,6 +176,7 @@
 													  			Insurance Form
 													  		</a>
 													  	</li>
+													  	
 													  	<li>   
 													  	 	<a href="javascript:void(0);" class="update-status" data-id="<?= $e->employee_id; ?>">
 													  	 		<i class="fa fa-edit"></i>
@@ -202,6 +185,7 @@
 													  	</li>
 												  	</ul>
 												</div>
+												<?php endif; ?>
 											</td>
 										</tr>
 										<?php $count++; endforeach; ?>

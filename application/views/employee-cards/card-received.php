@@ -32,15 +32,6 @@
 							</select>
 							<span></span>
 						</div>
-						<!-- <div class="filterSelect">
-							<select name="employee_type" class="form-control">
-								<option value="all">Card status</option>
-								<option value="pending">Pending</option>
-								<option value="deliver">Deliver</option>
-								<option value="received">Received</option>
-							</select>
-							<span></span>
-						</div> -->
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>
@@ -109,12 +100,13 @@
 					<div class="col-md-12">
 						<div class="tableMain">
 							<div class="table-responsive">
-								<table class="table table-hover" id="employee-table" style="cursor: pointer;">
+								<table class="table" id="employee-table" style="cursor: pointer;">
 									<thead>
 										<tr>
 											<th>
 												<input type="checkbox" id="mark-all">
 											</th>
+											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
 											<th>Project</th>
@@ -130,6 +122,7 @@
 											<td>
 												<input type="checkbox" data-id="<?= $e->employee_id; ?>" data-index="<?= $count; ?>" class="employee">
 											</td>
+											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
 											<td><?= $e->contact_no; ?></td>
 											<td><?= $e->project_name; ?></td>

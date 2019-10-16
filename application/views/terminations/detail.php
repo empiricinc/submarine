@@ -72,7 +72,7 @@
 							</div>
 						</div>
 					</div>
-					<hr>
+					
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="col-lg-2 col-print-2">

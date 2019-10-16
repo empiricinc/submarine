@@ -46,8 +46,7 @@ class Field_joining extends MY_Controller
 			 	'Province_model',
 				'Departments_model',
 				'Designations_model',
-				'Projects_model',
-				'Locations_model'
+				'Projects_model'
 				)
 			);
 	}
@@ -130,7 +129,7 @@ class Field_joining extends MY_Controller
 		
 		$url = 'Field_joining/employees';
 		
-		$this->pagination_initializer_query_string($this->limit, $this->num_links, $total_rows, $url);
+		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 
 		$data['query_string'] = $_SERVER['QUERY_STRING'];
 		$data['title'] = 'List of Employees';
@@ -139,7 +138,6 @@ class Field_joining extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
-		$data['locations'] = $this->Locations_model->get_by_project($this->session_data['project_id']);
 
 		$data['marital_status'] = $this->db->get('marital_status')->result();
 

@@ -25,7 +25,7 @@ class Disciplinary_model extends CI_Model
 	{
 
 		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.date_of_birth, xe.company_id,
-		 xc.name as company_name, xdd.department_id, xdd.department_name, xd.designation_id, xd.designation_name, xe.provience_id, ebi.personal_contact, ebi.contact_number, ebi.contact_other");
+		 xc.name as company_name, xdd.department_id, xdd.department_name, xd.designation_id, xd.designation_name, xe.provience_id, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.job_title, ebi.cnic");
 		      
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
@@ -46,7 +46,7 @@ class Disciplinary_model extends CI_Model
 	{
 		if(array_key_exists('di.id', $conditions))
 		{
-			$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(c_by.first_name, " ", IFNULL(c_by.last_name, "")) AS created_by, ebi.cnic, ebi.date_of_joining, di.status_id, ds.status_text, dt.type_name');
+			$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(c_by.first_name, " ", IFNULL(c_by.last_name, "")) AS created_by, ebi.cnic, ebi.job_title, ebi.date_of_joining, di.status_id, ds.status_text, dt.type_name');
 			$this->db->join('xin_companies AS xc', 'di.project_id = xc.company_id', 'left');
 			$this->db->join('xin_designations AS xd', 'di.designation_id = xd.designation_id', 'left');
 			$this->db->join('xin_departments AS xds', 'di.department_id = xds.department_id', 'left');
@@ -75,6 +75,7 @@ class Disciplinary_model extends CI_Model
 		if(!empty($conditions))
 			$this->db->where($conditions);
 
+		$this->db->order_by('di.id', 'desc');
 		return $this->db->get('disciplinary AS di');
 
 	}
@@ -139,6 +140,58 @@ class Disciplinary_model extends CI_Model
 	{
 		$this->db->where('disciplinary_type_id', $type_id);
 		return $this->db->get('disciplinary_documents')->row();
+	}
+
+	function position_filled_against()
+	{
+		return $this->db->get('position_filled_against')->result();
+	}
+
+	function transfer_types()
+	{
+		return $this->db->get('transfer_type')->result();
+	}
+
+	function job_positions($conditions=array())
+	{
+		$this->db->select('DISTINCT(xin_designations.designation_id), xin_designations.designation_name');
+		$this->db->join('xin_designations', 'location_job_position.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where($conditions);
+		return $this->db->get('location_job_position')->result();
+	}
+
+	function get_districts($conditions=array())
+	{
+		$this->db->select('DISTINCT(district.id), district.name');
+
+		$this->db->join('district', 'location_job_position.district_id = district.id', 'left');
+		$this->db->where($conditions);
+		return $this->db->get('location_job_position')->result();
+	}
+
+	function get_tehsils($conditions=array())
+	{
+		$this->db->select('DISTINCT(tehsil.id), tehsil.name');
+		
+		$this->db->join('tehsil', 'location_job_position.tehsil_id = tehsil.id', 'left');
+		$this->db->where($conditions);
+		return $this->db->get('location_job_position')->result();
+	}
+
+	function get_union_councils($conditions=array())
+	{
+		$this->db->select('DISTINCT(union_councel.id), union_councel.name');
+		
+		$this->db->join('union_councel', 'location_job_position.uc_id = union_councel.id', 'left');
+		$this->db->where($conditions);
+		return $this->db->get('location_job_position')->result();
+	}
+
+	function reason_descriptions($reason_id="")
+	{
+		$this->db->select('disciplinary_reason_description_id AS desc_id, name');
+		$this->db->where('disciplinary_reason_id', $reason_id);
+		return $this->db->get('disciplinary_reason_descriptions')->result();
 	}
 
 

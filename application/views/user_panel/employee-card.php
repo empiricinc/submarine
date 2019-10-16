@@ -18,17 +18,17 @@
 				<input type="hidden" name="employee_id" value="<?= $employee->employee_id; ?>">
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<input type="text" name="employee_name" value="<?= ucwords($employee->emp_name); ?>" class="form-control" id="card-name" readonly>
+						<input type="text" name="employee_name" value="<?= ucwords($employee->emp_name); ?>" class="form-control" id="card-name" placeholder="Employee name" readonly>
 					</div>
 				</div>
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<input type="text" name="designation" value="<?= $employee->designation_name; ?>" id="card-designation" class="form-control"  required readonly>
+						<input type="text" name="designation" value="<?= $employee->designation_name; ?>" id="card-designation" class="form-control" placeholder="Designation"  required readonly>
 					</div>
 				</div>
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<input type="text" name="project" value="<?= $employee->project_name; ?>" id="card-project" class="form-control"  required readonly>
+						<input type="text" name="project" value="<?= $employee->project_name; ?>" id="card-project" class="form-control" placeholder="Project"  required readonly>
 					</div>
 				</div>
 				<div class="col-lg-12">

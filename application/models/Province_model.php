@@ -22,9 +22,13 @@ class Province_model extends CI_Model
     		return $this->db->get('provinces')->result();
     	
         $this->db->select('DISTINCT(p.id), p.name');
-        $this->db->join('xin_office_location xol', 'p.id = xol.province_id', 'left');
-        $this->db->where('xol.company_id', $project_id);
+        $this->db->join('location_job_position l', 'p.id = l.province_id', 'left');
+        $this->db->where('l.company_id', $project_id);
         return $this->db->get('provinces p')->result();
+        // $this->db->select('DISTINCT(p.id), p.name');
+        // $this->db->join('xin_office_location xol', 'p.id = xol.province_id', 'left');
+        // $this->db->where('xol.company_id', $project_id);
+        // return $this->db->get('provinces p')->result();
 
     }
 

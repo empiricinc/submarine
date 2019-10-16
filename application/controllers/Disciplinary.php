@@ -132,20 +132,38 @@ class Disciplinary extends MY_Controller
 
 		$data['title'] = 'Add Disciplinary';
 		$data['detail'] = $this->Disciplinary_model->employee_info($filtered_conditions, "", "", $exclude_user_roles)->row();
-	
+		
 		$data['department'] = $this->Departments_model->get_by_project($this->session_data['project_id']); 
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $provinces = $this->Province_model->get_by_project($this->session_data['project_id']);
 		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
 		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+
+		$position_filled_against = $this->Disciplinary_model->position_filled_against();
+		$transfer_type = $this->Disciplinary_model->transfer_types();
+
 		$province_string = '';
+		$position_filled_against_string = '';
+		$transfer_type_string = '';
 
 		foreach ($provinces as $p) {
-			$province_string .="'<option value='".$p->id."'>".$p->name."</option>";
+			$province_string .= "'<option value='".$p->id."'>".ucwords($p->name)."</option>";
 		}
 
+		foreach ($position_filled_against as $pfa) {
+			$position_filled_against_string .= "'<option value='".$pfa->id."'>".ucwords($pfa->name)."</option>";
+		}
+
+		foreach ($transfer_type as $tt) {
+			$transfer_type_string .= "'<option value='".$tt->id."'>".ucwords($tt->name)."</option>";
+		}
+
+
+
 		$data['province_string'] = $province_string;
+		$data['position_filled_against_string'] = $position_filled_against_string;
+		$data['transfer_type_string'] = $transfer_type_string;
 		$data['content'] = $this->load->view('disciplinary/add', $data, TRUE);
 		$this->load->view('disciplinary/_template', $data);
 	}
@@ -278,6 +296,145 @@ class Disciplinary extends MY_Controller
 		}
 	}
 
+
+	// function add_new()
+	// {
+	// 	$entry_by = $this->session_data['user_id'];
+
+	// 	if(isset($_POST['submit']))
+	// 	{
+	// 		$employee_id = $this->input->post('employee_id');
+	// 		$designation = $this->input->post('designation_id');
+	// 		$department = $this->input->post('department_id');
+	// 		$project = $this->input->post('project_id');
+	// 		$province = $this->input->post('province_id');
+
+	// 		$type_id = $this->input->post('type_id');
+
+	// 		$reason = $this->input->post('reason');
+	// 		$other_reason = $this->input->post('other_reason');
+	// 		$reported_by = $this->input->post('reported_by');
+	// 		$reported_date = $this->input->post('reported_date');
+	// 		$evidence = $this->input->post('evidence');
+	// 		$evidence_date = $this->input->post('evidence_date');
+	// 		$description = $this->input->post('description');
+
+	// 		$complaint_mode = $this->input->post('complaint_mode');
+	// 		$intensity = $this->input->post('intensity');
+	// 		$subject = $this->input->post('subject');
+
+	// 		// $status = $this->input->post('status');
+	// 		$created_by = $this->input->post('created_by');
+	// 		$created_date = $this->input->post('created_date');
+
+	// 		$salary_hold = $this->input->post('salary_hold');
+	// 		$suspend_from_duty = $this->input->post('suspend_from_duty');
+	// 		$resignation_date = $this->input->post('resignation_date');
+
+	// 		$reported_by = $this->input->post('reported_by');
+	// 		$reported_date = $this->input->post('reported_date');
+	// 		$reported_date_ctc = $this->input->post('reported_date_ctc');
+
+	// 		$prior_notice = $this->input->post('prior_notice');
+	// 		$last_working_date = $this->input->post('last_working_date');
+	// 		$issue_reporting_date = $this->input->post('issue_reporting_date');
+	// 		$transfer_type = $this->input->post('transfer_type');
+
+	// 		$position_abolish = $this->input->post('position_abolish');
+	// 		$abolish_date = $this->input->post('abolish_date');
+	// 		$position_filled_against = $this->input->post('position_filled_against');
+			
+	// 		$job_position = $this->input->post('job_position');
+	// 		$transfer_effective_date = $this->input->post('transfer_effective_date');
+
+	// 		$province = $this->input->post('province');
+	// 		$district = $this->input->post('district');
+	// 		$tehsil = $this->input->post('tehsil');
+	// 		$uc = $this->input->post('uc');
+
+	// 		$today = date('Y-m-d');
+			
+	// 		$data = array(
+	// 					'employee_id' => $employee_id,
+	// 					'project_id' => $project,
+	// 					'department_id' => $department,
+	// 					'designation_id' => $designation,
+	// 					'province_id' => $province,
+	// 					// 'district_id' => $district,
+	// 					// 'tehsil_id' => $tehsil,
+	// 					// 'uc_id' => $uc,
+	// 					'job_position_id' => $job_position,
+	// 					'disciplinary_type_id' => $type_id,
+	// 					'disciplinary_status_id' => ,
+	// 					'disciplinary_category_id' => ,
+	// 					'disciplinary_reason_id' => $reason,
+	// 					'other_reason' => $other_reason,
+	// 					'assign_id' => '',
+	// 					'name' => '',
+	// 					'description' => $description,
+	// 					'template_content' => ,
+	// 					'salary_hold' => $salary_hold,
+	// 					'salary_deduction_days' => ,
+	// 					'salary_deduction_month' => ,
+	// 					'evidence' => $evidence,
+	// 					'evidence_date' => $evidence_date,
+	// 					'reporting_date' => $reported_date,
+	// 					'reported_by' => $reported_by,
+	// 					'approved_by' => ,
+	// 					'action_approval_date' => ,
+	// 					'approval_received_date' => ,
+	// 					'last_working_date' => $last_working_date,
+	// 					'position_abolish' => $position_abolish,
+	// 					'date_of_abolish' => $abolish_date,
+	// 					'resignation_submission_date' => $resignation_dat,
+	// 					'prior_notice' => $prior_notice,
+	// 					'exit_interview' => ,
+	// 					'letter_no' => ,
+	// 					'manually_generated' => ,
+	// 					'created_by' => $created_by,
+	// 					'created_date' => $created_date,
+	// 					'is_deleted' => '0',
+	// 					'updated_by' => ,
+	// 					'updated_date' => ,
+	// 					'reasons' => $reason,
+	// 					'print_date' => ,
+	// 					'issued_date' => ,
+	// 					'close_date' => ,
+	// 					'delivered_date' => ,
+	// 					'response_received_date' => ,
+	// 					'response_not_received_date' => ,
+	// 					'satisfactory_date' => ,
+	// 					'unsatisfactory_date' => ,
+	// 					'new_province_id' => ,
+	// 					'new_region_id' => ,
+	// 					'new_district_id' => ,
+	// 					'new_tehsil_id' => ,
+	// 					'new_uc_id' => ,
+	// 					'position_filled_against_id' => $position_filled_against,
+	// 					'new_job_position_id' => $job_position,
+	// 					'transfer_type_id' => $transfer_type,
+	// 					'transfer_effective_date' => $transfer_effective_date,
+	// 					'transfer_approval_date' => ,
+	// 					'next_disciplinary_id' => ,
+	// 					'security_deposit_paid' =>
+
+	// 				);
+
+	// 		$inv_added = $this->Disciplinary_model->add($data);
+	// 		$disciplinary_id = $this->db->insert_id();
+			
+	// 		if(!empty($_FILES['files']) && $_FILES['files']['size'][0] != 0)
+	// 			$this->upload_files($_FILES, $employee_id, $disciplinary_id);
+
+			
+	// 		if($inv_added)
+	// 		{
+	// 			$this->session->set_flashdata('success', 'Investigation initiated successfully.');
+	// 			redirect('Disciplinary/employees', 'refresh');
+	// 		}
+	// 	}
+	// }
+
 	
 	function view($offset="")
 	{
@@ -320,9 +477,9 @@ class Disciplinary extends MY_Controller
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
 		
 
-		$data['title'] = 'List Employee Actions';
-		$data['complaints'] = $this->Disciplinary_model->disciplinary_actions($filtered_conditions, $this->limit, $offset)->result();
-		
+		$data['title'] = 'Disciplinary Actions';
+		$data['disciplinary_actions'] = $this->Disciplinary_model->disciplinary_actions($filtered_conditions, $this->limit, $offset)->result();
+
 		$data['project'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['department'] = $this->Departments_model->get_by_project($this->session_data['project_id']); 
 		$data['designation'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
@@ -358,7 +515,14 @@ class Disciplinary extends MY_Controller
 		$data['status'] = $this->Disciplinary_model->disciplinary_status()->result();
 		$data['files'] = $this->Disciplinary_model->disciplinary_files()->result();
 		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+
+		$reason_id = $data['detail']->type_id;
+		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
+		$data['reason_description'] = $this->Disciplinary_model->reason_descriptions($reason_id);
+		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
 		
+		$data['form_fields'] = $this->disciplinary_fields_update(ucwords($data['detail']->type_name));
+
 		$data['content'] = $this->load->view('disciplinary/detail', $data, TRUE);
 		$this->load->view('disciplinary/_template', $data);
 	}
@@ -367,12 +531,12 @@ class Disciplinary extends MY_Controller
 	public function status_fields()
 	{
 		$this->ajax_check();
-
+		
 		$status = $this->input->post('status_text');
 		$type = $this->Disciplinary_model->get_disciplinary_type()->result();
 		$status_row = $this->Disciplinary_model->get_status_id($status);
 		$status_id = $status_row->id;
-		
+
 		$status_group = array('dpcr', 'issued', 'printed', 'delivered', 'received', 'satisfactory', 're open', 'no action');
 		$output = '<input type="hidden" name="status_id" id="status-id" value="'.$status_id.'">';
 		if($status == 'pending')
@@ -448,7 +612,7 @@ class Disciplinary extends MY_Controller
 						</div>';
 		}
 
-		$this->json_response(array('output' => $output, 'error' => '0'));
+		$this->json_response(array('output' => $output));
 	}
 
 
@@ -606,16 +770,443 @@ class Disciplinary extends MY_Controller
 		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
     }
 
+ 
     function load_template()
     {
     	$this->ajax_check();
 
     	$type_id = $this->input->post('type_id');
+    	$disciplinary_id = $this->input->post('disciplinary_id');
 
     	$data = $this->Disciplinary_model->get_template($type_id);
-    	$this->json_response($data);
+    	$detail = $this->Disciplinary_model->disciplinary_actions(array('di.id' => $disciplinary_id))->row();
+    	
+    	$name = $detail->emp_name;
+    	$title = $detail->job_title;
+    	$cnic = $detail->cnic;
+    	$letter_no = $detail->letter_no;
+    	$reporting_date = $detail->reported_date;
+
+    	$title = str_replace('—', '-', $title);
+    	$title_array = explode('-', $title);
+    	$month_year = date('M, Y');
+    	$current_date = date('d-m-Y');
+    	
+    	$template = '';
+    	if(!empty($title_array[0]))
+    	{
+	    	$short_title = $title_array[1];
+	    	$province = $title_array[2];
+	    	$district = $title_array[3];
+	    	$tehsil = $title_array[4];
+	    	$uc = $title_array[5];
+
+	    	$template = $data->description;
+	    	
+	    	$template = str_replace('[[name]]', $name, $template);
+	    	$template = str_replace('[[current_month_year]]', $month_year, $template);
+	    	$template = str_replace('[[current_date]]', $current_date, $template);
+	    	$template = str_replace('[[title]]', $title, $template);
+	    	$template = str_replace('[[job_type_long_desc]]', $title, $template);
+	    	$template = str_replace('[[job_type_short]]', $short_title, $template);
+	    	$template = str_replace('[[reporting_date]]', $reporting_date, $template);
+
+	    	$template = str_replace('[[cnic]]', $cnic, $template);
+	    	$template = str_replace('[[letter_no]]', $letter_no, $template);
+
+	    	$template = str_replace('[[province]]', $province, $template);
+	    	$template = str_replace('[[district]]', $district, $template);
+	    	$template = str_replace('[[tehsil]]', $tehsil, $template);
+	    	$template = str_replace('[[uc]]', $uc, $template);
+    	}
+    	$this->json_response($template);
     }
 
+
+    function districts()
+    {
+    	$province_id = $this->input->post('province_id');
+    	
+    	$conditions = [
+    			'location_job_position.province_id' => $province_id, 
+    			'location_job_position.company_id' => $this->session_data['project_id'],
+    			'location_job_position.status !=' => '0' 
+    		];
+
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+    	$job_positions = $this->Disciplinary_model->job_positions($filtered_conditions);
+    	$districts = $this->Disciplinary_model->get_districts($filtered_conditions);
+    	
+    	$this->json_response(array('districts' => $districts, 'job_positions' => $job_positions));
+
+    }
+
+    function tehsils()
+    {
+    	$district_id = $this->input->post('district_id');
+
+    	$conditions = [
+    			'location_job_position.district_id' => $district_id, 
+    			'location_job_position.company_id' => $this->session_data['project_id'],
+    			'location_job_position.status !=' => '0' 
+    		];
+
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+    	$job_positions = $this->Disciplinary_model->job_positions($filtered_conditions);
+    	$tehsils = $this->Disciplinary_model->get_tehsils($filtered_conditions);
+    	
+    	$this->json_response(array('tehsils' => $tehsils, 'job_positions' => $job_positions));
+
+    }
+
+    function union_councils()
+    {
+    	$tehsil_id = $this->input->post('tehsil_id');
+
+    	$conditions = [
+    			'location_job_position.tehsil_id' => $tehsil_id, 
+    			'location_job_position.company_id' => $this->session_data['project_id'],
+    			'location_job_position.status !=' => '0' 
+    		];
+
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+    	$job_positions = $this->Disciplinary_model->job_positions($filtered_conditions);
+    	$ucs = $this->Disciplinary_model->get_union_councils($filtered_conditions);
+    	
+    	$this->json_response(array('ucs' => $ucs, 'job_positions' => $job_positions));
+
+    }
+
+    function add_reason_description()
+    {
+    	$disciplinary_id = $this->input->post('disciplinary_id');
+    	$reason_description_id = $this->input->post('disciplinary_reason_desc');
+    	$data = array('reason_desc_id' => $reason_description_id);
+
+    	$updated = $this->Disciplinary_model->update($disciplinary_id, $data);
+    	if($updated)
+		{
+			$this->session->set_flashdata('success', 'Reason Description added successfully.');
+		}
+		else
+		{
+			$this->session->set_flashdata('error', 'Reason Description insertion failed.');
+		}
+
+
+		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
+
+    }
+
+    function save_template()
+    {
+    	$disciplinary_id = $this->input->post('disciplinary_id');
+    	$template_content = $this->input->post('template_content');
+
+    	$data = array('template_content' => $template_content);
+
+    	$updated = $this->Disciplinary_model->update($disciplinary_id, $data);
+    	if($updated)
+    		echo '1';
+    	else
+    		echo '0';
+    }
+
+    function disciplinary_fields_update($type="")
+    {
+    	$output = '';
+    	$provinces_string = '';
+		$position_filled_against_string = '';
+		$transfer_type_string = '';
+
+		$provinces = $this->Province_model->get($this->session_data['project_id']);
+		$position_filled_against = $this->Disciplinary_model->position_filled_against();
+		$transfer_type = $this->Disciplinary_model->transfer_types();
+
+		foreach ($provinces as $p) {
+			$provinces_string .= "'<option value='".$p->id."'>".ucwords($p->name)."</option>";
+		}
+
+		foreach ($position_filled_against as $pfa) {
+			$position_filled_against_string .= "'<option value='".$pfa->id."'>".ucwords($pfa->name)."</option>";
+		}
+
+		foreach ($transfer_type as $tt) {
+			$transfer_type_string .= "'<option value='".$tt->id."'>".ucwords($tt->name)."</option>";
+		}
+
+
+    	if($type == 'Warning' || $type == 'Final Warning' || $type == 'Explanation' || $type == 'Suspension' || $type == 'Query')
+			{
+				$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence</label>
+									<select name="evidence" id="evidence" class="form-control" required>
+										<option value="">SELECT EVIDENCE</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence Date</label>
+									<input type="text" name="evidence_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SALARY HOLD</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>';
+			}
+			elseif($type == 'Show Cause')
+			{
+				$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence</label>
+									<select name="evidence" id="evidence" class="form-control" required="required">
+										<option value="">SELECT EVIDENCE</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence Date</label>
+									<input type="text" name="evidence_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SALARY HOLD</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Suspende from Duty</label>
+									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>';
+			}
+			elseif($type == 'Resign')
+			{
+				$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence</label>
+									<select name="evidence" id="evidence" class="form-control" required="required">
+										<option value="">SELECT EVIDENCE</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence Date</label>
+									<input type="text" name="evidence_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SALARY HOLD</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Suspende from Duty</label>
+									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>';
+			}
+			elseif($type == 'Contract Closure')
+			{
+				$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Issue Reporting Date</label>
+									<input type="text" name="issue_reporting_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Last Working Date</label>
+									<input type="text" name="last_working_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Position Abolish</label>
+									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Abolish Date</label>
+									<input type="text" name="abolish_date" class="form-control date">
+								</div>
+							</div>';
+			}
+			elseif($type == 'Refusal')
+			{
+				$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Issue Reporting Date</label>
+									<input type="text" name="issue_reporting_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary" id="salary" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Last Working Date</label>
+									<input type="text" name="last_working_date" class="form-control date">
+								</div>
+							</div>';
+			}
+			elseif($type == 'Transfer')
+			{
+				$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Transfer Type</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										'.$transfer_type_string.'
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Position Abolish</label>
+									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Abolish Date</label>
+									<input type="text" name="abolish_date" class="form-control date">
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Reporting Date To CTC</label>
+									<input type="text" name="reported_date_ctc" class="form-control date">
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Province</label>
+									<select name="province" id="province" class="form-control province" required="required">
+										<option value="">SELECT OPTION</option>
+										'.$provinces_string.'
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>District</label>
+									<select name="district" id="district" class="form-control district" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Tehsil</label>
+									<select name="tehsil" id="tehsil" class="form-control tehsil" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>UC</label>
+									<select name="uc" id="uc" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Position Filled Against</label>
+									<select name="position_filled_against" id="position_filled_against" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										'.$position_filled_against_string.'
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>New Job Position</label>
+									<select name="job_position" id="job_position" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Transfer Effective Date</label>
+									<input type="text" name="transfer_effective_date" class="form-control date">
+								</div>
+							</div>';
+			}
+
+			return $output;
+    }
 
 
 }
