@@ -7,22 +7,8 @@
 				</div>
 				<form action="<?= base_url(); ?>Employee_cards/view" method="GET" id="employee-search-form">
 					<div class="selectBoxMain">
-						<?php switch ($card_status) {
-							case 'pending':
-								$status = 1;
-								break;
-							case 'printed':
-								$status = 2;
-								break;
-							case 'delivered':
-								$status = 3;
-								break;
-							default:
-								$status = 4;
-								break;
 
-						} ?>
-						<input type="hidden" name="status" value="<?= $status; ?>">
+						<input type="hidden" name="status" value="<?= $card_status; ?>">
 						<div class="filterSelect">
 							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID">
 						</div>
@@ -81,13 +67,8 @@
 							</div>
 							<div class="col-md-6 text-right">
 								<div class="tabelTopBtn">
-									<?php if($card_status == 'printed'): ?>
-										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/change_status" data-status="<?= $card_status; ?>" class="btn change-status">
-											<i class="fa fa-truck"></i> Deliver
-										</a>
-									<?php endif; ?>
-									<?php if($card_status == 'pending'): ?>
-										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/change_status" data-status="<?= $card_status; ?>" class="btn change-status">
+									<?php if($card_status == '1'): ?>
+										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/status_update" data-status="<?= $card_status; ?>" class="btn change-status">
 											<i class="fa fa-check"></i> Mark As Printed
 										</a>
 
@@ -95,9 +76,9 @@
 											<i class="fa fa-print"></i> Print View
 										</a>
 									<?php endif; ?>
-									<?php if($card_status == 'delivered'): ?>
-										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/change_status" data-status="<?= $card_status; ?>" class="btn change-status">
-											<i class="fa fa-arrow-down"></i> Mark As Received
+									<?php if($card_status == '2'): ?>
+										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/status_update" data-status="<?= $card_status; ?>" class="btn change-status">
+											<i class="fa fa-truck"></i> Deliver
 										</a>
 									<?php endif; ?>
 									
@@ -111,10 +92,10 @@
 					<div class="col-md-12">
 						<div class="tableMain">
 							<div class="table-responsive">
-								<table class="table table-hover" id="employee-table" style="cursor: pointer;">
+								<table class="table" id="employee-table" style="cursor: pointer;">
 									<thead>
 										<tr>
-											<?php if($card_status != 'received'): ?>
+											<?php if($card_status == '1' OR $card_status == '2'): ?>
 											<th style="padding-left: 10px;">
 												<input type="checkbox" id="mark-all">
 											</th>
@@ -125,14 +106,12 @@
 											<th>Project</th>
 											<th>Designation</th>
 											<th>Date of joining</th>
-											<?php if($card_status == 'printed'): ?>
+											<?php if($card_status == '2'): ?>
 											<th>Print Date</th>
-												<?php elseif($card_status == 'delivered'): ?>
-													<th>Delivered Date</th>
-												<?php elseif($card_status == 'received'): ?>
+												<?php elseif($card_status == '3'): ?>
 													<th>Received Date</th>
 											<?php endif; ?>
-											<?php if($card_status == 'pending' OR $card_status == 'printed'): ?>
+											<?php if($card_status == '1' OR $card_status == '2'): ?>
 											<th>Action</th>
 											<?php endif; ?>
 										</tr>
@@ -140,7 +119,7 @@
 									<tbody>
 										<?php $count=0; foreach($employees AS $e): ?>
 										<tr>
-											<?php if($card_status != 'received'): ?>
+											<?php if($card_status == '1' OR $card_status == '2'): ?>
 											<td>
 												<input type="checkbox" data-id="<?= $e->card_id; ?>" data-index="<?= $count; ?>" class="employee">
 											</td>
@@ -151,22 +130,20 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
 											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
-											<?php if($card_status == 'printed'): ?>
-											<td><?= date('d-m-Y', strtotime($e->print_date)); ?></td>
-												<?php elseif($card_status == 'delivered'): ?>
-													<td><?= date('d-m-Y', strtotime($e->deliver_date)); ?></td>
-												<?php elseif($card_status == 'received'): ?>
-													<td><?= date('d-m-Y', strtotime($e->receive_date)); ?></td>
+											<?php if($card_status == '2'): ?>
+											<td><?= ($e->print_date) ? date('d-m-Y', strtotime($e->print_date)) : ''; ?></td>
+												<?php elseif($card_status == '3'): ?>
+													<td><?= ($e->receive_date) ? date('d-m-Y', strtotime($e->receive_date)) : ''; ?></td>
 											<?php endif; ?>
 
-											<?php if($card_status == 'pending'): ?>
+											<?php if($card_status == '1'): ?>
 											<td>
 												<a href="<?= base_url(); ?>Employee_cards/print_cards/<?= $e->card_id; ?>" class="label label-primary">Print</a>
 											</td>
 									
-											<?php elseif($card_status == 'printed'): ?>
+											<?php elseif($card_status == '2'): ?>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->card_id; ?>/2" class="label label-danger">deliver</a>
+												<a href="<?= base_url(); ?>Employee_cards/status_update/<?= $e->card_id; ?>/2" class="label label-danger">deliver</a>
 											</td>
 
 											<?php endif; ?>

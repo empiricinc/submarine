@@ -23,7 +23,7 @@
 						</div>
 						<div class="col-md-5">
 							<div class="tabelTopBtn" style="padding-top: 12px !important;">
-								<a href="<?= base_url(); ?>Employee_cards/print_cards/1" class="btn">
+								<a href="<?= base_url(); ?>Employee_cards/print_cards" class="btn">
 									<i class="fa fa-print"></i> Print All
 								</a>
 								<a href="<?= base_url(); ?>Employee_cards/view?status=1" class="btn">
@@ -55,7 +55,7 @@
 												<td><?= ($c->date_of_joining) ? date('d-m-Y', strtotime($c->date_of_joining)) : ''; ?></td>
 												<td>
 													<a href="<?= base_url(); ?>Employee_cards/print_cards/<?= $c->card_id; ?>" class="label label-primary">Print</a>
-													<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->card_id; ?>/1/1" class="label label-info">Mark Print</a>
+													<a href="<?= base_url(); ?>Employee_cards/status_update/<?= $c->card_id; ?>/1/1" class="label label-info">Mark Print</a>
 												</td>
 											</tr>
 											<?php endforeach; ?>
@@ -106,7 +106,7 @@
 													<td><?= $c->project_name; ?></td>
 													<td><?= date('d-m-Y', strtotime($c->print_date)); ?></td>
 													<td>
-														<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $c->card_id; ?>/2/1" class="label label-danger">deliver</a>
+														<a href="<?= base_url(); ?>Employee_cards/status_update/<?= $c->card_id; ?>/2/1" class="label label-danger">deliver</a>
 
 													</td>
 												</tr>
@@ -191,9 +191,6 @@
 									<table class="table">
 										<thead>
 											<tr>
-												<!-- <th>
-													<input type="checkbox" id="mark-all-delivered">
-												</th> -->
 												<th>ID</th>
 												<th>Name</th>
 												<th>Project</th>
@@ -203,9 +200,6 @@
 										<tbody>
 											<?php foreach($received AS $c): ?>
 												<tr>
-													<!-- <td>
-														<input type="checkbox" data-id="<?= $c->employee_id; ?>" class="delivered-card">
-													</td> -->
 													<td><?= $c->employee_id; ?></td>
 													<td><?= ucwords($c->emp_name); ?></td>
 													<td><?= $c->project_name; ?></td>

@@ -572,12 +572,6 @@
 
 		$('.change-status').on('click', function() {
 			var status = $(this).data('status');
-			if(status == 'pending')
-				status = '/'+1;
-			else if(status == 'printed')
-				status = '/'+2;
-			else if(status == 'delivered')
-				status = '/'+3;
 
 			$.unique(ids.sort()).sort();
 			
@@ -588,7 +582,7 @@
 				
 			}
 			res = res.replace(/-+$/,'');
-			res = '/'+res;
+			res = '/'+res+'/';
 
 			var url = $(this).data('url');
 			

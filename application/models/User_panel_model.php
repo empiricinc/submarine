@@ -22,26 +22,21 @@ class User_panel_model extends CI_Model
 
     function get_employee_detail($id)
 	{
-        $employee_basic_info_fileds = ", ebi.father_name, ebi.date_of_birth, ebi.cnic, ebi.cnic_expiry_date, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, ebi.tribe, ebi.ethnicity, ebi.language, ebi.nationality, ebi.religion, ebi.bloodgroup, xec.contract_type_id, xec.from_date AS date_of_joining, xec.to_date AS contract_expiry_date";
+        $employee_basic_info_fileds = ", ebi.father_name, ebi.date_of_birth, ebi.cnic, ebi.cnic_expiry_date, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, ebi.tribe, ebi.ethnicity, ebi.language, ebi.nationality, ebi.religion, ebi.bloodgroup";
 
 
 		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.email AS email_address, xe.profile_picture,
-		 xc.name as company_name, xdd.department_name, xd.designation_name, xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, 
+		 xc.name as company_name, xdd.department_name, xd.designation_name, 
             epli.permanent_address_details, permanent_province, permanent_district, permanent_tehsil, permanent_uc,
             eri.resident_address_details, resident_province, resident_district, resident_tehsil, resident_uc $employee_basic_info_fileds");
 		      
-
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
         $this->db->join('employee_residential_info eri', 'xe.employee_id = eri.user_id', 'left');
 
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
         $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-        
-        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
-        
-        $this->db->join('xin_employee_contract xec', 'ebi.user_id = xec.employee_id', 'left');
-        $this->db->join('xin_contract_type xct', 'xec.contract_type_id = xct.contract_type_id', 'left');
 
 
 		return $this->db->get_where('xin_employees xe', array('xe.employee_id' => $id))->row();

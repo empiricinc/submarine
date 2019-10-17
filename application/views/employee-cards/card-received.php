@@ -87,7 +87,7 @@
 							</div>
 							<div class="col-md-6 text-right">
 								<div class="tabelTopBtn">
-									<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/change_status" data-status="deliver" class="btn change-status">
+									<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/status_update" data-status="3" class="btn change-status">
 										<i class="fa fa-check"></i> Mark As Received
 									</a>
 								</div>
@@ -120,17 +120,17 @@
 										<?php $count=0; foreach($employees AS $e): ?>
 										<tr>
 											<td>
-												<input type="checkbox" data-id="<?= $e->employee_id; ?>" data-index="<?= $count; ?>" class="employee">
+												<input type="checkbox" data-id="<?= $e->card_id; ?>" data-index="<?= $count; ?>" class="employee">
 											</td>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
 											<td><?= $e->contact_no; ?></td>
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
-											<td><?= date('d-m-Y', strtotime($e->date_of_joining)); ?></td>
-											<td><?= date('d-m-Y', strtotime($e->deliver_date)); ?></td>
+											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
+											<td><?= ($e->deliver_date) ? date('d-m-Y', strtotime($e->deliver_date)) : ''; ?></td>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/change_status/<?= $e->employee_id; ?>/3" class="label label-success">received</a>
+												<a href="<?= base_url(); ?>Employee_cards/status_update/<?= $e->card_id; ?>/3" class="label label-success">received</a>
 											</td>
 
 										</tr>

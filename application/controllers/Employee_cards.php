@@ -35,14 +35,11 @@ class Employee_cards extends MY_Controller
 		$this->load->database();
 
 		$this->load->model(array(
-							'Reports_model',
-							'Investigation_model',
-							'Resignations_model',
-							'Terminations_model',
 							'Designations_model',
 							'Province_model',
 							'Projects_model'
 						));
+		$this->load->model('Employee_cards_model', 'Cards_model');
 
 
 	}
@@ -60,21 +57,26 @@ class Employee_cards extends MY_Controller
 
 	function index()
 	{
+		/* Card status 1 => pending, 2 => printed, 3 => delivered, 4 => received */
 		$data['title'] = 'Employee Cards Dashboard';
 
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.card_status' => 'printed'
+					'ec.status' => '1'
 				];
 
-		$data['printed'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
-		$conditions['ec.card_status'] = 'pending';
-		$data['pending'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
-		$conditions['ec.card_status'] = 'delivered';
-		$data['delivered'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
-		$conditions['ec.card_status'] = 'received';
-		$data['received'] = $this->Reports_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$data['pending'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$conditions['ec.status'] = '2';
+		$data['printed'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+		
+		$conditions['ec.status'] = '3';
+		$data['delivered'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$conditions['ec.status'] = '4';
+		$data['received'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
 
 		$data['content'] = $this->load->view('employee-cards/dashboard', $data, TRUE);
 		$this->load->view('employee-cards/_template', $data);
@@ -83,26 +85,16 @@ class Employee_cards extends MY_Controller
 
 	public function view()
 	{
-		$status_num = $this->input->get('status');
+		$status = $this->input->get('status');
 		$offset = $this->input->get('page');
 
-		$card_status = "";
-		if($status_num == '1')
-			$card_status = 'pending';
-		elseif($status_num == '2')
-			$card_status = 'printed';
-		elseif($status_num == '3')
-			$card_status = 'delivered';
-		elseif($status_num == '4')
-			$card_status = 'received';
 
-
-		$this->security->xss_clean($status_num);
+		$this->security->xss_clean($status);
 
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.card_status' => $card_status
+					'ec.status' => $status
 				];
 
 		if(isset($_GET['search']))
@@ -132,9 +124,9 @@ class Employee_cards extends MY_Controller
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
 		$data['title'] = 'Employee Cards';
-		$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
+		$data['employees'] = $this->Cards_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
 		
-		$total_rows = $this->Reports_model->get_employee_cards($filtered_conditions)->num_rows();
+		$total_rows = $this->Cards_model->get_employee_cards($filtered_conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
@@ -143,7 +135,7 @@ class Employee_cards extends MY_Controller
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
 
-		$data['card_status'] = $card_status;
+		$data['card_status'] = $status;
 		$data['content'] = $this->load->view('employee-cards/view', $data, TRUE);
 		$this->load->view('employee-cards/_template', $data);
 	}
@@ -160,7 +152,7 @@ class Employee_cards extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.card_status' => 'pending'
+					'ec.status' => '1'
 				];
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 		if($card_ids[0] != "")
@@ -168,7 +160,7 @@ class Employee_cards extends MY_Controller
 			for ($i=0; $i < count($card_ids); $i++) { 
 				$conditions['ec.id'] = $card_ids[$i];
 				$filtered_conditions = $this->remove_empty_entries($conditions);
-				$emp_data = $this->Reports_model->get_employee_cards($filtered_conditions)->row();
+				$emp_data = $this->Cards_model->get_employee_cards($filtered_conditions)->row();
 				
 				array_push($employees, $emp_data);
 			}
@@ -176,10 +168,10 @@ class Employee_cards extends MY_Controller
 		}
 		else
 		{
-			$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions)->result();
+			$data['employees'] = $this->Cards_model->get_employee_cards($filtered_conditions)->result();
 		}
 		
-		$total_rows = $this->Reports_model->get_employee_cards($conditions)->num_rows();
+		$total_rows = $this->Cards_model->get_employee_cards($conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
@@ -194,7 +186,7 @@ class Employee_cards extends MY_Controller
 
 	public function received($offset="")
 	{
-		$card_status = 'delivered';
+		$card_status = '3';
 		$ids = $this->uri->segment(3);
 		$card_ids = explode('-', $ids);
 
@@ -203,7 +195,7 @@ class Employee_cards extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.card_status' => $card_status
+					'ec.status' => $card_status
 				];
 
 		if(isset($_GET['search']))
@@ -227,9 +219,9 @@ class Employee_cards extends MY_Controller
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
 		$data['title'] = 'Employee Cards';
-		$data['employees'] = $this->Reports_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
+		$data['employees'] = $this->Cards_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
 	
-		$total_rows = $this->Reports_model->get_employee_cards($filtered_conditions)->num_rows();
+		$total_rows = $this->Cards_model->get_employee_cards($filtered_conditions)->num_rows();
 		$url = 'Employee_cards/view';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
@@ -243,67 +235,61 @@ class Employee_cards extends MY_Controller
 	}
 
 
-	public function change_status()
-	{	
-
+	public function status_update()
+	{
 		$ids = $this->uri->segment(3);
 		$card_ids = explode('-', $ids);
 
-		$status = $card_status = $this->uri->segment(4);
-		$is_dash = $this->uri->segment(5);
-		
-		if($card_status == "")
-			show_404();
+		$status = (int) $this->uri->segment(4);
+		$new_status = '';
 
+		$is_dashboard = (int) $this->uri->segment(5);
 
-		$employees = array();
+		$date_field = '';
 		$date = date('Y-m-d');
-		$date_type = '';
 
-		if($card_status == "")
-			$card_status = $this->input->get('card_status');
+		if($is_dashboard == '1')
+			$url = 'Employee_cards';
 
-		if($card_status == '1')
-		{
-			$card_status = 'printed';
-			$date_type = 'print_date';
-		}
-		elseif($card_status == '2')
-		{
-			$card_status = 'delivered';
-			$date_type = 'deliver_date';
-		}
-		elseif($card_status == '3')
-		{
-			$card_status = 'received';
-			$date_type = 'receive_date';
+		switch ($status) {
+			case '1':
+				$new_status = '2';
+				$date_field = 'print_date';
+				break;
+			case '2':
+				$new_status = '3';
+				$date_field = 'deliver_date';
+				break;
+			case '3':
+				$new_status = '4';
+				$date_field = 'receive_date';
+				break;
 		}
 
-		$data['title'] = 'Employee Cards';
-
-		
-		if($card_ids[0] != "")
+		if($card_ids[0] != '')
 		{
 			for ($i=0; $i < count($card_ids); $i++) { 
-				$this->db->update('employee_cards', 
-									array('card_status' => $card_status, $date_type => $date), 
-									array('id' => $card_ids[$i])
-								);
+				$data = array('status' => $new_status, $date_field => $date);
+				$updated = $this->Cards_model->update_card_status($card_ids[$i], $data);
 			}
 		}
 		else
 		{
-			$this->db->update('employee_cards', 
-								array('card_status' => $card_status)
-							);
+			$data = array('status' => $new_status, $date_field => $date);
+			$updated = $this->Cards_model->update_card_status($card_id, $data);
 		}
 
-		
-		if($is_dash == '1')
-			redirect('Employee_cards/index');
-		else if($card_status == 'received')
-			redirect('Employee_cards/received');
-		redirect(base_url().'Employee_cards/view?status='.$status, 'refresh');
+
+		if($updated)
+		{
+			if($is_dashboard)
+				redirect($url, 'refresh');
+			elseif($status == '3')
+				redirect('Employee_cards/received', 'refresh');
+			else
+				redirect('Employee_cards/view?status='.$status);
+		}
+
 	}
 
 

@@ -46,13 +46,13 @@
 						<tr>
 							<td id="tdColumn1" style="width:50%;vertical-align: top; padding: 20px;" class="no-padding-print no-border">
 									<div class="card-container" id="dvColumn_1_9595">
-										<img src="<?= base_url(); ?>assets/img/card-front.png" style="width: 380px;height: 240px;">
+										<img src="<?= base_url(); ?>assets/employee-card/card-front.png" style="width: 380px;height: 240px;">
 
 									<div class="card-emp-picture">
-										<img src="<?= base_url(); ?>assets/img/no-photo.png" style="position: relative;width: 73px;height: 86px;left: 5px;bottom: 15px;">
+										<img src="<?= base_url(); ?>assets/employee-card/no-photo.png" style="position: relative;width: 73px;height: 86px;left: 5px;bottom: 15px;">
 									</div>
 									<div class="card-emp-name"><?= ucwords($e->emp_name); ?></div>
-									<div class="card-province-logo"><img src="<?= base_url(); ?>assets/img/FATA_logo.png" style="position: relative; width: 57px;height: 67px;"></div>
+									<div class="card-province-logo"><img src="<?= base_url(); ?>assets/employee-card/FATA_logo.png" style="position: relative; width: 57px;height: 67px;"></div>
 				                    <div class="card-district-heading">District :</div>
 				                    <div class="card-tehsil-uc-area-heading">UC/Area :</div>
 									<div class="card-district"><?= strtoupper($district); ?></div>
@@ -61,13 +61,13 @@
 									<div class="card-emp-id"></div>
 									<div class="card-sign-authority">( Regional Manager )</div>
 									<div class="card-authority-signature">
-										<img src="<?= base_url(); ?>assets/img/fatasign.png" style="position: relative; width: 60px;height: 43px; right: 80px;">
+										<img src="<?= base_url(); ?>assets/employee-card/fatasign.png" style="position: relative; width: 60px;height: 43px; right: 80px;">
 									</div>
 								</div>
 							</td>
 							<td id="tdColumn2" style="width:50%;vertical-align: top; padding: 20px;" class=" no-border">
 								<div class="card-container" id="dvColumn_2_9595">
-									<img src="<?= base_url(); ?>assets/img/card-rear.png" style="width: 380px;height: 240px;">
+									<img src="<?= base_url(); ?>assets/employee-card/card-rear.png" style="width: 380px;height: 240px;">
 									<div class="card-cnic"><?= $e->cnic; ?></div>
 									<div class="card-other-id-name"></div>
 									<div class="card-date-of-birth">
