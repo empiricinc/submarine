@@ -165,17 +165,19 @@ class Tests extends MY_Controller{
 		$post_data = $this->input->post();
 		$validate = $this->Tests_model->validate_applicant($post_data);
 		if($validate){
+			$this->session->set_userdata('rollnumber', $post_data['roll_no']);
 			redirect("tests/questions_for_test/{$post_data['roll_no']}");
-		} elseif($validate['test_date'] > date('Y-m-d', strtotime($post_data['test_date']))) {
-			$this->session->set_flashdata('failed', '<strong>Aww Snap !</strong> Your exam date is over, you are not allowed to take the exam.');
-			redirect('tests/exam_login');
 		} else {
-			$this->session->set_flashdata('failed', '<strong>Aww snap !</strong> Looks like you have not applied for the post advertised. <br><strong>OR</strong><br> The date you have been given for the exam is over, contact system administrator for further information.');
+			$this->session->set_flashdata('failed', '<strong>Aww snap !</strong> Looks like you have already taken the exam. <br><strong>OR</strong><br> The date you have been given for the exam is over, contact system administrator for further information.');
 			redirect('tests/exam_login');
 		}
 	}
 	// Random questions / data to display
 	public function questions_for_test(){
+		$session = $this->session->userdata('rollnumber');
+		if(empty($session)){
+			redirect('tests/exam_login');
+		}
 		// Get answers with the question ID stored as FK in the answers table.
 		$data['questions_rand'] = $this->Tests_model->test_questions();
 		// Get without join, the questions only...
@@ -297,6 +299,7 @@ class Tests extends MY_Controller{
 	public function test_submitted(){
 		// $data['title'] = 'Test System | Test Submitted';
 		// $data['content'] = 'test-system/test_submitted';
+		$this->session->sess_destroy();
 		$this->load->view('test-system/test_submitted');
 	}
 	// Modify answers / options for the questions. Display the data in the form...

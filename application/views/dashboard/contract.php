@@ -138,7 +138,7 @@ h4 {
                 </thead>
                 <tbody>
                   <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Levels.
-                    foreach ($pending_contracts as $contract){
+                    $check_copies = $this->db->select('employee_id')->from('xin_employees')->where('employee_id IN(SELECT emp_id FROM employee_contract_files)')->get()->result();                    foreach ($pending_contracts as $contract){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
                     if($contract->status == 0){
@@ -173,34 +173,34 @@ h4 {
                         <?php echo substr($contract->message, 0, 20).'...'; ?>
                       </a>
                       <div class="modal fade" id="message<?= $contract->application_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                  <!--Header-->
-                                <div class="modal-header">
-                                  <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Message... </h4>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                  </button>
-                                </div>
-                                <!--Body-->
-                                <div class="modal-body">
-                                  <div class="row">
-                                    <div class="col-md-6 col-md-offset-3 text-center">
-                                      <strong>Message Description</strong>
-                                      <p><?php echo $contract->message; ?></p>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!--Footer-->
-                                <div class="modal-footer">
-                                  <?php if($contract->status == 1): ?>
-                                    <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
-                                  <?php endif; ?>
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                              <!--Header-->
+                            <div class="modal-header">
+                              <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Message... </h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <!--Body-->
+                            <div class="modal-body">
+                              <div class="row">
+                                <div class="col-md-6 col-md-offset-3 text-center">
+                                  <strong>Message Description</strong>
+                                  <p><?php echo $contract->message; ?></p>
                                 </div>
                               </div>
                             </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                              <?php if($contract->status == 1): ?>
+                                <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
+                              <?php endif; ?>
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
                           </div>
+                        </div>
+                      </div>
                     </td>
                     <td align="center">
                       <?php if($contract->status == 0): ?>
@@ -225,7 +225,7 @@ h4 {
                         <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
                         <a data-toggle="tooltip" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>">
                           <i class="fa fa-check-circle"></i></a>
-                        <a data-toggle="tooltip" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description == NULL){ echo base_url('contract/activate_first'); }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
+                        <a data-toggle="tooltip" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description === NULL){ echo base_url('contract/activate_first'); if($check_copies == false){ echo base_url('contract/verify_first'); } }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
                         <a data-toggle="modal" data-target="#rejectContract<?= $contract->user_id; ?>" href="#rejectModal">
                           <i class="fa fa-close"></i>
                         </a>

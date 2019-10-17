@@ -453,7 +453,7 @@ class Contract extends MY_Controller {
 	}
 	// Activate contract first, then activate it.
 	public function activate_first(){
-		echo "You need to create the contract first, then activate it !";
+		echo "You need to create and then verify the contract first, then you can activate it !";
 	}
 	// Multiple files upload. Contract copies upload.
 	function contract_upload(){

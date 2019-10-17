@@ -260,11 +260,13 @@ class Tests_model extends CI_Model{
 	}
 	// Validate applicant to get access to the paper.
 	public function validate_applicant($post_data){
-		$this->db->select('id, rollnumber, test_date, sdt, status');
+		$this->db->select('id, rollnumber, test_date, sdt');
 		$this->db->where('rollnumber', $post_data['roll_no']);
-		$this->db->where('test_date >', date('Y-m-d', strtotime($post_data['test_date'])));
+		$this->db->where('test_date', date('Y-m-d', strtotime($post_data['test_date'])));
+		$this->db->where('rollnumber NOT IN(SELECT applicant_id from ex_applicants)');
 		$this->db->from('assign_test');
 		$query = $this->db->get();
+		echo $this->db->last_query();
 		if($query->num_rows() == 0)
 			return false;
 		else

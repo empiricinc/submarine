@@ -53,9 +53,7 @@
 					<div class="col-lg-12 text-center">
 						<div class="submitBtn">
 							<a href="http://www.ctc.org.pk" target="blank" class="btn btnSubmit">Visit our Site</a>
-							<a href="http://www.ctc.org.pk/business-opportunities/jobs/" class="btn btnSubmit" target="blank">View Job Criteria</a>
-							<a href="?" class="btn btnSubmit">Call for Result</a>
-							<a href="?" class="btn btnSubmit">More info</a>
+							<a href="http://www.ctc.org.pk/career" class="btn btnSubmit" target="blank">View Job Criteria</a>
 						</div>
 					</div>
 				</div>
