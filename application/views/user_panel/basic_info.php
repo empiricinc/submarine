@@ -64,7 +64,7 @@
 										<div class="col-lg-12" style="padding-bottom: 30px;">
 											<div class="col-lg-4 col-lg-offset-5">
 												<?php 
-													$profile_picture = ($basic_info->profile_picture) ?  base_url().'uploads/profile/'.$basic_info->profile_picture : base_url()."assets/img/no-photo.png";
+													$profile_picture = ($basic_info->profile_picture) ?  base_url().'uploads/profile/'.$basic_info->profile_picture : base_url()."uploads/profile/no-photo.png";
 												 ?>
 												 <div class="img-wrapper img-circle" style="width: 120px; height: 120px; border: 1px solid #e1e4e7;">
 												<img src="<?= $profile_picture; ?>" id="profile" alt="Profile Picture" width="120px" height="120px" class="img-circle" style="position: relative;">

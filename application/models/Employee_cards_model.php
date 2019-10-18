@@ -15,7 +15,7 @@ class Employee_cards_model extends CI_Model
 	function get_employee_cards($conditions=array(), $limit="", $offset="")
     {
         $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.contact_no, xd.designation_name, ebi.cnic, ebi.contact_number, ebi.personal_contact,
-            ebi.date_of_birth, ebi.job_title, xc.name AS project_name, ec.id AS card_id, ec.card_status, ec.issue_date, ec.expiry_date, xe.date_of_joining, ec.print_date, ec.deliver_date, ec.receive_date");
+            ebi.date_of_birth, ebi.job_title, xc.name AS project_name, ec.id AS card_id, ec.status, ec.issue_date, ec.expiry_date, xe.date_of_joining, ec.print_date, ec.deliver_date, ec.receive_date");
 
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');        
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
@@ -33,9 +33,9 @@ class Employee_cards_model extends CI_Model
     }
 
 
-    function update_card_status($card_id, $data)
+    function update_card_status($conditions=array(), $data=array())
     {
-    	$this->db->where(array('id' => $card_id));
+    	$this->db->where($conditions);
 		return $this->db->update('employee_cards', $data);
     }
 

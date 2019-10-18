@@ -63,11 +63,16 @@
 					<div class="col-md-12">
 						<div class="tabelHeading">
 							<div class="col-md-6">
-								<h3>Employee Cards<span></span></h3>
+								<h3><?= $title; ?><span></span></h3>
 							</div>
 							<div class="col-md-6 text-right">
 								<div class="tabelTopBtn">
-									<?php if($card_status == '1'): ?>
+									<?php if($card_status == '0') { ?>
+										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/status_update" data-status="<?= $card_status; ?>" class="btn change-status">
+											<i class="fa fa-arrow-right"></i> Send For Print
+										</a>
+
+									<?php } elseif($card_status == '1') { ?>
 										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/status_update" data-status="<?= $card_status; ?>" class="btn change-status">
 											<i class="fa fa-check"></i> Mark As Printed
 										</a>
@@ -75,12 +80,11 @@
 										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/print_cards" class="btn print-cards">
 											<i class="fa fa-print"></i> Print View
 										</a>
-									<?php endif; ?>
-									<?php if($card_status == '2'): ?>
+									<?php } elseif($card_status == '2') { ?>
 										<a href="javascript:void(0);" data-url="<?= base_url(); ?>Employee_cards/status_update" data-status="<?= $card_status; ?>" class="btn change-status">
 											<i class="fa fa-truck"></i> Deliver
 										</a>
-									<?php endif; ?>
+									<?php } ?>
 									
 								</div>
 							</div>
@@ -95,11 +99,9 @@
 								<table class="table" id="employee-table" style="cursor: pointer;">
 									<thead>
 										<tr>
-											<?php if($card_status == '1' OR $card_status == '2'): ?>
 											<th style="padding-left: 10px;">
 												<input type="checkbox" id="mark-all">
 											</th>
-											<?php endif; ?>
 											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
@@ -108,8 +110,8 @@
 											<th>Date of joining</th>
 											<?php if($card_status == '2'): ?>
 											<th>Print Date</th>
-												<?php elseif($card_status == '3'): ?>
-													<th>Received Date</th>
+											<?php elseif($card_status == '3'): ?>
+											<th>Received Date</th>
 											<?php endif; ?>
 											<?php if($card_status == '1' OR $card_status == '2'): ?>
 											<th>Action</th>
@@ -119,11 +121,9 @@
 									<tbody>
 										<?php $count=0; foreach($employees AS $e): ?>
 										<tr>
-											<?php if($card_status == '1' OR $card_status == '2'): ?>
 											<td>
 												<input type="checkbox" data-id="<?= $e->card_id; ?>" data-index="<?= $count; ?>" class="employee">
 											</td>
-											<?php endif; ?>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
 											<td><?= $e->contact_number; ?></td>
@@ -132,8 +132,8 @@
 											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
 											<?php if($card_status == '2'): ?>
 											<td><?= ($e->print_date) ? date('d-m-Y', strtotime($e->print_date)) : ''; ?></td>
-												<?php elseif($card_status == '3'): ?>
-													<td><?= ($e->receive_date) ? date('d-m-Y', strtotime($e->receive_date)) : ''; ?></td>
+											<?php elseif($card_status == '3'): ?>
+											<td><?= ($e->receive_date) ? date('d-m-Y', strtotime($e->receive_date)) : ''; ?></td>
 											<?php endif; ?>
 
 											<?php if($card_status == '1'): ?>
@@ -143,7 +143,7 @@
 									
 											<?php elseif($card_status == '2'): ?>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/status_update/<?= $e->card_id; ?>/2" class="label label-danger">deliver</a>
+												<a href="javascript:void(0);" data-status="<?= $card_status; ?>" data-id="<?= $e->card_id; ?>" data-url="<?= base_url(); ?>Employee_cards/status_update" class="label label-danger change-status">deliver</a>
 											</td>
 
 											<?php endif; ?>

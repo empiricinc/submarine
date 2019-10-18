@@ -83,7 +83,7 @@
 					<div class="col-md-12">
 						<div class="tabelHeading">
 							<div class="col-md-6">
-								<h3>Employee's List <span></span></h3>
+								<h3>Receive Cards <span></span></h3>
 							</div>
 							<div class="col-md-6 text-right">
 								<div class="tabelTopBtn">
@@ -130,7 +130,7 @@
 											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
 											<td><?= ($e->deliver_date) ? date('d-m-Y', strtotime($e->deliver_date)) : ''; ?></td>
 											<td>
-												<a href="<?= base_url(); ?>Employee_cards/status_update/<?= $e->card_id; ?>/3" class="label label-success">received</a>
+												<a href="javascript:void(0);" data-status="<?= $card_status; ?>" data-id="<?= $e->card_id; ?>" data-url="<?= base_url(); ?>Employee_cards/status_update" class="label label-success change-status">received</a>
 											</td>
 
 										</tr>

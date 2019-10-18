@@ -223,6 +223,40 @@
 
 <!-- ./ Edit Work Experience -->
 
+<!-- Status  Modal -->
+<div class="modal fade animated" id="status-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+    <form action="" method="POST" id="update-status-form">
+        <div class="modal-content">
+        	<div class="modal-header">
+    			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+    				<span aria-hidden="true">×</span> 
+    			</button>
+
+    			<h4 class="modal-title">Change Status</h4> 
+    		</div>
+    		<div class="modal-body" id="status-data-handler">
+    			<div class="row">
+    				<input type="hidden" name="status" id="status">
+	    			<input type="hidden" name="card_ids" id="card-ids">
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<input type="text" name="status_date" value="" id="status-date" class="form-control date" placeholder="Status Date"  data-toggle="tooltip" title="Status Date" required>
+						</div>
+					</div>
+    			</div>
+    			
+    		</div>
+    		<div class="modal-footer">
+				<button type="submit" id="update-job" class="btn btnSubmit">Update</button>
+    		</div>
+    		
+        </div>
+    </form>
+    </div>
+</div>
+
+<!-- ./Status Modal -->
 
 <!-- Delete Modal -->
 <div class="modal fade animated" id="delete-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -570,23 +604,35 @@
 		});
 
 
-		$('.change-status').on('click', function() {
+		$('.change-status').on('click', function(e) {
 			var status = $(this).data('status');
+			var id = $(this).data('id');
+			var card_ids = '';
 
-			$.unique(ids.sort()).sort();
-			
-			var res = '';
-			for(i=0; i<ids.length; i++)
+			var form_url = $(this).data('url');
+
+			if(id == undefined)
 			{
-				res += ids[i].toString() + '-';
-				
+				$.unique(ids.sort()).sort();
+				for(i=0; i<ids.length; i++)
+				{
+					card_ids += ids[i].toString() + '-';
+					
+				}
+				card_ids = card_ids.replace(/-+$/,'');
+				if(card_ids == '')
+					form_url = '<?= base_url(); ?>Employee_cards/update_status_all';
 			}
-			res = res.replace(/-+$/,'');
-			res = '/'+res+'/';
-
-			var url = $(this).data('url');
+			else
+			{
+				card_ids = id;
+			}
 			
-			window.location = url+res+status;
+			
+			$('#status').val(status);
+			$('#card-ids').val(card_ids);
+			$('#update-status-form').attr('action', form_url);
+			$('#status-modal').modal('show');
 
 		});
 

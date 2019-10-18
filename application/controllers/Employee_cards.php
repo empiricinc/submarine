@@ -57,16 +57,18 @@ class Employee_cards extends MY_Controller
 
 	function index()
 	{
-		/* Card status 1 => pending, 2 => printed, 3 => delivered, 4 => received */
+		/* Card status 0 => card request, 1 => pending, 2 => printed, 3 => delivered, 4 => received */
 		$data['title'] = 'Employee Cards Dashboard';
 
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.status' => '1'
+					'ec.status' => '0'
 				];
 
+	    $data['card_request'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
 
+	    $conditions['ec.status'] = '1';
 		$data['pending'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
 
 		$conditions['ec.status'] = '2';
@@ -87,7 +89,23 @@ class Employee_cards extends MY_Controller
 	{
 		$status = $this->input->get('status');
 		$offset = $this->input->get('page');
+		$title = '';
 
+		switch ($status) {
+			case '0':
+				$title = 'Card Requests';
+				break;
+			case '1':
+				$title = 'Ready To Print';
+				break;
+			case '2':
+				$title = 'Ready To Delivered';
+				break;
+			case '3':
+				$title = 'Delivered';
+				break;
+
+		}
 
 		$this->security->xss_clean($status);
 
@@ -123,7 +141,8 @@ class Employee_cards extends MY_Controller
 		
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
-		$data['title'] = 'Employee Cards';
+
+		$data['title'] = $title;
 		$data['employees'] = $this->Cards_model->get_employee_cards($filtered_conditions, $this->limit, $offset)->result();
 		
 		$total_rows = $this->Cards_model->get_employee_cards($filtered_conditions)->num_rows();
@@ -237,21 +256,19 @@ class Employee_cards extends MY_Controller
 
 	public function status_update()
 	{
-		$ids = $this->uri->segment(3);
+		$ids = $this->input->post('card_ids');
+		$status = $this->input->post('status');
+		$date = $this->input->post('status_date');
+
 		$card_ids = explode('-', $ids);
-
-		$status = (int) $this->uri->segment(4);
 		$new_status = '';
-
-		$is_dashboard = (int) $this->uri->segment(5);
-
 		$date_field = '';
-		$date = date('Y-m-d');
-
-		if($is_dashboard == '1')
-			$url = 'Employee_cards';
 
 		switch ($status) {
+			case '0':
+				$new_status = '1';
+				$date_field = 'request_print_date';
+				break;
 			case '1':
 				$new_status = '2';
 				$date_field = 'print_date';
@@ -269,25 +286,63 @@ class Employee_cards extends MY_Controller
 		if($card_ids[0] != '')
 		{
 			for ($i=0; $i < count($card_ids); $i++) { 
+				$conditions = array('id' => $card_ids[$i]);
 				$data = array('status' => $new_status, $date_field => $date);
-				$updated = $this->Cards_model->update_card_status($card_ids[$i], $data);
+				$updated = $this->Cards_model->update_card_status($conditions, $data);
 			}
 		}
 		else
 		{
+			$conditions = array('id' => $card_id);
 			$data = array('status' => $new_status, $date_field => $date);
-			$updated = $this->Cards_model->update_card_status($card_id, $data);
+			
+			$updated = $this->Cards_model->update_card_status($conditions, $data);
 		}
 
+		
+		if($updated)
+		{
+			if($status == '3')
+				redirect('Employee_cards/received', 'refresh');
+			else
+				redirect('Employee_cards/view?status='.$status, 'refresh');
+		}
+	}
+
+	public function update_status_all()
+	{
+		$status = $this->input->post('status');
+		$date = $this->input->post('status_date');
+		// $date = date('Y-m-d');
+
+		switch ($status) {
+			case '0':
+				$new_status = '1';
+				$date_field = 'request_print_date';
+				break;
+			case '1':
+				$new_status = '2';
+				$date_field = 'print_date';
+				break;
+			case '2':
+				$new_status = '3';
+				$date_field = 'deliver_date';
+				break;
+			case '3':
+				$new_status = '4';
+				$date_field = 'receive_date';
+				break;
+		}
+
+		$conditions = array('status' => $status);
+		$data = array('status' => $new_status, $date_field => $date);
+		
+		$updated = $this->Cards_model->update_card_status($conditions, $data);
 
 		if($updated)
 		{
-			if($is_dashboard)
-				redirect($url, 'refresh');
-			elseif($status == '3')
-				redirect('Employee_cards/received', 'refresh');
-			else
-				redirect('Employee_cards/view?status='.$status);
+			// $this->session->set_flashdata('success', 'Status Updated successfully');
+			redirect('Employee_cards/view?status='.$status, 'refresh');
 		}
 
 	}

@@ -50,6 +50,7 @@ class Insurance_model extends CI_Model
         if(!empty($conditions))
             $this->db->where($conditions);
 
+        $this->db->where_not_in('xe.user_role_id', array(1, 2));
         $this->db->order_by('xe.user_id', 'DESC');
         return $this->db->get('insurance_claims ic');
     }

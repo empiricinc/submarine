@@ -12,11 +12,7 @@
 							<div class="col-md-10">
 								<h3><?= $title; ?> <span></span></h3>
 							</div>
-							<!-- <div class="col-md-3 text-right" style="padding-right: 0px;">
-								<div class="tabelTopBtn">
-								<a href="<?= base_url(); ?>Reports/employee_cards_pdf" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a>
-								</div>
-							</div> -->
+
 							<div class="col-md-2 text-right" style="padding-left: 0px;">
 								<div class="tabelTopBtn">
 								<a href="javascript:void(0);" class="btn" onclick="window.print()";><i class="fa fa-print"></i> Print</a>
