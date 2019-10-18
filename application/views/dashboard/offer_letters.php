@@ -171,7 +171,7 @@ h4 {
                         <?php if($letter->status != 0): ?>
                           <a href="javascript:void(0)" class="btn btn-success btn-xs">Accepted</a>
                             <?php else: ?>
-                          <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-info btn-xs">Upload</a>
+                          <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-info btn-xs">Generate</a>
                           <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Forward</a>
                           <a data-toggle="modal" data-target="#attachment<?php echo $letter->user_id; ?>" href="#" class="btn btn-warning btn-xs">View</a>
                           <div class="modal fade" id="attachment<?= $letter->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

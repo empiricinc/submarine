@@ -266,7 +266,6 @@ class Tests_model extends CI_Model{
 		$this->db->where('rollnumber NOT IN(SELECT applicant_id from ex_applicants)');
 		$this->db->from('assign_test');
 		$query = $this->db->get();
-		echo $this->db->last_query();
 		if($query->num_rows() == 0)
 			return false;
 		else
