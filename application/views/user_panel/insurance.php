@@ -21,9 +21,9 @@
 				<?php endif; ?>
 			</div>
 			<div class="col-lg-12">
-				<form action="<?= base_url(); ?>Insurance/add_claim" method="POST">
+				<form action="<?= base_url(); ?>User_panel/add_insurance_claim" method="POST" enctype="multipart/form-data" id="insurance-form">
 					<input type="hidden" name="employee_id" id="employee-id" value="<?= $employee->employee_id; ?>">
-					<input type="hidden" name="url" value="<?= current_url(); ?>">
+
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="inputFormMain">
@@ -66,6 +66,15 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="inputFormMain">
+								<input type="file" name="attachments[]" value="" id="insurance-files" class="form-control" data-toggle="tooltip" title="Insurance Files" multiple>
+								<small class="form-text text-muted">Supported file formats (.txt, .doc, .docx, .pdf)</small>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="inputFormMain">
 								<input type="text" name="subject" value="" id="subject" class="form-control" placeholder="Subject" data-toggle="tooltip" title="Subject" required>
 							</div>
 						</div>
@@ -79,7 +88,7 @@
 
 					<div class="row">
 						<div class="col-lg-12 submitBtn">
-							<button type="submit" class="btn btnSubmit btn-block"> 
+							<button type="submit" id="insuracne-form-btn" class="btn btnSubmit btn-block"> 
 			    				Submit 
 			    			</button>
 						</div>
