@@ -111,13 +111,12 @@
 											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
-											<!-- <th>Email</th> -->
 											<th>Project</th>
 											<th>Department</th>
 											<th>Designation</th>
-											<th>Date of birth</th>
-											<!-- <th>From Date</th>
-											<th>To Date</th> -->
+											<th>Incident</th>
+											<th>Incident Date</th>
+											<th>Reporting Date</th>
 											<th>Status</th>	
 											<th>Action</th>	
 										</tr>
@@ -147,7 +146,9 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= ucwords($e->designation_name); ?></td>
-											<td><?= ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : ''; ?></td>
+											<td><?= ucwords($e->type); ?></td>
+											<td><?= ($e->incident_date) ? date('d-m-Y', strtotime($e->incident_date)) : ''; ?></td>
+											<td><?= ($e->reporting_date) ? date('d-m-Y', strtotime($e->reporting_date)) : ''; ?></td>
 											<td>
 												<?= 
 													'<label class="label '.$label.'" id="label-'. $e->employee_id.'">'.$e->status.'</label>'; 

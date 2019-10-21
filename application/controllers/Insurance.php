@@ -62,8 +62,7 @@ class Insurance extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.is_active' => '1',
-					'xe.status !=' => '0'
+					'xe.status NOT IN(0, 4, 5) AND xe.is_active = ' => '1'
 				];
 
 
@@ -75,6 +74,7 @@ class Insurance extends MY_Controller
 			$designation = (int) $this->input->get('designation');
 			$project = (int) $this->input->get('project');
 			$status = $this->input->get('status');
+			$employee_status = $this->input->get('employee_status');
 			
 			if($employeeName != '')
 				$employeeName = '%'.$employeeName.'%';
@@ -86,6 +86,9 @@ class Insurance extends MY_Controller
 			if($project != 0)
 				$conditions['xe.company_id'] = $project;
 			$conditions['xe.designation_id'] = $designation;
+
+			if($employee_status != "")
+				$conditions['xe.status'] = $employee_status;
 
 			if($status != "")
 			{
@@ -120,7 +123,7 @@ class Insurance extends MY_Controller
 		$offset = $this->input->get('page');
 		$data['title'] = 'Employees Insurance List';
 		$data['employees'] = $this->Insurance_model->get_employees($conditions, $this->limit, $offset)->result();
-		
+
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
@@ -174,7 +177,7 @@ class Insurance extends MY_Controller
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 		/* end pagination */
 
-		$data['title'] = 'Employees Insurance List';
+		$data['title'] = 'Insurance Claims';
 		$data['insurance_claims'] = $this->Insurance_model->get_insurance_claims($conditions, $this->limit, $offset)->result();
 		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
@@ -199,7 +202,7 @@ class Insurance extends MY_Controller
 
 			$filtered_conditions = $this->remove_empty_entries($conditions);
 
-			$data['detail'] = $this->Insurance_model->get_insurance_claims($filtered_conditions)->row();
+			$data['detail'] = $this->Insurance_model->get_insurance_claim_detail($filtered_conditions)->row();
 			$data['files'] = $this->Insurance_model->get_insurance_files($claim_id)->result();
 
 			$data['content'] = $this->load->view('insurance/claim-detail', $data, TRUE);
@@ -228,10 +231,13 @@ class Insurance extends MY_Controller
 			$subject = $this->input->post('subject');
 			$description = $this->input->post('description');
 
-			$url = $this->input->post('url');
+			$previous_claim = $this->Insurance_model->check_claim_existence($employee_id);
+			if($previous_claim > 0)
+			{
+				$this->session->set_flashdata('error', '<strong>Previous claim!</strong> Claim already in progress.');
+				redirect('Insurance/list_employees', 'refresh');
 
-			if($reported_by == '')
-				$reported_by = $employee_name;
+			}
 
 			$data = array(
 						'employee_id' => $employee_id,
@@ -246,9 +252,13 @@ class Insurance extends MY_Controller
 					);
 
 			$add = $this->Insurance_model->add_claim($data);
+			$insurance_claim_id = $this->db->insert_id();
 
 			if($add)
 			{
+				if(!empty($_FILES['attachments']) OR $_FILES['attachments']['size'][0] != 0)
+					$this->upload_files($_FILES['attachments'], $insurance_claim_id, $entry_by);
+
 				$this->session->set_flashdata('success', '<strong>Success!</strong> Insurance claim submitted');
 			}
 			else
@@ -256,7 +266,7 @@ class Insurance extends MY_Controller
 				$this->session->set_flashdata('error', '<strong>Error!</strong> Insurance claim wasn\'t submitted');
 			}
 
-			redirect($url, 'refresh');
+			redirect('Insurance/list_employees', 'refresh');
 		}
 		else
 		{
@@ -265,7 +275,7 @@ class Insurance extends MY_Controller
 	}
 
 
-	public function add()
+	public function update_status()
 	{
 		if(isset($_POST))
 		{
@@ -282,7 +292,6 @@ class Insurance extends MY_Controller
 				$new_status = 'uninsured';
 			else
 				$new_status = 'insured';
-
 
 			$employee_row = $this->Insurance_model->get_employee_status($employee_id)->row();
 			if($new_status == 'uninsured' && $employee_row->status > 0 && $employee_row->status < 5)
@@ -314,7 +323,7 @@ class Insurance extends MY_Controller
 						'entry_at' => $updated_at
 					);
 				$this->Insurance_model->insurance_log($data);
-				$this->session->set_flashdata('success', 'Insurance added Successfully');
+				$this->session->set_flashdata('success', 'Insurance status updated successfully');
 			}
 			else{
 				$this->session->set_flashdata('error', 'Server Problem');
@@ -425,18 +434,13 @@ class Insurance extends MY_Controller
 			}
 
 			$update = $this->Insurance_model->update_insurance_claim($data, $claim_id);
-			
-			if(!empty($_FILES) && $_FILES['docs']['size'][0] != 0)
-				$uploaded = $this->upload_files($_FILES, $claim_id, $status);
+			if(!empty($_FILES) && $_FILES['attachments']['size'][0] != 0)
+				$uploaded = $this->upload_files($_FILES['attachments'], $claim_id, $status);
 
 			if($update)
-			{
 				$this->session->set_flashdata('success', 'Record Updated Successfully');
-			}
 			else
-			{
 				$this->session->set_flashdata('error', 'Record Updation Failed');
-			}
 
 			redirect('Insurance/view_claims', 'refresh');
 		}
@@ -447,17 +451,17 @@ class Insurance extends MY_Controller
 	}
 
 
-	private function upload_files($files, $id, $status="")
+	private function upload_files($files, $claim_id, $uploaded_by)
     {
     	$data = array();
-        
-        $filesCount = count($_FILES['docs']['name']);
+
+        $filesCount = count($files['name']);
         for($i = 0; $i < $filesCount; $i++){
-            $_FILES['file']['name']     = $_FILES['docs']['name'][$i];
-            $_FILES['file']['type']     = $_FILES['docs']['type'][$i];
-            $_FILES['file']['tmp_name'] = $_FILES['docs']['tmp_name'][$i];
-            $_FILES['file']['error']    = $_FILES['docs']['error'][$i];
-            $_FILES['file']['size']     = $_FILES['docs']['size'][$i];
+            $_FILES['file']['name']     = $files['name'][$i];
+            $_FILES['file']['type']     = $files['type'][$i];
+            $_FILES['file']['tmp_name'] = $files['tmp_name'][$i];
+            $_FILES['file']['error']    = $files['error'][$i];
+            $_FILES['file']['size']     = $files['size'][$i];
             
             // File upload configuration
             $uploadPath = './uploads/insurance_claims/';
@@ -476,9 +480,8 @@ class Insurance extends MY_Controller
 
                 $uploadData[$i]['original_name'] = $fileData['orig_name'];
                 $uploadData[$i]['file_name'] = $fileData['file_name'];
-                $uploadData[$i]['uploaded_by'] = $this->session_data['user_id'];
-                $uploadData[$i]['insurance_claim_id'] = $id;
-                $uploadData[$i]['file_type'] = $status;
+                $uploadData[$i]['uploaded_by'] = $uploaded_by;
+                $uploadData[$i]['insurance_claim_id'] = $claim_id;
             }
             else
             {

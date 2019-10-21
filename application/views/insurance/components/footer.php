@@ -7,13 +7,12 @@
     				<span aria-hidden="true">×</span> 
     			</button>
 
-    			<strong class="modal-title">Insurance Form</strong> 
+    			<strong class="modal-title">Insurance Claim Form</strong> 
     		</div>
-    		<form action="<?= base_url(); ?>Insurance/add_claim" method="POST">
+    		<form action="<?= base_url(); ?>Insurance/add_claim" method="POST" id="insurance-form" enctype="multipart/form-data">
 	    		<div class="modal-body" id="insurance-handler">
 	    			<div class="row" style="padding-left: 15px; padding-right: 15px;">
 	    			<input type="hidden" name="employee_id" id="employee-id" value="">
-					<input type="hidden" name="url" value="<?= current_url(); ?>">
 					<div class="col-lg-6">
 						<div class="inputFormMain">
 							<input type="text" name="employee_name" value="" id="employee-name" class="form-control" placeholder="Employee name" data-toggle="tooltip" title="Employee name" readonly>
@@ -49,37 +48,42 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="incident_date" value="" id="incident-date" class="form-control date" placeholder="Incident Date" data-toggle="tooltip" title="Incident Date" readonly>
+							<input type="text" name="incident_date" value="" id="incident-date" class="form-control date" placeholder="Incident Date" data-toggle="tooltip" title="Incident Date" required>
 						</div>
 					</div>
 
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="reporting_date" value="" id="reporting-date" class="form-control date" placeholder="Reporting Date" data-toggle="tooltip" title="Reporting Date">
+							<input type="text" name="reporting_date" value="" id="reporting-date" class="form-control date" placeholder="Reporting Date" data-toggle="tooltip" title="Reporting Date" required>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="reported_by" value="" id="reported_by" class="form-control" placeholder="Reported By" data-toggle="tooltip" title="Reported By">
+							<input type="text" name="reported_by" value="" id="reported_by" class="form-control" placeholder="Reported By" data-toggle="tooltip" title="Reported By" required>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<input type="file" name="attachments[]" value="" class="form-control insurance-files" data-toggle="tooltip" title="Insurance Files" multiple required>
+								<small class="form-text text-muted">Supported file formats (.txt, .doc, .docx, .pdf)</small>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<input type="text" name="subject" value="" id="subject" class="form-control" placeholder="Subject" data-toggle="tooltip" title="Subject" required>
 						</div>
 					</div>
 
 					<div class="col-lg-12">
 						<div class="inputFormMain">
-							<input type="text" name="subject" value="" id="subject" class="form-control" placeholder="Subject" data-toggle="tooltip" title="Subject">
-						</div>
-					</div>
-
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<textarea name="description" id="description" class="form-control" rows="5" required></textarea>
+							<textarea name="description" id="description" class="form-control" rows="5" placeholder="Description" required></textarea>
 						</div>
 					</div>
 					</div>
 	    		</div>
 	    		<div class="modal-footer">
 	    			<div class="col-lg-12">
-		    			<button type="submit" class="btn btnSubmit"> 
+		    			<button type="submit" class="btn btnSubmit" id="insurance-form-btn"> 
 		    				Submit 
 		    			</button>
 		    			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
@@ -99,23 +103,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Insurance Status</h4>
+				<h4 class="modal-title">Update Insurance Status</h4>
 			</div>
-			<form action="<?= base_url(); ?>Insurance/add" method="POST">
+			<form action="<?= base_url(); ?>Insurance/update_status" method="POST">
 			<input type="hidden" name="employee_id" id="emp-id">
 			<input type="hidden" name="status" id="insurance-status">
 			<div class="row" style="padding-left: 15px; padding-right: 15px;">
 				<div class="modal-body">
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<input type="text" name="from_date" value="" id="start-date" class="form-control date" placeholder="Insurance Start Date" data-toggle="tooltip" title="Insurance Start Date" required>
-						</div>
-					</div>
-					<div class="col-lg-12">
-						<div class="inputFormMain">
-							<input type="text" name="to_date" value="" id="end-date" class="form-control date" placeholder="Insurance End Date" data-toggle="tooltip" title="Insurance End Date" required>
-						</div>
-					</div>
+					
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -185,7 +180,7 @@
 						
 					</div>
 					<div class="inputFormMain col-lg-12">
-						<input type="file" class="form-control" name="docs[]" multiple>
+						<input type="file" class="form-control insurance-files" name="attachments[]" multiple>
 					</div>
 				</div>
 			</div>
@@ -334,11 +329,39 @@
 		$('.update-status').on('click', function() {
 			var emp_id = $(this).data('id');
 			var insurance_status = $('#status-'+emp_id).val();
+			var dataHandler = $('#status-modal .modal-body').html('');
 		
 			$('#emp-id').val(emp_id);
 			$('#insurance-status').val(insurance_status);
 
+			if(insurance_status == 'pending' || insurance_status == 'uninsured')
+			{
+				dataHandler.append(`
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<input type="text" name="from_date" value="" id="start-date" class="form-control date" placeholder="Insurance Start Date" data-toggle="tooltip" title="Insurance Start Date" required>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<input type="text" name="to_date" value="" id="end-date" class="form-control date" placeholder="Insurance End Date" data-toggle="tooltip" title="Insurance End Date" required>
+						</div>
+					</div>
+				`);	
+
+			}
+			else if(insurance_status == 'insured')
+			{
+				dataHandler.append(`
+					<div class="col-lg-12">
+						<p>Click on update to mark employee as uninsured.</p>
+					</div>
+					`);
+			}
+
 			$('#status-modal').modal('show');
+			$('.date').datepicker({dateFormat:'yy-mm-dd'});
+			$('input').attr('autocomplete','off');
 			
 		});
 	</script>
@@ -421,9 +444,9 @@
 					$('#decision').html(`<div class="col-lg-12">
 						<div class="inputFormMain">
 							<select name="decision" id="input" class="form-control" required="required">
-								<option value="">Decision</option>
-								<option value="accepted">Accepted</option>
-								<option value="rejected">Rejected</option>
+								<option value="">Select Decision</option>
+								<option value="1">Accepted</option>
+								<option value="0">Rejected</option>
 							</select>
 						</div>
 					</div>`);
@@ -445,6 +468,30 @@
 			$('#search-btn').trigger('click');
 		});
 
+	</script>
+
+	<script type="text/javascript">
+		$('.insurance-files').on('change', function(e) {
+			var error = 0;
+
+			var attachments = $(this)[0].files;
+			$.each(attachments, function(index) {
+				var extension = attachments[index].name.split('.').pop();
+
+				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg']) == -1)
+					error = 1;
+			});
+
+			if(error === 1)
+			{
+				toastr.error('Invalid file extension');
+				$('.insurance-files').val('');
+				return;
+			}
+
+
+
+		});
 	</script>
 
 

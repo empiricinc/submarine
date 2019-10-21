@@ -41,6 +41,15 @@
 							</select>
 							<span></span>
 						</div>
+
+						<div class="filterSelect">
+							<select name="employee_status" id="employee-status" class="form-control">
+								<option value="">Employee Type</option>
+								<option value="5">Resigned</option>
+								<option value="6">Terminated</option>
+							</select>	
+						</div>
+
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
 								<option value="">Province</option>

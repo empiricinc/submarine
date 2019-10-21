@@ -121,7 +121,7 @@
 								<label>Incident Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->incident_date)); ?>
+								<?= ($detail->incident_date) ? date('d-m-Y', strtotime($detail->incident_date)) : ''; ?>
 							</div>
 						</div>
 					</div>
@@ -139,7 +139,7 @@
 								<label>Reported Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->reporting_date)); ?>
+								<?= ($detail->reporting_date) ? date('d-m-Y', strtotime($detail->reporting_date)) : ''; ?>
 							</div>
 						</div>
 					</div>
@@ -194,7 +194,7 @@
 								<label>Remarks Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->remarks_date)); ?>
+								<?= ($detail->remarks_date) ? date('d-m-Y', strtotime($detail->remarks_date)) : ''; ?>
 							</div>
 						</div>
 					</div>
@@ -251,7 +251,7 @@
 								<label>Decision Date</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= date('d-m-Y', strtotime($detail->decision_date)); ?>
+								<?= ($detail->decision_date) ? date('d-m-Y', strtotime($detail->decision_date)) : ''; ?>
 							</div>
 						</div>
 					</div>
@@ -262,7 +262,7 @@
 								<label>Decision</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->decision); ?>
+								<?= ($detail->decision) ? 'Claim Accepted' : 'Claim Rejected'; ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">

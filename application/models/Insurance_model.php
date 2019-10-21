@@ -36,14 +36,13 @@ class Insurance_model extends CI_Model
 
     function get_insurance_claims($conditions=array(), $limit="", $offset="")
     {
-        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, ic.*, ebi.date_of_birth, ebi.contact_number, ebi.father_name, g.gender_name");
+        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, ic.id, ic.type, ic.incident_date, ic.reporting_date, ic.status, ebi.contact_number");
 
         $this->db->join('xin_employees xe', 'ic.employee_id = xe.employee_id', 'left');
-        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
         $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
         $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-        $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
 
         $this->db->limit($limit, $offset);
 
@@ -51,8 +50,26 @@ class Insurance_model extends CI_Model
             $this->db->where($conditions);
 
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
-        $this->db->order_by('xe.user_id', 'DESC');
+        $this->db->order_by('ic.entry_at', 'DESC');
         return $this->db->get('insurance_claims ic');
+    }
+
+    function get_insurance_claim_detail($conditions=array())
+    {
+        $this->db->select('CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, xc.name AS project_name, xdd.department_name, xd.designation_name, ic.*, CONCAT(r_by.first_name, " ", IFNULL(r_by.last_name, "")) AS remarks_by_name, CONCAT(d_by.first_name, " ", IFNULL(d_by.last_name, "")) AS decision_by_name, ebi.father_name, ebi.date_of_birth, g.gender_name');
+
+        $this->db->join('xin_employees xe', 'ic.employee_id = xe.employee_id', 'left');
+        $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
+        $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+        $this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
+        $this->db->join('xin_employees r_by', 'ic.remarks_by = r_by.employee_id', 'left');
+        $this->db->join('xin_employees d_by', 'ic.decision_by = d_by.employee_id', 'left');
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
+        $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');
+
+        $this->db->where($conditions);
+        return $this->db->get('insurance_claims ic');
+
     }
 
 	function add_claim($data)
@@ -117,6 +134,13 @@ class Insurance_model extends CI_Model
     {
         $this->db->select('xe.status');
         return $this->db->get_where('xin_employees xe', array('xe.employee_id' => $id));
+    }
+
+    function check_claim_existence($employee_id)
+    {
+        $this->db->where_in('status', array('pending', 'inprogress'));
+        $this->db->where('employee_id', $employee_id);
+        return $this->db->get('insurance_claims')->num_rows();
     }
 
 
