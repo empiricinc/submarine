@@ -722,19 +722,32 @@ class Reports extends MY_Controller
 		$data['title'] = "List of Tests";
 		$data['query_string'] = $_SERVER['QUERY_STRING'];
 
-		$total_rows = $this->Reports_model->applicants_report($date_from, $date_to, $job_id, $project, $designation, $rollno, $applicant_name)->num_rows();
+		$conditions = [
+						'xin_job_applications.project' => $this->session_data['project_id'],
+						'xin_job_applications.province' => $this->session_data['province_id']
+					];
+
+		$conditions['xin_job_applications.created_at >='] = $date_from;
+		$conditions['xin_job_applications.created_at <='] = $date_to;
+		$conditions['xin_job_applications.job_id'] = $job_id;
+		$conditions['xin_companies.company_id'] = $project;
+		$conditions['xin_designations.designation_id'] = $designation;
+		$conditions['xin_job_applications.application_id'] = $rollno;
+
+		if($applicant_name != '')
+			$conditions['xin_job_applications.fullname'] = "%".$applicant_name."%";
+
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
+		$total_rows = $this->Reports_model->list_tests($filtered_conditions)->num_rows();
 		$url = 'Reports/tests';
-		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
+		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 
-
-		$data['report_gen'] = $this->Reports_model->applicants_report($date_from, $date_to, $job_id, $project, $designation, $rollno, $applicant_name, $this->limit, $offset)->result();
-
-
+		$data['tests'] = $this->Reports_model->list_tests($filtered_conditions)->result();
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 
 		$data['jobs'] = $this->Reports_model->get_jobs();
-
 
 		$data['content'] = $this->load->view('reports/tests', $data, TRUE);
 		$this->load->view('reports/_template', $data);
@@ -743,11 +756,18 @@ class Reports extends MY_Controller
 
 	public function test_detail($applicant_id)
 	{
+		$conditions = [
+						'xin_job_applications.project' => $this->session_data['project_id'],
+						'xin_job_applications.province' => $this->session_data['province_id'],
+						'xin_job_applications.application_id' => $applicant_id
+					];
+
 		if(!empty($applicant_id))
 		{
 			$data['title'] = "Test Detail";
 			
-			$data['detail'] = $this->Reports_model->applicants_report_detail($applicant_id)->row();
+			$filtered_conditions = $this->remove_empty_entries($conditions);
+			$data['detail'] = $this->Reports_model->test_detail($filtered_conditions);
 			if(empty($data['detail']))
 			{
 				show_404();

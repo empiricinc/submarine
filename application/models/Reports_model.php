@@ -353,84 +353,57 @@ class Reports_model extends CI_Model
     }
 
 
-    public function applicants_report($date_from="", $date_to="", $job_id="", $project="", $designation="", $rollno="", $applicant_name="", $limit="", $offset=""){
-        $this->db->select('xin_job_applications.*,
-                            xin_jobs.job_id,
-                            xin_jobs.job_title,
-                            xin_jobs.company,
-                            xin_jobs.designation_id,
-                            xin_companies.company_id,
-                            xin_companies.name as compName,
-                            assign_test.test_date AS exam_date,
-                            test_result.obtain_marks, test_result.total_marks, 
-                            gender.gender_name AS applicant_gender, 
-                            education.name AS applicant_education,
-                            provinces.name AS province_name,
-                            city.name AS city_name');
-        // $this->db->from('xin_job_applications');
-        $this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
-        $this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
-        $this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-        $this->db->join('assign_test', 'xin_job_applications.application_id = assign_test.rollnumber', 'right');
-
-
-        $this->db->join('test_result', 'xin_job_applications.application_id = assign_test.rollnumber', 'left');
-        $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
-        $this->db->join('education', 'xin_job_applications.education = education.id', 'left');
-        $this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
-        $this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
-             
-        // $this->db->limit($limit, $offset);
-        if($date_from != "")
-            $this->db->where('xin_job_applications.created_at >=', $date_from);
-
-        if($date_to != "")
-            $this->db->where('xin_job_applications.created_at <=', $date_to);
-        if($job_id != "")
-            $this->db->where('xin_job_applications.job_id', $job_id);
-        if($project != "")
-            $this->db->where('xin_companies.company_id', $project);
-        if($designation != "")
-            $this->db->where('xin_designations.designation_id', $designation);
-        if($rollno != "")
-            $this->db->where('xin_job_applications.application_id', $rollno);
-        if($applicant_name != "")
-            $this->db->like('xin_job_applications.fullname', $applicant_name);
-        
-        $this->db->limit($limit, $offset);
-        $results =  $this->db->get('xin_job_applications');
-        return $results;
-    }
-
-    public function applicants_report_detail($applicant_id)
+    public function list_tests($conditions=array(), $limit="", $offset="")
     {
-        $this->db->select('xin_job_applications.*,
+        $this->db->select('test_result.rollnumber,
+                            test_result.sdt as exam_date,
+                            xin_job_applications.application_id,
+                            xin_job_applications.fullname,
+                            xin_job_applications.email,
+                            xin_job_applications.created_at,
                             xin_jobs.job_id,
                             xin_jobs.job_title,
-                            xin_jobs.company,
-                            xin_jobs.designation_id,
                             xin_companies.company_id,
-                            xin_companies.name as compName,
+                            xin_companies.name as company_name');
+
+        $this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id');
+        $this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
+        $this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
+        $this->db->where($conditions);
+        $this->db->group_by('xin_job_applications.application_id');
+        $this->db->limit($limit, $offset);
+        return $this->db->get('test_result');
+    }
+
+    public function test_detail($conditions=array())
+    {
+        $this->db->select('test_result.rollnumber,
+                            test_result.obtain_marks, 
+                            test_result.total_marks, 
+                            xin_job_applications.fullname,
+                            xin_job_applications.email,
+                            xin_job_applications.created_at,
+                            xin_jobs.job_title,                            
+                            xin_companies.name as company_name,
                             assign_test.test_date AS exam_date,
-                            test_result.obtain_marks, test_result.total_marks, 
                             gender.gender_name AS applicant_gender, 
                             education.name AS applicant_education,
                             provinces.name AS province_name,
                             city.name AS city_name');
-        $this->db->from('xin_job_applications');
-        $this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
-        $this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
-        $this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+        $this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id');
+        $this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
+        $this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
+        $this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id');
         $this->db->join('assign_test', 'xin_job_applications.application_id = assign_test.rollnumber', 'left');
-        $this->db->join('test_result', 'xin_job_applications.application_id = test_result.rollnumber', 'left');
         $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
         $this->db->join('education', 'xin_job_applications.education = education.id', 'left');
         $this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
         $this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
-        $this->db->where('xin_job_applications.application_id', $applicant_id);  
-
-        return $this->db->get();
+        $this->db->where($conditions);
+        return $this->db->get('test_result')->row();
     }
+
+ 
 
 
     public function get_projects(){
