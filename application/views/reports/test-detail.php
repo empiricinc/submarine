@@ -17,7 +17,7 @@
 							<div class="tabelTopBtn">
 								<div class="btn-group">
 									<a href="javascript:void(0);" onclick="window.print();" class="btn"><i class="fa fa-print"></i> Print</a>
-									<a href="<?= base_url(); ?>Reports/applicant_report_pdf/<?= $detail->application_id; ?>" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a>
+									<a href="<?= base_url(); ?>Reports/applicant_report_pdf/<?= $detail->rollnumber; ?>" target="_blank" class="btn"><i class="fa fa-file"></i> PDF</a>
 								</div>
 							
 							</div>
@@ -51,7 +51,7 @@
 								<label>Applicant ID</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->application_id; ?>
+								<?= $detail->rollnumber; ?>
 							</div>
 						</div>
 					</div>
@@ -64,12 +64,7 @@
 								<?= $detail->applicant_gender; ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label>Age</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->age; ?>
-							</div>
+
 						</div>
 					</div>
 
@@ -115,7 +110,7 @@
 								<label>Company</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
-								<?= $detail->compName; ?>
+								<?= $detail->company_name; ?>
 							</div>
 							<div class="col-lg-2 col-print-2"></div>
 							<div class="col-lg-2 col-print-2">

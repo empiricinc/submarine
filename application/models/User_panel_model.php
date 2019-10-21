@@ -183,7 +183,6 @@ class User_panel_model extends CI_Model
     public function emp_bank_info($id)
     {
         $this->db->select('ebi.id, ebi.bank_id, ebi.account_title, ebi.account_id, ebi.branch_code, b.bank_name');
-        // $this->db->join('employee_basic_info AS e', 'ebi.user_id = e.user_id', 'left');
         $this->db->join('bank AS b', 'ebi.bank_id = b.bank_id', 'left');
         return $this->db->get_where('employee_bank_information_info AS ebi', array('ebi.user_id' => $id))->result();
     }
@@ -509,6 +508,14 @@ class User_panel_model extends CI_Model
         return $this->db->get('employee_cards ec')->row();
     }
 
+    public function employee_basic_payroll_info()
+    {
+        $this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ebi.cnic, xc.name AS company_name, xd.designation_name');
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
+        $this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
+        $this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+        return $this->db->get('xin_employees xe')->row();
+    }
 
     public function employee_salary($employee_id)
     {

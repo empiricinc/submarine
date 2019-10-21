@@ -749,3 +749,7 @@ tr {
   font-size: 12px;
   font-weight: 600;
 }
+
+.table-responsive {
+	min-height: 150px !important;
+}

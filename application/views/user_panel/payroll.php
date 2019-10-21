@@ -14,7 +14,7 @@
 				<div class="">
 					<div class="col-md-3">
 						<div class="inputFormMain">
-							<input type="text" name="salary_month" id="salary-month" class="form-control date" placeholder="Enter Payroll Month" required>
+							<input type="text" name="salary_month" id="salary-month" class="form-control payroll-month" placeholder="Payroll Month/Year" required>
 						</div>
 					</div>
 					<div class="col-md-1">
@@ -76,33 +76,7 @@
 								<div class="col-md-4 col-print-3"><?= $basic_info->designation_name; ?></div>
 							</div>
 						</div>
-<!-- 						<div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
-								<div class="col-md-2 col-print-3"><label>Salary Date</label></div>
-								<div class="col-md-4 col-print-3">Mar-2019</div>
 
-								<div class="col-md-2 col-print-3"><label>Total Days</label></div>
-								<div class="col-md-4 col-print-3">30</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
-								<div class="col-md-2 col-print-3"><label>Absent Days</label></div>
-								<div class="col-md-4 col-print-3">1</div>
-
-								<div class="col-md-2 col-print-3"><label>Paid Days</label></div>
-								<div class="col-md-4 col-print-3">29</div>
-							</div>
-						</div> -->
-						<!-- <div class="row">
-							<div class="col-md-12 col-print-12 no-padding-print">
-								<div class="col-md-2 col-print-3"><label>Salary Per Day</label></div>
-								<div class="col-md-4 col-print-3">30,000</div>
-
-								<div class="col-md-2 col-print-3"><label></label></div>
-								<div class="col-md-4 col-print-3"></div>
-							</div>
-						</div> -->
 						<div class="row">
 							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Gross Salary</label></div>

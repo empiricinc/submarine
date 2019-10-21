@@ -21,8 +21,9 @@
 
           <li><a href="<?= base_url(); ?>User_panel/trainings">Trainings</a></li>
           <li><a href="<?= base_url(); ?>User_panel/new_card">Card Request</a></li>
-          <li><a href="<?= base_url(); ?>User_panel/investigation">Investigation</a></li>
+          <!-- <li><a href="<?= base_url(); ?>User_panel/investigation">Investigation</a></li> -->
           <li><a href="<?= base_url(); ?>User_panel/insurance">Insurance</a></li>
+          <li><a href="<?= base_url(); ?>Logout">Logout</a></li>
           <!-- <li>
             <a href="#">
               <span class="dot"></span>

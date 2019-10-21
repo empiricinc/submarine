@@ -1,9 +1,3 @@
-<?php 
-/* Filename: reports.php
-*  Author: Saddam
-*  File location: views / test-system / reports.php
-*/
-?>
 <section class="secMainWidthFilter">
 	<div class="row marg">
 		<div class="col-lg-2 no-leftPad">
@@ -42,7 +36,7 @@
 						</div>
 						<div class="filterSelect">
 							<select name="job_id" class="form-control">
-								<option value="">Job ID</option>
+								<option value="">Job Title</option>
 								<?php foreach($jobs as $job): ?>
 									<option value="<?php echo $job->job_id; ?>">
 										<?php echo $job->job_title; ?>
@@ -71,31 +65,17 @@
 			<div class="mainTableWhite">
 				<div class="row">
 					<div class="col-md-12">
-							<div class="tabelHeading">
-								<div class="col-md-10">
-									<h3><?= $title; ?> <span></span></h3>
+						<div class="tabelHeading">
+							<div class="col-md-10">
+								<h3><?= $title; ?> <span></span></h3>
+							</div>
+							<div class="col-md-2 text-right">
+								<div class="tabelTopBtn">
+								<a href="http://localhost/submarine/Reports/testsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 								</div>
-								<div class="col-md-2 text-right">
-									<div class="tabelTopBtn">
-									<a href="http://localhost/submarine/Reports/testsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
-									</div>
-								</div>
 							</div>
 						</div>
-					<!-- <div class="col-lg-12">
-						<div class="col-lg-10">
-							<div class="tabelHeading">
-								<h3>reports <span></span></h3>
-							</div>
-						</div>
-						
-						<div class="col-lg-2">
-							<div class="tabelTopBtn" <?php if(empty($report_gen)): ?> style="display: none;" <?php endif; ?>>
-								<a href="<?php echo base_url('tests/print_data'); ?>" class="btn"><img src="<?php echo base_url('dashboardDesign/assets/img/print.png'); ?>" alt=""> Print</a>
-							</div>
-						</div>
-					</div> -->
-					
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
@@ -104,26 +84,24 @@
 								<table class="table table-hover" id="tests-table">
 									<thead>
 										<tr>
-											<th>Applicant's name</th>
-											<th>Project</th>
-											<th>Job</th>
-											<th>Email</th>
-											<th>Message</th>
 											<th>Roll No</th>
+											<th>Name</th>
+											<th>Project</th>
+											<th>Job Title</th>
+											<th>Email</th>
 											<th>Date Applied</th>
 											<th>Exam Date</th>
 										</tr>
 									</thead>
 									<tbody>
-										<?php if(!empty($report_gen)) :
-										foreach($report_gen as $result): ?>
-										<tr data="<?= $result->application_id; ?>">
+										<?php if(!empty($tests)) :
+										foreach($tests as $result): ?>
+										<tr data="<?= $result->rollnumber; ?>">
+											<td><?php echo $result->rollnumber; ?></td>
 											<td><?php echo ucwords($result->fullname); ?></td>
-											<td><?php echo $result->compName; ?></td>
+											<td><?php echo $result->company_name; ?></td>
 											<td><?php echo $result->job_title; ?></td>
 											<td><?php echo $result->email; ?></td>
-											<td><?php echo $result->message; ?></td>
-											<td><?php echo $result->application_id; ?></td>
 											<td><?php echo date('M d, Y', strtotime($result->created_at)); ?></td>
 											<td><?php echo date('M d, Y', strtotime($result->exam_date)); ?></td>
 											<td></td>

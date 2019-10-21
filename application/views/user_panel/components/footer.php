@@ -404,6 +404,8 @@
 
 	});	
 
+	$('.payroll-month').datepicker({dateFormat:'mm/yy'});
+
 	$('.date-onward').datepicker({
 		minDate: 0
 	});
@@ -1277,6 +1279,30 @@
 		});
 	</script>
 
+
+	<script type="text/javascript">
+		$('#insurance-form-btn').on('click', function(e) {
+			e.preventDefault();
+			var error = 0;
+
+			var attachments = $('#insurance-files')[0].files;
+			$.each(attachments, function(index) {
+				var extension = attachments[index].name.split('.').pop();
+				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg']) == -1)
+					error = 1;
+			});
+
+			if(error === 1)
+			{
+				toastr.error('Invalid file extension');
+				return;
+			}
+
+			$('#insurance-form').trigger('submit');
+
+
+		});
+	</script>
 
 
 </body>

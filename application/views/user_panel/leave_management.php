@@ -53,7 +53,7 @@
 					</div>
 					<div class="col-lg-2" style="padding-left: 70px;">
 						<div class="submitBtn dropdown">
-							<button class="btn btnSubmit" id="elm-xls">Export Data</button>
+							<button type="button" class="btn btnSubmit" id="elm-xls">Export Data</button>
 						</div>
 					</div>
 					

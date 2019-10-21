@@ -11,6 +11,12 @@ class User_panel extends MY_Controller
 		parent::__construct();
 		if(empty($this->session->username))
             redirect(base_url());
+
+        $roles = array(1, 2);
+        $user_role = $this->session->username['user_role'];
+        
+        if(in_array($user_role, $roles))
+            redirect(base_url().'dashboard');
         
         $this->session_data = array(
 					        	'user_id' => $this->session->username['employee_id'], 
@@ -29,7 +35,8 @@ class User_panel extends MY_Controller
 				"User_panel_model",
 				"Department_model",
 				"Designation_model",
-				"Resignations_model"
+				"Resignations_model",
+				"Insurance_model"
 			)
 		);
 
@@ -419,7 +426,7 @@ class User_panel extends MY_Controller
 		$employee_id = $this->session_data['user_id'];
 		$data['title'] = "Payroll Information";
 
-		$data['basic_info'] = $this->User_panel_model->get_employee_detail($employee_id);
+		$data['basic_info'] = $this->User_panel_model->employee_basic_payroll_info($employee_id);
 		$data['payroll'] = $this->User_panel_model->employee_salary($employee_id);
 		
 		$data['content'] = $this->load->view("user_panel/payroll", $data, TRUE);;
@@ -1270,6 +1277,113 @@ class User_panel extends MY_Controller
 	 	$data['content'] = $this->load->view('user_panel/insurance', $data, TRUE);
 		$this->load->view('user_panel/_template', $data);
 	}
+
+
+	public function add_insurance_claim()
+	{
+		$entry_by = $this->session_data['user_id'];
+
+		if(isset($_POST))
+		{
+			$employee_id = $this->input->post('employee_id');
+			$employee_name = $this->input->post('employee_name');
+			$designation = $this->input->post('designation');
+			$type = $this->input->post('type');
+			$incident_date = $this->input->post('incident_date');
+			$reporting_date = $this->input->post('reporting_date');
+			$reported_by = $this->input->post('reported_by');
+			$subject = $this->input->post('subject');
+			$description = $this->input->post('description');
+
+
+			$pending_claim = $this->Insurance_model->check_claim_existence($employee_id);
+			
+			if($pending_claim > 0)
+			{
+				$this->session->set_flashdata('error', '<strong>Previous claim!</strong> Claim already in progress.');
+				redirect('User_panel/insurance', 'refresh');
+
+			}
+			
+			$data = array(
+						'employee_id' => $employee_id,
+						'type' => $type,
+						'incident_date' => $incident_date,
+						'reporting_date' => $reporting_date,
+						'reported_by' => $reported_by,
+						'subject' => $subject,
+						'description' => $description,
+						'status' => 'pending',
+						'entry_by' => $entry_by
+					);
+			
+			$add = $this->Insurance_model->add_claim($data);
+			$insurance_claim_id = $this->db->insert_id();
+
+			if($add)
+			{
+				if(!empty($_FILES['attachments']) OR $_FILES['attachments']['size'][0] = 0)
+					$this->upload_files($_FILES['attachments'], $insurance_claim_id, $entry_by);
+
+				$this->session->set_flashdata('success', '<strong>Success!</strong> Insurance claim submitted');
+			}
+			else
+			{
+				$this->session->set_flashdata('error', '<strong>Error!</strong> Insurance claim wasn\'t submitted');
+			}
+
+			redirect('User_panel/insurance', 'refresh');
+		}
+		else
+		{
+			show_404();
+		}
+	}
+
+
+	public function upload_files($files, $insurance_claim_id, $uploaded_by)
+	{
+		$data = array();
+		$filesCount = count($files['name']);
+		for ($i=0; $i < $filesCount; $i++) { 
+			$_FILES['file']['name'] = $files['name'][$i];
+			$_FILES['file']['type'] = $files['type'][$i];
+			$_FILES['file']['tmp_name'] = $files['tmp_name'][$i];
+			$_FILES['file']['error'] = $files['error'][$i];
+			$_FILES['file']['size'] = $files['size'][$i];
+
+			$uploadPath = './uploads/insurance_claims/';
+            $config['upload_path'] = $uploadPath;
+            $config['allowed_types'] = 'jpg|jpeg|png|pdf|doc|docx';
+            $config['encrypt_name'] = TRUE;
+            
+            // Load and initialize upload library
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            
+            // Upload file to server
+            if($this->upload->do_upload('file')){
+                // Uploaded file data
+                $fileData = $this->upload->data();
+
+                $uploadData[$i]['original_name'] = $fileData['orig_name'];
+                $uploadData[$i]['file_name'] = $fileData['file_name'];
+                $uploadData[$i]['uploaded_date'] = date("Y-m-d H:i:s");
+                $uploadData[$i]['insurance_claim_id'] = $insurance_claim_id;
+                $uploadData[$i]['uploaded_by'] = $uploaded_by;
+            }
+            else
+            {
+            	echo $this->upload->display_errors();
+            }
+		}
+
+		if(!empty($uploadData))
+			return $this->Insurance_model->upload($uploadData);
+		else
+			return false;
+	}
+
 
 	public function investigation_reply()
 	{
