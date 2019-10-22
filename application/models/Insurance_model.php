@@ -143,6 +143,11 @@ class Insurance_model extends CI_Model
         return $this->db->get('insurance_claims')->num_rows();
     }
 
+    function get_insurance_id($employee_id)
+    {
+        $this->db->where(array('employee_id' => $employee_id));
+        return $this->db->get('insurance')->row()->id;
+    }
 
 
 }

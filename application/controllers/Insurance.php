@@ -367,7 +367,7 @@ class Insurance extends MY_Controller
 						);
 						
 						$rec_update = $this->Insurance_model->update($data, $employee_ids[$i]);
-						$insurance_id = $this->db->get_where('insurance', array('employee_id' => $employee_ids[$i]))->row()->id;
+						$insurance_id = $this->Insurance_model->get_insurance_id($employee_ids[$i]); 
 
 						if($rec_update) {
 							$data = array(

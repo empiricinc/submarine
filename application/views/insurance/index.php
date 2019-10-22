@@ -129,6 +129,7 @@
 											<th>Department</th>
 											<th>Designation</th>											
 											<th>Date of joining</th>
+											<th>Date of birth</th>
 											<th>Status</th>	
 											<th>Action</th>	
 										</tr>
@@ -145,7 +146,19 @@
 												$label = 'label-danger';
 											}
 										 ?>
-										<tr>
+										<?php 
+											$currentDate = strtotime(date('d-m-Y'));
+											$dob = ($e->date_of_birth) ? strtotime($e->date_of_birth) : '';
+
+											$diff = $currentDate - $dob;
+											$age = floor($diff/(365*24*60*60));
+
+											$ageLimit = 60; //#e1e4e7
+											$backgroundColor = ($age > $ageLimit) ? 'background: #8ef5ff8c;' : '';
+
+
+										 ?>
+										<tr style="<?= $backgroundColor; ?>">
 											<input type="hidden" id="emp-name-<?= $e->employee_id; ?>" value="<?= ucwords($e->emp_name); ?>">
 											<input type="hidden" id="project-<?= $e->employee_id; ?>" value="<?= ucwords($e->project_name); ?>">
 											<input type="hidden" id="department-<?= $e->employee_id; ?>" value="<?= ucwords($e->department_name); ?>">
@@ -154,7 +167,7 @@
 
 											<input type="hidden" name="insurance_status[]" value="<?= $e->status; ?>">
 											<td>
-												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured') { ?> disabled <?php } ?> >
+												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured' OR $age >= $ageLimit) { ?> disabled <?php } ?> >
 											</td>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
@@ -162,9 +175,13 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= ucwords($e->designation_name); ?></td>
-											<td>
-												<?= $date_of_joining = ($e->doj) ? date('d-m-Y', strtotime($e->doj)) : ''; ?>
-											</td>
+											<td><?=
+											 $date_of_joining = ($e->doj) ? date('d-m-Y', strtotime($e->doj)) : ''; 
+											?></td>
+
+											<td><?= 
+											$date_of_birth = ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : ''; 
+											?></td>
 											
 											<td>
 												<?php 
@@ -172,7 +189,7 @@
 												?>
 											</td>
 											<td>
-												<?php if($date_of_joining != ""): ?>
+												<?php if($date_of_joining != "" AND $age < $ageLimit): ?>
 												<div class="btn-group btn-group-sm dropdown-btns">
 												  	<a class="btn btn-primary dropdown-toggle" href="javscript:void(0);" data-toggle="dropdown">
 												  		<i class="fa fa-cog"></i>
