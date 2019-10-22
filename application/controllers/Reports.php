@@ -90,12 +90,8 @@ class Reports extends MY_Controller
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
-			// $district = (int) $this->input->get('district');
-			// $tehsil = (int) $this->input->get('tehsil');
-			// $uc = (int) $this->input->get('uc');
 			$project = (int) $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
-			// $location = (int) $this->input->get('location');
 
 			$employee_type = $this->input->get('employee_type');
 			
@@ -2211,7 +2207,15 @@ class Reports extends MY_Controller
 		if($employee_id === FALSE)
 			show_404();
 		
-		$detail = $this->Reports_model->get_employee_detail($employee_id);
+		$conditions = [
+				'xe.company_id' => $this->session_data['project_id'],
+				'xe.provience_id' => $this->session_data['province_id'],
+				'xe.employee_id' => $employee_id
+			];
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
+		$detail = $this->Reports_model->get_employee_detail($filtered_conditions);
+
 		if(empty($detail))
 		{
 			show_404();
@@ -2273,7 +2277,7 @@ class Reports extends MY_Controller
 		<tbody>
 			<tr>
 				<td style="width: 18%; font-family: helvetica; font-weight: bold;">Employee Name</td>
-				<td style="width: 32%; font-family: helvetica;">'.ucwords($detail->first_name .' '. $detail->last_name).'</td>
+				<td style="width: 32%; font-family: helvetica;">'.ucwords($detail->emp_name).'</td>
 				<td style="width: 18%; font-family: helvetica; font-weight: bold;">Father Name</td>
 				<td style="width: 32%; font-family: helvetica;">'.ucwords($detail->father_name).'</td>
 			</tr>
@@ -2545,7 +2549,15 @@ class Reports extends MY_Controller
 		if($training_id === FALSE)
 			show_404();
 		
-		$detail = $this->Reports_model->get_training_detail($training_id);
+		$conditions = [
+						'xt.project' => $this->session_data['project_id'],
+						'xt.location' => $this->session_data['province_id'],
+						'xt.trg_id' => $training_id
+					];
+
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
+		$detail = $this->Reports_model->get_training_detail($filtered_conditions);
 		if(empty($detail))
 		{
 			show_404();
@@ -2722,7 +2734,15 @@ class Reports extends MY_Controller
 		if($training_id === FALSE)
 			show_404();
 		
-		$detail = $this->Reports_model->get_training_detail($training_id);
+		$conditions = [
+						'xt.project' => $this->session_data['project_id'],
+						'xt.location' => $this->session_data['province_id'],
+						'xt.trg_id' => $training_id
+					];
+
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
+		$detail = $this->Reports_model->get_training_detail($filtered_conditions);
 		if(empty($detail))
 		{
 			show_404();
@@ -2889,7 +2909,15 @@ class Reports extends MY_Controller
 		if($training_id === FALSE)
 			show_404();
 		
-		$detail = $this->Reports_model->get_training_detail($training_id);
+		$conditions = [
+						'xt.project' => $this->session_data['project_id'],
+						'xt.location' => $this->session_data['province_id'],
+						'xt.trg_id' => $training_id
+					];
+
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+
+		$detail = $this->Reports_model->get_training_detail($filtered_conditions);
 		if(empty($detail))
 		{
 			show_404();
@@ -3050,7 +3078,15 @@ class Reports extends MY_Controller
 		if($applicant_id === FALSE)
 			show_404();
 		
-		$detail = $this->Reports_model->applicants_report_detail($applicant_id)->row();
+		$conditions = [
+						'xin_job_applications.project' => $this->session_data['project_id'],
+						'xin_job_applications.province' => $this->session_data['province_id'],
+						'xin_job_applications.application_id' => $applicant_id
+					];
+		
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+		$detail = $this->Reports_model->test_detail($filtered_conditions);
+
 
 		if(empty($detail))
 		{

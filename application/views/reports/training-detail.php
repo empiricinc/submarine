@@ -21,10 +21,10 @@
 								</div>
 							</div>
 						</div>
-						<div class="employee-detail-print-header hide-from-screen">
+						<div class="print-header hide-from-screen">
 							<div class="row">
 								<div class="col-md-12">
-									<center><img src="http://localhost/submarine/uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>
+									<center><img src="<?= base_url(); ?>uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>
 								</div>
 								<div class="col-md-12">
 									<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4></center>
@@ -94,14 +94,14 @@
 									<label>Start Date</label>
 								</div>
 								<div class="col-lg-3 col-print-3">
-									<?= date('d-m-Y', strtotime($detail->start_date)); ?>
+									<?= ($detail->start_date) ? date('d-m-Y', strtotime($detail->start_date)) : ''; ?>
 								</div>
 								<div class="col-lg-2 col-print-2"></div>
 								<div class="col-lg-2 col-print-2">
 									<label>End Date</label>
 								</div>
 								<div class="col-lg-3 col-print-3">
-									<?= date('d-m-Y', strtotime($detail->end_date)); ?>
+									<?= ($detail->end_date) ? date('d-m-Y', strtotime($detail->end_date)) : ''; ?>
 								</div>
 							</div>
 						</div>

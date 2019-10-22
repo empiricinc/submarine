@@ -24,10 +24,10 @@
 						</div>
 
 					</div>
-					<div class="employee-detail-print-header hide-from-screen">
+					<div class="print-header hide-from-screen">
 						<div class="row">
 							<div class="col-md-12">
-								<center><img src="http://localhost/submarine/uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>
+								<center><img src="<?= base_url(); ?>uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>
 							</div>
 							<div class="col-md-12">
 								<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4></center>
@@ -149,20 +149,6 @@
 							</div>
 						</div>
 					</div>
-
-					
-
-					<!-- <div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-3 col-print-3">
-								<label>Confirmation Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->confirmed_date; ?>
-							</div>
-						</div>
-					</div> -->
-					
 
 				</div>
 			</section>

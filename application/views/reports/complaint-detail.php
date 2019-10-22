@@ -21,7 +21,7 @@
 						<div class="btn-group" role="group" aria-label="Basic example">
 						  <a href="javascript:void(0);" class="btn btn-default print-btn" onclick="window.print();"><i class="fa fa-print"></i> Print </a>
 						 
-						  <a href="<?= base_url(); ?>Investigation/report/<?= $detail->id; ?>" target="_blank" class="btn btn-default"><i class="fa fa-file"></i> Pdf </a>
+						  <a href="<?= base_url(); ?>Complaint/report/<?= $detail->id; ?>" target="_blank" class="btn btn-default"><i class="fa fa-file"></i> Pdf </a>
 						</div>
 					</div>
 
@@ -168,7 +168,7 @@
 
 <!-- Print -->
 <section id="printable" class="hide-from-screen">
-	<div class="salaryslip-header">
+	<div class="print-header salaryslip-header">
 		<div class="row">
 			<div class="col-print-12">
 				<center><img src="<?= base_url(); ?>uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>

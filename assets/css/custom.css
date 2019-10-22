@@ -206,6 +206,11 @@ tr {
 	@page {
 		margin: 0;
 	}
+
+	.print-header {
+		margin-top: 30px;
+	}
+	
 	.hide-print {
 		display: none;
 	}
