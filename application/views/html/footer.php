@@ -45,5 +45,8 @@
 		$('input').attr('autocomplete','off');
 	</script>
 
+	<script type="text/javascript">
+		$('.btn-group-sm:last').addClass('dropup');
+	</script>
 
 
