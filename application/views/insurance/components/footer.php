@@ -11,7 +11,7 @@
     		</div>
     		<form action="<?= base_url(); ?>Insurance/add_claim" method="POST" id="insurance-form" enctype="multipart/form-data">
 	    		<div class="modal-body" id="insurance-handler">
-	    			<div class="row" style="padding-left: 15px; padding-right: 15px;">
+	    			<div class="row">
 	    			<input type="hidden" name="employee_id" id="employee-id" value="">
 					<div class="col-lg-6">
 						<div class="inputFormMain">
@@ -195,6 +195,84 @@
 </div>
 
 
+<!-- Insurance Edit Modal -->
+
+<div class="modal fade" id="edit-insurance-modal">
+	<div class="modal-dialog">
+		<form action="<?= base_url(); ?>Insurance/update_claim_detail" method="POST">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Edit</h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" name="claim_id" value="<?= $detail->insurance_claim_id; ?>">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<label>Type</label>
+							<select name="type" class="form-control" required="required">
+								<option value="">SELECT TYPE</option>
+								<option value="accident" <?php if($detail->type == 'accident') { ?> selected <?php } ?>>Accident</option>
+								<option value="death" <?php if($detail->type == 'death') { ?> selected <?php } ?>>Death</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<div class="form-group">
+								<label>Incident Date</label>
+								<input type="text" name="incident_date" class="form-control date" value="<?= $detail->incident_date; ?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<div class="form-group">
+								<label>Reported By</label>
+								<input type="text" name="reported_by" class="form-control" value="<?= $detail->reported_by; ?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<div class="form-group">
+								<label>Reported Date</label>
+								<input type="text" name="reported_date" class="form-control date" value="<?= $detail->reporting_date; ?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<div class="form-group">
+								<label>Subject</label>
+								<input type="text" name="subject" class="form-control" value="<?= $detail->subject; ?>">
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<div class="form-group">
+								<label>Description</label>
+								<textarea name="description" class="form-control no-resize" id="" cols="30" rows="5"><?= $detail->description; ?></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="submitBtn">
+					<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btnSubmit">Update</button>
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
+
+<!-- Insurance Edit Modal -->
+
 
 <?php $this->load->view('html/footer'); ?>
 
@@ -360,7 +438,16 @@
 			}
 
 			$('#status-modal').modal('show');
-			$('.date').datepicker({dateFormat:'yy-mm-dd'});
+			$('.date').datepicker({
+				changeMonth: true,
+				changeYear: true,
+				dateFormat:'yy-mm-dd',
+				yearRange: '1900:' + (new Date().getFullYear() + 15),
+				beforeShow: function(input) {
+					$(input).datepicker("widget").show();
+				}
+
+			});
 			$('input').attr('autocomplete','off');
 			
 		});
@@ -491,6 +578,38 @@
 
 
 
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('input[type="checkbox"]').on('click', function() {
+			var file_type = $(this).data('id');
+			var claim_id = $('#insurance-claim-id').val();
+			var status = 0;
+
+			if($(this).is(':checked') == true)
+			{
+				status = 1;
+			}
+			else
+			{
+				status = 0;
+			}
+
+			$.ajax({
+				url: '<?= base_url(); ?>Insurance/update_checklist',
+				type: 'POST',
+				dataType: 'html',
+				data: {file_type: file_type, claim_id: claim_id, status: status},
+				success: function(response) {
+					
+					if(response == 1)
+						toastr.success('Record updated successfully.');
+					else
+						toastr.error('Record updation failed.');
+				}
+			});
+			
 		});
 	</script>
 

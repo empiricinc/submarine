@@ -203,8 +203,13 @@ class Insurance extends MY_Controller
 			$filtered_conditions = $this->remove_empty_entries($conditions);
 
 			$data['detail'] = $this->Insurance_model->get_insurance_claim_detail($filtered_conditions)->row();
+			if(empty($data['detail']))
+				show_404();
+
 			$data['files'] = $this->Insurance_model->get_insurance_files($claim_id)->result();
 
+			$data['file_checklist'] = $this->Insurance_model->get_files_checklist($claim_id);
+		
 			$data['content'] = $this->load->view('insurance/claim-detail', $data, TRUE);
 			$this->load->view('insurance/_template', $data);
 		}
@@ -218,7 +223,6 @@ class Insurance extends MY_Controller
 	public function add_claim()
 	{
 		$entry_by = $this->session_data['user_id'];
-
 		if(isset($_POST))
 		{
 			$employee_id = $this->input->post('employee_id');
@@ -239,6 +243,7 @@ class Insurance extends MY_Controller
 
 			}
 
+
 			$data = array(
 						'employee_id' => $employee_id,
 						'type' => $type,
@@ -258,6 +263,15 @@ class Insurance extends MY_Controller
 			{
 				if(!empty($_FILES['attachments']) OR $_FILES['attachments']['size'][0] != 0)
 					$this->upload_files($_FILES['attachments'], $insurance_claim_id, $entry_by);
+
+				$data = array();
+
+				$file_type = $this->Insurance_model->get_file_types();
+				foreach ($file_type as $file_type) {
+					array_push($data, array('insurance_claim_id' => $insurance_claim_id, 'file_type_id' => $file_type->id));
+				}
+
+				$this->Insurance_model->add_files_checklist($data);
 
 				$this->session->set_flashdata('success', '<strong>Success!</strong> Insurance claim submitted');
 			}
@@ -399,8 +413,11 @@ class Insurance extends MY_Controller
 		redirect('Insurance/list_employees', 'refresh');
 	}
 
+	/* Status and Remarks */
 	public function update_claim()
 	{
+		$entry_by = $this->session_data['user_id'];
+
 		if(isset($_POST))
 		{
 			$claim_id = $this->input->post('claim_id');
@@ -435,7 +452,7 @@ class Insurance extends MY_Controller
 
 			$update = $this->Insurance_model->update_insurance_claim($data, $claim_id);
 			if(!empty($_FILES) && $_FILES['attachments']['size'][0] != 0)
-				$uploaded = $this->upload_files($_FILES['attachments'], $claim_id, $status);
+				$uploaded = $this->upload_files($_FILES['attachments'], $claim_id, $entry_by);
 
 			if($update)
 				$this->session->set_flashdata('success', 'Record Updated Successfully');
@@ -450,6 +467,69 @@ class Insurance extends MY_Controller
 		}
 	}
 
+	public function update_claim_detail()
+	{
+		$claim_id = $this->input->post('claim_id');
+		$type = $this->input->post('type');
+		$incident_date = $this->input->post('incident_date');
+		$reported_by = $this->input->post('reported_by');
+		$reported_date = $this->input->post('reported_date');
+		$subject = $this->input->post('subject');
+		$description = $this->input->post('description');
+
+		$data = array(
+					'type' => $type,
+					'incident_date' => $incident_date,
+					'reported_by' => $reported_by,
+					'reporting_date' => $reported_date,
+					'subject' => $subject,
+					'description' => $description
+				);
+
+		$updated = $this->Insurance_model->update_insurance_claim($data, $claim_id);
+
+		if($updated)
+			$this->session->set_flashdata('success', 'Record updated successfully.');
+		else
+			$this->session->set_flashdata('error', 'Record updation failed');
+
+		redirect('Insurance/claim_detail/'.$claim_id, 'refresh');
+	}
+
+	public function update_checklist()
+	{
+		$this->ajax_check();
+
+		$file_type_id = $this->input->post('file_type');
+		$insurance_claim_id = $this->input->post('claim_id');
+		$status = $this->input->post('status');
+
+		$conditions = ['insurance_claim_id' => $insurance_claim_id, 'file_type_id' => $file_type_id];
+		$data = ['status' => $status];
+		$updated = $this->Insurance_model->update_files_checklist($conditions, $data);
+
+		if($updated)
+			echo '1';
+		else
+			echo '0';
+	}
+
+	public function add_new_files()
+	{
+		$uploaded_by = $this->session_data['user_id'];
+		$claim_id = $this->input->post('claim_id');
+
+		if(!empty($_FILES) && $_FILES['attachments']['size'][0] != 0)
+		{
+			$uploaded = $this->upload_files($_FILES['attachments'], $claim_id, $uploaded_by);
+			if($uploaded)
+				$this->session->set_flashdata('success', 'Files uploaded successfully.');
+			else
+				$this->session->set_flashdata('error', 'Files uploading failed.'. $this->upload->display_errors());
+		}
+
+		redirect('Insurance/claim_detail/'.$claim_id, 'refresh');
+	}
 
 	private function upload_files($files, $claim_id, $uploaded_by)
     {
@@ -485,12 +565,13 @@ class Insurance extends MY_Controller
             }
             else
             {
-            	echo $this->upload->display_errors();
+            	 $this->upload->display_errors();
+            	 return false;
             }
         }
         
         if(!empty($uploadData)){
-            $insert = $this->Insurance_model->upload($uploadData);
+            return $this->Insurance_model->upload($uploadData);
 
         }
     }
@@ -574,8 +655,8 @@ class Insurance extends MY_Controller
 
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
-		$claims = $this->Insurance_model->get_insurance_claims($filtered_conditions)->result();
-	
+		$claims = $this->Insurance_model->insurance_claims_report($filtered_conditions);
+		
 		if(count($claims) == 0)
         	exit('No Records found');
         
@@ -619,6 +700,11 @@ class Insurance extends MY_Controller
         // set Row
         $rowCount = 2;
         foreach ($claims as $element) {
+
+        	if($element->decision == '1')
+        		$decision = 'Accepted';
+        	elseif($element->decision == '0')
+        		$decision = 'Rejected';
         
             $sheet->SetCellValue('A' . $rowCount, $element->employee_id);
             $sheet->SetCellValue('B' . $rowCount, ucwords($element->emp_name));
@@ -626,7 +712,7 @@ class Insurance extends MY_Controller
             $sheet->SetCellValue('D' . $rowCount, ucwords($element->gender_name));
             $sheet->SetCellValue('E' . $rowCount, $element->personal_contact);
             $sheet->SetCellValue('F' . $rowCount, $element->contact_number);
-            $sheet->SetCellValue('G' . $rowCount, date('d-m-Y', strtotime($element->date_of_birth)));
+            $sheet->SetCellValue('G' . $rowCount, ($element->date_of_birth) ? date('d-m-Y', strtotime($element->date_of_birth)) : '');
             $sheet->SetCellValue('H' . $rowCount, $element->cnic);
             $sheet->SetCellValue('I' . $rowCount, ucwords($element->project_name));
             $sheet->SetCellValue('J' . $rowCount, ucwords($element->department_name));
@@ -634,16 +720,16 @@ class Insurance extends MY_Controller
             $sheet->SetCellValue('L' . $rowCount, ucwords($element->type));
             $sheet->SetCellValue('M' . $rowCount, date('d-m-Y', strtotime($element->incident_date)));
             $sheet->SetCellValue('N' . $rowCount, ucwords($element->reported_by));
-            $sheet->SetCellValue('O' . $rowCount, date('d-m-Y', strtotime($element->reporting_date)));
+            $sheet->SetCellValue('O' . $rowCount, ($element->reporting_date) ? date('d-m-Y', strtotime($element->reporting_date)) : '');
             $sheet->SetCellValue('P' . $rowCount, $element->subject);
             $sheet->SetCellValue('Q' . $rowCount, $element->description);
             $sheet->SetCellValue('R' . $rowCount, $element->remarks);
-            $sheet->SetCellValue('S' . $rowCount, ucwords($element->remarks_by_name));
-            $sheet->SetCellValue('T' . $rowCount, date('d-m-Y', strtotime($element->remarks_date)));
+            $sheet->SetCellValue('S' . $rowCount, ucwords($element->remarks_by));
+            $sheet->SetCellValue('T' . $rowCount, ($element->remarks_date) ? date('d-m-Y', strtotime($element->remarks_date)) : '');
             $sheet->SetCellValue('U' . $rowCount, '');
-            $sheet->SetCellValue('V' . $rowCount, $element->decision);
-            $sheet->SetCellValue('W' . $rowCount, ucwords($element->decision_by_name));
-            $sheet->SetCellValue('X' . $rowCount, date('d-m-Y', strtotime($element->decision_date)));
+            $sheet->SetCellValue('V' . $rowCount, $decision);
+            $sheet->SetCellValue('W' . $rowCount, ucwords($element->decision_by));
+            $sheet->SetCellValue('X' . $rowCount, ($element->decision_date) ? date('d-m-Y', strtotime($element->decision_date)) : '');
             $sheet->SetCellValue('Y' . $rowCount, $element->status);
             
             $rowCount++;

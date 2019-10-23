@@ -1,321 +1,289 @@
-<section class="secMainWidth remove-padding-print">
+<section class="secMainWidth">
 	<div class="row">
-		
-		<?php //var_dump($detail); exit; ?>
 		<div class="col-lg-12">
-		<!-- <section class="secMainWidth"> -->
 			<section class="secFormLayout">
-				<div class="mainInputBg remove-padding-print remove-margin-print no-border-print">
-
-					<div class="row hide-from-print">
+				<div class="mainInputBg">
+					<div class="row">
 						<div class="col-lg-10">
 							<div class="tabelHeading">
-								<h3 id="detail-box-title"><?= $title; ?></h3>
-							</div>
-						</div>
-						<div class="col-md-2 text-right">
-							<div class="tabelTopBtn">
-								<div class="btn-group">
-									<a href="javascript:void(0);" onclick="window.print();" class="btn"><i class="fa fa-print"></i> Print</a>
-								</div>
-						
+								<h3><?= $title; ?></h3>
 							</div>
 						</div>
 					</div>
-					<div class="employee-detail-print-header hide-from-screen">
-						<div class="row">
-							<div class="col-md-12">
-								<center><img src="http://localhost/submarine/uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<?php if($this->session->flashdata('success')) { ?>
+							<div class="alert alert-info" data-dismiss="alert">
+								<strong>Success!</strong> <?= $this->session->flashdata('success'); ?>
 							</div>
-							<div class="col-md-12">
-								<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4></center>
-								<center><h5>Insurance Claim Detail</h5></center>
+							<?php } elseif($this->session->flashdata('error')) { ?>
+							<div class="alert alert-danger" data-dismiss="alert">
+								<strong>Error!</strong> <?= $this->session->flashdata('error'); ?>
 							</div>
-							<div class="col-md-12">
-								<hr>
+							<?php } ?>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="btn-group">
+								<button type="button" data-toggle="dropdown" class="btn btn-primary btn-sm dropdown-toggle">
+									<i class="fa fa-cog"></i> Admin <i class="fa fa-angle-down"></i>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="#edit-insurance-modal" class="dropdown-item" data-toggle="modal">
+											<i class="fa fa-edit"></i> Edit
+										</a>
+									</li>
+								</ul>
+							</div>
+							
+							<button type="button" class="btn btn-warning btn-sm">
+								<i class="fa fa-comment"></i> Comment
+							</button>
+						</div>
+					</div>
+
+					<div class="solidLine"></div>
+					
+					<div class="row">
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>Employee Name</label>
+								<div>
+									<?= ucwords($detail->emp_name); ?>
+								</div>
 							</div>	
-						</div>
-					</div>
-					<div class="solidLine hide-from-print"></div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Name</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->emp_name); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label>Father Name</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->father_name); ?>
+						</div>	
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>CNIC</label>
+								<div>
+									<?= $detail->cnic; ?>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Project</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->project_name); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label>Department</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->department_name); ?>
+						<div class="col-lg-8">
+							<div class="form-group">
+								<label>Job Position</label>
+								<div>
+									<?= $detail->job_title; ?>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Designation</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->designation_name); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Gender</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->gender_name; ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label>DOB</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ($detail->date_of_birth) ? date('d-m-Y', strtotime($detail->date_of_birth)) : ''; ?>
-							</div>
-						</div>
-					</div>
-					
-					<div class="row"><div class="col-lg-12"><hr></div></div>
 
 					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Incident Type</label>
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>Type</label>
+								<div>
+									<span class="primary-label"><?= ucwords($detail->type); ?></span>
+								</div>
 							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucfirst($detail->type); ?>
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>Status</label>
+								<div>
+									<span class="danger-label"><?= ucwords($detail->status); ?></span>
+								</div>
 							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
+						</div>
+
+						<div class="col-lg-2">
+							<div class="form-group">
 								<label>Incident Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ($detail->incident_date) ? date('d-m-Y', strtotime($detail->incident_date)) : ''; ?>
+								<div>
+									<?= date('d-m-Y', strtotime($detail->incident_date)); ?>
+								</div>
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
+						<div class="col-lg-2">
+							<div class="form-group">
 								<label>Reported By</label>
+								<div>
+									<?= ucwords($detail->reported_by); ?>
+								</div>
 							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucfirst($detail->reported_by); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
 								<label>Reported Date</label>
+								<div>
+									<?= date('d-m-Y', strtotime($detail->reporting_date)); ?>
+								</div>
 							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ($detail->reporting_date) ? date('d-m-Y', strtotime($detail->reporting_date)) : ''; ?>
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>Created By</label>
+								<div>
+									<?= ucwords($detail->created_by); ?>
+								</div>
 							</div>
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Subject</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->subject; ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label></label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Description</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->description; ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label></label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-					
-					<?php if($detail->remarks != ""): ?>
-					<div class="row"><div class="col-lg-12"><hr></div></div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
+						<div class="col-lg-2">
+							<div class="form-group">
 								<label>Remarks By</label>
+								<div>
+									<?= ucwords($detail->remarks_by); ?>
+								</div>
 							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->remarks_by_name); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
 								<label>Remarks Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ($detail->remarks_date) ? date('d-m-Y', strtotime($detail->remarks_date)) : ''; ?>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Remarks</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->remarks; ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label></label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-
-						<?php if(!empty($files)): ?>
-						<div class="row hide-from-print">
-							<div class="col-lg-12">
-								<div class="col-lg-2 col-print-2">
-									<label>Files</label>
-								</div>
-								<div class="col-lg-3 col-print-3">
-									<?php foreach($files AS $f): ?>
-										<?php if($f->file_type == 'inprogress'): ?>
-										<a href="<?= base_url(); ?>uploads/insurance_claims/<?= $f->file_name; ?>" class="label label-primary"><?= $f->original_name; ?></a>
-									<?php endif; ?>
-									<?php endforeach; ?>
+								<div>
+									<?= ($detail->remarks_date) ? date('d-m-Y', strtotime($detail->remarks_date)) : ''; ?>
 								</div>
 							</div>
 						</div>
-						<?php endif; ?>
-
-					<?php endif; ?>
-
-					<?php if($detail->decision != ""): ?>
-					<div class="row"><div class="col-lg-12"><hr></div></div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Decision By</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ucwords($detail->decision_by_name); ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label>Decision Date</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ($detail->decision_date) ? date('d-m-Y', strtotime($detail->decision_date)) : ''; ?>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
+						<div class="col-lg-2">
+							<div class="form-group">
 								<label>Decision</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= ($detail->decision) ? 'Claim Accepted' : 'Claim Rejected'; ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label></label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="col-lg-2 col-print-2">
-								<label>Decision Detail</label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								<?= $detail->decision_text; ?>
-							</div>
-							<div class="col-lg-2 col-print-2"></div>
-							<div class="col-lg-2 col-print-2">
-								<label></label>
-							</div>
-							<div class="col-lg-3 col-print-3">
-								
-							</div>
-						</div>
-					</div>
-
-						<?php if(!empty($files)): ?>
-						<div class="row hide-from-print">
-							<div class="col-lg-12">
-								<div class="col-lg-2 col-print-2">
-									<label>Files</label>
-								</div>
-								<div class="col-lg-3 col-print-3">
-									<?php foreach($files AS $f): ?>
-										<?php if($f->file_type == 'completed'): ?>
-										<a href="<?= base_url(); ?>uploads/insurance_claims/<?= $f->file_name; ?>" class="label label-primary"><?= $f->original_name; ?></a>
-									<?php endif; ?>
-									<?php endforeach; ?>
+								<div>
+									<?php 
+										if($detail->decision == '1')  
+											echo '<span class="info-label">Accepted</span>';
+										elseif($detail->decision == '0') 
+										  	echo '<span class="info-label">Rejected</span>'; 
+									?>
 								</div>
 							</div>
 						</div>
-						<?php endif; ?>
-					<?php endif; ?>
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>Decision By</label>
+								<div>
+									<?= ucwords($detail->decision_by); ?>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2">
+							<div class="form-group">
+								<label>Decision Date</label>
+								<div>
+									<?= ($detail->decision_date) ? date('d-m-Y', strtotime($detail->decision_date)) : ''; ?>
+								</div>
+							</div>
+						</div>
+					</div>
 
 					
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label>Subject</label>
+								<div>
+									<?= $detail->subject; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label>Description</label>
+								<div>
+									<?= $detail->description; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<?php if(!empty($detail->remarks_by)): ?>
+
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label>Remarks</label>
+								<div>
+									<?= $detail->remarks; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php endif; ?>
+					
+					<?php if(!empty($detail->decision_by)): ?>
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="form-group">
+								<label>Decision detail</label>
+								<div>
+									<?= $detail->decision_text; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php endif; ?>
+
+					<div class="solidLine"></div>
+
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="col-lg-12 pl-0">
+								<h3><i class="fa fa-paperclip"></i> Attachments</h3>
+								<ul>
+									<?php foreach($files AS $file): ?>
+									<li>
+										<a href="<?= base_url(); ?>uploads/insurance_claims/<?= $file->file_name; ?>" target="_blank"><?= $file->original_name;  ?></a>
+										<small>
+											<?= ucwords($file->uploaded_by); ?>, at: <?= date('d-m-Y', strtotime($file->uploaded_date)); ?>
+										</small>
+									</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
+							<div class="col-lg-12 pl-0">
+							<form action="<?= base_url(); ?>Insurance/add_new_files" method="POST" enctype="multipart/form-data">
+								<input type="hidden" name="claim_id" value="<?= $detail->insurance_claim_id; ?>" id="insurance-claim-id">
+
+								<div class="inputFormMain">
+									<input type="file" name="attachments[]" class="form-control" multiple />
+								</div>
+								<div class="submitBtn">
+									<button type="submit" class="btn btnSubmit btn-block">
+										Upload Files
+									</button>
+								</div>
+							</form>
+							</div>
+						</div>
+
+						<div class="col-lg-8">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th width="10%">Check</th>
+										<th>Updates</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach($file_checklist AS $f): ?>
+									<tr>
+										<td>
+											<input type="checkbox" name="file_type[]" data-id="<?= $f->id; ?>" <?php if($f->status == '1') { ?> checked <?php } ?> />
+										</td>
+										<td>
+											<?= $f->type_description; ?>
+										</td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
 
 				</div>
 			</section>
-		<!-- </section> -->
 		</div>
-
 	</div>
 </section>
