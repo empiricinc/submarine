@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			
-			<div id="card-form">
+			<form action="<?= base_url(); ?>User_panel/request_card" method="POST">
 				<input type="hidden" name="employee_id" value="<?= $employee->employee_id; ?>">
 				<div class="col-lg-12">
 					<div class="inputFormMain">
@@ -33,7 +33,7 @@
 				</div>
 				<div class="col-lg-12">
 					<div class="inputFormMain">
-						<select data-plugin="select_hrm" name="reason" id="card-reason" class="form-control" required="required">
+						<select name="reason" id="card-reason" class="form-control" required="required">
 							<option value="">SELECT REASON</option>
 							<?php foreach($reason AS $r): ?>
 							<option value="<?= $r->id; ?>"><?= $r->reason_text; ?></option>
@@ -44,11 +44,11 @@
 				
 				<div class="col-lg-12">
 					<div class="submitBtn">
-						<button class="btn btnSubmit btn-block" id="card-request-btn">Submit</button>
+						<button type="submit" class="btn btnSubmit btn-block" id="card-request-btn">Submit</button>
 					</div>
 				</div>
 
-			</div>
+			</form>
 		</div>
 	</div>
 </section>

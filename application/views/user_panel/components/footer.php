@@ -1200,32 +1200,6 @@
 		});
 	</script>
 
-	<script type="text/javascript">
-		$('#card-request-btn').on('click', function() {
-			var reason = $('#card-reason').val();
-
-			$.ajax({
-				url: '<?= base_url(); ?>User_panel/request_card',
-				type: 'POST',
-				dataType: 'html',
-				data: {reason: reason},
-				success: function(response) 
-				{
-					if(response == '1')
-					{
-						$('.alert').css('display', 'block');
-						toastr.success('Card request submitted');
-
-					}
-					else
-					{
-						toastr.error("Error! Problem in server");
-					}
-				}
-			});
-				
-		});
-	</script>
 
 	<script type="text/javascript">
 		$('#print-contract').on('click', function() {
@@ -1281,7 +1255,8 @@
 
 
 	<script type="text/javascript">
-		$('#insurance-form-btn').on('click', function(e) {
+
+		$('#insurance-files').on('change', function(e) {
 			e.preventDefault();
 			var error = 0;
 
@@ -1294,15 +1269,16 @@
 
 			if(error === 1)
 			{
-				toastr.error('Invalid file extension');
+				toastr.error('Invalid file extension.');
+				$('#insurance-files').val('');
 				return;
 			}
 
-			$('#insurance-form').trigger('submit');
-
-
+			// $('#insurance-form').trigger('submit');
 		});
+	
 	</script>
+
 
 
 </body>

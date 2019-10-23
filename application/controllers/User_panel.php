@@ -122,27 +122,26 @@ class User_panel extends MY_Controller
 	{
 		$employee_id = $this->session_data['user_id'];
 		$date = date('Y-m-d');
-
-		$this->ajax_check();
 		$reason = $this->input->post('reason');
 
 		$data = array(
 					'employee_id' => $employee_id,
-					'card_status' => 'pending',
 					'request_reason' => $reason,
 					'request_date' => $date
 					);
-
+		
 		$res = $this->db->insert('employee_cards', $data);
 		
 		if($res)
 		{
-			echo '1';
+			$this->session->set_flashdata('success', 'Request submitted successfully.');
 		}
 		else
 		{
-			echo '0';
+			$this->session->set_flashdata('error', 'Request submission failed.');
 		}
+
+		redirect('User_panel/new_card', 'refresh');
 	}
 
 
@@ -1274,6 +1273,7 @@ class User_panel extends MY_Controller
 		$data['title'] = 'Insurance Claim Form';
 		$data['employee'] = $this->User_panel_model->get_name_designation($employee_id);
 		// $data['insurance'] = $this->User_panel_model->get_open_investigations($employee_id)->result();
+		$data['file_type'] = $this->Insurance_model->get_file_types();
 	 	$data['content'] = $this->load->view('user_panel/insurance', $data, TRUE);
 		$this->load->view('user_panel/_template', $data);
 	}
@@ -1282,7 +1282,7 @@ class User_panel extends MY_Controller
 	public function add_insurance_claim()
 	{
 		$entry_by = $this->session_data['user_id'];
-
+		
 		if(isset($_POST))
 		{
 			$employee_id = $this->input->post('employee_id');
@@ -1294,8 +1294,10 @@ class User_panel extends MY_Controller
 			$reported_by = $this->input->post('reported_by');
 			$subject = $this->input->post('subject');
 			$description = $this->input->post('description');
+			$file_type = $this->input->post('file_type');
 
-
+			// $files_uploaded = implode(',', $file_type);
+		
 			$pending_claim = $this->Insurance_model->check_claim_existence($employee_id);
 			
 			if($pending_claim > 0)
@@ -1315,6 +1317,7 @@ class User_panel extends MY_Controller
 						'description' => $description,
 						'status' => 'pending',
 						'entry_by' => $entry_by
+						// 'file_types_added' => $files_uploaded
 					);
 			
 			$add = $this->Insurance_model->add_claim($data);
@@ -1325,6 +1328,20 @@ class User_panel extends MY_Controller
 				if(!empty($_FILES['attachments']) OR $_FILES['attachments']['size'][0] = 0)
 					$this->upload_files($_FILES['attachments'], $insurance_claim_id, $entry_by);
 
+				$data = array();
+
+				$checklist_item = $this->Insurance_model->get_file_types();
+				foreach ($checklist_item as $ci) {
+					array_push($data, array('insurance_claim_id' => $insurance_claim_id, 'file_type_id' => $ci->id));
+				}
+				$this->Insurance_model->add_files_checklist($data);
+
+				foreach ($file_type as $ft) {
+					$where = array('insurance_claim_id' => $insurance_claim_id, 'file_type_id' => $ft);
+					$this->Insurance_model->update_files_checklist($where, array('status' => '1'));
+				}
+
+				
 				$this->session->set_flashdata('success', '<strong>Success!</strong> Insurance claim submitted');
 			}
 			else
