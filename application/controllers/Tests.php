@@ -27,6 +27,10 @@ class Tests extends MY_Controller{
 		$this->load->model('Xin_model');
 	}
 	public function index($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!is_null($offset)){
 			$this->uri->segment(3);
@@ -590,11 +594,113 @@ class Tests extends MY_Controller{
 		$data['content'] = 'test-system/reports';
 		$this->load->view('test-system/components/template', $data);
 	}
-
-	// public function get_result(){
-	// 	$data = $this->Tests_model->save_test_result();
-	// 	var_dump($data);
-	// }
+	// -------------------------- Add result, create and view paper ----------------------------- //
+	public function get_rollnumber($rollnumber){
+		// $rollnumber = $this->input->post('applicant_rollnumber');
+		$data = $this->Tests_model->get_rollnumber_detail($rollnumber);
+		echo json_encode($data);
+	}
+	// Add result manually.
+	public function add_result(){
+		$data['title'] = 'Test System | Add Result';
+		$data['content'] = 'test-system/result_card';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Save result for the applicant who can't take the exam online.
+	public function save_result(){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('applicant_rollnumber', 'Applicant Roll Number', 'required|numeric');
+		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[3]');
+		$this->form_validation->set_rules('total_marks', 'Total Marks', 'required|numeric');
+		if($this->form_validation->run() == FALSE){
+			$this->add_result();
+		}else{
+			$data = array(
+				'rollnumber' => $this->input->post('applicant_rollnumber'),
+				'obtain_marks' => $this->input->post('marks_obtained'),
+				'total_marks' => $this->input->post('total_marks')
+			);
+			var_dump($data); exit;
+			$this->Tests_model->add_result($data);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Result has been saved successfully');
+			redirect('tests/total_appeared');
+		}
+	}
+	// Create paper for exam/post.
+	public function create_paper(){
+		$data['title'] = 'Test System | Create Paper';
+		$data['content'] = 'test-system/create_paper';
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Get all the questions on the page to select from them.
+	public function get_paper(){
+		$project = $this->input->post('project');
+		$designation = $this->input->post('designation');
+		$data['title'] = 'Test System | Select Questions';
+		$data['content'] = 'test-system/create_paper';
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['jobs'] = $this->Tests_model->get_jobs();
+		$data['list_questions'] = $this->Tests_model->get_for_paper($project, $designation);
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Save paper into the database.
+	public function save_paper(){
+		$question = $_POST['question'];
+		$marks = $_POST['marks'];
+		$q_lenght = count($question);
+		$q_lenght = count($marks);
+		for($i = 0; $i < $q_lenght; $i++){
+			$data = array(
+				'que_id' => $_POST['question'][$i],
+				'project_id' => $_POST['project'],
+				'designation_id' => $_POST['designation'],
+				'job_id' => $_POST['job_id'],
+				'marks' => $_POST['marks'][$i],
+				'created_at' => date('Y-m-d')
+			);
+			$this->Tests_model->create_paper($data);
+		}
+		$this->session->set_flashdata('success', '<strong>Success !</strong> Paper has been created successfully!');
+		redirect('tests/create_paper');
+	}
+	// View paper pattern.
+	public function paper($offset = NULL){
+		$limit = 20;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('tests/paper');
+		$config['total_rows'] = $this->Tests_model->count_questions();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 10;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['title'] = 'Test System | Question Paper';
+		$data['content'] = 'test-system/paper_pattern';
+		$data['qdash'] = $this->Tests_model->question_paper($limit, $offset);
+		$data['questions_rand'] = $this->Tests_model->get_paper_pattern();
+		$this->load->view('test-system/components/template', $data);
+	}
 }
 
 ?>

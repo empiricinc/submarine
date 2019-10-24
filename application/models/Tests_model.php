@@ -169,12 +169,14 @@ class Tests_model extends CI_Model{
 	}
 	// Change data for creating exams, get designations for project.
 	public function get_pro_designations($proj_id){
-		$this->db->select('xin_companies.*,
+		$this->db->select('location_job_position.company_id,
+							location_job_position.designation_id,
 							xin_designations.designation_id,
 							xin_designations.designation_name');
-		$this->db->from('xin_companies');
-		$this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
-		$this->db->where('xin_companies.company_id', $proj_id);
+		$this->db->from('location_job_position');
+		$this->db->join('xin_designations', 'location_job_position.designation_id = xin_designations.designation_id', 'left');
+		$this->db->group_by('location_job_position.designation_id');
+		$this->db->where('company_id', $proj_id);
 		return $this->db->get()->result();
 	}
 	// Select project from the list, change in designations will occur.
@@ -480,9 +482,9 @@ class Tests_model extends CI_Model{
 							xin_companies.company_id,
 							xin_companies.name as compName');
 		$this->db->from('test_result');
-		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id');
-		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
-		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
+		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
@@ -597,6 +599,97 @@ class Tests_model extends CI_Model{
 		$this->db->or_where('xin_designations.designation_id', $designation);
 		$results =  $this->db->get();
 		return $results->result();
+	}
+	// --------------------------- Adding result, creating and viewing paper ---------------------- //
+	// Get data by rollnumber.
+	public function get_rollnumber_detail($rollnumber){
+		$this->db->select('assign_test.rollnumber,
+									xin_job_applications.application_id,
+									xin_job_applications.job_id,
+									xin_job_applications.fullname,
+									xin_jobs.job_id,
+									xin_jobs.company,
+									xin_jobs.designation_id,
+									xin_companies.company_id,
+									xin_companies.name,
+									xin_designations.designation_id,
+									xin_designations.designation_name');
+		$this->db->from('assign_test');
+		$this->db->join('xin_job_applications', 'assign_test.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where('assign_test.rollnumber', $rollnumber);
+		$query = $this->db->get();
+		return $query->row();
+	}
+	// Save the test result manually.
+	public function add_result($data){
+		$this->db->insert('test_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Get questions to create paper for specific job and designation.
+	public function get_for_paper($project = '', $designation = ''){
+		$this->db->select('ex_questions.*,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('ex_questions');
+		$this->db->join('xin_companies', 'ex_questions.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'ex_questions.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where(array('ex_questions.project_id' => $project, 'ex_questions.designation_id' => $designation));
+		$this->db->group_by('ex_questions.id');
+		$this->db->order_by('ex_questions.id', 'RANDOM');
+		$this->db->limit(100);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	// Create paper.
+	public function create_paper($data){
+		$this->db->insert('exam_paper', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Get paper pattern.
+	public function get_paper_pattern(){
+		$this->db->select('exam_paper.*,
+									ex_answers.ans_id,
+									ex_answers.ans_name,
+									ex_answers.q_id,
+									xin_companies.company_id,
+									xin_designations.designation_id,
+									xin_jobs.job_id,
+									xin_jobs.job_title');
+		$this->db->from('exam_paper');
+		$this->db->join('ex_answers', 'exam_paper.que_id = ex_answers.q_id', 'left');
+		$this->db->join('xin_companies', 'exam_paper.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'exam_paper.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('xin_jobs', 'xin_jobs.job_id = exam_paper.job_id', 'left');
+		$query = $this->db->get();
+		return $query->result();
+	}
+	// Count questions.
+	public function count_questions(){
+		return $this->db->where('id IN(SELECT que_id FROM exam_paper)')->from('ex_questions')->count_all_results();
+	}
+	// Get questions present in the exam_paper table.
+	public function question_paper($limit, $offset){
+		$this->db->select('ex_questions.id,
+									ex_questions.question,
+									exam_paper.que_id,
+									exam_paper.marks');
+		$this->db->from('ex_questions');
+		$this->db->join('exam_paper', 'ex_questions.id = exam_paper.que_id');
+		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
 	}
 }
 
