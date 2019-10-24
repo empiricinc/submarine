@@ -901,6 +901,7 @@ class Contract extends MY_Controller {
   	$user_id = $this->input->post('user_id');
   	$data = array(
   		'attachment' => $this->input->post('offer_letter'),
+  		'status' => 2
   	);
   	$this->Contract_model->upload_offer_letter($user_id, $data);
   	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been uploaded successfully!');

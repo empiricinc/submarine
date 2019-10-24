@@ -171,8 +171,9 @@ h4 {
                         <?php if($letter->status != 0): ?>
                           <a href="javascript:void(0)" class="btn btn-success btn-xs">Accepted</a>
                             <?php else: ?>
-                          <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-info btn-xs">Generate</a>
-                          <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Forward</a>
+                          <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-info btn-xs">Gen</a>
+                          <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Fwd</a>
+                          <a href="<?php echo base_url(); ?>contract/reject_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Rej</a>
                           <a data-toggle="modal" data-target="#attachment<?php echo $letter->user_id; ?>" href="#" class="btn btn-warning btn-xs">View</a>
                           <div class="modal fade" id="attachment<?= $letter->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
@@ -243,7 +244,7 @@ h4 {
                       <tbody>
                         <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($letters as $accepted): 
-                            if($accepted->status == 1):
+                            if($accepted->status == 1 OR $accepted->status == 2):
                             ?>
                         <tr>
                           <td>CTC-<?= $accepted->user_id; ?></td>
@@ -307,7 +308,7 @@ h4 {
                       <tbody>
                         <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($letters as $rejected): 
-                            if($rejected->status == 2):
+                            if($rejected->status == 3):
                             ?>
                         <tr>
                           <td>CTC-<?= $rejected->user_id; ?></td>

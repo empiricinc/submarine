@@ -129,6 +129,7 @@ h4 {
                             <?php else: ?>
                           <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $pending->user_id; ?>" class="btn btn-info btn-xs">Upload</a>
                           <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $pending->user_id; ?>" class="btn btn-primary btn-xs">Forward</a>
+                          <a href="<?php echo base_url(); ?>contract/reject_offer_letter/<?php echo $pending->user_id; ?>" class="btn btn-primary btn-xs">Reject</a>
                           <a data-toggle="modal" data-target="#attachment<?php echo $pending->user_id; ?>" href="#" class="btn btn-warning btn-xs">View</a>
                           <div class="modal fade" id="attachment<?= $pending->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">

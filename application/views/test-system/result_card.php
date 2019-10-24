@@ -22,17 +22,17 @@
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_name" class="form-control" placeholder="Applicant's name" id="applicant_name" style="color: #aeafaf;">
+							<input type="text" name="applicant_name" class="form-control" placeholder="Applicant's name" id="applicant_name" style="color: #aeafaf;" readonly="">
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_project" class="form-control" placeholder="Applicant's Project" id="project" style="color: #aeafaf;">
+							<input type="text" name="applicant_project" class="form-control" placeholder="Applicant's Project" id="project" style="color: #aeafaf;" readonly="">
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_designation" class="form-control" placeholder="Applicant's Designation" id="designation" style="color: #aeafaf;">
+							<input type="text" name="applicant_designation" class="form-control" placeholder="Applicant's Designation" id="designation" style="color: #aeafaf;" readonly="">
 						</div>
 					</div>
 					<div class="col-lg-3">

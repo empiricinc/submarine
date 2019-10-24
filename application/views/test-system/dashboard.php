@@ -46,6 +46,7 @@
 												<th>Name</th>
 												<th>job title</th>
 												<th>email</th>
+												<th>roll no.</th>
 												<th>exam date</th>
 											</tr>
 										</thead>
@@ -60,6 +61,9 @@
 												</td>
 												<td>
 													<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
+												</td>
+												<td>
+													<?php echo $applicant->rollnumber; ?>
 												</td>
 												<td>
 													<?php echo date('M d, Y - h:i a', strtotime($applicant->test_date)); ?>

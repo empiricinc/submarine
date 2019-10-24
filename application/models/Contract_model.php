@@ -39,7 +39,7 @@ class Contract_model extends CI_Model {
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-      $this->db->order_by('employee_contract.user_id', 'DESC');
+      $this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();
@@ -73,6 +73,7 @@ class Contract_model extends CI_Model {
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
       $this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
+      $this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit(10);
 	 	$query = $this->db->get();
 	 	return $query->result();
@@ -112,6 +113,7 @@ class Contract_model extends CI_Model {
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
+		$this->db->order_by('employee_contract.id', 'DESC');
 		// $this->db->where("DATEDIFF(NOW(), $str2) BETWEEN 21 AND 1");
 		$this->db->limit(10);
 		$query = $this->db->get();
@@ -152,6 +154,7 @@ class Contract_model extends CI_Model {
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
       $this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
+      $this->db->order_by('employee_contract.id', 'DESC');
 		// $this->db->where("DATEDIFF(NOW(), $str2) BETWEEN 21 AND 1");
 		$this->db->limit(10);
 		$query = $this->db->get();
@@ -190,6 +193,7 @@ class Contract_model extends CI_Model {
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
 		$this->db->where(array('employee_contract.status' => 1));
+		$this->db->order_by('employee_contract.id', 'DESC');
 		// $this->db->or_where(array('employee_contract.status' => 2));
 		// $this->db->or_where(array('employee_contract.status' => 3));
 		$this->db->limit($limit, $offset);
@@ -226,6 +230,7 @@ class Contract_model extends CI_Model {
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
 		$this->db->where('employee_contract.status', 1);
 		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
+		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
         return $query->result();
@@ -262,6 +267,7 @@ class Contract_model extends CI_Model {
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
 		$this->db->where('employee_contract.status', 0);
+		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();
@@ -297,6 +303,7 @@ class Contract_model extends CI_Model {
 		$this->db->where('employee_contract.status', 0);
 		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
 		$this->db->limit($limit, $offset);
+		$this->db->order_by('employee_contract.id', 'DESC');
 	 	$query = $this->db->get();
 	 	return $query->result();
 	}
@@ -340,6 +347,7 @@ class Contract_model extends CI_Model {
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
+		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
 		return $query->result();
@@ -379,6 +387,7 @@ class Contract_model extends CI_Model {
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
 		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
+		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
 		return $query->result();
@@ -426,6 +435,7 @@ class Contract_model extends CI_Model {
      	$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
 		$this->db->where('employee_contract.status', 5);
 		$this->db->or_where('employee_contract.status', 6);
+		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
 		return $query->result();
@@ -467,6 +477,7 @@ class Contract_model extends CI_Model {
 		$this->db->where('employee_contract.status', 5);
 		$this->db->or_where('employee_contract.status', 6);
 		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
+		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
 		return $query->result();
@@ -500,9 +511,10 @@ class Contract_model extends CI_Model {
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
       $this->db->join('xin_departments', 'xin_employees.employee_id = xin_departments.department_id', 'left');
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
-		$this->db->where('employee_contract.status', $status);
-		// $this->db->limit(10);
-		return $this->db->get()->result();
+	  $this->db->where('employee_contract.status', $status);
+	  $this->db->order_by('employee_contract.id', 'DESC');
+	  // $this->db->limit(10);
+	  return $this->db->get()->result();
 	}
 	// Printed contracts -- Manager.
 	public function printed_contracts_manager($projid, $provid, $status = ''){
@@ -711,6 +723,7 @@ class Contract_model extends CI_Model {
 	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
 	 	$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();
@@ -750,6 +763,7 @@ class Contract_model extends CI_Model {
 	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
 	 	$this->db->where('employee_offer_letter.status', 0);
+	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
 	 	$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();
@@ -777,6 +791,7 @@ class Contract_model extends CI_Model {
 	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
 	 	$this->db->where('employee_offer_letter.status', 2);
+	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
 	 	$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();
@@ -807,7 +822,7 @@ class Contract_model extends CI_Model {
 	 // Reject letter
 	  public function reject_letter($user_id){
 		 $this->db->where('user_id', $user_id);
-		 $this->db->update('employee_offer_letter', array('status' => 2));
+		 $this->db->update('employee_offer_letter', array('status' => 3));
 		 return true;
 	 }
 }

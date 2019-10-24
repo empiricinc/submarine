@@ -661,13 +661,13 @@ class Tests_model extends CI_Model{
 	// Get paper pattern.
 	public function get_paper_pattern(){
 		$this->db->select('exam_paper.*,
-									ex_answers.ans_id,
-									ex_answers.ans_name,
-									ex_answers.q_id,
-									xin_companies.company_id,
-									xin_designations.designation_id,
-									xin_jobs.job_id,
-									xin_jobs.job_title');
+							ex_answers.ans_id,
+							ex_answers.ans_name,
+							ex_answers.q_id,
+							xin_companies.company_id,
+							xin_designations.designation_id,
+							xin_jobs.job_id,
+							xin_jobs.job_title');
 		$this->db->from('exam_paper');
 		$this->db->join('ex_answers', 'exam_paper.que_id = ex_answers.q_id', 'left');
 		$this->db->join('xin_companies', 'exam_paper.project_id = xin_companies.company_id', 'left');
@@ -683,9 +683,9 @@ class Tests_model extends CI_Model{
 	// Get questions present in the exam_paper table.
 	public function question_paper($limit, $offset){
 		$this->db->select('ex_questions.id,
-									ex_questions.question,
-									exam_paper.que_id,
-									exam_paper.marks');
+							ex_questions.question,
+							exam_paper.que_id,
+							exam_paper.marks');
 		$this->db->from('ex_questions');
 		$this->db->join('exam_paper', 'ex_questions.id = exam_paper.que_id');
 		$this->db->limit($limit, $offset);

@@ -39,7 +39,7 @@
 												</td>
 												<td>
 													<div class="inputFormMain">
-														<select name="status[]" class="form-control input-sm" style="color: #aeafaf;" <?php if($today == date('Y-m-d', strtotime($att_date[0]->attendance_date))): ?> disabled <?php endif; ?>>
+														<select name="status[]" class="form-control input-sm" style="color: #aeafaf;" required="required" <?php if($today == date('Y-m-d', strtotime($att_date->attendance_date))): ?> disabled <?php endif; ?>>
 															<option value="">
 																Select Status
 															</option>
@@ -61,7 +61,7 @@
 											<tr>
 												<td>
 													<div class="submitBtn">
-														<button class="btn btnSubmit" type="submit" <?php if($today == date('Y-m-d', strtotime($att_date[0]->attendance_date))): ?> disabled <?php endif; ?>>Save</button>
+														<button class="btn btnSubmit" type="submit">Save</button>
 														<a href="javascript:history.go(-1);" class="btn btnSubmit">Cancel</a>
 													</div>
 												</td>
