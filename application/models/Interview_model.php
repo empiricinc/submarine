@@ -22,7 +22,7 @@ class Interview_model extends CI_Model {
     }
     // Interviews not done yet, schedules interviews.
 	 public function interview_information() {
-	 	$due_date = date('Y-m-d h:i:s');
+	 	$due_date = date('Y-m-d');
 	 	$this->db->select('*');
 	 	$this->db->from('assign_interview');
 	 	$this->db->where('interview_date >', $due_date);
@@ -38,7 +38,7 @@ class Interview_model extends CI_Model {
 	}
 	// Get scheduled interviews. (Interview date > Current date)
 	public function scheduled_interviews(){
-		$due_date = date('Y-m-d h:i:s');
+		$due_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.application_id,
 							xin_job_applications.job_id,
@@ -72,7 +72,7 @@ class Interview_model extends CI_Model {
 	}
 	// Search interviews.
 	public function scheduled_search($rollno, $name, $project, $designation, $province, $district){
-		$int_date = date('Y-m-d h:i:s');
+		$int_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
@@ -115,7 +115,7 @@ class Interview_model extends CI_Model {
 	}
 	// Count scheduled interviews.
 	public function count_scheduled(){
-		$date_range = date('Y-m-d h:i:s');
+		$date_range = date('Y-m-d');
 		$this->db->select('*');
 		$this->db->from('assign_interview');
 		$this->db->where('interview_date >=', $date_range);
@@ -125,7 +125,7 @@ class Interview_model extends CI_Model {
 	}
 	// Get all scheduled interviews.
 	public function all_scheduled($limit, $offset){
-		$due_date = date('Y-m-d h:i:s');
+		$due_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.application_id,
 							xin_job_applications.job_id,
@@ -301,7 +301,7 @@ function applicantdetails($id){
    	}
     // Overdue interviews, date passed and not done yet.
     public function overdue_interviews(){
-		$range = date('Y-m-d h:i:s');
+		$range = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -336,7 +336,7 @@ function applicantdetails($id){
 	}
 	// Count all overdue interviews.
 	public function count_overdue(){
-		$date_range = date('Y-m-d h:i:s');
+		$date_range = date('Y-m-d');
 		$this->db->select('*');
 		$this->db->from('assign_interview');
 		$this->db->where('interview_date <', $date_range);
@@ -346,7 +346,7 @@ function applicantdetails($id){
 	}
 	// Get all overdue interviews. (List of all overdue interviews)
 	public function all_overdue($limit, $offset){
-		$range = date('Y-m-d h:i:s');
+		$range = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -381,7 +381,7 @@ function applicantdetails($id){
 	}
 	// Search overdue interviews.
 	public function overdue_search($rollno, $name, $project, $designation, $province, $district){
-		$overdue_date = date('Y-m-d h:i:s');
+		$overdue_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -422,6 +422,22 @@ function applicantdetails($id){
 		// Make sure that the rollnumber doesn't exist in the interview_result table.
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		return $this->db->get()->result();
+	}
+	// Re-schedule an interview.
+	public function re_schedule($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('assign_interview', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Delete an interview.
+	public function delete_interview($rollnumber){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->delete('assign_interview');
+		return true;
 	}
 
 	 // read job info

@@ -352,6 +352,25 @@ $this->load->model('job_longlisted_model'); // load model
 		$data['subview'] = $this->load->view('interviews/overdue_list', $data, TRUE);
 		$this->load->view('layout_main', $data); // page load.
 	}
+	// Re-schedule an interview.
+	public function re_schedule(){
+		$rollnumber = $this->input->post('rollnumber');
+		$data = array(
+			'interview_date' => $this->input->post('interview_date')
+		);
+		$this->Interview_model->re_schedule($rollnumber, $data);
+		$this->session->set_flashdata('success', '<strong>Success !</strong> The Interview has been Re-scheduled.');
+		redirect('interview');
+	}
+	// Delete an interview.
+	public function delete_interview($rollnumber){
+		if($this->Interview_model->delete_interview($rollnumber)){
+			$this->session->set_flashdata('success', '<strong>Deleted !</strong> The interview has been deleted !');
+			redirect('interview');
+		}else{
+			echo "The operation wasn't successfull !";
+		}
+	}
 	
 
 	// get opened and closed tickets for chart

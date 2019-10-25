@@ -48,10 +48,14 @@ if ($interviewResult) {
 ?>
 
 
-<style type="text/css"> .ui-datepicker{display: none !important;} .form-control.ddfield{ height: 36px !important; width: 300px; border: 1px solid #ccc; } .inputfield{ width: 300px; margin-top: -6px; padding: 10px; line-height: 1rem; background-color: #f6f7f8; border: 1px solid #e1e4e7; } .datefldset{ background: none !important; border: 0px !important; } .lablewidth{ width: 180px; text-align: right; font-size: 15px; } </style>
+<style type="text/css"> .ui-datepicker{display: block;} .form-control.ddfield{ height: 36px !important; width: 300px; border: 1px solid #ccc; } .inputfield{ width: 300px; margin-top: -6px; padding: 10px; line-height: 1rem; background-color: #f6f7f8; border: 1px solid #e1e4e7; } .datefldset{ background: none !important; border: 0px !important; } .lablewidth{ width: 180px; text-align: right; font-size: 15px; } </style>
 
 <style type="text/css">.breadcrumb.no-bg{ display: none; } h4{ display: none; }</style>
-
+<script type="text/javascript">
+ $(document).ready(function(){
+    $('.date').ui-datepicker();
+  });
+</script>
 <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
   <section class="secIndex">
     <div class="row">
@@ -62,6 +66,11 @@ if ($interviewResult) {
             <span>statistics and more&hellip;</span>
           </h1>
         </div>
+        <?php if($success = $this->session->flashdata('success')): ?>
+          <div class="alert alert-success text-center">
+            <?php echo $success; ?>
+          </div>
+        <?php endif; ?>
       </div>
     </div>
   </section>
@@ -558,6 +567,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                     <th>location</th>
                     <th>district</th>
                     <th>interview date</th>
+                    <th>options | operations</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -655,6 +665,41 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                     <td><?= $overdue->provName; ?></td>
                     <td><?= $overdue->cityName; ?></td>
                     <td><?= date('M d, Y', strtotime($overdue->interview_date)); ?></td>
+                    <td>
+                      <a href="#" data-toggle="modal" data-target="#re_schedule<?= $overdue->rollnumber; ?>" class="btn btn-primary btn-xs">Re-schedule</a>
+                      <a href="<?= base_url(); ?>interview/delete_interview/<?= $overdue->rollnumber; ?>" class="btn btn-danger btn-xs" onclick="javascript:return confirm('Are you sure to delete ?');">Delete</a>
+                      <div class="modal fade" id="re_schedule<?= $overdue->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <!--Header-->
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Re-schedule an Interview... </h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <!--Body-->
+                            <div class="modal-body">
+                              <form action="<?= base_url('interview/re_schedule'); ?>" method="post">
+                                <input type="hidden" name="rollnumber" value="<?= $overdue->rollnumber; ?>">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <label>Interview Date</label>
+                                    <input type="text" name="interview_date" class="form-control date" value="<?php echo date('Y-m-d', strtotime($overdue->interview_date)); ?>"><br>
+                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                    <button type="reset" class="btn btn-default btn-sm">Cancel</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 <?php endforeach; ?>
                 </tbody>
