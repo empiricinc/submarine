@@ -108,6 +108,7 @@
 											<th>Project</th>
 											<th>Designation</th>
 											<th>Date of joining</th>
+											
 											<?php if($card_status == '2'): ?>
 											<th>Print Date</th>
 											<?php elseif($card_status == '3'): ?>
@@ -130,6 +131,7 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
 											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
+
 											<?php if($card_status == '2'): ?>
 											<td><?= ($e->print_date) ? date('d-m-Y', strtotime($e->print_date)) : ''; ?></td>
 											<?php elseif($card_status == '3'): ?>
