@@ -62,7 +62,7 @@ class Insurance extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.status NOT IN(0, 4, 5) AND xe.is_active = ' => '1'
+					'xe.status' => '1'
 				];
 
 
@@ -88,7 +88,10 @@ class Insurance extends MY_Controller
 			$conditions['xe.designation_id'] = $designation;
 
 			if($employee_status != "")
+			{
 				$conditions['xe.status'] = $employee_status;
+			}
+
 
 			if($status != "")
 			{
@@ -113,7 +116,7 @@ class Insurance extends MY_Controller
 		$conditions = $this->sc_employees($query_string, 'insurance');
 
 		/* Pagination */
-
+		
 		$total_rows = $this->Insurance_model->get_employees($conditions)->num_rows();
 		$url = 'Insurance/list_employees';
 		
@@ -123,7 +126,7 @@ class Insurance extends MY_Controller
 		$offset = $this->input->get('page');
 		$data['title'] = 'Employees Insurance List';
 		$data['employees'] = $this->Insurance_model->get_employees($conditions, $this->limit, $offset)->result();
-
+		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
@@ -298,8 +301,9 @@ class Insurance extends MY_Controller
 			$from_date = $this->input->post('from_date');
 			$to_date = $this->input->post('to_date');
 
+			$updated_at = $this->input->post('updated_at');
 			$updated_by = $this->session_data['user_id'];
-			$updated_at = date('Y-m-d');
+
 			$new_status = '';
 
 			if($status == 'insured')
@@ -318,10 +322,11 @@ class Insurance extends MY_Controller
 					'from_date' => $from_date,
 					'to_date' => $to_date,
 					'status' => $new_status,
-					'updated_by' => $updated_by,
-					'updated_at' => $updated_at
+					'updated_at' => $updated_at,
+					'updated_by' => $updated_by	
 				);
 
+			
 			$rec_update = $this->Insurance_model->update($data, $employee_id);
 			$insurance_row = $this->db->get_where('insurance', array('employee_id' => $employee_id))->row();
 			$insurance_id = $insurance_row->id;
@@ -333,8 +338,8 @@ class Insurance extends MY_Controller
 						'from_date' => $from_date,
 						'to_date' => $to_date,
 						'status' => $new_status,
-						'entry_by' => $updated_by,
-						'entry_at' => $updated_at
+						'status_date' => $updated_at,
+						'entry_by' => $updated_by
 					);
 				$this->Insurance_model->insurance_log($data);
 				$this->session->set_flashdata('success', 'Insurance status updated successfully');

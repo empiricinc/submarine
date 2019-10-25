@@ -91,6 +91,17 @@ class Insurance_model extends CI_Model
 
     }
 
+    function add_insurance($data)
+    {
+        return $this->db->insert('insurance', $data);
+    }
+
+    function check_insurnce_existense($employee_id)
+    {
+        $this->db->where('employee_id', $employee_id);
+        return $this->db->get('insurance')->num_rows();
+    }
+
 	function add_claim($data)
 	{
 		return $this->db->insert('insurance_claims', $data);

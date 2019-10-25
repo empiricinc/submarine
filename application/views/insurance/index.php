@@ -47,7 +47,8 @@
 								<option value="">Employee Type</option>
 								<option value="5">Resigned</option>
 								<option value="6">Terminated</option>
-							</select>	
+							</select>
+							<span></span>	
 						</div>
 
 						<div class="filterSelect">
@@ -90,9 +91,9 @@
 
 							<div class="col-md-5 text-right">
 								<div class="tabelTopBtn pt-0">
-								<a href="javascript:void(0);" class="btn update-status-btn"><i class="fa fa-edit"></i> Mark as Insured</a>
-								
-								<a href="<?= base_url(); ?>Insurance/reportXLS<?= '?'.$query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+									<a href="javascript:void(0);" class="btn update-status-btn"><i class="fa fa-edit"></i> Mark as Insured</a>
+									
+									<a href="<?= base_url(); ?>Insurance/reportXLS<?= '?'.$query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 								</div>
 							</div>
 
@@ -138,6 +139,9 @@
 										<?php $count=1; foreach($employees AS $e): ?>
 										<?php 
 										    $label = '';
+										    if($e->status == '')
+										    	$e->status = 'pending';
+
 											if($e->status == 'pending') {
 												$label = 'label-warning';
 											} elseif($e->status == 'insured') {
@@ -160,6 +164,8 @@
 										 ?>
 										<tr style="<?= $backgroundColor; ?>">
 											<input type="hidden" id="emp-name-<?= $e->employee_id; ?>" value="<?= ucwords($e->emp_name); ?>">
+											<input type="hidden" id="employee-status-<?= $e->employee_id; ?>" value="<?= $e->employee_status; ?>">
+
 											<input type="hidden" id="project-<?= $e->employee_id; ?>" value="<?= ucwords($e->project_name); ?>">
 											<input type="hidden" id="department-<?= $e->employee_id; ?>" value="<?= ucwords($e->department_name); ?>">
 											<input type="hidden" id="emp-designation-<?= $e->employee_id; ?>" value="<?= ucwords($e->designation_name); ?>">
@@ -196,13 +202,16 @@
 												  		<i class="fa fa-angle-down"></i>
 												  	</a>
 												  	<ul class="dropdown-menu pull-right" style="z-index: 1000; background: #fff;">
+
+												  		<?php if($e->employee_status == '1'): ?>
 													  	<li>   
 													  		<a href="javascript:void(0);" class="add-claim" data-id="<?= $e->employee_id; ?>">
 													  			<i class="fa fa-check"></i>
 													  			Insurance Form
 													  		</a>
 													  	</li>
-													  	
+													  	<?php endif; ?>
+
 													  	<li>   
 													  	 	<a href="javascript:void(0);" class="update-status" data-id="<?= $e->employee_id; ?>">
 													  	 		<i class="fa fa-edit"></i>

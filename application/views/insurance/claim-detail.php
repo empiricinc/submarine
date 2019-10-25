@@ -40,9 +40,20 @@
 								</ul>
 							</div>
 							
-							<button type="button" class="btn btn-warning btn-sm">
-								<i class="fa fa-comment"></i> Comment
+
+							<?php 
+								if($detail->status == 'pending') {
+									$update_status = 'inprogress';
+								} elseif($detail->status == 'inprogress') {
+									$update_status = 'completed';
+								}
+
+							?>
+							<?php if($detail->status != 'completed'): ?>
+							<button type="button" class="btn btn-success btn-sm change-status" data-id="<?= $detail->insurance_claim_id; ?>" data-status="<?= $detail->status; ?>">
+								<i class="fa fa-archive"></i> <?= $update_status; ?>
 							</button>
+							<?php endif; ?>
 						</div>
 					</div>
 
@@ -270,7 +281,7 @@
 									<?php foreach($file_checklist AS $f): ?>
 									<tr>
 										<td>
-											<input type="checkbox" name="file_type[]" data-id="<?= $f->id; ?>" <?php if($f->status == '1') { ?> checked <?php } ?> />
+											<input type="checkbox" class="checklist" name="file_type[]" data-id="<?= $f->id; ?>" <?php if($f->status == '1') { ?> checked <?php } ?> />
 										</td>
 										<td>
 											<?= $f->type_description; ?>

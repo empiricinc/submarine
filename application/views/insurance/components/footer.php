@@ -108,7 +108,7 @@
 			<form action="<?= base_url(); ?>Insurance/update_status" method="POST">
 			<input type="hidden" name="employee_id" id="emp-id">
 			<input type="hidden" name="status" id="insurance-status">
-			<div class="row" style="padding-left: 15px; padding-right: 15px;">
+			<div class="row">
 				<div class="modal-body">
 					
 				</div>
@@ -197,6 +197,7 @@
 
 <!-- Insurance Edit Modal -->
 
+<?php if(isset($detail)): ?>
 <div class="modal fade" id="edit-insurance-modal">
 	<div class="modal-dialog">
 		<form action="<?= base_url(); ?>Insurance/update_claim_detail" method="POST">
@@ -270,7 +271,7 @@
 		</form>
 	</div>
 </div>
-
+<?php endif; ?>
 <!-- Insurance Edit Modal -->
 
 
@@ -336,6 +337,22 @@
 		}
 	</script>
 
+
+	<script type="text/javascript">
+		/* Bulk update button and checkboxes will be removed in case of inactive employees
+		*/
+
+		$(function() {
+			var status = parseInt("<?= $this->input->get('employee_status'); ?>");
+			
+			if(!isNaN(status) && $.inArray(parseInt(status), [0, 5, 6]))
+			{
+				$('.update-status-btn').remove();
+				$('input[type="checkbox"]').remove();
+			}
+
+		});
+	</script>
 
 	<script type="text/javascript">
 		$('.project').on('change', function() {
@@ -406,8 +423,16 @@
 
 		$('.update-status').on('click', function() {
 			var emp_id = $(this).data('id');
+			var employee_status = $('#employee-status-'+emp_id).val();
+			
 			var insurance_status = $('#status-'+emp_id).val();
 			var dataHandler = $('#status-modal .modal-body').html('');
+
+			if(employee_status != '1')
+			{
+				toastr.error('Inactive employees can\'t be insured');
+				return;
+			}
 		
 			$('#emp-id').val(emp_id);
 			$('#insurance-status').val(insurance_status);
@@ -425,6 +450,11 @@
 							<input type="text" name="to_date" value="" id="end-date" class="form-control date" placeholder="Insurance End Date" data-toggle="tooltip" title="Insurance End Date" required>
 						</div>
 					</div>
+					<div class="col-lg-12">
+						<div class="inputFormMain">
+							<input type="text" name="updated_at" value="" id="status-updated-at" class="form-control date" placeholder="Insurance Date" data-toggle="tooltip" title="Insurance Date" required> 
+						</div>
+					</div>
 				`);	
 
 			}
@@ -432,7 +462,9 @@
 			{
 				dataHandler.append(`
 					<div class="col-lg-12">
-						<p>Click on update to mark employee as uninsured.</p>
+						<div class="inputFormMain">
+							<input type="text" name="updated_at" value="" id="status-updated-at" class="form-control date" placeholder="Uninsured Date" data-toggle="tooltip" title="Uninsured Date" required> 
+						</div>
 					</div>
 					`);
 			}
@@ -565,7 +597,7 @@
 			$.each(attachments, function(index) {
 				var extension = attachments[index].name.split('.').pop();
 
-				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg']) == -1)
+				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'pdf']) == -1)
 					error = 1;
 			});
 
@@ -582,7 +614,7 @@
 	</script>
 
 	<script type="text/javascript">
-		$('input[type="checkbox"]').on('click', function() {
+		$('.checklist').on('click', function() {
 			var file_type = $(this).data('id');
 			var claim_id = $('#insurance-claim-id').val();
 			var status = 0;
