@@ -36,7 +36,8 @@ class User_panel extends MY_Controller
 				"Department_model",
 				"Designation_model",
 				"Resignations_model",
-				"Insurance_model"
+				"Insurance_model", 
+				"Employee_cards_model"
 			)
 		);
 
@@ -120,6 +121,9 @@ class User_panel extends MY_Controller
 
 	public function request_card()
 	{
+		if(!isset($_POST))
+			show_404();
+
 		$employee_id = $this->session_data['user_id'];
 		$date = date('Y-m-d');
 		$reason = $this->input->post('reason');
@@ -130,17 +134,24 @@ class User_panel extends MY_Controller
 					'request_date' => $date
 					);
 		
-		$res = $this->db->insert('employee_cards', $data);
+		$previous_request = $this->Employee_cards_model->check_previous_request($employee_id)->num_rows();
+		$res = '';
+		
+		if($previous_request > 0)
+		{
+			$this->session->set_flashdata('error', 'Card request already in queue.');
+		}
+		else
+		{
+			$res = $this->Employee_cards_model->add($data);
+		}
 		
 		if($res)
 		{
 			$this->session->set_flashdata('success', 'Request submitted successfully.');
 		}
-		else
-		{
-			$this->session->set_flashdata('error', 'Request submission failed.');
-		}
 
+		
 		redirect('User_panel/new_card', 'refresh');
 	}
 
@@ -164,15 +175,8 @@ class User_panel extends MY_Controller
 		            $data = array('upload_data' => $this->upload->data());
 		            $image = $data['upload_data']['file_name']; 
 		            
-		            // $employeeRow = $this->User_panel_model->get_previous_pic($employee_id);
 		            $result = $this->User_panel_model->update_profile_pic($image, $employee_id);
-		           
-		            // if($result)
-		            // {
 
-		            // 	$oldPic = $employeeRow->profile_picture;
-		            // 	unlink(base_url().'uploads/profile/'.$oldPic);
-		            // }
 				}
 
 			}
@@ -1272,8 +1276,7 @@ class User_panel extends MY_Controller
 		$employee_id = $this->session_data['user_id'];
 		$data['title'] = 'Insurance Claim Form';
 		$data['employee'] = $this->User_panel_model->get_name_designation($employee_id);
-		// $data['insurance'] = $this->User_panel_model->get_open_investigations($employee_id)->result();
-		$data['file_type'] = $this->Insurance_model->get_file_types();
+
 	 	$data['content'] = $this->load->view('user_panel/insurance', $data, TRUE);
 		$this->load->view('user_panel/_template', $data);
 	}
@@ -1296,8 +1299,6 @@ class User_panel extends MY_Controller
 			$description = $this->input->post('description');
 			$file_type = $this->input->post('file_type');
 
-			// $files_uploaded = implode(',', $file_type);
-		
 			$pending_claim = $this->Insurance_model->check_claim_existence($employee_id);
 			
 			if($pending_claim > 0)
@@ -1336,11 +1337,12 @@ class User_panel extends MY_Controller
 				}
 				$this->Insurance_model->add_files_checklist($data);
 
+				if(!empty($file_type)):
 				foreach ($file_type as $ft) {
 					$where = array('insurance_claim_id' => $insurance_claim_id, 'file_type_id' => $ft);
 					$this->Insurance_model->update_files_checklist($where, array('status' => '1'));
 				}
-
+				endif;
 				
 				$this->session->set_flashdata('success', '<strong>Success!</strong> Insurance claim submitted');
 			}

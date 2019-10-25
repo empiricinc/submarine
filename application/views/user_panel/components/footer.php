@@ -576,13 +576,34 @@
 
 		$('#basic-information-form').on('submit', function(e) {
 			e.preventDefault();
+			var error = 0;
+			$.each($('.contact-no'), function(index, val) {
 
-			var contact_no = $('.contact-no').val();
-			if(!contact_no.match(/^\d+$/))
-			{
-				toastr.error('Contact No must not contain letters');
+				if(!$(this).val().match(/^\d+$/))
+				{
+					toastr.error('Contact No must not contain letters');
+					error = 1;
+					return;
+				}
+				
+			});
+
+			$.each($('.contact-no'), function(index, val) {
+				
+				if($(this).val().length > 11 || $(this).val().length < 11)
+				{
+					toastr.error('Invalid contact no provided.');
+					toastr.error('Contact No must not exceed 11 digits.');
+					error = 1;
+					return;
+				}
+				
+			});
+
+			
+			if(error == 1)
 				return;
-			}
+
 			$.ajax({
 				url: '<?= base_url(); ?>User_panel/update_employee',
 				type: 'POST',
@@ -1263,7 +1284,7 @@
 			var attachments = $('#insurance-files')[0].files;
 			$.each(attachments, function(index) {
 				var extension = attachments[index].name.split('.').pop();
-				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg']) == -1)
+				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'pdf']) == -1)
 					error = 1;
 			});
 

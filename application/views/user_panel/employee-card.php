@@ -8,11 +8,19 @@
 					<h3><?= $title; ?></h3>
 				</div>
 			</div>
+			<?php if($this->session->flashdata('success')) { ?>
 			<div class="col-lg-12">
-				<div class="alert alert-info" data-dismiss="alert" style="display: none;">
-					<strong>Done!</strong> Your card request is submitted successfully
+				<div class="alert alert-info" data-dismiss="alert">
+					<strong>Success!</strong> <?= $this->session->flashdata('success'); ?>
 				</div>
 			</div>
+			<?php } elseif($this->session->flashdata('error')) {  ?>
+			<div class="col-lg-12">
+				<div class="alert alert-danger" data-dismiss="alert">
+					<strong>Error!</strong> <?= $this->session->flashdata('error'); ?>
+				</div>
+			</div>
+			<?php } ?>
 			
 			<form action="<?= base_url(); ?>User_panel/request_card" method="POST">
 				<input type="hidden" name="employee_id" value="<?= $employee->employee_id; ?>">

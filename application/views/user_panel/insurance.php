@@ -83,27 +83,6 @@
 					</div>
 
 					<div class="row">
-						<div class="col-lg-12">
-							<table class="table table-condensed">
-								<thead>
-									<tr>
-										<th></th>
-										<th>File type</th>
-									</tr>
-								</thead>
-								<tbody>
-									<?php foreach($file_type AS $ft): ?>
-									<tr>
-										<td><input type="checkbox" name="file_type[]" value="<?= $ft->id; ?>"></td>
-										<td><?= $ft->type_description; ?></td>
-									</tr>
-									<?php endforeach; ?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-
-					<div class="row">
 						<div class="col-lg-12 submitBtn">
 							<button type="submit" class="btn btnSubmit"> 
 			    				Submit 
