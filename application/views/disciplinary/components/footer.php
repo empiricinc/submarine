@@ -44,7 +44,7 @@
 <?php if(isset($detail)): ?>
 <div class="modal fade" id="edit-disciplinary-modal">
 	<div class="modal-dialog modal-lg">
-		<form action="<?= base_url(); ?>Investigation/update_investigation" method="POST">
+		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary" method="POST">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">
@@ -56,11 +56,7 @@
 			<div class="modal-body">
 				<div class="row">
 	    				<div class="col-lg-4">
-	    					<!-- <input type="hidden" name="employee_id" id="employee-id" value="<?= $detail->employee_id; ?>">
-	    					<input type="hidden" name="project_id" id="project-id" value="<?= $detail->company_id; ?>">
-	    					<input type="hidden" name="province_id" id="province-id" value="<?= $detail->provience_id; ?>">
-	    					<input type="hidden" name="department_id" id="department-id" value="<?= $detail->department_id; ?>">
-	    					<input type="hidden" name="designation_id" id="designation-id" value="<?= $detail->designation_id; ?>"> -->
+
 							<div class="inputFormMain">
 								<label>Employee Name</label>
 								<input type="text" name="employee_name" id="employee-name" class="form-control" value="<?= ucwords($detail->emp_name); ?>" readonly>
@@ -764,7 +760,7 @@
 				data: {disciplinary_id: disciplinary_id, template_content: template_content},
 				success: function(response) {
 					if(response == '1')
-						toastr.success('Letter Forwarded Successfully.');
+						toastr.success('Letter saved successfully.');
 					if(response == '0')
 						toastr.error('Server Error.');
 				}

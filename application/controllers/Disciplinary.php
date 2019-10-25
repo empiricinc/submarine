@@ -297,145 +297,6 @@ class Disciplinary extends MY_Controller
 	}
 
 
-	// function add_new()
-	// {
-	// 	$entry_by = $this->session_data['user_id'];
-
-	// 	if(isset($_POST['submit']))
-	// 	{
-	// 		$employee_id = $this->input->post('employee_id');
-	// 		$designation = $this->input->post('designation_id');
-	// 		$department = $this->input->post('department_id');
-	// 		$project = $this->input->post('project_id');
-	// 		$province = $this->input->post('province_id');
-
-	// 		$type_id = $this->input->post('type_id');
-
-	// 		$reason = $this->input->post('reason');
-	// 		$other_reason = $this->input->post('other_reason');
-	// 		$reported_by = $this->input->post('reported_by');
-	// 		$reported_date = $this->input->post('reported_date');
-	// 		$evidence = $this->input->post('evidence');
-	// 		$evidence_date = $this->input->post('evidence_date');
-	// 		$description = $this->input->post('description');
-
-	// 		$complaint_mode = $this->input->post('complaint_mode');
-	// 		$intensity = $this->input->post('intensity');
-	// 		$subject = $this->input->post('subject');
-
-	// 		// $status = $this->input->post('status');
-	// 		$created_by = $this->input->post('created_by');
-	// 		$created_date = $this->input->post('created_date');
-
-	// 		$salary_hold = $this->input->post('salary_hold');
-	// 		$suspend_from_duty = $this->input->post('suspend_from_duty');
-	// 		$resignation_date = $this->input->post('resignation_date');
-
-	// 		$reported_by = $this->input->post('reported_by');
-	// 		$reported_date = $this->input->post('reported_date');
-	// 		$reported_date_ctc = $this->input->post('reported_date_ctc');
-
-	// 		$prior_notice = $this->input->post('prior_notice');
-	// 		$last_working_date = $this->input->post('last_working_date');
-	// 		$issue_reporting_date = $this->input->post('issue_reporting_date');
-	// 		$transfer_type = $this->input->post('transfer_type');
-
-	// 		$position_abolish = $this->input->post('position_abolish');
-	// 		$abolish_date = $this->input->post('abolish_date');
-	// 		$position_filled_against = $this->input->post('position_filled_against');
-			
-	// 		$job_position = $this->input->post('job_position');
-	// 		$transfer_effective_date = $this->input->post('transfer_effective_date');
-
-	// 		$province = $this->input->post('province');
-	// 		$district = $this->input->post('district');
-	// 		$tehsil = $this->input->post('tehsil');
-	// 		$uc = $this->input->post('uc');
-
-	// 		$today = date('Y-m-d');
-			
-	// 		$data = array(
-	// 					'employee_id' => $employee_id,
-	// 					'project_id' => $project,
-	// 					'department_id' => $department,
-	// 					'designation_id' => $designation,
-	// 					'province_id' => $province,
-	// 					// 'district_id' => $district,
-	// 					// 'tehsil_id' => $tehsil,
-	// 					// 'uc_id' => $uc,
-	// 					'job_position_id' => $job_position,
-	// 					'disciplinary_type_id' => $type_id,
-	// 					'disciplinary_status_id' => ,
-	// 					'disciplinary_category_id' => ,
-	// 					'disciplinary_reason_id' => $reason,
-	// 					'other_reason' => $other_reason,
-	// 					'assign_id' => '',
-	// 					'name' => '',
-	// 					'description' => $description,
-	// 					'template_content' => ,
-	// 					'salary_hold' => $salary_hold,
-	// 					'salary_deduction_days' => ,
-	// 					'salary_deduction_month' => ,
-	// 					'evidence' => $evidence,
-	// 					'evidence_date' => $evidence_date,
-	// 					'reporting_date' => $reported_date,
-	// 					'reported_by' => $reported_by,
-	// 					'approved_by' => ,
-	// 					'action_approval_date' => ,
-	// 					'approval_received_date' => ,
-	// 					'last_working_date' => $last_working_date,
-	// 					'position_abolish' => $position_abolish,
-	// 					'date_of_abolish' => $abolish_date,
-	// 					'resignation_submission_date' => $resignation_dat,
-	// 					'prior_notice' => $prior_notice,
-	// 					'exit_interview' => ,
-	// 					'letter_no' => ,
-	// 					'manually_generated' => ,
-	// 					'created_by' => $created_by,
-	// 					'created_date' => $created_date,
-	// 					'is_deleted' => '0',
-	// 					'updated_by' => ,
-	// 					'updated_date' => ,
-	// 					'reasons' => $reason,
-	// 					'print_date' => ,
-	// 					'issued_date' => ,
-	// 					'close_date' => ,
-	// 					'delivered_date' => ,
-	// 					'response_received_date' => ,
-	// 					'response_not_received_date' => ,
-	// 					'satisfactory_date' => ,
-	// 					'unsatisfactory_date' => ,
-	// 					'new_province_id' => ,
-	// 					'new_region_id' => ,
-	// 					'new_district_id' => ,
-	// 					'new_tehsil_id' => ,
-	// 					'new_uc_id' => ,
-	// 					'position_filled_against_id' => $position_filled_against,
-	// 					'new_job_position_id' => $job_position,
-	// 					'transfer_type_id' => $transfer_type,
-	// 					'transfer_effective_date' => $transfer_effective_date,
-	// 					'transfer_approval_date' => ,
-	// 					'next_disciplinary_id' => ,
-	// 					'security_deposit_paid' =>
-
-	// 				);
-
-	// 		$inv_added = $this->Disciplinary_model->add($data);
-	// 		$disciplinary_id = $this->db->insert_id();
-			
-	// 		if(!empty($_FILES['files']) && $_FILES['files']['size'][0] != 0)
-	// 			$this->upload_files($_FILES, $employee_id, $disciplinary_id);
-
-			
-	// 		if($inv_added)
-	// 		{
-	// 			$this->session->set_flashdata('success', 'Investigation initiated successfully.');
-	// 			redirect('Disciplinary/employees', 'refresh');
-	// 		}
-	// 	}
-	// }
-
-	
 	function view($offset="")
 	{
 		$conditions = [
@@ -1206,6 +1067,11 @@ class Disciplinary extends MY_Controller
 			}
 
 			return $output;
+    }
+
+    function update_disciplinary()
+    {
+    	exit('Page under construction');
     }
 
 

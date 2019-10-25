@@ -8,94 +8,109 @@
 						<h3>
 							<?= $title; ?>
 							<br><br>
-							
-							<div class="btn-group">
-								<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-									<i class="fa fa-cog"></i> ADMIN <i class="fa fa-angle-down"></i>
-								</button>
-								<ul class="dropdown-menu">
-									<li>
-										<a class="dropdown-item" href="#edit-disciplinary-modal" data-toggle="modal">
-											<i class="fa fa-edit"></i> Edit
-										</a>
-									</li>
-								</ul>
-							</div>
-
-							<button type="button" class="btn btn-sm btn-warning" onclick="document.getElementById('comments-form').scrollIntoView();">
-								<i class="fa fa-comments"></i> COMMENTS
-							</button>
-
-						<?php if($detail->status_text != 'delete'): ?>
-							<?php if($detail->status_text == 'open' OR $detail->status_text == 'pending'): ?>
-								<button type="button" class="btn btn-sm btn-danger disciplinary-status-btn" data-text="delete">
-									<i class="fa fa-trash"></i> DELETE
-								</button>
-							<?php endif; ?>
-							
-
-							<?php if($detail->status_text == 'open') { ?>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="dpcr">
-									<i class="fa fa-archive"></i> DPCR	
-								</button>
-							<?php } elseif($detail->status_text == 'dpcr') { ?>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="pending">
-									<i class="fa fa-archive"></i> PENDING	
-								</button>
-							<?php } elseif($detail->status_text == 'pending') { ?>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="issued">
-									<i class="fa fa-archive"></i> ISSUE	
-								</button>
-							<?php } elseif($detail->status_text == 'issued') { ?>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="printed">
-									<i class="fa fa-archive"></i> PRINT	
-								</button>
-							<?php } elseif($detail->status_text == 'printed') { ?>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="delivered">
-									<i class="fa fa-archive"></i> DELIVER
-								</button>
-
-							<?php } elseif($detail->status_text == 'delivered') { ?>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="received">
-									<i class="fa fa-archive"></i> RECEIVED
-								</button>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="not received">
-									<i class="fa fa-archive"></i> NOT RECEIVED
-								</button>
-								<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
-									<i class="fa fa-archive"></i> NO ACTION
-								</button>
-
-						<?php } elseif($detail->status_text == 'received') { ?>
-							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="satisfactory">
-								<i class="fa fa-archive"></i> 
-								SATISFACTORY 
-							</button>
-
-							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="unsatisfactory">
-								<i class="fa fa-archive"></i> 
-								UNSATISFACTORY 
-							</button>
-
-							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="admitted"> 
-								<i class="fa fa-archive"></i>
-								ADMITTED 
-							</button>
-
-							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
-									<i class="fa fa-archive"></i> 
-									NO ACTION	
-							</button>
-
-							<!-- <button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="re open"> 
-								<i class="fa fa-archive"></i>
-								RE OPEN 
-							</button> -->
-
-						<?php } ?>
-						
-						<?php endif; ?>
 						</h3>
+						
+						<div class="row">
+							<div class="col-lg-12">
+								<?php if($this->session->flashdata('success')) { ?>
+								<div class="alert alert-info" data-dismiss="alert">
+									<strong>Success!</strong> <?= $this->session->flashdata('success'); ?>
+								</div>
+								<?php } elseif($this->session->flashdata('error')) { ?>
+								<div class="alert alert-danger" data-dismiss="alert">
+									<strong>Error!</strong> <?= $this->session->flashdata('error'); ?>
+								</div>
+								<?php } ?>
+							</div>
+						</div>
+
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-cog"></i> ADMIN <i class="fa fa-angle-down"></i>
+							</button>
+							<ul class="dropdown-menu">
+								<li>
+									<a class="dropdown-item" href="#edit-disciplinary-modal" data-toggle="modal">
+										<i class="fa fa-edit"></i> Edit
+									</a>
+								</li>
+							</ul>
+						</div>
+
+						<button type="button" class="btn btn-sm btn-warning" onclick="document.getElementById('comments-form').scrollIntoView();">
+							<i class="fa fa-comments"></i> COMMENTS
+						</button>
+
+					<?php if($detail->status_text != 'delete'): ?>
+						<?php if($detail->status_text == 'open' OR $detail->status_text == 'pending'): ?>
+							<button type="button" class="btn btn-sm btn-danger disciplinary-status-btn" data-text="delete">
+								<i class="fa fa-trash"></i> DELETE
+							</button>
+						<?php endif; ?>
+						
+
+						<?php if($detail->status_text == 'open') { ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="dpcr">
+								<i class="fa fa-archive"></i> DPCR	
+							</button>
+						<?php } elseif($detail->status_text == 'dpcr') { ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="pending">
+								<i class="fa fa-archive"></i> PENDING	
+							</button>
+						<?php } elseif($detail->status_text == 'pending') { ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="issued">
+								<i class="fa fa-archive"></i> ISSUE	
+							</button>
+						<?php } elseif($detail->status_text == 'issued') { ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="printed">
+								<i class="fa fa-archive"></i> PRINT	
+							</button>
+						<?php } elseif($detail->status_text == 'printed') { ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="delivered">
+								<i class="fa fa-archive"></i> DELIVER
+							</button>
+
+						<?php } elseif($detail->status_text == 'delivered') { ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="received">
+								<i class="fa fa-archive"></i> RECEIVED
+							</button>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="not received">
+								<i class="fa fa-archive"></i> NOT RECEIVED
+							</button>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
+								<i class="fa fa-archive"></i> NO ACTION
+							</button>
+
+					<?php } elseif($detail->status_text == 'received') { ?>
+						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="satisfactory">
+							<i class="fa fa-archive"></i> 
+							SATISFACTORY 
+						</button>
+
+						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="unsatisfactory">
+							<i class="fa fa-archive"></i> 
+							UNSATISFACTORY 
+						</button>
+
+						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="admitted"> 
+							<i class="fa fa-archive"></i>
+							ADMITTED 
+						</button>
+
+						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
+								<i class="fa fa-archive"></i> 
+								NO ACTION	
+						</button>
+
+						<!-- <button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="re open"> 
+							<i class="fa fa-archive"></i>
+							RE OPEN 
+						</button> -->
+
+					<?php } ?>
+					
+					<?php endif; ?>
+						
 					</div>
 				</div>
 				<!-- <div class="col-lg-2">
