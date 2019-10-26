@@ -8,6 +8,9 @@
 	.label{
 		cursor: pointer;
 	}
+	small#attendance{
+		color: red;
+	}
 </style>
 <?php if(empty($results)): ?>
 <section class="secMainWidthFilter">
@@ -285,7 +288,7 @@
 							<?php if($employee_names): ?>
 								<a href="<?php echo base_url(); ?>trainings/attendance/<?= $training_detail['trg_id']; ?>"><i class="fa fa-plus"></i> Attendance</a>
 							<?php else: ?>
-								 <i class="fa fa-plus"></i> Attendance |<small>No attendance can be taken because of no trainees registered!</small>
+								 <i class="fa fa-plus"></i> Attendance |<small id='attendance'> Can't be taken because of no trainees registered! <a href="<?= base_url(); ?>trainings/delete_trg/<?= $training_detail['trg_id']; ?>" class="btn btn-danger btn-xs" onclick="javascript:return confirm('Are you sure to remove this ?');">Remove</a></small>
 							<?php endif; ?>
 						</small>
 					</div>

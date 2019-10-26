@@ -1374,6 +1374,12 @@ class Trainings_model extends CI_Model{
 		$this->db->delete('events_calendar');
 		return true;
 	}
+	// Remove the training if no trainees are registerd.
+	public function remove_training($trg_id){
+		$this->db->where('trg_id', $trg_id);
+		$this->db->delete('xin_trainings');
+		return true;
+	}
 
 	// -----------------------------------------------------------------------------
 	// Training report, export to excel.

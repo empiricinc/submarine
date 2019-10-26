@@ -389,12 +389,21 @@ class Trainings extends CI_Controller{
 			if(!empty($row)){
 				$employee_names .= "<div class='row'><div class='col-lg-3'><strong>". $serial++.". </strong>". ucfirst($row->first_name). "</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-3'>".$row->name."</div><div class='col-lg-3'>".$row->contact_no."</div><hr></div>";
 			}else{
-				$no_employees .= '<div class="alert alert-danger text-center"><p class="lead">Sorry, there are no trainees registered in this training ! Try creating new training & adding trainees into it.</p></div>';
+				$no_employees .= '<div class="alert alert-danger"><p class="lead text-center">Sorry, there are no trainees registered in this training ! Try removing the training instead.</p></div>';
 			}
 		}
 		$data['employee_names'] = $employee_names;
 		$data['no_employees'] = $no_employees;
 		$this->load->view('training-files/components/template', $data);
+	}
+	// Delete training if no employees registered in it..
+	public function delete_trg($trg_id){
+		if($this->Trainings_model->remove_training($trg_id)){
+			$this->session->set_flashdata('success', '<strong>Success !</strong> The training has been removed successfully!');
+			redirect('trainings/all_trainings');
+		}else{
+			echo "The operation wasn't successful. Try again.";
+		}
 	}
 	// List of all trainers.
 	public function trainers($offset = NULL){
