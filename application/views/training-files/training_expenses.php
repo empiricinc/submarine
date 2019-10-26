@@ -113,7 +113,7 @@
 										<?php foreach($expenses as $expense): ?>
 										<tr>
 											<td>
-												<?= $expense->first_name." ".$expense->last_name; ?>
+												<?= $expense->first_name; ?>
 											</td>
 											<td>
 												<?= $expense->status; ?>

@@ -30,16 +30,16 @@
 									</thead>
 									<tbody>
 										<form action="<?php echo base_url('trainings/save_attendance'); ?>" method="post">
-											<?php $today = date('Y-m-d');
-										$att_date = $this->db->select('training_id, attendance_date')->from('training_attendance')->where('training_id', $this->uri->segment(3))->order_by('attendance_date', 'DESC')->get()->result(); ?>
+										<?php $today = date('Y-m-d');
+										$att_date =  $this->db->select('training_id, attendance_date')->from('training_attendance')->where('training_id', $trainee_employees->trg_id)->order_by('attendance_date', 'DESC')->get()->result(); ?>
 										<?php for ($i = 0; $i < count($names); $i++): ?>
 											<tr>
 												<td>
-													<?php echo $names[$i]->first_name . " " . $names[$i]->last_name; ?>
+													<?php echo $names[$i]->first_name; ?>
 												</td>
 												<td>
 													<div class="inputFormMain">
-														<select name="status[]" class="form-control input-sm" style="color: #aeafaf;" required="required" <?php if($today == date('Y-m-d', strtotime($att_date->attendance_date))): ?> disabled <?php endif; ?>>
+														<select name="status[]" class="form-control input-sm" style="color: #aeafaf;" required="required" <?php if($today == date('Y-m-d', strtotime($att_date[0]->attendance_date))): ?> disabled <?php endif; ?>>
 															<option value="">
 																Select Status
 															</option>

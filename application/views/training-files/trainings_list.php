@@ -133,12 +133,12 @@
 												<?=$training->hall_detail; ?>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->trg_id; ?>">
+												<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->training_id; ?>">
 													<span class="label label-warning">
 														Acty Rpt
 													</span>&nbsp;
 												</a>
-												<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->trg_id; ?>">
+												<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->training_id; ?>">
 													<span class="label label-danger">
 														View
 													</span> &nbsp;
@@ -282,7 +282,11 @@
 					<div class="col-lg-4">
 						<small>
 							<h3>Training Information</h3>
-							<a href="<?php echo base_url(); ?>trainings/attendance/<?= $training_detail['trg_id']; ?>"><i class="fa fa-plus"></i> Attendance</a>
+							<?php if($employee_names): ?>
+								<a href="<?php echo base_url(); ?>trainings/attendance/<?= $training_detail['trg_id']; ?>"><i class="fa fa-plus"></i> Attendance</a>
+							<?php else: ?>
+								 <i class="fa fa-plus"></i> Attendance |<small>No attendance can be taken because of no trainees registered!</small>
+							<?php endif; ?>
 						</small>
 					</div>
 					<div class="col-lg-4 text-right">
@@ -304,16 +308,15 @@
 		</div>
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-lg-12">
+				<div class="col-lg-10 col-lg-offset-1">
 					<div class="row">
-						<div class="col-lg-2"><h3>Employee Name</h3></div>
+						<div class="col-lg-3"><h3>Employee Name</h3></div>
 						<div class="col-lg-3"><h3>Designation</h3></div>
-						<div class="col-lg-2"><h3>Project</h3></div>
-						<div class="col-lg-2"><h3>Contact</h3></div>
-						<div class="col-lg-3"><h3>Address</h3></div>
+						<div class="col-lg-3"><h3>Project</h3></div>
+						<div class="col-lg-3"><h3>Contact</h3></div>
 					</div>
 					<p class="lead">
-						<?php echo $employee_names; ?>
+						<?php if($employee_names){ echo $employee_names; }else{ echo $no_employees; } ?>
 					</p>
 				</div>
 			</div>
@@ -364,17 +367,17 @@
 								<td>${val.location}</td>
 								<td>${val.hall_detail}</td>
 								<td>
-									<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->trg_id; ?>">
+									<a href="<?php echo base_url(); ?>trainings/activity_reporting/${val.trg_id}">
 										<span class="label label-warning">
 											Acty Rpt
 										</span>&nbsp;
 									</a>
-									<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->trg_id; ?>">
+									<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/${val.trg_id}">
 										<span class="label label-danger">
 											View
 										</span> &nbsp;
 									</a>
-									<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
+									<a href="<?php echo base_url(); ?>trainings/attendance/${val.trg_id}">
 										<span class="label label-success">
 											Attendance
 										</span> &nbsp;

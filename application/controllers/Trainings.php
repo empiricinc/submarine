@@ -371,13 +371,12 @@ class Trainings extends CI_Controller{
 		$employee_detail = explode(',', $detail_row['trainee_employees']);
 		$serial = 1;
 		$employee_names = '';
+		$no_employees = '';
 		for ($i = 0; $i < count($employee_detail); $i++) {
 			$this->db->select('xin_employees.employee_id,
 								xin_employees.first_name,
-								xin_employees.last_name,
 								xin_employees.designation_id,
 								xin_employees.company_id,
-								xin_employees.address,
 								xin_employees.contact_no,
 								xin_companies.company_id,
 								xin_companies.name,
@@ -387,9 +386,14 @@ class Trainings extends CI_Controller{
 			$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
 			$row = $this->db->get_where('xin_employees', array('employee_id' => $employee_detail[$i]))->row();
 			// Print the data in HTML view.
-			$employee_names .= "<div class='row'><div class='col-lg-2'><strong>". $serial++.". </strong>". ucfirst($row->first_name) . " " . ucfirst($row->last_name) ."</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-2'>".$row->name."</div><div class='col-lg-2'>".$row->contact_no."</div><div class='col-lg-3'>".$row->address."</div><hr></div>";
+			if(!empty($row)){
+				$employee_names .= "<div class='row'><div class='col-lg-3'><strong>". $serial++.". </strong>". ucfirst($row->first_name). "</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-3'>".$row->name."</div><div class='col-lg-3'>".$row->contact_no."</div><hr></div>";
+			}else{
+				$no_employees .= '<div class="alert alert-danger text-center"><p class="lead">Sorry, there are no trainees registered in this training ! Try creating new training & adding trainees into it.</p></div>';
+			}
 		}
 		$data['employee_names'] = $employee_names;
+		$data['no_employees'] = $no_employees;
 		$this->load->view('training-files/components/template', $data);
 	}
 	// List of all trainers.
@@ -791,13 +795,6 @@ class Trainings extends CI_Controller{
 		$employees = $this->Trainings_model->get_employees_for_training($comp_id);
 		echo json_encode($employees);
 	}
-	// Load the attencance view
-	public function attendance_view(){
-		$data['trainings'] = $this->Trainings_model->get_trainings_list();
-		$data['title'] = 'Trainings | Employees Attendance';
-		$data['content'] = 'training-files/attendance_view';
-		$this->load->view('training-files/components/template', $data);
-	}
 	// Employees' attendance in training.
 	public function attendance($trg_id=''){
 		if($trg_id == "") // If $trg_id is empty, load the page from the post form.
@@ -807,7 +804,7 @@ class Trainings extends CI_Controller{
 		$names = array();
 		$ids = explode(',', $row->trainee_employees);
 		for ($i = 0; $i < count($ids); $i++) {
-			$names[$i] = $this->db->query("SELECT employee_id, first_name, last_name FROM xin_employees WHERE employee_id = " . $ids[$i])->row();
+			$names[$i] = $this->db->query("SELECT employee_id, first_name FROM xin_employees WHERE employee_id = " . $ids[$i])->row();
 		}
 		$data['names'] = $names;
 		$data['title'] = 'Trainings | Attendance';
@@ -855,7 +852,7 @@ class Trainings extends CI_Controller{
 				$this->db->update('xin_trainings', array('status' => '2'));
 		// Print a success message on the screen on successful submission of data.
 		$this->session->set_flashdata('success', 'Attendance submitted successfully!');
-		return redirect('Trainings/attendance_view');
+		return redirect('Trainings/all_trainings');
 	}
 	// Training expenses
 	public function expenses($trg_id = ''){
@@ -915,9 +912,7 @@ class Trainings extends CI_Controller{
 		$female = 0;
 		for ($j = 0; $j < count($trainees); $j++ ) {
 		 	$this->db->select('xin_employees.employee_id,
-		 						
 		 						xin_employees.first_name,
-		 						xin_employees.last_name,
 		 						xin_employees.designation_id,
 		 						xin_employees.company_id,
 		 						xin_designations.designation_id,
