@@ -313,10 +313,9 @@
 			<div class="row">
 				<div class="col-lg-10 col-lg-offset-1">
 					<div class="row">
-						<div class="col-lg-3"><h3>Employee Name</h3></div>
-						<div class="col-lg-3"><h3>Designation</h3></div>
-						<div class="col-lg-3"><h3>Project</h3></div>
-						<div class="col-lg-3"><h3>Contact</h3></div>
+						<div class="col-lg-4"><h3>Employee Name</h3></div>
+						<div class="col-lg-4"><h3>Designation</h3></div>
+						<div class="col-lg-4"><h3>Project</h3></div>
 					</div>
 					<p class="lead">
 						<?php if($employee_names){ echo $employee_names; }else{ echo $no_employees; } ?>

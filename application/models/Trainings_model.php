@@ -876,7 +876,6 @@ class Trainings_model extends CI_Model{
 							xin_employees.email,
 							xin_employees.company_id,
 							xin_employees.designation_id,
-							xin_employees.contact_no,
 							xin_companies.company_id,
 							xin_companies.name,
 							xin_designations.designation_name,

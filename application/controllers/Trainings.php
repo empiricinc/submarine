@@ -377,7 +377,6 @@ class Trainings extends CI_Controller{
 								xin_employees.first_name,
 								xin_employees.designation_id,
 								xin_employees.company_id,
-								xin_employees.contact_no,
 								xin_companies.company_id,
 								xin_companies.name,
 								xin_designations.designation_id,
@@ -387,7 +386,7 @@ class Trainings extends CI_Controller{
 			$row = $this->db->get_where('xin_employees', array('employee_id' => $employee_detail[$i]))->row();
 			// Print the data in HTML view.
 			if(!empty($row)){
-				$employee_names .= "<div class='row'><div class='col-lg-3'><strong>". $serial++.". </strong>". ucfirst($row->first_name). "</div><div class='col-lg-3'> ".$row->designation_name. "</div><div class='col-lg-3'>".$row->name."</div><div class='col-lg-3'>".$row->contact_no."</div><hr></div>";
+				$employee_names .= "<div class='row'><div class='col-lg-4'><strong>". $serial++.". </strong>". ucfirst($row->first_name). "</div><div class='col-lg-4'> ".$row->designation_name. "</div><div class='col-lg-4'>".$row->name."</div><hr></div>";
 			}else{
 				$no_employees .= '<div class="alert alert-danger"><p class="lead text-center">Sorry, there are no trainees registered in this training ! Try removing the training instead.</p></div>';
 			}
