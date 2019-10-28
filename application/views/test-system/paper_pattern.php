@@ -34,7 +34,7 @@
 			</div>
 			<form action="<?php //echo base_url('tests/applicants_test'); ?>" method="post">
 				<ul id="list">
-					<?php $counter = $this->uri->segment(3) + 1;  ?>
+					<?php $counter = 1;  ?>
 					<?php foreach($qdash as $que_rand) : ?>
 						<p>
 							<strong>
@@ -59,7 +59,7 @@
 			<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10 text-center">
-					<?php echo $this->pagination->create_links(); ?>
+					<?php //echo $this->pagination->create_links(); ?>
 				</div>
 				<div class="col-md-1"></div>
 			</div>

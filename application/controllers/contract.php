@@ -900,11 +900,10 @@ class Contract extends MY_Controller {
   public function create_offer_letter(){
   	$user_id = $this->input->post('user_id');
   	$data = array(
-  		'attachment' => $this->input->post('offer_letter'),
-  		'status' => 2
+  		'attachment' => $this->input->post('offer_letter')
   	);
   	$this->Contract_model->upload_offer_letter($user_id, $data);
-  	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been uploaded successfully!');
+  	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been generated successfully!');
   	redirect('contract/offer_letters');
   }
 

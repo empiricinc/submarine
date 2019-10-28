@@ -63,14 +63,14 @@ class Tests_model extends CI_Model{
 								ex_answers.ans_id, 
 								ex_answers.ans_name, 
 								ex_answers.status as status_ans, 
-								ex_questions.id as quest_id, 
-								ex_questions.question as quest');
+								exam_paper.que_id as quest_id,
+								ex_questions.id, 
+								ex_questions.question as quest,
+								xin_jobs.job_id');
 		$this->db->from('ex_answers');
 		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id');
-		// $this->db->where('ex_questions.project_id', 4);
-		// $this->db->order_by('ex_questions.id', 'RANDOM');
-		// $this->db->where('ex_questions.id >', 2);
-		// $this->db->limit(4);
+		$this->db->join('exam_paper', 'ex_questions.id = exam_paper.que_id');
+		$this->db->join('xin_jobs', 'exam_paper.job_id = xin_jobs.job_id');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -658,7 +658,7 @@ class Tests_model extends CI_Model{
 			return false;
 		}
 	}
-	// Get paper pattern.
+	// Get paper pattern. Answers for questions saved previously.
 	public function get_paper_pattern(){
 		$this->db->select('exam_paper.*,
 							ex_answers.ans_id,
@@ -677,17 +677,28 @@ class Tests_model extends CI_Model{
 		return $query->result();
 	}
 	// Count questions.
-	public function count_questions(){
-		return $this->db->where('id IN(SELECT que_id FROM exam_paper)')->from('ex_questions')->count_all_results();
+	public function count_jobs(){
+		return $this->db->where('job_id IN(SELECT job_id FROM xin_jobs)')->from('exam_paper')->group_by('job_id')->count_all_results();
 	}
 	// Get questions present in the exam_paper table.
-	public function question_paper($limit, $offset){
+	public function question_paper($job_id){
 		$this->db->select('ex_questions.id,
 							ex_questions.question,
 							exam_paper.que_id,
 							exam_paper.marks');
 		$this->db->from('ex_questions');
 		$this->db->join('exam_paper', 'ex_questions.id = exam_paper.que_id');
+		$this->db->where('exam_paper.job_id', $job_id);
+		return $this->db->get()->result();
+	}
+	// List all jobs' papers.
+	public function get_jobs_papers($limit, $offset){
+		$this->db->select('exam_paper.*,
+							xin_jobs.job_id,
+							xin_jobs.job_title');
+		$this->db->join('xin_jobs', 'exam_paper.job_id = xin_jobs.job_id', 'left');
+		$this->db->from('exam_paper');
+		$this->db->group_by('exam_paper.job_id');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}

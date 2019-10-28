@@ -56,7 +56,7 @@
           <li id="appeared"><a href="<?php echo base_url('tests/total_appeared'); ?>">appeared</a></li>
           <li><a href="<?php echo base_url('tests/projects'); ?>">projects</a></li>
           <li><a href="<?php echo base_url('tests/jobs'); ?>">jobs</a></li>
-          <li><a href="<?php echo base_url('tests/paper'); ?>">paper</a></li>
+          <li><a href="<?php echo base_url('tests/list_papers'); ?>">papers</a></li>
           <li><a href="<?php echo base_url('tests/reports'); ?>">reports</a></li>
           <li>
             <a href="#">

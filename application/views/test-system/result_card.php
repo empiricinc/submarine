@@ -74,9 +74,15 @@
 				data: {rollnumber: rollnumber},
 				success: function(data){
 					console.log(data);
-					$('#applicant_name').val(data.fullname);
-					$('#project').val(data.name);
-					$('#designation').val(data.designation_name);
+					if(data){
+						$('#applicant_name').val(data.fullname);
+						$('#project').val(data.name);
+						$('#designation').val(data.designation_name);
+					}else{
+						$('#applicant_name').val('');
+						$('#project').val('');
+						$('#designation').val('');
+					}
 				}
 			});
 		});
