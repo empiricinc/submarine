@@ -667,15 +667,23 @@ class Tests extends MY_Controller{
 		redirect('tests/create_paper');
 	}
 	// View paper pattern.
-	public function paper($offset = NULL){
+	public function paper($job_id){
+		$data['title'] = 'Test System | Question Paper';
+		$data['content'] = 'test-system/paper_pattern';
+		$data['qdash'] = $this->Tests_model->question_paper($job_id);
+		$data['questions_rand'] = $this->Tests_model->get_paper_pattern();
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Paper detail, click on a job title and view the paper.
+	public function list_papers($offset = NULL){
 		$limit = 20;
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
-		$config['base_url'] = base_url('tests/paper');
-		$config['total_rows'] = $this->Tests_model->count_questions();
+		$config['base_url'] = base_url('tests/list_papers');
+		$config['total_rows'] = $this->Tests_model->count_jobs();
 		$config['per_page'] = $limit;
 		$config['num_links'] = 10;
 		$config["full_tag_open"] = '<ul class="pagination">';
@@ -695,10 +703,9 @@ class Tests extends MY_Controller{
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		$data['title'] = 'Test System | Question Paper';
-		$data['content'] = 'test-system/paper_pattern';
-		$data['qdash'] = $this->Tests_model->question_paper($limit, $offset);
-		$data['questions_rand'] = $this->Tests_model->get_paper_pattern();
+		$data['papers'] = $this->Tests_model->get_jobs_papers($limit, $offset);
+		$data['title'] = 'Test System | Papers List';
+		$data['content'] = 'test-system/papers_list';
 		$this->load->view('test-system/components/template', $data);
 	}
 }
