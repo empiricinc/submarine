@@ -79,13 +79,14 @@ if ($interviewResult) {
       <div class="col-md-6">
         <div class="mainTableWhite">
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
               <div class="tabelHeading">
                 <h3>scheduled interviews</h3>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
               <div class="tabelTopBtn">
+                  <a data-toggle='tooltip' title="Add interview marks here." href="<?= base_url('interview/add_marks'); ?>" class="btn"><img src="<?= base_url('assets/img/plus.png'); ?>"> Marks</a>
                   <a href="<?= base_url('interview/list_scheduled'); ?>" class="btn">
                     View All
                   </a>

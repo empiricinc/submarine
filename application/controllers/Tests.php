@@ -648,21 +648,19 @@ class Tests extends MY_Controller{
 	}
 	// Save paper into the database.
 	public function save_paper(){
-		$question = $_POST['question'];
-		$marks = $_POST['marks'];
-		$q_lenght = count($question);
-		$q_lenght = count($marks);
-		for($i = 0; $i < $q_lenght; $i++){
+		foreach($_POST['question'] as $key => $val){
 			$data = array(
-				'que_id' => $_POST['question'][$i],
+				'job_id' => $_POST['job_id'],
+				'que_id' => $val,
 				'project_id' => $_POST['project'],
 				'designation_id' => $_POST['designation'],
-				'job_id' => $_POST['job_id'],
-				'marks' => $_POST['marks'][$i],
+				'marks' => $_POST['marks'][$key],
 				'created_at' => date('Y-m-d')
 			);
-			$this->Tests_model->create_paper($data);
+			var_dump($data);
+			//$this->Tests_model->create_paper($data);
 		}
+		exit;
 		$this->session->set_flashdata('success', '<strong>Success !</strong> Paper has been created successfully!');
 		redirect('tests/create_paper');
 	}

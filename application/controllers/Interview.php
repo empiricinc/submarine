@@ -371,6 +371,36 @@ $this->load->model('job_longlisted_model'); // load model
 			echo "The operation wasn't successfull !";
 		}
 	}
+	// Add marks manually.
+	public function add_marks(){
+		$data['path_url'] = 'interview_marks';
+		$data['subview'] = $this->load->view('interviews/interview_marks', $data, TRUE);
+		$this->load->view('layout_main', $data); // page load.
+	}
+	// Get applicant's detail by rollnumber.
+	public function get_rollnumber($rollnumber){
+		$data = $this->Interview_model->get_rollnumber_detail($rollnumber);
+		echo json_encode($data);
+	}
+	// Save interview marks.
+	public function save_marks(){
+		$this->form_validation->set_rules('applicant_rollnumber', 'Applicant Roll number', 'trim|required');
+		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[2]');
+		$this->form_validation->set_rules('total_marks', 'Total Marks', 'required|numeric');
+		if($this->form_validation->run() == FALSE){
+			$this->add_marks();
+		}else{
+			$data = array(
+				'rollnumber' => $this->input->post('applicant_rollnumber'),
+				'obtain_marks' => $this->input->post('marks_obtained'),
+				'total_marks' => $this->input->post('total_marks'),
+				'comments' => $this->input->post('additional_comment')
+			);
+			$this->Interview_model->save_marks($data);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been saved successfully!');
+			redirect('interview');
+		}
+	}
 	
 
 	// get opened and closed tickets for chart

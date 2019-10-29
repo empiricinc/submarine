@@ -143,12 +143,11 @@ $(document).ready(function() {
                     <th>name</th>
                     <th>project</th>
                     <th>designation</th>
-                    <th>address</th>
                     <th>contract duration</th>
                     <th>manger</th>
                     <th>type</th>
                     <th>submission date</th>
-                    <th>status</th>
+                    <th>action</th>
                   </tr>
                 </thead>
                 <tbody id="filter_results">
@@ -172,9 +171,6 @@ $(document).ready(function() {
                     </td>
                     <td>
                       <?php echo $contract->designation_name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->address; ?>
                     </td>
                     <td>
                       <?php echo date('M d, Y', strtotime($contract->from_date)).' - '.date('M d, Y', strtotime($contract->to_date)); ?>
@@ -265,7 +261,6 @@ $(document).ready(function() {
                 <td>${val.first_name} ${val.last_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
-                <td>${val.address}</td>
                 <td>${fromDate} - ${toDate}</td>
                 <td>${val.contract_manager}</td>
                 <td>${val.cont_type}</td>
@@ -283,7 +278,6 @@ $(document).ready(function() {
                 <td>${val.first_name} ${val.last_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
-                <td>${val.address}</td>
                 <td>${fromDate} - ${toDate}</td>
                 <td>${val.contract_manager}</td>
                 <td>${val.cont_type}</td>
@@ -301,7 +295,6 @@ $(document).ready(function() {
                 <td>${val.first_name} ${val.last_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
-                <td>${val.address}</td>
                 <td>${fromDate} - ${toDate}</td>
                 <td>${val.contract_manager}</td>
                 <td>${val.cont_type}</td>
@@ -319,7 +312,6 @@ $(document).ready(function() {
                 <td>${val.first_name} ${val.last_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
-                <td>${val.address}</td>
                 <td>${fromDate} - ${toDate}</td>
                 <td>${val.contract_manager}</td>
                 <td>${val.cont_type}</td>

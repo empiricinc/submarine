@@ -142,8 +142,8 @@ h4 {
         <div class="row">
           <div class="col-md-12">
             <div class="tableMain">
-              <div class="table-responsive">
-                <table class="table table-striped" style="width:100%">
+              <div class="table">
+                <table class="table table-condensed" style="width:100%">
                   <thead>
                     <tr>
                       <th>emp iD</th>
@@ -172,7 +172,7 @@ h4 {
                           <a href="javascript:void(0)" class="btn btn-success btn-xs">Accepted</a>
                             <?php else: ?>
                           <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-info btn-xs">Gen</a>
-                          <a href="<?php echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Fwd</a>
+                          <a href="<?php if($letter->attachment == ''){ ?> javascript:void(0); <?php }else{ echo base_url(); ?>contract/accept_offer_letter/<?php echo $letter->user_id; } ?>" class="btn btn-primary btn-xs">Fwd</a>
                           <a href="<?php echo base_url(); ?>contract/reject_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary btn-xs">Rej</a>
                           <a data-toggle="modal" data-target="#attachment<?php echo $letter->user_id; ?>" href="#" class="btn btn-warning btn-xs">View</a>
                           <div class="modal fade" id="attachment<?= $letter->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

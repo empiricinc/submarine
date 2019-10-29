@@ -439,6 +439,38 @@ function applicantdetails($id){
 		$this->db->delete('assign_interview');
 		return true;
 	}
+	// Get rollnumber detail for applicant for entering interview marks manually.
+	public function get_rollnumber_detail($rollnumber){
+		$this->db->select('assign_interview.rollnumber,
+									xin_job_applications.application_id,
+									xin_job_applications.job_id,
+									xin_job_applications.fullname,
+									xin_jobs.job_id,
+									xin_jobs.company,
+									xin_jobs.designation_id,
+									xin_companies.company_id,
+									xin_companies.name,
+									xin_designations.designation_id,
+									xin_designations.designation_name');
+		$this->db->from('assign_interview');
+		$this->db->join('xin_job_applications', 'assign_interview.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where('assign_interview.rollnumber', $rollnumber);
+		echo $this->db->last_query();
+		$query = $this->db->get();
+		return $query->row();
+	}
+	// Save interview marks.
+	public function save_marks($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	 // read job info
 
