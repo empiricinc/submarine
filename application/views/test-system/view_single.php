@@ -32,6 +32,7 @@
 					</div><br>
 					<?php endforeach; break; // END and BREAK the second "foreach". ?>
 					<?php endforeach; // END the first "foreach loop". ?>
+					<?php if($view_one): ?>
 					<div class="submitBtn">
 						<a class="btn btnSubmit" href="<?php echo base_url('tests/view_single/'); ?><?php $count_id = $one['ques_id']+1; echo $count_id++; ?>">Move Forward &raquo;</a>
 
@@ -39,9 +40,16 @@
 
 						<a class="btn btnSubmit" href="javascript:history.go(-1);">Back &laquo;</a>
 					</div>
+					<?php else: ?>
+						<div class="alert alert-danger text-center">
+							<p><strong>Aww Snap! </strong>There are no options added to this question yet. Add options instead | <a href="<?php echo base_url();?>tests/add_options/<?= $this->uri->segment(3); ?>" class="btn btn-info btn-xs">Add Options</a></p>
+						</div>
+					<?php endif; ?>
 				</div>
 			</div>
+			<?php if(!empty($view_one)): ?>
 				<small>[&hellip; You can only modify answers, and can't delete them so that you're seeing only the modify link against each answer here &hellip;]</small>
+			<?php endif; ?>
 		</div>
 	</section>
 </section>
