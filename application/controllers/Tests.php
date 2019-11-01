@@ -657,10 +657,8 @@ class Tests extends MY_Controller{
 				'marks' => $_POST['marks'][$key],
 				'created_at' => date('Y-m-d')
 			);
-			var_dump($data);
-			//$this->Tests_model->create_paper($data);
+			$this->Tests_model->create_paper($data);
 		}
-		exit;
 		$this->session->set_flashdata('success', '<strong>Success !</strong> Paper has been created successfully!');
 		redirect('tests/create_paper');
 	}
