@@ -136,12 +136,12 @@
 												<?=$training->hall_detail; ?>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->training_id; ?>">
+												<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->trg_id; ?>">
 													<span class="label label-warning">
 														Acty Rpt
 													</span>&nbsp;
 												</a>
-												<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->training_id; ?>">
+												<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->trg_id; ?>">
 													<span class="label label-danger">
 														View
 													</span> &nbsp;
