@@ -946,7 +946,6 @@ class Contract extends MY_Controller {
   	$data = array(
   		'attachment' => $this->input->post('offer_letter')
   	);
-  	var_dump($data); exit;
   	$this->Contract_model->upload_offer_letter($user_id, $data);
   	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been generated successfully!');
   	redirect('contract/offer_letters');
