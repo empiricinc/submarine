@@ -781,6 +781,7 @@ class Contract extends MY_Controller {
         $data['sl2'] = $this->session->userdata('accessLevel');
 	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
 	    $data['pen_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
+	    $data['rej_letters'] = $this->Contract_model->rejected_offer_letters($limit, $offset);
 	    $data['subview'] = $this->load->view('dashboard/offer_letters', $data, TRUE);
 	    $this->load->view('layout_main', $data); // Page load.
 	}
@@ -867,7 +868,7 @@ class Contract extends MY_Controller {
 		$data['sl3'] = $this->session->userdata('accessLevel');  
         $data['sl2'] = $this->session->userdata('accessLevel');
 
-		$data['rejected_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
+		$data['rejected_letters'] = $this->Contract_model->rejected_offer_letters($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
     	$this->load->view('layout_main', $data); // Page load.
 	}
@@ -976,6 +977,28 @@ class Contract extends MY_Controller {
 	    $pdf->writeHTML($html, true, false, true, false, '');
 	    ob_clean();
 	    $pdf->Output(md5(time()).'.pdf', 'I');
+	}
+	// -------------------------------- Search for data ----------------------------------- //
+	// Search accepted offer letters.
+	public function search_accepted(){
+		$keyword = $this->input->get('search_accepted');
+		$data['results'] = $this->Contract_model->accepted_search($keyword);
+	  	$data['subview'] = $this->load->view('dashboard/accepted_offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
+	}
+	// Search pending offer letters.
+	public function search_pending(){
+		$keyword = $this->input->get('search_pending');
+		$data['results'] = $this->Contract_model->pending_search($keyword);
+	  	$data['subview'] = $this->load->view('dashboard/pending_offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
+	}
+	// Search rejected offer letters.
+	public function search_rejected(){
+		$keyword = $this->input->get('search_rejected');
+		$data['results'] = $this->Contract_model->rejected_search($keyword);
+	  	$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
 	}
 
 	

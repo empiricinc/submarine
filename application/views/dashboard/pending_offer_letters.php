@@ -91,11 +91,31 @@ h4 {
     <section class="secIndexTable">
         <div class="mainTableWhite">
             <div class="row">
-                <div class="col-md-12">
-                  <div class="tabelHeading">
-                     <h3>list of all pending offer letters | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
-                  </div>
+              <div class="col-md-7">
+                <div class="tabelHeading">
+                  <?php if(empty($results)): ?>
+                   <h3>list of all pending offer letters | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
+                   <?php else: ?>
+                  <h3>search results for: <small><?php echo $_GET['search_pending']; ?> | <a href="javascript:history.go(-1);">&laquo; back</a></small></h3>
+                  <?php endif; ?>
                 </div>
+              </div>
+              <div class="col-md-5">
+                  <div class="tabelTopBtn">
+                    <form class="form-inline" action="<?php echo base_url('contract/search_pending'); ?>" method="get">
+                    <div class="inputFormMain">
+                      <div class="input-group">
+                        <input type="text" name="search_pending" class="form-control" placeholder="Search keyword" required="" autocomplete="off">
+                        <div class="input-group-btn">
+                          <button type="submit" class="btn btnSubmit">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </form><small>Search by emp name, project, designation.</small>    
+                </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-md-12">
@@ -113,7 +133,7 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        <?php if(!empty($pend_letters)): if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($pend_letters as $pending): 
                             if($pending->status == 0):
                             ?>
@@ -159,7 +179,56 @@ h4 {
                         <?php endif; ?>
                           </td>
                         </tr>
-                          <?php endif; endforeach; endif; ?>
+                          <?php endif; endforeach; endif; endif; ?>
+                          <?php if(!empty($results)): foreach($results as $result): ?>
+                            <tr>
+                          <td>CTC-<?= $result->user_id; ?></td>
+                          <td><?= $result->fullname; ?></td>
+                          <td><?= $result->name; ?></td>
+                          <td><?php echo $result->designation_name; ?></td>
+                          <td><?php echo date('M d, Y', strtotime($result->sdt)); ?></td>
+                          <td>
+                            <?php if($result->status != 0): ?>
+                          <a href="javascript:void(0)" class="btn btn-success btn-xs">Accepted</a>
+                            <?php else: ?>
+                          <a href="<?php echo base_url(); ?>contract/upload_offer_letter/<?php echo $result->user_id; ?>" class="btn btn-info btn-xs">Generate</a>
+                          <a href="<?php if($result->attachment == ''){ ?> javascript:void(0); <?php }else{ echo base_url(); ?>contract/accept_offer_letter/<?php echo $result->user_id; } ?>" class="btn btn-primary btn-xs">Forward</a>
+                          <a href="<?php echo base_url(); ?>contract/reject_offer_letter/<?php echo $result->user_id; ?>" class="btn btn-primary btn-xs">Reject</a>
+                          <a data-toggle="modal" data-target="#attachment<?php echo $result->user_id; ?>" href="#" class="btn btn-warning btn-xs">View</a>
+                          <div class="modal fade" id="attachment<?= $result->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                              <div class="modal-content">
+                                  <!--Header-->
+                                <div class="modal-header">
+                                  <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Offer Letter Description</h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                  </button>
+                                </div>
+                                <!--Body-->
+                                <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-md-12">
+                                      <p><?php echo $result->attachment; ?></p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--Footer-->
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        <?php endif; ?>
+                          </td>
+                        </tr>
+                          <?php endforeach; endif; ?>
+                          <?php if(empty($results) and empty($pend_letters)): ?>
+                          <div class="alert alert-danger text-center">
+                            <p><strong>Sorry! </strong>We were unable to find results for your search keyword. Search for something that does exist instead.</p>
+                          </div>
+                          <?php endif; ?>
                       </tbody>
                     </table>
                   </div>
@@ -169,7 +238,7 @@ h4 {
             <div class="row">
               <div class="col-md-1"></div>
               <div class="col-md-10 text-center">
-                <?php echo $this->pagination->create_links(); ?>
+                <?php if(!empty($pend_letters) AND empty($results)){ echo $this->pagination->create_links(); } ?>
               </div>
               <div class="col-md-1"></div>
             </div>

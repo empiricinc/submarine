@@ -301,7 +301,7 @@ h4 {
                       </thead>
                       <tbody>
                         <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
-                          foreach($letters as $rejected): 
+                          foreach($rej_letters as $rejected): 
                             if($rejected->status == 3):
                             ?>
                         <tr>

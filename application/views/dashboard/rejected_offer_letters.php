@@ -91,11 +91,31 @@ h4 {
     <section class="secIndexTable">
         <div class="mainTableWhite">
             <div class="row">
-                <div class="col-md-12">
-                  <div class="tabelHeading">
-                     <h3>list of all rejected offer letters | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
-                  </div>
+              <div class="col-md-7">
+                <div class="tabelHeading">
+                  <?php if(empty($results)): ?>
+                   <h3>list of all rejected offer letters | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
+                   <?php else: ?>
+                   <h3>search results for: <small><?php echo $_GET['search_rejected']; ?> | <a href="javascript:history.go(-1);">&laquo; back</a></small></h3>
+                  <?php endif; ?>
                 </div>
+              </div>
+              <div class="col-md-5">
+                <div class="tabelTopBtn">
+                  <form class="form-inline" action="<?php echo base_url('contract/search_rejected'); ?>" method="get">
+                  <div class="inputFormMain">
+                    <div class="input-group">
+                      <input type="text" name="search_rejected" class="form-control" placeholder="Search keyword" required="" autocomplete="off">
+                      <div class="input-group-btn">
+                        <button type="submit" class="btn btnSubmit">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form><small>Search by emp name, project, designation.</small>    
+              </div>
+              </div>
             </div>
             <div class="row">
               <div class="col-md-12">
@@ -113,9 +133,9 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        <?php if(!empty($rejected_letters)): if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($rejected_letters as $rejected): 
-                            if($rejected->status == 2): ?>
+                            if($rejected->status == 3): ?>
                         <tr>
                           <td>CTC-<?= $rejected->user_id; ?></td>
                           <td><?= $rejected->fullname; ?></td>
@@ -130,7 +150,28 @@ h4 {
                             <?php endif; ?>
                           </td>
                         </tr>
-                        <?php endif; endforeach; endif; ?>
+                        <?php endif; endforeach; endif; endif; ?>
+                        <?php if(!empty($results)): foreach($results as $result): ?>
+                          <tr>
+                          <td>CTC-<?= $result->user_id; ?></td>
+                          <td><?= $result->fullname; ?></td>
+                          <td><?= $result->name; ?></td>
+                          <td><?php echo $result->designation_name; ?></td>
+                          <td><?php echo date('M d, Y', strtotime($result->sdt)); ?></td>
+                          <td>
+                           <?php if($result->status != 0 AND $result->status != 1): ?>
+                            <button class="btn btn-danger btn-xs">Rejected</button>
+                            <?php else: ?>
+                            <button class="btn btn-warning btn-xs">Pending</button>
+                            <?php endif; ?>
+                          </td>
+                        </tr>
+                        <?php endforeach; endif; ?>
+                        <?php if(empty($rejected_letters) AND empty($results)): ?>
+                          <div class="alert alert-danger text-center">
+                            <p><strong>Sorry! </strong>We were unable to find results for your search keyword. Search for something that does exist instead.</p>
+                          </div>
+                        <?php endif; ?>
                       </tbody>
                     </table>
                   </div>
@@ -140,7 +181,7 @@ h4 {
             <div class="row">
               <div class="col-md-1"></div>
               <div class="col-md-10 text-center">
-                <?php echo $this->pagination->create_links(); ?>
+                <?php if(!empty($rejected_letters) AND empty($results)){ echo $this->pagination->create_links(); } ?>
               </div>
               <div class="col-md-1"></div>
             </div>

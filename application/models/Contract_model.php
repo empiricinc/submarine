@@ -784,7 +784,7 @@ class Contract_model extends CI_Model {
 	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
-	 	$this->db->where('employee_offer_letter.status', 2);
+	 	$this->db->where('employee_offer_letter.status', 3);
 	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
 	 	$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
@@ -825,6 +825,105 @@ class Contract_model extends CI_Model {
 	 	$this->db->from('employee_offer_letter');
 	 	$this->db->where('user_id', $user_id);
 	 	return $this->db->get()->row();
+	 }
+	 // ---------------------------------- Search in offer letters ----------------------------- //
+	 // Search in accepted offer letters.
+	 public function accepted_search($keyword){
+	 	$this->db->select('employee_offer_letter.id, 
+				 					employee_offer_letter.user_id,
+				 					employee_offer_letter.status,
+				 					employee_offer_letter.attachment,
+				 					employee_offer_letter.sdt,
+				 					xin_companies.company_id,
+				 					xin_companies.name,
+				 					xin_designations.designation_id,
+				 					xin_designations.designation_name,
+				 					xin_job_applications.application_id,
+				 					xin_job_applications.job_id,
+				 					xin_job_applications.fullname,
+				 					xin_jobs.job_id,
+				 					xin_jobs.company,
+				 					xin_jobs.designation_id');
+	 	$this->db->from('employee_offer_letter');
+	 	$this->db->join('xin_job_applications', 'employee_offer_letter.user_id = xin_job_applications.application_id', 'left');
+	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+	 	$this->db->like('xin_job_applications.fullname', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 1);
+	 	$this->db->or_like('xin_companies.name', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 1);
+	 	$this->db->or_like('xin_designations.designation_name', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 1);
+	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
+	 	$query = $this->db->get();
+	 	return $query->result();
+	 }
+	 // Search in pending offer letters.
+	 public function pending_search($keyword){
+	 	$this->db->select('employee_offer_letter.id, 
+				 					employee_offer_letter.user_id,
+				 					employee_offer_letter.status,
+				 					employee_offer_letter.attachment,
+				 					employee_offer_letter.sdt,
+				 					xin_companies.company_id,
+				 					xin_companies.name,
+				 					xin_designations.designation_id,
+				 					xin_designations.designation_name,
+				 					xin_job_applications.application_id,
+				 					xin_job_applications.job_id,
+				 					xin_job_applications.fullname,
+				 					xin_jobs.job_id,
+				 					xin_jobs.company,
+				 					xin_jobs.designation_id');
+		$this->db->from('employee_offer_letter');
+		$this->db->join('xin_job_applications', 'employee_offer_letter.user_id = xin_job_applications.application_id', 'left');
+	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+	 	$this->db->where('employee_offer_letter.status', 0);
+	 	$this->db->like('xin_job_applications.fullname', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 0);
+	 	$this->db->or_like('xin_companies.name', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 0);
+	 	$this->db->or_like('xin_designations.designation_name', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 0);
+	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
+	 	$query = $this->db->get();
+	 	return $query->result();
+	 }
+	 // Search in rejected offer letters.
+	 public function rejected_search($keyword){
+	 	$this->db->select('employee_offer_letter.id, 
+				 					employee_offer_letter.user_id,
+				 					employee_offer_letter.status,
+				 					employee_offer_letter.attachment,
+				 					employee_offer_letter.sdt,
+				 					xin_companies.company_id,
+				 					xin_companies.name,
+				 					xin_designations.designation_id,
+				 					xin_designations.designation_name,
+				 					xin_job_applications.application_id,
+				 					xin_job_applications.job_id,
+				 					xin_job_applications.fullname,
+				 					xin_jobs.job_id,
+				 					xin_jobs.company,
+				 					xin_jobs.designation_id');
+		$this->db->from('employee_offer_letter');
+		$this->db->join('xin_job_applications', 'employee_offer_letter.user_id = xin_job_applications.application_id', 'left');
+	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+	 	$this->db->where('employee_offer_letter.status', 3);
+	 	$this->db->like('xin_job_applications.fullname', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 3);
+	 	$this->db->or_like('xin_companies.name', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 3);
+	 	$this->db->or_like('xin_designations.designation_name', $keyword);
+	 	$this->db->where('employee_offer_letter.status', 3);
+	 	$this->db->order_by('employee_offer_letter.id', 'DESC');
+	 	$query = $this->db->get();
+	 	return $query->result();
 	 }
 }
 ?>
