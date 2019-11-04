@@ -665,7 +665,7 @@ class Contract_model extends CI_Model {
 	}
 	// Printing contracts. Print multiple having status equals 0 (Pending...)
 	public function print_bulk(){
-		$this->db->select();
+		$this->db->select('*');
 		$this->db->from('employee_contract');
 		$this->db->where('status', 0);
 		return $this->db->get()->result();
@@ -818,6 +818,13 @@ class Contract_model extends CI_Model {
 		 $this->db->where('user_id', $user_id);
 		 $this->db->update('employee_offer_letter', array('status' => 3));
 		 return true;
+	 }
+	 // Print offer letter.
+	 public function offer_letter_print($user_id){
+	 	$this->db->select('*');
+	 	$this->db->from('employee_offer_letter');
+	 	$this->db->where('user_id', $user_id);
+	 	return $this->db->get()->row();
 	 }
 }
 ?>

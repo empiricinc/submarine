@@ -196,6 +196,7 @@ h4 {
                                 <!--Footer-->
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  <a target="blank" href="<?php echo base_url(); ?>contract/print_offer_letter/<?php echo $letter->user_id; ?>" class="btn btn-primary">Print</a>
                                 </div>
                               </div>
                             </div>
@@ -222,7 +223,7 @@ h4 {
               </div>
               <div class="col-md-7">
                 <div class="tabelTopBtn">
-                  <a href="<?= base_url('contract/offer_letters'); ?>" class="btn">View All</a>
+                  <a href="<?= base_url('contract/list_accepted_letters'); ?>" class="btn">View All</a>
                 </div>
               </div>
             </div>
@@ -267,16 +268,9 @@ h4 {
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-1"></div>
-              <div class="col-md-10 text-center">
-                <?php echo $this->pagination->create_links(); ?>
-              </div>
-              <div class="col-md-1"></div>
-            </div>
         </div>
       </div>
-<div class="col-md-12">
+      <div class="col-md-12">
         <div class="mainTableWhite">
             <div class="row">
               <div class="col-md-5">

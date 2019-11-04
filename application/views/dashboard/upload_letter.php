@@ -45,15 +45,54 @@
     </div>
   </section>
 </section>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/tinymce/plugins/variable/style.css'); ?>">
 <!-- TinyMCE script -->
 <script src='<?= base_url(); ?>assets/tinymce/tinymce.min.js'></script>
 <!-- Script -->
-<script>
-tinymce.init({ 
-  selector:'.editor',
-  theme: 'modern',
-  height: 200
+<script type="text/javascript" src="<?php echo base_url('assets/tinymce/plugins/variable/plugin.js'); ?>"></script>
+<script type="text/javascript">
+tinymce.init({
+    // basic tinyMCE stuff
+    selector: ".editor",
+    // content_css: 'style.css',
+    height: 200,
+    theme: 'modern',
+    menubar: true,
+    // toolbar: "bold,italic,mybutton,code",
+    statusbar: true,
+    // Adding more variables to the form, but we don't need to add more vars.
+    // setup : function(ed) {
+    //     window.tester = ed;
+    //     ed.addButton('mybutton', {
+    //         title : 'My button',
+    //         text : 'Insert variable',
+    //         onclick : function() {
+    //             ed.plugins.variables.addVariable('account_id');         
+    //         }
+    //     });
+    //     ed.on('variableClick', function(e) {
+    //        console.log('click', e);
+    //     });
+    // },
+    // variable plugin related
+    plugins: "variable, code",
+    variable_mapper: {  // Will look for variables in replace them with the text.
+        name: 'Shahid Qamar',
+        designation: 'CHW',
+        address: 'Hayat Abad, Phase III',
+        district: 'Peshawar',
+        province: 'KP',
+        cnic: '1420245324532',
+        start_date: '2019-10-01',
+        end_date: '2019-12-31',
+        date: '2019-10-01'
+    }
+    // variable_prefix: '{{',
+    // variable_suffix: '}}'
+    // variable_class: 'bbbx-my-variable',
+    //variable_valid: ['username', 'sender', 'phone', 'community_name', 'email']
 });
+
 // Get offer letter from database to the textarea.
 $(function() {
     $("#offer_type").change(function() {

@@ -143,126 +143,128 @@ h4 {
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
                     if($contract->status == 0){
                   ?>
-                  <tr>
-                    <td>
-                      <input type="checkbox" name="print" id="checkPrint" style="display: block;">
-                    </td>
-                    <td>
-                      CTC-<?php echo '0'.$contract->user_id; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->fullname; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->city_name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->dom_name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->gender_name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->email; ?>
-                    </td>
-                    <td>
-                      <a data-toggle="modal" data-target="#message<?= $contract->application_id; ?>" href="#message">
-                        <?php echo substr($contract->message, 0, 20).'...'; ?>
-                      </a>
-                      <div class="modal fade" id="message<?= $contract->application_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                              <!--Header-->
-                            <div class="modal-header">
-                              <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Message... </h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                              </button>
-                            </div>
-                            <!--Body-->
-                            <div class="modal-body">
-                              <div class="row">
-                                <div class="col-md-6 col-md-offset-3 text-center">
-                                  <strong>Message Description</strong>
-                                  <p><?php echo $contract->message; ?></p>
-                                </div>
-                              </div>
-                            </div>
-                            <!--Footer-->
-                            <div class="modal-footer">
-                              <?php if($contract->status == 1): ?>
-                                <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
-                              <?php endif; ?>
-                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td align="center">
-                      <?php if($contract->status == 0): ?>
-                      <a data-toggle="tooltip" title="Pending" data-placement="top" href="<?= base_url('contract/pending_contracts'); ?>">
-                        <i class="fa fa-spinner"></i>
-                        <?php else: ?>
-                        <div class="label label-danger">
-                          Rejected
-                        </div>
-                      <?php endif; ?>
-                      </a>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
-                    </td>
-                    <td id="allChecked">
-                    <?php
-                      if($contract->status == 0): ?>
-                        <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
-                        <a data-toggle="tooltip" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>">
-                          <i class="fa fa-check-circle"></i></a>
-                        <a data-toggle="tooltip" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description === NULL){ echo base_url('contract/activate_first'); if($check_copies == false){ echo base_url('contract/verify_first'); } }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
-                        <a data-toggle="modal" data-target="#rejectContract<?= $contract->user_id; ?>" href="#rejectModal">
-                          <i class="fa fa-close"></i>
+                  <?php if($contract->user_id): ?>
+                    <tr>
+                      <td>
+                        <input type="checkbox" name="print" id="checkPrint" style="display: block;">
+                      </td>
+                      <td>
+                        CTC-<?php echo '0'.$contract->user_id; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->fullname; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->name; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->city_name; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->dom_name; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->gender_name; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->email; ?>
+                      </td>
+                      <td>
+                        <a data-toggle="modal" data-target="#message<?= $contract->application_id; ?>" href="#message">
+                          <?php echo substr($contract->message, 0, 20).'...'; ?>
                         </a>
-                        <!-- Reject Modal starts. -->
-                        <div class="modal fade" id="rejectContract<?php echo $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="message<?= $contract->application_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <!--Header-->
                               <div class="modal-header">
-                                <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Rejection Reason... </h4>
+                                <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Message... </h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">×</span>
                                 </button>
                               </div>
                               <!--Body-->
                               <div class="modal-body">
-                                <form action="<?= base_url('contract/reject'); ?>" method="post">
-                                  <input type="hidden" name="user_id" value="<?= $contract->user_id; ?>">
-                                  <label for="reason">Rejection Reason</label>
-                                  <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...." required=""></textarea><br>
-                                  <input type="submit" name="submit" class="btn btn-primary" value="Submit">
-                                  <input type="reset" name="reset" class="btn btn-warning" value="Reset">
-                                </form>
+                                <div class="row">
+                                  <div class="col-md-6 col-md-offset-3 text-center">
+                                    <strong>Message Description</strong>
+                                    <p><?php echo $contract->message; ?></p>
+                                  </div>
+                                </div>
                               </div>
                               <!--Footer-->
                               <div class="modal-footer">
+                                <?php if($contract->status == 1): ?>
+                                  <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
+                                <?php endif; ?>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <!-- Reject modal ends. -->
-                     <?php else: ?>
-                        Contract Activated
-                     <?php endif; ?>                  
-                    </td>
-                  </tr>
+                      </td>
+                      <td align="center">
+                        <?php if($contract->status == 0): ?>
+                        <a data-toggle="tooltip" title="Pending" data-placement="top" href="<?= base_url('contract/pending_contracts'); ?>">
+                          <i class="fa fa-spinner"></i>
+                          <?php else: ?>
+                          <div class="label label-danger">
+                            Rejected
+                          </div>
+                        <?php endif; ?>
+                        </a>
+                      </td>
+                      <td>
+                        <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
+                      </td>
+                      <td>
+                        <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
+                      </td>
+                      <td id="allChecked">
+                      <?php
+                        if($contract->status == 0): ?>
+                          <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
+                          <a data-toggle="tooltip" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>">
+                            <i class="fa fa-check-circle"></i></a>
+                          <a data-toggle="tooltip" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description === NULL){ echo base_url('contract/activate_first'); if($check_copies == false){ echo base_url('contract/verify_first'); } }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
+                          <a data-toggle="modal" data-target="#rejectContract<?= $contract->user_id; ?>" href="#rejectModal">
+                            <i class="fa fa-close"></i>
+                          </a>
+                          <!-- Reject Modal starts. -->
+                          <div class="modal fade" id="rejectContract<?php echo $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                  <!--Header-->
+                                <div class="modal-header">
+                                  <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Rejection Reason... </h4>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                  </button>
+                                </div>
+                                <!--Body-->
+                                <div class="modal-body">
+                                  <form action="<?= base_url('contract/reject'); ?>" method="post">
+                                    <input type="hidden" name="user_id" value="<?= $contract->user_id; ?>">
+                                    <label for="reason">Rejection Reason</label>
+                                    <textarea name="reason" class="form-control" rows="5" placeholder="Start typing here...." required=""></textarea><br>
+                                    <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+                                    <input type="reset" name="reset" class="btn btn-warning" value="Reset">
+                                  </form>
+                                </div>
+                                <!--Footer-->
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Reject modal ends. -->
+                       <?php else: ?>
+                          Contract Activated
+                       <?php endif; ?>                  
+                      </td>
+                    </tr>
+                  <?php endif; ?>
                   <?php } } } ?>
                 </tbody>
               </table>

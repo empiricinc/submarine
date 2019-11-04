@@ -871,6 +871,49 @@ class Contract extends MY_Controller {
 		$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
     	$this->load->view('layout_main', $data); // Page load.
 	}
+	// List of all accepted offer letters.
+	public function list_accepted_letters($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$projid = $session['project_id'];
+	    $provid = $session['provience_id'];
+
+	    $this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/list_accepted_letters');
+		$config['total_rows'] = $this->Contract_model->count_offer_letters();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		 
+		$data['sl3'] = $this->session->userdata('accessLevel');  
+        $data['sl2'] = $this->session->userdata('accessLevel');
+	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
+	    $data['subview'] = $this->load->view('dashboard/accepted_offer_letters', $data, TRUE);
+	    $this->load->view('layout_main', $data); // Page load.
+	}
 // Accept Offer letter
   public function accept_offer_letter($user_id){
     if($this->Contract_model->accept_letter($user_id)){
@@ -902,11 +945,38 @@ class Contract extends MY_Controller {
   	$data = array(
   		'attachment' => $this->input->post('offer_letter')
   	);
+  	var_dump($data); exit;
   	$this->Contract_model->upload_offer_letter($user_id, $data);
   	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been generated successfully!');
   	redirect('contract/offer_letters');
   }
-
+  // Print offer letter.
+  public function print_offer_letter($user_id){
+		$this->load->library('Pdf');
+	    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	    $pdf->SetTitle('Employment Contract');
+	    $pdf->SetHeaderMargin(30);
+	    $pdf->SetTopMargin(20);
+	    $pdf->setFooterMargin(20);
+	    $pdf->SetAutoPageBreak(true);
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->SetAuthor('Saddam');
+	    $pdf->SetDisplayMode('real', 'default');
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->setFontSubsetting(true);
+	    $pdf->setFont('times', '', 12);
+	    $pdf->setPrintHeader(false);
+	    $pdf->setPrintFooter(false);
+	    // Add a page
+	    $data['offer_letter'] = $this->Contract_model->offer_letter_print($user_id);
+	    // $title = $print->title;
+	    ob_start();
+	    $pdf->AddPage(); // Data will be loaded to the page here.
+	    $html = $this->load->view('dashboard/print_letter', $data, true);
+	    $pdf->writeHTML($html, true, false, true, false, '');
+	    ob_clean();
+	    $pdf->Output(md5(time()).'.pdf', 'I');
+	}
 
 	
 

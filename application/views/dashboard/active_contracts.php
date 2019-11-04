@@ -156,6 +156,7 @@ $(document).ready(function() {
                   $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
                   if($contract->status == 1){
                 ?>
+                <?php if($contract->employee_id): ?>
                   <tr>
                     <td>
                       <input type="checkbox" name="print" id="checkPrint">
@@ -164,7 +165,7 @@ $(document).ready(function() {
                       CTC-<?= $contract->name.'-'.$contract->employee_id; ?>
                     </td>
                     <td>
-                      <?php echo $contract->first_name.' '.$contract->last_name;?>
+                      <?php echo $contract->first_name;?>
                     </td>
                     <td>
                       <?php echo $contract->name; ?>
@@ -188,6 +189,7 @@ $(document).ready(function() {
                       <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->employee_id; ?>" class="btn btn-primary btn-xs">Print</a>
                     </td>
                   </tr>
+                <?php endif; ?>
                   <?php } } ?>
                 </tbody>
               </table>
@@ -258,7 +260,7 @@ $(document).ready(function() {
               <tr>
                 <td><input type="checkbox" name="print" id="checkPrint"></td>
                 <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
+                <td>${val.first_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
                 <td>${fromDate} - ${toDate}</td>
@@ -275,7 +277,7 @@ $(document).ready(function() {
               <tr>
                 <td><input type="checkbox" name="print" id="checkPrint"></td>
                 <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
+                <td>${val.first_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
                 <td>${fromDate} - ${toDate}</td>
@@ -292,7 +294,7 @@ $(document).ready(function() {
               <tr>
                 <td><input type="checkbox" name="print" id="checkPrint"></td>
                 <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
+                <td>${val.first_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
                 <td>${fromDate} - ${toDate}</td>
@@ -309,7 +311,7 @@ $(document).ready(function() {
               <tr>
                 <td><input type="checkbox" name="print" id="checkPrint"></td>
                 <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name} ${val.last_name}</td>
+                <td>${val.first_name}</td>
                 <td>${val.name}</td>
                 <td>${val.designation_name}</td>
                 <td>${fromDate} - ${toDate}</td>
