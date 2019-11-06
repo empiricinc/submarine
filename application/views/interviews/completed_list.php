@@ -78,7 +78,6 @@
                       <th>district</th>
                       <th>marks</th>
                       <th>interview date</th>
-                      <th>remarks</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -152,10 +151,6 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Comments</td>
-                                      <td><?= $row->comments; ?></td>
-                                    </tr>
-                                    <tr>
                                       <td>Result submission date</td>
                                       <td><?= date('M d, Y', strtotime($row->int_date)); ?></td>
                                     </tr>
@@ -186,38 +181,6 @@
                         </div>
                       </td>
                       <td><?= date('l, M jS, Y', strtotime($completed->sdt)); ?></td>
-                      <td>
-                        <a href="#commentModal" data-toggle="modal" data-target="#comment_detail<?= $completed->rollnumber; ?>">
-                          <?= substr($completed->comments, 0, 20).'&hellip;'; ?>
-                        </a>
-                        <div class="modal fade" id="comment_detail<?= $completed->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <!--Header-->
-                              <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Remarks... </h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">×</span>
-                                </button>
-                              </div>
-                              <!--Body-->
-                              <div class="modal-body">
-                                <table class="table table-hover">
-                                  <tbody>
-                                   <?php foreach ($com_data as $row){ ?>
-                                    <p><?= $row->comments; ?></p>
-                                    <?php } ?>  
-                                  </tbody>
-                                </table>
-                              </div>
-                              <!--Footer-->
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
@@ -249,7 +212,6 @@
                       <th>district</th>
                       <th>marks</th>
                       <th>interview date</th>
-                      <th>remarks</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -323,10 +285,6 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Comments</td>
-                                      <td><?= $row->comments; ?></td>
-                                    </tr>
-                                    <tr>
                                       <td>Result submission date</td>
                                       <td><?= date('M d, Y', strtotime($row->int_date)); ?></td>
                                     </tr>
@@ -357,38 +315,6 @@
                         </div>
                       </td>
                       <td><?= date('l, M jS, Y', strtotime($result->sdt)); ?></td>
-                      <td>
-                        <a href="#commentModal" data-toggle="modal" data-target="#comment_detail<?= $result->rollnumber; ?>">
-                          <?= substr($result->comments, 0, 20).'&hellip;'; ?>
-                        </a>
-                        <div class="modal fade" id="comment_detail<?= $result->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <!--Header-->
-                              <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Remarks... </h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">×</span>
-                                </button>
-                              </div>
-                              <!--Body-->
-                              <div class="modal-body">
-                                <table class="table table-hover">
-                                  <tbody>
-                                   <?php foreach ($com_data as $row){ ?>
-                                    <p><?= $row->comments; ?></p>
-                                    <?php } ?>  
-                                  </tbody>
-                                </table>
-                              </div>
-                              <!--Footer-->
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>

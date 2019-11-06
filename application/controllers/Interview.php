@@ -393,12 +393,128 @@ $this->load->model('job_longlisted_model'); // load model
 			$data = array(
 				'rollnumber' => $this->input->post('applicant_rollnumber'),
 				'obtain_marks' => $this->input->post('marks_obtained'),
-				'total_marks' => $this->input->post('total_marks'),
-				'comments' => $this->input->post('additional_comment')
+				'total_marks' => $this->input->post('total_marks')
 			);
 			$this->Interview_model->save_marks($data);
 			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been saved successfully!');
 			redirect('interview');
+		}
+	}
+	// Interview form for SM/UCCSO.
+	public function form_sm($rollnumber){
+		$data['path_url'] = '';
+		$data['applicant_detail'] = $this->Interview_model->applicant_detail($rollnumber);
+		$data['subview'] = $this->load->view('interviews/sm_interview_form', $data, TRUE);
+		$this->load->view('layout_main', $data); // page load.
+	}
+	// Save SM Interview result.
+	public function sm_interview(){
+		$q1 = $this->input->post('per_marks');
+		$q2 = $this->input->post('qual_marks');
+		$q3 = $this->input->post('exp_marks');
+		$q4 = $this->input->post('job_marks');
+		$q5 = $this->input->post('sup_marks');
+		$q6 = $this->input->post('rep_marks');
+		$q7 = $this->input->post('mob_marks');
+		$q8 = $this->input->post('comm_marks');
+		$obtained = $q1 + $q2 + $q3 + $q4 + $q5 + $q6 + $q7 + $q8;
+		$data = array(
+			'rollnumber' => $this->input->post('rollnumber'),
+			'obtain_marks' => $obtained,
+			'total_marks' => 50,
+			'remark1' => $this->input->post('per_remarks'),
+			'remark2' => $this->input->post('qual_remarks'),
+			'remark3' => $this->input->post('exp_remarks'),
+			'remark4' => $this->input->post('job_remarks'),
+			'remark5' => $this->input->post('sup_remarks'),
+			'remark6' => $this->input->post('rep_remarks'),
+			'remark7' => $this->input->post('mob_remarks'),
+			'remark8' => $this->input->post('comm_remarks'),
+			'remark10' => $this->input->post('overall_remarks')
+		);
+		if($this->Interview_model->save_sm_interview($data)){
+			$this->session->set_flashdata('success', '<strong>Success !</strong> The interview result has been saved successfully');
+			redirect('interview');
+		}else{
+			echo "The operation wasn't successful";
+		}
+	}
+	// Interview form for DHCSO.
+	public function form_dhcso($rollnumber){
+		$data['path_url'] = '';
+		$data['applicant_detail'] = $this->Interview_model->applicant_detail($rollnumber);
+		$data['subview'] = $this->load->view('interviews/dhcso_interview_form', $data, TRUE);
+		$this->load->view('layout_main', $data); // page load.
+	}
+	// Save DHCSO interview.
+	public function dhcso_interview(){
+		$q1 = $this->input->post('per_marks');
+		$q2 = $this->input->post('con_marks');
+		$q3 = $this->input->post('qual_marks');
+		$q4 = $this->input->post('exp_marks');
+		$q5 = $this->input->post('comp_marks');
+		$q6 = $this->input->post('job_marks');
+		$q7 = $this->input->post('prof_marks');
+		$q8 = $this->input->post('attrib_marks');
+		$q9 = $this->input->post('comm_marks');
+		$obtained = $q1 + $q2 + $q3 + $q4 + $q5 + $q6 + $q7 + $q8 + $q9;
+		$data = array(
+			'rollnumber' => $this->input->post('rollnumber'),
+			'obtain_marks' => $obtained,
+			'total_marks' => 50,
+			'remark1' => $this->input->post('per_remarks'),
+			'remark2' => $this->input->post('con_remarks'),
+			'remark3' => $this->input->post('qual_remarks'),
+			'remark4' => $this->input->post('exp_remarks'),
+			'remark5' => $this->input->post('comp_remarks'),
+			'remark6' => $this->input->post('job_remarks'),
+			'remark7' => $this->input->post('prof_remarks'),
+			'remark8' => $this->input->post('attrib_remarks'),
+			'remark9' => $this->input->post('comm_remarks'),
+			'remark10' => $this->input->post('overall_remarks')
+		);
+		if($this->Interview_model->save_dhcso_interview($data)){
+			$this->session->set_flashdata('success', '<strong>Success !</strong> The interview result has been submitted successfully.');
+			redirect('interview');
+		}else{
+			echo "The operation wasn't successful";
+		}
+	}
+	// Interview form for FCM/CHW.
+	public function form_fcm($rollnumber){
+		$data['path_url'] = '';
+		$data['applicant_detail'] = $this->Interview_model->applicant_detail($rollnumber);
+		$data['subview'] = $this->load->view('interviews/fcm_interview_form', $data, TRUE);
+		$this->load->view('layout_main', $data); // page load.
+	}
+	// Save FCM/CHW interview.
+	public function fcm_interview(){
+		$q1 = $this->input->post('dob_marks');
+		$q2 = $this->input->post('marital_marks');
+		$q3 = $this->input->post('qual_marks');
+		$q4 = $this->input->post('exp_marks');
+		$q5 = $this->input->post('comm_marks');
+		$q6 = $this->input->post('mob_marks');
+		$q7 = $this->input->post('lang_marks');
+		$obtained = $q1 + $q2 + $q3 + $q4 + $q5 + $q6 + $q7;
+		$data = array(
+			'rollnumber' => $this->input->post('rollnumber'),
+			'obtain_marks' => $obtained,
+			'total_marks' => 50,
+			'remark1' => $this->input->post('dob_remarks'),
+			'remark2' => $this->input->post('marital_remarks'),
+			'remark3' => $this->input->post('qual_remarks'),
+			'remark4' => $this->input->post('exp_remarks'),
+			'remark5' => $this->input->post('comm_remarks'),
+			'remark6' => $this->input->post('mob_remarks'),
+			'remark7' => $this->input->post('lang_remarks'),
+			'remark10' => $this->input->post('overall_remarks')
+		);
+		if($this->Interview_model->save_fcm_interview($data)){
+			$this->session->set_flashdata('success', '<strong>Success !</strong> The interview result has been submitted successfully.');
+			redirect('interview');
+		}else{
+			echo "The operation wasn't successful";
 		}
 	}
 	

@@ -188,7 +188,6 @@ function applicantdetails($id){
     					interview_result.rollnumber,
     					interview_result.obtain_marks,
     					interview_result.total_marks,
-    					interview_result.comments,
     					interview_result.sdt as int_date,
     					assign_interview.id,
     					assign_interview.rollnumber,
@@ -232,7 +231,6 @@ function applicantdetails($id){
     						interview_result.rollnumber,
     						interview_result.obtain_marks,
     						interview_result.total_marks,
-    						interview_result.comments,
     						interview_result.sdt,
     						xin_job_applications.application_id,
     						xin_job_applications.fullname,
@@ -266,7 +264,6 @@ function applicantdetails($id){
     						interview_result.rollnumber,
     						interview_result.obtain_marks,
     						interview_result.total_marks,
-    						interview_result.comments,
     						interview_result.sdt,
     						xin_job_applications.application_id,
     						xin_job_applications.fullname,
@@ -464,6 +461,57 @@ function applicantdetails($id){
 	}
 	// Save interview marks.
 	public function save_marks($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Display applicant detail in the form while adding result.
+	public function applicant_detail($rollnumber){
+		$this->db->select('assign_interview.rollnumber,
+							assign_interview.interview_date,
+									xin_job_applications.application_id,
+									xin_job_applications.job_id,
+									xin_job_applications.fullname,
+									xin_jobs.job_id,
+									xin_jobs.company,
+									xin_jobs.designation_id,
+									xin_companies.company_id,
+									xin_companies.name,
+									xin_designations.designation_id,
+									xin_designations.designation_name');
+		$this->db->from('assign_interview');
+		$this->db->join('xin_job_applications', 'assign_interview.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where('assign_interview.rollnumber', $this->uri->segment(3));
+		echo $this->db->last_query();
+		$query = $this->db->get();
+		return $query->row();
+	}
+	// Save SM interview.
+	public function save_sm_interview($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Save DHCSO interview.
+	public function save_dhcso_interview($data){
+		$this->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Save FCM/CHW interview.
+	public function save_fcm_interview($data){
 		$this->db->insert('interview_result', $data);
 		if($this->db->affected_rows() > 0){
 			return true;

@@ -48,11 +48,6 @@
 							<span style="color: red;"><?php echo form_error('total_marks'); ?></span>
 						</div>
 					</div>
-					<div class="col-lg-6">
-						<div class="inputFormMain">
-							<textarea name="additional_comment" class="form-control" placeholder="Additional remarks (if any?)" style="color: #aeafaf;" rows="2"></textarea>
-						</div>
-					</div>
 					<div class="col-lg-12">
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>

@@ -110,11 +110,11 @@ if ($interviewResult) {
         <tr>
           <th>RNo.</th>
           <th>Detail</th>
-          <th>Action</th>
           <th>project</th>
           <th>designation</th>
           <th>location</th>
-          <th>Interview</th>
+          <th>Interview date</th>
+          <th>action</th>
         </tr>
       </thead>
       <tbody>
@@ -205,172 +205,14 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                   </div>
                 </div>
             </td>
+            <td><?php echo $interview->compName; ?></td>
+            <td><?php echo $interview->designation_name; ?></td>
+            <td><?php echo $interview->provName;?></td>
+            <td><?php echo date('M d, Y', strtotime($interview->interview_date)); ?></td>
             <td>
-<?php
-
-      $interviewresult = $this->Interview_model->interview_result_exists('interview_result','rollnumber',$interview->rollnumber); 
-      if($interviewresult==0){ 
-        echo '<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#assigninterview'.$i.'" style="display: block;">Add Result</button>';
-      }else{ 
-       // echo '<button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok"></span> Interview Result</button>';
-      //}
-
-      $checkinterviewresult = $this->job_longlisted_model->interview__result_exists('interview_result','rollnumber',$interview->rollnumber); 
-      if($checkinterviewresult==0){ // aghr interview result nhe dia to zero condition ma serf tab show ho jay
-                             echo '<button type="button" class="btn btn-success btn-xs" ><span class="glyphicon glyphicon-ok"></span> Interview</button>';
-                            }else{ $interviewmarks = $this->job_longlisted_model->interview_result_byjobId($interview->rollnumber); foreach ($interviewmarks as $intr){  $interviewPM = $intr->obtain_marks*100/$intr->total_marks; }
-                             echo '<button type="button" class="btn btn-success btn-xs" >'.round($interviewPM).'%'.'</button>';
-                            }
-            }
-?>                            
-                            <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#assigninterview<?php echo $i; ?>">Result</button> -->
-
-                            <div class="modal fade" id="assigninterview<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Add Interview Result & comments</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">×</span>
-                                    </button>
-                                  </div>
-                                  <div class="container">
-                               <form action="<?php echo site_url("job_post/add_interview_result") ?>" method="post" name="add_job" id="xin-form">
-                                  <!-- <input type="hidden" name="email" value="<?php echo $candidate->email;?>"> --> <!-- // email address where sent auto email to interviewr person // --> 
-                                  <input type="hidden" name="rollnumber" value="<?php echo $interview->rollnumber;?>">
-                                <br>
-
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">Roll Number: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" value="CTC-<?php echo $interview->rollnumber;?>" class="inputfield" readonly="readonly">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-
-                                <div class="row">
-                                  <div class="form-group">
-                                    <div class="col-lg-4">
-                                      <label for="date_of_closing" class="control-label lablewidth">Communication: </label>
-                                    </div>
-                                    <div class="col-lg-8">
-                                      <input type="text" name="communication" value="10" class="inputfield">
-                                    </div>
-                                  </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                  <div class="form-group">
-                                    <div class="col-lg-4">
-                                      <label for="date_of_closing" class="control-label lablewidth">Experience: </label>
-                                    </div>
-                                    <div class="col-lg-8">
-                                      <input type="text" name="experience" value="10" class="inputfield">
-                                    </div>
-                                  </div>
-                                </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">Aptitude: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" name="aptitude" value="10" class="inputfield">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">Personality: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" name="personality" value="10" class="inputfield">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">Language: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" name="language" value="10" class="inputfield">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">Education: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" name="education" value="10" class="inputfield">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">General Knowledge: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" name="general_knowledge" value="10" class="inputfield">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="date_of_closing" class="control-label lablewidth">Total Marks: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <input type="text" name="total_marks" value="70" class="inputfield">
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                  <div class="row">
-                                    <div class="form-group">
-                                      <div class="col-lg-4">
-                                        <label for="comments" class="control-label lablewidth">Comments: </label>
-                                      </div>
-                                      <div class="col-lg-8">
-                                        <textarea name="comments" class="inputfield" rows="5" placeholder="Additional info, comments about the candidate."></textarea>
-                                      </div>
-                                    </div>
-                                  </div>
-                                <br>
-                                <div class="row">
-                                  <div class="col-lg-8 col-lg-offset-4">
-                                    <button type="submit" class="btn btn-primary save"><?php echo $this->lang->line('xin_save');?></button>
-                                    <button type="button" class="btn btn-warning reset">Cancel</button><br><br>
-                                  </div>
-                                </div>
-                                </form>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td><?php echo $interview->compName; ?></td>
-                          <td><?php echo $interview->designation_name; ?></td>
-                          <td><?php echo $interview->provName;?></td>
-                          <td><?php echo date('M d, Y', strtotime($interview->interview_date)); ?></td>
-                      </tr>
+              <a href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Result</a>
+            </td>
+          </tr>
         <?php } ?>               
                     </tbody>
                   </table>
@@ -481,10 +323,6 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                                         <td>
                                           <?= '<strong>'.$row->obtain_marks.'</strong> out of <strong>'.$row->total_marks.'</strong> with the percentage of <strong>'.round($row->obtain_marks/$row->total_marks*100).'.</strong>'; ?>
                                         </td>
-                                      </tr>
-                                      <tr>
-                                        <td>Comments</td>
-                                        <td><?= $row->comments; ?></td>
                                       </tr>
                                       <tr>
                                         <td>Result submission date</td>
