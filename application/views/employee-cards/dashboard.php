@@ -233,7 +233,8 @@
 												<th>ID</th>
 												<th>Name</th>
 												<th>Project</th>
-												<th>Receive Date</th>
+												<th>Deliver Date</th>
+												<th>Received Date</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -242,6 +243,7 @@
 													<td><?= $c->employee_id; ?></td>
 													<td><?= ucwords($c->emp_name); ?></td>
 													<td><?= $c->project_name; ?></td>
+													<td><?= date('d-m-Y', strtotime($c->deliver_date)); ?></td>
 													<td><?= date('d-m-Y', strtotime($c->receive_date)); ?></td>
 												</tr>
 											<?php endforeach; ?>
