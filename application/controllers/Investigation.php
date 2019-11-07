@@ -261,7 +261,7 @@ class Investigation extends MY_Controller
 				);
 
 		if($this->Investigation_model->update($investigation_id, $data))
-			$this->session->set_flashdata('success', 'Investigation Update Successfully');
+			$this->session->set_flashdata('success', 'Investigation Updated Successfully');
 		else
 			$this->session->set_flashdata('error', 'Investigation Updation failed');
 

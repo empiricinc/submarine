@@ -63,7 +63,8 @@ class Employee_cards extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.status' => '0'
+					'ec.status' => '0',
+					'xe.status' => '1'
 				];
 
 	    $data['card_request'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
@@ -96,13 +97,16 @@ class Employee_cards extends MY_Controller
 				$title = 'Card Requests';
 				break;
 			case '1':
-				$title = 'Ready To Print';
+				$title = 'Pending for Print';
 				break;
 			case '2':
-				$title = 'Ready To Delivered';
+				$title = 'Printed';
 				break;
 			case '3':
 				$title = 'Delivered';
+				break;
+			case '4':
+				$title = 'Received';
 				break;
 
 		}
@@ -112,7 +116,8 @@ class Employee_cards extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.status' => $status
+					'ec.status' => $status,
+					'xe.status' => '1'
 				];
 
 		if(isset($_GET['search']))
@@ -171,7 +176,8 @@ class Employee_cards extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.status' => '1'
+					'ec.status' => '1',
+					'xe.status' => '1'
 				];
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 		if($card_ids[0] != "")
@@ -203,7 +209,7 @@ class Employee_cards extends MY_Controller
 		$this->load->view('employee-cards/_template', $data);
 	}
 
-	public function received($offset="")
+	public function receive($offset="")
 	{
 		$card_status = '3';
 		$ids = $this->uri->segment(3);
@@ -214,7 +220,8 @@ class Employee_cards extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'ec.status' => $card_status
+					'ec.status' => $card_status,
+					'xe.status' => '1'
 				];
 
 		if(isset($_GET['search']))
@@ -313,7 +320,6 @@ class Employee_cards extends MY_Controller
 	{
 		$status = $this->input->post('status');
 		$date = $this->input->post('status_date');
-		// $date = date('Y-m-d');
 
 		switch ($status) {
 			case '0':

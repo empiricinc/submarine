@@ -207,9 +207,13 @@ tr {
 		margin: 0;
 	}
 
-	.print-header {
-		margin-top: 30px;
+	.secMainWidth {
+		margin: 30px;
 	}
+
+	/*.print-header {
+		margin-top: 30px;
+	}*/
 	
 	.hide-print {
 		display: none;
@@ -647,6 +651,10 @@ tr {
 	border-radius: .25em;
 }
 
+.normal-font {
+	font-weight: normal;
+}
+
 .mt-0 {
 	margin-top: 0px;
 }
@@ -702,6 +710,11 @@ tr {
 .mlr-5 {
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.mtb-0 {
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 .mtb-15 {
@@ -764,6 +777,3 @@ tr {
   font-weight: 600;
 }
 
-.table-responsive {
-	min-height: 150px !important;
-}

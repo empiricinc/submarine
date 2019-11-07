@@ -33,7 +33,7 @@
 							</select>
 							<span></span>
 						</div>
-						<!-- <div class="filterSelect">
+						<div class="filterSelect">
 							<select name="project" class="form-control">
 								<option value="">Project</option>
 								<?php foreach($projects AS $p): ?>
@@ -42,15 +42,6 @@
 							</select>
 							<span></span>
 						</div>
-						<div class="filterSelect">
-							<select name="location" class="form-control">
-								<option value="">Location</option>
-								<?php foreach($locations AS $l): ?>
-								<option value="<?= $l->location_id; ?>"><?= $l->location_name; ?></option>
-								<?php endforeach; ?>
-							</select>
-							<span></span>
-						</div> -->
 
 						<div class="filterSelect">
 							<select name="province" class="form-control province">
@@ -61,29 +52,7 @@
 							</select>
 							<span></span>
 						</div>
-						<!-- <div class="filterSelect hide">
-							<select name="district" class="form-control district" id="district">
-								<option value="">District</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="tehsil" class="form-control tehsil" id="tehsil">
-								<option value="">Tehsil</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="uc" class="form-control uc" id="uc">
-								<option value="">UC</option>
-								
-							</select>
-							<span></span>
-						</div> -->
 						
-
 						<div class="filterSelectBtn">
 							<button type="submit" name="search" class="btn btnSubmit" id="search-btn">Search</button>
 						</div>
@@ -128,12 +97,11 @@
 													<thead>
 														<tr>
 															<th>ID</th>
-															<th>Province</th>
-															<th>District</th>
 															<th>Name</th>
 															<th>Gender</th>
 															<th>Designation</th>
-															<th>D.O.B</th>
+															<th>D.O.B</th>									
+															<th>Province</th>
 															<th>CNIC</th>
 															<th>D.O.J</th>
 															<th>Action</th>
@@ -149,12 +117,12 @@
 															<input type="hidden" id="action-<?= $e->employee_id; ?>" value="<?= $action; ?>">
 
 															<td><?= $e->employee_id; ?></td>
-															<td><?= ucfirst($e->province); ?></td>
-															<td><?= ucfirst($e->district); ?></td>
 															<td><?= ucwords($e->emp_name); ?></td>
 															<td><?= ucfirst($e->gender); ?></td>
 															<td><?= $e->designation_name; ?></td>
 															<td><?= date('d-m-Y', strtotime($e->date_of_birth)); ?></td>
+															
+															<td><?= ucfirst($e->province); ?></td>
 															<td><?= $cnic_no = ($e->cnic_no == '') ? '<label class="label label-default">Unverified</label>' : $e->cnic_no; ?></td>
 															<td><?= $doj = ($e->doj == '') ? '<label class="label label-default">Unverified</label>' : date('d-m-Y', strtotime($e->doj)); ?></td>
 															<td>

@@ -14,7 +14,7 @@ class Employee_cards_model extends CI_Model
 
 	function get_employee_cards($conditions=array(), $limit="", $offset="")
     {
-        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.contact_no, xd.designation_name, ebi.cnic, ebi.contact_number, ebi.personal_contact,
+        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xd.designation_name, ebi.cnic, ebi.contact_number, ebi.personal_contact,
             ebi.date_of_birth, ebi.job_title, xc.name AS project_name, ec.id AS card_id, ec.status, ec.issue_date, ec.expiry_date, ebi.date_of_joining, ec.print_date, ec.deliver_date, ec.receive_date");
 
         $this->db->join('xin_employees xe', 'ec.employee_id = xe.employee_id', 'left');
@@ -29,7 +29,7 @@ class Employee_cards_model extends CI_Model
 
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
         $this->db->order_by('ec.id', 'DESC');
-        
+        // $this->db->group_by('xe.employee_id');
         return $this->db->get('employee_cards ec');
     }
 

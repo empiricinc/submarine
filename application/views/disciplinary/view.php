@@ -75,17 +75,16 @@
 										<h3><?= $title; ?><span></span>
 											<br>
 											<small class="" id="status-btn">
-												<?php 
-													// $labels = array('warning', 'info', 'success', 'primary', 'danger'); 
-												?>
 
-												<?php $i=0; foreach($status AS $s): ?>
-												<!-- <a href="javascript:void(0);" data-status="<?= $s->id; ?>" class="label label-default"><?= $s->status_text; ?></a>  -->
-												
-												<?php $i++; endforeach; ?>
-												<!-- <a href="javascript:void(0);" data-status="all" class="label label-default">show all</a> -->
 											</small>
 										</h3>
+									</div>
+									<div class="col-md-2">
+										<div class="tabelTopBtn">
+											<a href="<?= base_url(); ?>Disciplinary/reportXLS" class="btn">
+												<i class="fa fa-file-excel-o"></i> Export Data
+											</a>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -111,19 +110,7 @@
 											</thead>
 											<tbody id="investigations-list">
 												
-												<?php $count=1; foreach($disciplinary_actions AS $c): 
-													$label = '';
-													// if($c->status_id == "1") 
-													// 	$label = "label label-warning";
-													// elseif($c->status_id == "2")
-													// 	$label = "label label-primary";
-													// elseif($c->status_id == "3")
-													// 	$label = "label label-success";
-													// elseif($c->status_id == "4")
-													// 	$label = "label label-info";
-													// elseif($c->status_id == "5")
-													// 	$label = "label label-danger";
-												?>
+												<?php $count=1; foreach($disciplinary_actions AS $c): ?>
 
 													<tr data="<?= $c->id; ?>">
 														<td><?= $c->employee_id; ?></td>

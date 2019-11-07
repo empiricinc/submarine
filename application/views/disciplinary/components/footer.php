@@ -12,17 +12,15 @@
 					<div id="disciplinaryHandler">
 						
 					</div>
-						<!-- <div class="row">
-							<div class="col-lg-12">
-								<div class="inputFormMain">
-									<label>Date</label>
-									<input type="text" name="added_date" class="form-control date">
-								</div>
-							</div>
-						</div> -->
 
 
 					<div class="row">
+						<div class="col-lg-12">
+							<div class="inputFormMain">
+								<label>Status Date</label>
+								<input type="text" name="added_date" class="form-control date" required>
+							</div>
+						</div>
 						<div class="col-lg-12">
 							<div class="inputFormMain">
 								<label>Comments</label>
@@ -44,7 +42,7 @@
 <?php if(isset($detail)): ?>
 <div class="modal fade" id="edit-disciplinary-modal">
 	<div class="modal-dialog modal-lg">
-		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary" method="POST">
+		<form action="<?= base_url(); ?>Disciplinary/update" method="POST">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">
@@ -55,87 +53,13 @@
 			</div>
 			<div class="modal-body">
 				<div class="row">
-	    				<div class="col-lg-4">
-
-							<div class="inputFormMain">
-								<label>Employee Name</label>
-								<input type="text" name="employee_name" id="employee-name" class="form-control" value="<?= ucwords($detail->emp_name); ?>" readonly>
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Designation</label>
-								<input type="text" name="designation_name" id="designation-name" class="form-control" value="<?= ucwords($detail->designation_name); ?>" readonly>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Type</label>
-								<select name="type_id" id="type" class="form-control" required="required">
-									<option value="">SELECT TYPE</option>
-									<?php foreach($type AS $t): ?>
-										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Reason</label>
-								<select name="reason" id="reason" class="form-control reason" required="required">
-									<option value="">SELECT REASON</option>
-									<?php foreach($reasons AS $r): ?>
-										<?php if($r->parent_id == '0') { ?>
-											<optgroup label="<?= $r->reason_text; ?>">
-										<?php } else { ?>
-												<option value="<?= $r->id; ?>"><?= $r->reason_text; ?></option>
-										<?php } ?>
-										<?php endforeach; ?>
-									<option value="other">Other</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Other Reason</label>
-								<input type="text" name="other_reason" id="other-reason" class="form-control other-reason" disabled>
-							</div>
-						</div>
-
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Reported By</label>
-								<input type="text" name="reported_by" class="form-control">
-							</div>
-						</div>
-						<div class="col-lg-4">
-							<div class="inputFormMain">
-								<label>Reporting Date</label>
-								<input type="text" name="reporting_date" class="form-control date">
-							</div>
-						</div>
-						
-						<?= $form_fields; ?>
-
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<label>Subject</label>
-								<input type="text" name="subject" class="form-control">
-							</div>
-						</div>
-						<div class="col-lg-12">
-							<div class="inputFormMain">
-								<label>Description</label>
-								<textarea name="description" id="description" class="form-control" rows="3" required="required"></textarea>
-							</div>
-						</div>
-						
-	    			</div>	
+		
+					<?= $form_fields; ?>
+	
+	    		</div>	
 			</div>
 			<div class="modal-footer">
-				<button type="submit" class="btn btnSubmit"> 
+				<button type="submit" name="submit" class="btn btnSubmit"> 
     				Update 
     			</button>
     			<button type="reset" class="btn btnSubmit" data-dismiss="modal"> 
@@ -245,10 +169,10 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Disciplinary/districts',
+				url: '<?= base_url(); ?>Disciplinary/districts/'+province,
 				type: 'POST',
 				dataType: 'json',
-				data: {province_id: province},
+				// data: {province_id: province},
 				success: function (response) {
 					
 					var district = response.data.districts;
@@ -276,7 +200,7 @@
 
 		$('.disciplinary').on('change', '.district', function() {
 			var district = $(this).val();
-			console.log(district);
+			
 			var tehsilHandler = $('#tehsil').html('<option value="">Select Tehsil</option>');
 			var jobPositionHandler = $('#job_position').html('<option value="">SELECT OPTION</option>');
 
@@ -287,10 +211,10 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Disciplinary/tehsils',
+				url: '<?= base_url(); ?>Disciplinary/tehsils/'+district,
 				type: 'POST',
 				dataType: 'json',
-				data: {district_id: district},
+				// data: {district_id: district},
 				success: function (response) {
 				
 					var tehsil = response.data.tehsils;
@@ -326,10 +250,10 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Disciplinary/union_councils',
+				url: '<?= base_url(); ?>Disciplinary/union_councils/'+tehsil,
 				type: 'POST',
 				dataType: 'json',
-				data: {tehsil_id: tehsil},
+				// data: {tehsil_id: tehsil},
 				success: function (response) {
 				
 					var ucs = response.data.ucs;
@@ -366,27 +290,6 @@
 				return;
 
 			window.location = "<?= base_url(); ?>Disciplinary/employee_disciplinary/" + employee_id;
-			// var employee_id = $(this).data('id');
-			// if(employee_id == undefined)
-			// 	return;
-			
-			// $.ajax({
-			// 	url: '<?= base_url(); ?>Disciplinary/employee_detail',
-			// 	type: 'POST',
-			// 	dataType: 'json',
-			// 	data: {employee_id: employee_id},
-			// 	success: function(response) {
-
-			// 		$('#employee-id').val(response.data.employee_id);
-			// 		$('#project-id').val(response.data.project_id);
-			// 		$('#province-id').val(response.data.provience_id);
-			// 		$('#department-id').val(response.data.department_id);
-			// 		$('#designation-id').val(response.data.designation_id);
-			// 		$('#employee-name').val(ucwords(response.data.emp_name));
-			// 		$('#designation-name').val(response.data.designation_name);
-			// 		$('#investigation-modal').modal('show');
-			// 	}
-			// });
 			
 		});
 	</script>
@@ -697,7 +600,7 @@
 							</div>`);
 			}
 
-			$('.date').datepicker();
+			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 			$('input').attr('autocomplete','off');
 		});
 	</script>
@@ -707,7 +610,7 @@
 		
 		$('.disciplinary-status-btn').on('click', function() {
 			var status_text = $(this).data('text');
-
+			
 			var disciplinaryHandler = $('#disciplinaryHandler').html('');
 			$.ajax({
 				url: '<?= base_url(); ?>Disciplinary/status_fields',
@@ -715,11 +618,11 @@
 				dataType: 'json',
 				data: {status_text: status_text},
 				success: function(response) {
-					
 					disciplinaryHandler.append(response.data.output);
 					$('#disciplinary-modal').modal('show');
 
 					$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+					$('input').attr('autocomplete','off');
 				}
 
 			});
@@ -740,7 +643,7 @@
 				data: {disciplinary_id: disciplinary_id, type_id: type_id},
 				success: function(response) {
 					if(response.data == '')
-						toastr.error('Error! No template found.');
+						toastr.error('No template available.');
 					else
 						tinymce.get('template').setContent(response.data);
 				}
@@ -753,12 +656,19 @@
 			var disciplinary_id = $('.disciplinary-id').val();
 			var template_content = tinymce.get('template').getContent();
 			
+			if(template_content == '')
+			{
+				toastr.error('Template can\'t be empty.');
+				return;
+			}
+
 			$.ajax({
 				url: '<?= base_url(); ?>Disciplinary/save_template',
 				type: 'POST',
 				dataType: 'html',
 				data: {disciplinary_id: disciplinary_id, template_content: template_content},
 				success: function(response) {
+
 					if(response == '1')
 						toastr.success('Letter saved successfully.');
 					if(response == '0')

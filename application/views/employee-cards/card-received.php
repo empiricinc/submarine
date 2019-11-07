@@ -124,7 +124,7 @@
 											</td>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
-											<td><?= $e->contact_no; ?></td>
+											<td><?= $e->contact_number; ?></td>
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
 											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>

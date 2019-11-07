@@ -43,27 +43,7 @@
 							</select>
 							<span></span>
 						</div>
-						<!-- <div class="filterSelect hide">
-							<select name="district" class="form-control district" id="district">
-								<option value="">District</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="tehsil" class="form-control tehsil" id="tehsil">
-								<option value="">Tehsil</option>
-								
-							</select>
-							<span></span>
-						</div>
-						<div class="filterSelect hide">
-							<select name="uc" class="form-control uc" id="uc">
-								<option value="">UC</option>
-								
-							</select>
-							<span></span>
-						</div> -->
+					
 						<div class="filterSelect">
 							<select name="employee_type" class="form-control">
 								<option value="current">Employee Type</option>
@@ -113,25 +93,23 @@
 										<tr>
 											<!-- <th>#</th> -->
 											<th>Name</th>
-											<th>Contact</th>
-											<!-- <th>Email</th> -->
 											<th>Project</th>
 											<th>Department</th>
 											<th>Designation</th>
+											<th>Province</th>
+											<th>Contact</th>
 											<th>Date of birth</th>
-											<!-- <th>Gender</th>	 -->
 										</tr>
 									</thead>
 									<tbody>
 										<?php $count=1; foreach($employees AS $e): ?>
 										<tr data="<?= $e->employee_id; ?>">
-											<!-- <td><?= $count; ?></td> -->
 											<td><?= ucwords($e->emp_name); ?></td>
-											<td><?= $e->contact_number; ?></td>
-											<!-- <td><?= $e->email; ?></td> -->
 											<td><?= $e->company_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
+											<td><?= $e->province_name; ?></td>
+											<td><?= $e->contact_number; ?></td>
 											<td><?= date('d-m-Y', strtotime($e->date_of_birth)); ?></td>
 										</tr>
 										<?php $count++; endforeach; ?>

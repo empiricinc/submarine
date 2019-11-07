@@ -46,7 +46,7 @@ class Disciplinary_model extends CI_Model
 	{
 		if(array_key_exists('di.id', $conditions))
 		{
-			$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(c_by.first_name, " ", IFNULL(c_by.last_name, "")) AS created_by, ebi.cnic, ebi.job_title, ebi.date_of_joining, di.status_id, ds.status_text, dt.type_name');
+			$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, CONCAT(c_by.first_name, " ", IFNULL(c_by.last_name, "")) AS created_by, ebi.cnic, ebi.job_title, ebi.date_of_joining, di.status_id, ds.status_text, dt.type_name, dc.name AS category_name');
 			$this->db->join('xin_companies AS xc', 'di.project_id = xc.company_id', 'left');
 			$this->db->join('xin_designations AS xd', 'di.designation_id = xd.designation_id', 'left');
 			$this->db->join('xin_departments AS xds', 'di.department_id = xds.department_id', 'left');
@@ -56,17 +56,20 @@ class Disciplinary_model extends CI_Model
 			$this->db->join('employee_basic_info ebi', 'di.employee_id = ebi.user_id', 'left');
 			$this->db->join('disciplinary_status ds', 'di.status_id = ds.id', 'left');
 			$this->db->join('disciplinary_type dt', 'di.type_id = dt.id', 'left');
+			$this->db->join('disciplinary_category dc', 'di.category_id = dc.id', 'left');
 					
 			$this->db->where($conditions);
 			return $this->db->get('disciplinary AS di');
 		}
 
-		$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ds.status_text, dt.type_name');
+		$this->db->select('di.*, xc.name AS project_name, xd.designation_name, xds.department_name, ir.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ds.status_text, dt.type_name, ebi.father_name, ebi.cnic, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.date_of_birth, ebi.job_title, CONCAT(c_by.first_name, " ", IFNULL(c_by.last_name, "")) AS created_by_name');
 		$this->db->join('xin_companies AS xc', 'di.project_id = xc.company_id', 'left');
 		$this->db->join('xin_designations AS xd', 'di.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments AS xds', 'di.department_id = xds.department_id', 'left');
 		$this->db->join('investigation_reasons AS ir', 'di.reason_id = ir.id', 'left');
 		$this->db->join('xin_employees xe', 'di.employee_id = xe.employee_id', 'left');
+		$this->db->join('xin_employees c_by', 'di.created_by = c_by.employee_id', 'left');
+		$this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
 		$this->db->join('disciplinary_status ds', 'di.status_id = ds.id', 'left');
 		$this->db->join('disciplinary_type dt', 'di.type_id = dt.id', 'left');
 		
@@ -92,10 +95,11 @@ class Disciplinary_model extends CI_Model
 		return $this->db->get('disciplinary_status');
 	}
 
-	function disciplinary_files()
+	function disciplinary_files($disciplinary_id)
 	{
 		$this->db->select('df.original_name, df.file_name, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, df.upload_date');
 		$this->db->join('xin_employees xe', 'df.uploaded_by = xe.employee_id', 'left');
+		$this->db->where('disciplinary_id', $disciplinary_id);
 		return $this->db->get('disciplinary_files df');
 	}
 
@@ -164,7 +168,7 @@ class Disciplinary_model extends CI_Model
 	{
 		$this->db->select('DISTINCT(district.id), district.name');
 
-		$this->db->join('district', 'location_job_position.district_id = district.id', 'left');
+		$this->db->join('district', 'location_job_position.district_id = district.id');
 		$this->db->where($conditions);
 		return $this->db->get('location_job_position')->result();
 	}
@@ -173,7 +177,7 @@ class Disciplinary_model extends CI_Model
 	{
 		$this->db->select('DISTINCT(tehsil.id), tehsil.name');
 		
-		$this->db->join('tehsil', 'location_job_position.tehsil_id = tehsil.id', 'left');
+		$this->db->join('tehsil', 'location_job_position.tehsil_id = tehsil.id');
 		$this->db->where($conditions);
 		return $this->db->get('location_job_position')->result();
 	}
@@ -182,7 +186,7 @@ class Disciplinary_model extends CI_Model
 	{
 		$this->db->select('DISTINCT(union_councel.id), union_councel.name');
 		
-		$this->db->join('union_councel', 'location_job_position.uc_id = union_councel.id', 'left');
+		$this->db->join('union_councel', 'location_job_position.uc_id = union_councel.id');
 		$this->db->where($conditions);
 		return $this->db->get('location_job_position')->result();
 	}
@@ -194,6 +198,24 @@ class Disciplinary_model extends CI_Model
 		return $this->db->get('disciplinary_reason_descriptions')->result();
 	}
 
+	function categories()
+	{
+		return $this->db->get('disciplinary_category')->result();
+	}
+
+	function get_employee_name($employee_id)
+	{
+		$this->db->select('CONCAT(first_name, " ", IFNULL(last_name, "")) AS employee_name');
+		$this->db->where('employee_id', $employee_id);
+		return $this->db->get('xin_employees')->row();
+	}
+
+	function get_employee_signature($employee_id)
+	{
+		$this->db->select('image_name');
+		$this->db->where('employee_id', $employee_id);
+		return $this->db->get('employee_signature')->row();
+	}
 
 }
 

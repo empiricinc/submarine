@@ -79,7 +79,7 @@
 						<div class="col-lg-4">
 							<div class="inputFormMain">
 								<label>Reporting Date</label>
-								<input type="text" name="reporting_date" class="form-control date">
+								<input type="text" name="reported_date" class="form-control date">
 							</div>
 						</div>
 

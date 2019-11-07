@@ -375,16 +375,17 @@ class User_panel_model extends CI_Model
         return $this->db->insert('xin_employee_resignations', $data);
     }
 
-    public function get_leave_types($gender)
+    public function get_leave_types($gender="")
     {
         if($gender == 'male')
             $this->db->where('identifier !=', 'maternity');
+
         $this->db->where('status', '1');
         return $this->db->get('xin_leave_type')->result();
     }
 
     
-    public function leaves_available_count($emp_id, $gender)
+    public function leaves_available_count($emp_id, $gender="")
     {
         $year = date('Y');
         $query = "
@@ -397,11 +398,15 @@ class User_panel_model extends CI_Model
             FROM `employee_basic_info` `ebi`, `gender` `g`, `xin_leave_type` `xlt`
             WHERE `ebi`.`gender` = `g`.`gender_id`
             AND `ebi`.`user_id` = $emp_id 
-            AND LOWER(`g`.`gender_name`) = '$gender'
             ";
+
+        if($gender != "")
+        {
+            $query .= " AND LOWER(`g`.`gender_name`) = '$gender'";
+        }
         if(strtolower($gender) == 'male')
         {
-            $query .= "AND `xlt`.`identifier` != 'maternity'";
+            $query .= " AND `xlt`.`identifier` != 'maternity'";
         }
 
         return $this->db->query($query)->result();
@@ -539,6 +544,13 @@ class User_panel_model extends CI_Model
         $this->db->from('employee_contract');
         $this->db->where('user_id', $user_id);
         return $this->db->get()->result();
+    }
+
+    public function employee_status($employee_id)
+    {
+        $this->db->select('is_active');
+        $this->db->where('employee_id', $employee_id);
+        return $this->db->get('xin_employees')->row();
     }
 
 }

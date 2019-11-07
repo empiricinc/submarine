@@ -41,7 +41,6 @@
 													<th>Gender</th>
 													<th>Designation</th>
 													<th>Province</th>
-													<th>District</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -51,7 +50,6 @@
 													<td><?= ucfirst($e->gender); ?></td>
 													<td><?= $e->designation_name; ?></td>
 													<td><?= ucfirst($e->province); ?></td>
-													<td><?= ucfirst($e->district); ?></td>
 												</tr>
 												<?php endforeach; ?>
 											</tbody>
@@ -90,7 +88,6 @@
 													<th>Gender</th>
 													<th>Designation</th>
 													<th>Province</th>
-													<th>District</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -100,7 +97,6 @@
 													<td><?= ucfirst($e->gender); ?></td>
 													<td><?= $e->designation_name; ?></td>
 													<td><?= ucfirst($e->province); ?></td>
-													<td><?= ucfirst($e->district); ?></td>
 												</tr>
 												<?php endforeach; ?>
 											</tbody>
@@ -143,9 +139,7 @@
 													<th>Name</th>
 													<th>Gender</th>
 													<th>Designation</th>
-													<th>Province</th>
-													<th>District</th>
-												</tr>
+													<th>Province</th>												</tr>
 											</thead>
 											<tbody>
 												<?php foreach($cnic_verified AS $e): ?>
@@ -154,7 +148,6 @@
 													<td><?= ucfirst($e->gender); ?></td>
 													<td><?= $e->designation_name; ?></td>
 													<td><?= ucfirst($e->province); ?></td>
-													<td><?= ucfirst($e->district); ?></td>
 												</tr>
 												<?php endforeach; ?>
 											</tbody>
@@ -193,7 +186,6 @@
 													<th>Gender</th>
 													<th>Designation</th>
 													<th>Province</th>
-													<th>District</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -203,7 +195,6 @@
 													<td><?= ucfirst($e->gender); ?></td>
 													<td><?= $e->designation_name; ?></td>
 													<td><?= ucfirst($e->province); ?></td>
-													<td><?= ucfirst($e->district); ?></td>
 												</tr>
 												<?php endforeach; ?>
 											</tbody>

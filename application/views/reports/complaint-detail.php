@@ -167,7 +167,7 @@
 
 
 <!-- Print -->
-<section id="printable" class="hide-from-screen">
+<section id="printable" class="secMainWidth hide-from-screen remove-padding-print">
 	<div class="print-header salaryslip-header">
 		<div class="row">
 			<div class="col-print-12">
@@ -217,7 +217,7 @@
 				</div>
 				<div class="col-lg-12 col-print-12 ptb-5">
 					<div class="col-lg-2 col-print-2"><strong>Description</strong></div>
-					<div class="col-lg-4 col-print-4"><?= $detail->complaint_desc; ?></div>
+					<div class="col-lg-10 col-print-10"><?= $detail->complaint_desc; ?></div>
 				</div>
 
 				<div class="col-lg-12 col-print-12"><hr></div>

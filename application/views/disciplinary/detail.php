@@ -43,7 +43,7 @@
 
 					<?php if($detail->status_text != 'delete'): ?>
 						<?php if($detail->status_text == 'open' OR $detail->status_text == 'pending'): ?>
-							<button type="button" class="btn btn-sm btn-danger disciplinary-status-btn" data-text="delete">
+							<button type="button" class="btn btn-sm btn-danger disciplinary-status-btn" data-text="cancelled">
 								<i class="fa fa-trash"></i> DELETE
 							</button>
 						<?php endif; ?>
@@ -113,11 +113,14 @@
 						
 					</div>
 				</div>
-				<!-- <div class="col-lg-2">
-					<a href="javascript:void(0);" class="label label-primary">Disciplinary Action</a>
-				</div> -->
+				<div class="col-lg-2">
+					<a href="<?= base_url(); ?>Disciplinary/report/<?= $detail->id; ?>" target="_blank" class="btn btn-warning btn-sm" style="float: right;">
+						<i class="fa fa-print"></i> Print
+					</a>
+				</div>
 			</div>
 			<div class="solidLine"></div>
+
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="col-lg-2"><strong>Employee Name</strong></div>
@@ -153,8 +156,12 @@
 						<div class="col-lg-2">
 							<label class="warning-label"><?= ucwords($detail->status_text); ?></label>
 						</div>
-						<div class="col-lg-2"></div>
-						<div class="col-lg-2"><?= ($detail->reason_text) ? '<label class="success-label">'.$detail->reason_text.'</label>' : ''; ?></div>
+						<div class="col-lg-2">
+							<?= ($detail->category_name) ? '<label class="info-label">'.$detail->category_name.'</label>' : ''; ?>
+						</div>
+						<div class="col-lg-2">
+							<?= ($detail->reason_text) ? '<label class="success-label">'.$detail->reason_text.'</label>' : ''; ?>
+						</div>
 						<div class="col-lg-2"><?= $detail->other_reason; ?></div>
 					</div>
 
@@ -259,7 +266,7 @@
 						<div class="col-lg-12"><?= $detail->description; ?></div>
 					</div>
 					
-				</div>
+				</div> 
 				
 				<div class="col-lg-12"><hr></div>
 				
@@ -321,20 +328,16 @@
 						<div class="col-lg-8 plr-0">
 							<h3 class="mt-0"><i class="fa fa-ticket"></i> Template</h3>
 						</div>
-						<div class="col-lg-4 pr-0">
-							<div class="col-lg-6">
-								<button type="button" class="btn btn-sm btn-success" id="save-template-btn" data-type="<?= $detail->type_id; ?>">
-									<i class="fa fa-save"></i>
-									SAVE
-								</button>
-							</div>
-							<div class="col-lg-6 pr-0">
-								<button type="button" class="btn btn-sm btn-primary" id="load-template-btn" data-type="<?= $detail->type_id; ?>" style="float: right;">
-									<i class="fa fa-paste"></i>
-									LOAD TEMPLATE
-								</button>
-							</div>
-							
+						<div class="col-lg-4 pr-0" style="text-align: right; padding-right: 5px;">
+							<button type="button" class="btn btn-sm btn-success" id="save-template-btn" data-type="<?= $detail->type_id; ?>">
+								<i class="fa fa-save"></i>
+								SAVE
+							</button>
+
+							<button type="button" class="btn btn-sm btn-primary" id="load-template-btn" data-type="<?= $detail->type_id; ?>">
+								<i class="fa fa-paste"></i>
+								LOAD TEMPLATE
+							</button>
 						</div>
 						<div class="col-lg-12 plr-0">
 							<textarea name="template" id="template" class="form-control editor" cols="30" rows="15">
@@ -399,14 +402,14 @@
 										<td>Open</td>
 										<td width="40%"><?= $detail->description; ?></td>
 										<td><?= ucwords($detail->created_by); ?></td>
-										<td><?= date('d-m-Y', strtotime($detail->created_date)); ?></td>
+										<td><?= ($detail->created_date) ? date('d-m-Y', strtotime($detail->created_date)) : ''; ?></td>
 									</tr>
 									<?php foreach ($status_comments as $c): ?>
 									<tr>
 										<td><?= ucwords($c->status_text); ?></td>
 										<td width="40%"><?= $c->comment_text; ?></td>
 										<td><?= ucwords($c->emp_name); ?></td>
-										<td><?= date('d-m-Y', strtotime($c->added_date)); ?></td>
+										<td><?= ($c->added_date) ? date('d-m-Y', strtotime($c->added_date)) : ''; ?></td>
 									</tr>
 									<?php endforeach; ?>
 								</tbody>

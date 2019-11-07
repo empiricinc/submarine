@@ -69,6 +69,7 @@ class Field_joining extends MY_Controller
 		$conditions = [ 
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
+					'xe.status' => '1'
 					];
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
@@ -91,7 +92,8 @@ class Field_joining extends MY_Controller
 
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'], 
-					'xe.provience_id' => $this->session_data['province_id']
+					'xe.provience_id' => $this->session_data['province_id'],
+					'xe.status' => '1'
 					];
 
 
@@ -100,12 +102,8 @@ class Field_joining extends MY_Controller
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = $this->input->get('province');
-			// $district = $this->input->get('district');
-			// $tehsil = $this->input->get('tehsil');
-			// $uc = $this->input->get('uc');
 			$project = $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
-			// $location = $this->input->get('location');
 			
 			if($employeeName != '')
 				$employeeName = '%'.$employeeName.'%';
@@ -146,35 +144,6 @@ class Field_joining extends MY_Controller
 		$this->load->view('field_joining/_template', $data);
 	}
 
-	// function get_employees_table()
- //    {
- //    	$project_id = $location_id = "1";
-
-	// 	$record_type = $status = $this->input->get('status');
-
-	// 	$project = $this->session->porject_id;
-	// 	//$location = $this->session->location_id;
-
-
-	// 	if($project != '')
-	// 		$project_id = "xc.company_id = $project";
-	// 	if($location != '')
-	// 		$location_id = "xol.location_id = $location";
-
-	// 	$conditions = "$project_id AND $location_id";
-
-    	
- //    	$total_rows = $this->Field_joining_model->get_employees($conditions, "", $this->limit, "", $record_type)->num_rows();
- //    	$url = 'Field_joining/employees';
-
-
- //    	$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
- //    	$data['title'] = 'List of Employees'; 
-
-	// 	$data['employees'] = $this->Field_joining_model->get_employees($conditions, "", $this->limit, "", $record_type)->result();
-	// 	$output = $this->load->view('field_joining/employees-table', $data, TRUE);
-	// 	echo $output;																																	  
- //    }
 
 	public function add_doj()
 	{
@@ -294,7 +263,8 @@ class Field_joining extends MY_Controller
 
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'], 
-					'xe.provience_id' => $this->session_data['province_id']
+					'xe.provience_id' => $this->session_data['province_id'],
+					'xe.status' => '1'
 					];
 
 
@@ -303,12 +273,8 @@ class Field_joining extends MY_Controller
 			$employeeID = (int) $this->input->get('employee_id');
 			$employeeName = $this->input->get('employee_name');
 			$province = (int) $this->input->get('province');
-			// $district = $this->input->get('district');
-			// $tehsil = $this->input->get('tehsil');
-			// $uc = $this->input->get('uc');
 			$project = (int) $this->input->get('project');
 			$designation = (int) $this->input->get('designation');
-			// $location = $this->input->get('location');
 			
 			if($employeeName != '')
 				$employeeName = '%'.$employeeName.'%';
@@ -340,20 +306,18 @@ class Field_joining extends MY_Controller
 		        ->setAutoSize(true);
 		}  
 
-		$sheet->getStyle('A1:L1')->getFont()->setBold(true);
+		$sheet->getStyle('A1:J1')->getFont()->setBold(true);
         // set Header
         $sheet->SetCellValue('A1', 'Province');
-        $sheet->SetCellValue('B1', 'District');
-        $sheet->SetCellValue('C1', 'Name');
-        $sheet->SetCellValue('D1', 'Gender');
-        $sheet->SetCellValue('E1', 'Designation');
-        $sheet->SetCellValue('F1', 'DOB');       
-        $sheet->SetCellValue('G1', 'CNIC');       
-        $sheet->SetCellValue('H1', 'DOJ');            
-        $sheet->SetCellValue('I1', 'Marital Status');            
-        $sheet->SetCellValue('J1', 'Verified through');  
-        $sheet->SetCellValue('K1', 'DOJ Entry Date');  
-        $sheet->SetCellValue('L1', 'CNIC Check Date');             
+        $sheet->SetCellValue('B1', 'Name');
+        $sheet->SetCellValue('C1', 'Gender');
+        $sheet->SetCellValue('D1', 'Designation');
+        $sheet->SetCellValue('E1', 'DOB');       
+        $sheet->SetCellValue('F1', 'CNIC');       
+        $sheet->SetCellValue('G1', 'DOJ');                      
+        $sheet->SetCellValue('H1', 'Verified through');  
+        $sheet->SetCellValue('I1', 'DOJ Entry Date');  
+        $sheet->SetCellValue('J1', 'CNIC Check Date');             
         // set Row
         $rowCount = 2;
         foreach ($field_joining as $e) {
@@ -362,17 +326,15 @@ class Field_joining extends MY_Controller
 			$doj = ($e->doj == '') ? 'Unverified' : date('d-m-Y', strtotime($e->doj));
 
             $sheet->SetCellValue('A' . $rowCount, ucfirst($e->province));
-            $sheet->SetCellValue('B' . $rowCount, ucfirst($e->district));
-            $sheet->SetCellValue('C' . $rowCount, ucwords($e->emp_name));
-            $sheet->SetCellValue('D' . $rowCount, ucfirst($e->gender));
-            $sheet->SetCellValue('E' . $rowCount, ucfirst($e->designation_name));
-            $sheet->SetCellValue('F' . $rowCount, date('d-m-Y', strtotime($e->date_of_birth)));
-            $sheet->SetCellValue('G' . $rowCount, $cnic_no);
-            $sheet->SetCellValue('H' . $rowCount, $doj);
-            $sheet->SetCellValue('I' . $rowCount, $e->marital_name);
-            $sheet->SetCellValue('J' . $rowCount, $e->verified_through);
-            $sheet->SetCellValue('K' . $rowCount, date('d-m-Y', strtotime($e->doj_entry_at)));
-            $sheet->SetCellValue('L' . $rowCount, date('d-m-Y', strtotime($e->cnic_entry_at)));
+            $sheet->SetCellValue('B' . $rowCount, ucwords($e->emp_name));
+            $sheet->SetCellValue('C' . $rowCount, ucfirst($e->gender));
+            $sheet->SetCellValue('D' . $rowCount, ucfirst($e->designation_name));
+            $sheet->SetCellValue('E' . $rowCount, date('d-m-Y', strtotime($e->date_of_birth)));
+            $sheet->SetCellValue('F' . $rowCount, $cnic_no);
+            $sheet->SetCellValue('G' . $rowCount, $doj);
+            $sheet->SetCellValue('H' . $rowCount, $e->verified_through);
+            $sheet->SetCellValue('H' . $rowCount, date('d-m-Y', strtotime($e->doj_entry_at)));
+            $sheet->SetCellValue('I' . $rowCount, date('d-m-Y', strtotime($e->cnic_entry_at)));
             $rowCount++;
         }
         $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);

@@ -77,8 +77,7 @@ class Reports extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.is_active' => '1',
-					'xe.status !=' => '0'
+					'xe.status' => '1'
 				];
 
 		$employee_type = "current";
@@ -95,6 +94,11 @@ class Reports extends MY_Controller
 
 			$employee_type = $this->input->get('employee_type');
 			
+			if($employee_type == 'resigned')
+				$conditions['xe.status'] = '5';
+			elseif($employee_type == 'terminated')
+				$conditions['xe.status'] = '6';
+
 			if($employeeName != '')
 				$employeeName = '%'.$employeeName.'%';
 
@@ -115,7 +119,8 @@ class Reports extends MY_Controller
 	{
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
-					'xe.provience_id' => $this->session_data['province_id']
+					'xe.provience_id' => $this->session_data['province_id'],
+					'xe.status' => '5'
 				];
 
 		if(isset($_GET['search']))
@@ -320,14 +325,14 @@ class Reports extends MY_Controller
 		list($conditions, $employee_type) = $this->sc_employees($query_string);
 		/* Pagination */
 
-		$total_rows = $this->Reports_model->get_employees($conditions, $employee_type)->num_rows();
+		$total_rows = $this->Reports_model->employees($conditions)->num_rows();
 		$url = 'Reports/employees';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url);
 		/* end pagination */
 
 		$data['title'] = 'List of Employees';
-		$data['employees'] = $this->Reports_model->get_employees($conditions, $employee_type, $this->limit, $offset)->result();
+		$data['employees'] = $this->Reports_model->employees($conditions, $this->limit, $offset)->result();
 		
 		
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
@@ -715,7 +720,7 @@ class Reports extends MY_Controller
 		$applicant_name = $this->input->get('applicant_name');
 
 
-		$data['title'] = "List of Tests";
+		$data['title'] = "Applicant's Result";
 		$data['query_string'] = $_SERVER['QUERY_STRING'];
 
 		$conditions = [

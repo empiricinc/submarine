@@ -11,12 +11,30 @@ class Reports_model extends CI_Model
 		$this->load->database();
 	}
 
+
+	function employees($conditions=array(), $limit="", $offset="")
+	{
+		$this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, xc.name AS company_name, xd.designation_name, xdd.department_name, ebi.date_of_birth, ebi.personal_contact, ebi.contact_number, p.name AS province_name');
+
+		$this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
+		$this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
+		$this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
+		$this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
+		$this->db->join('provinces p', 'xe.provience_id = p.id', 'left');
+
+		$this->db->where($conditions);
+		$this->db->where_not_in('xe.user_role_id', array(1, 2));
+		$this->db->limit($limit, $offset);
+		$this->db->order_by('xe.employee_id', 'DESC');
+		return $this->db->get('xin_employees xe');
+	}
+    
 	function get_employees($conditions=array(), $employee_type="", $limit="", $offset="")
 	{
         $other_fields = "";
         if($employee_type == "resigned")
         {
-            $other_fields .= ", CONCAT(ra_by.first_name, ' ', IFNULL(ra_by.last_name, '')) AS resignation_accepted_by, xer.resignation_date, xer.reason AS other_reason, xer.accepted_date, xer.subject, xer.description, rr.reason_text";
+            $other_fields .= ", CONCAT(ra_by.first_name, ' ', IFNULL(ra_by.last_name, '')) AS resignation_accepted_by, xer.resignation_date, xer.reason AS other_reason, xer.decision_date, xer.subject, xer.description, rr.reason_text";
         }
         elseif($employee_type == "terminated")
         {
@@ -25,7 +43,7 @@ class Reports_model extends CI_Model
 
         $employee_basic_info_fileds = ", ebi.father_name, ebi.date_of_birth, ebi.cnic, ebi.cnic_expiry_date, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.other_languages, xec.from_date AS date_of_joining, xec.to_date AS contract_expiry_date, g.gender_name, m.marital_name, c.country_name, r.religion_name, tribe.tribe_name, e.ethnicity_name, l.language_name, bg.blood_group_name";
 
-		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name,'')) AS emp_name, xe.contact_no, xe.email, xc.name as company_name, xe.date_of_joining, xdd.department_name, xd.designation_name, xol.location_name,
+		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name,'')) AS emp_name, xe.email, xc.name as company_name, xdd.department_name, xd.designation_name,
             epli.permanent_address_details AS p_address, pp.name AS p_province, pd.name AS p_district, pt.name AS p_tehsil, pu.name AS p_uc,
             eri.resident_address_details AS r_address, rp.name AS r_province, rd.name AS r_district, rt.name AS r_tehsil, ru.name AS r_uc $other_fields $employee_basic_info_fileds");
 
@@ -47,8 +65,6 @@ class Reports_model extends CI_Model
 		$this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
 		$this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
-        $this->db->join('xin_employee_location xel', 'xe.employee_id = xel.employee_id', 'left');
-        $this->db->join('xin_office_location xol', 'xel.office_location_id = xol.location_id', 'left');
 
         $this->db->join('employee_permanent_location_info epli', 'xe.employee_id = epli.user_id', 'left');
         $this->db->join('provinces pp', 'epli.permanent_province = pp.id', 'left');
@@ -66,7 +82,7 @@ class Reports_model extends CI_Model
         {
             $this->db->join('xin_employee_resignations xer', 'xe.employee_id = xer.employee_id', 'right');
             $this->db->join('resignation_reasons rr', 'xer.reason_id = rr.reason_id', 'left');
-            $this->db->join('xin_employees ra_by', 'ra_by.user_id = xer.accepted_by', 'left');
+            $this->db->join('xin_employees ra_by', 'ra_by.user_id = xer.decision_by', 'left');
         }
         elseif($employee_type == "terminated")
         {
@@ -85,16 +101,17 @@ class Reports_model extends CI_Model
         // $this->db->order_by('CAST(xe.employee_id AS UNSIGNED)', 'ASC');
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
         $this->db->order_by('xe.user_id', 'ASC');
+
 		return $this->db->get('xin_employees xe');
 	}
 
     /* Fix it use single function */
     function get_employee_detail($conditions=array())
     {
-        $employee_basic_info_fileds = ", ebi.father_name, ebi.cnic, ebi.cnic_expiry_date, ebi.date_of_birth, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.contract_expiry_date, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, ebi.tribe, ebi.ethnicity, ebi.language, ebi.nationality, ebi.religion, ebi.bloodgroup, r.relation_name, t.tribe_name, g.gender_name, e.ethnicity_name, l.language_name, co.country_name, rn.religion_name, bg.blood_group_name, g.gender_name, m.marital_name, xct.name AS contract_type";
+        $employee_basic_info_fileds = ", ebi.father_name, ebi.cnic, ebi.cnic_expiry_date, ebi.date_of_birth, ebi.personal_contact, ebi.contact_number, ebi.contact_other, ebi.date_of_joining, ebi.contract_expiry_date, ebi.other_languages, ebi.relation_id AS relation, ebi.gender, ebi.marital_status, ebi.tribe, ebi.ethnicity, ebi.language, ebi.nationality, ebi.religion, ebi.bloodgroup, r.relation_name, t.tribe_name, g.gender_name, e.ethnicity_name, l.language_name, co.country_name, rn.religion_name, bg.blood_group_name, g.gender_name, m.marital_name, xct.name AS contract_type";
 
 
-        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.contact_no, xe.email, xc.name as company_name, xe.date_of_joining, xdd.department_name, xd.designation_name, xol.location_name,
+        $this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.email, xc.name as company_name, xdd.department_name, xd.designation_name, xol.location_name,
             epli.permanent_address_details AS p_address, pp.name AS p_province, pd.name AS p_district, pt.name AS p_tehsil, pu.name AS p_uc,
             eri.resident_address_details AS r_address, rp.name AS r_province, rd.name AS r_district, rt.name AS r_tehsil, ru.name AS r_uc $employee_basic_info_fileds");
               

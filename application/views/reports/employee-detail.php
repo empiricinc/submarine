@@ -7,12 +7,12 @@
 				<div class="mainInputBg remove-padding-print remove-margin-print no-border-print">
 
 					<div class="row hide-from-print">
-						<div class="col-lg-10">
+						<div class="col-lg-8">
 							<div class="tabelHeading">
 								<h3 id="detail-box-title"><?= $title; ?></h3>
 							</div>
 						</div>
-						<div class="col-md-2 text-right">
+						<div class="col-md-4 text-right">
 							<div class="tabelTopBtn">
 								<div class="btn-group">
 									<a href="javascript:void(0);" onclick="window.print();" class="btn"><i class="fa fa-print"></i> Print</a>

@@ -578,9 +578,17 @@ class User_panel extends MY_Controller
 					'description' => $description
 				);
 
-		if($this->Resignations_model->check_resignation_status($employee_id))
+		$num_rows = $this->Resignations_model->check_resignation_status($employee_id);
+
+		if($num_rows > 0)
 		{
 			$this->session->set_flashdata('error', 'Resignation already submitted.');
+
+			/* Check employee status */
+			$is_active = $this->User_panel_model->employee_status($employee_id)->is_active;
+			
+			if(!$is_active)
+				redirect(base_url().'Logout');
 		}
 		else
 		{

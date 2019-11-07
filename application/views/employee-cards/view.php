@@ -92,11 +92,13 @@
 						</div>
 					</div>
 				</div>
+				
+				<?php if($card_status == '0'): ?>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="tableMain">
 							<div class="table-responsive">
-								<table class="table" id="employee-table" style="cursor: pointer;">
+								<table class="table" id="requests-table" style="cursor: pointer;">
 									<thead>
 										<tr>
 											<th style="padding-left: 10px;">
@@ -108,15 +110,6 @@
 											<th>Project</th>
 											<th>Designation</th>
 											<th>Date of joining</th>
-											
-											<?php if($card_status == '2'): ?>
-											<th>Print Date</th>
-											<?php elseif($card_status == '3'): ?>
-											<th>Received Date</th>
-											<?php endif; ?>
-											<?php if($card_status == '1' OR $card_status == '2'): ?>
-											<th>Action</th>
-											<?php endif; ?>
 										</tr>
 									</thead>
 									<tbody>
@@ -131,24 +124,6 @@
 											<td><?= $e->project_name; ?></td>
 											<td><?= $e->designation_name; ?></td>
 											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
-
-											<?php if($card_status == '2'): ?>
-											<td><?= ($e->print_date) ? date('d-m-Y', strtotime($e->print_date)) : ''; ?></td>
-											<?php elseif($card_status == '3'): ?>
-											<td><?= ($e->receive_date) ? date('d-m-Y', strtotime($e->receive_date)) : ''; ?></td>
-											<?php endif; ?>
-
-											<?php if($card_status == '1'): ?>
-											<td>
-												<a href="<?= base_url(); ?>Employee_cards/print_cards/<?= $e->card_id; ?>" class="label label-primary">Print</a>
-											</td>
-									
-											<?php elseif($card_status == '2'): ?>
-											<td>
-												<a href="javascript:void(0);" data-status="<?= $card_status; ?>" data-id="<?= $e->card_id; ?>" data-url="<?= base_url(); ?>Employee_cards/status_update" class="label label-danger change-status">deliver</a>
-											</td>
-
-											<?php endif; ?>
 										</tr>
 										<?php $count++; endforeach; ?>
 									</tbody>
@@ -157,6 +132,179 @@
 						</div>
 					</div>
 				</div>
+
+				<?php elseif($card_status == '1'): ?>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="tableMain">
+							<div class="table-responsive">
+								<table class="table" id="pending-table" style="cursor: pointer;">
+									<thead>
+										<tr>
+											<th style="padding-left: 10px;">
+												<input type="checkbox" id="mark-all">
+											</th>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Contact</th>
+											<th>Project</th>
+											<th>Designation</th>
+											<th>Date of joining</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php $count=0; foreach($employees AS $e): ?>
+										<tr>
+											<td>
+												<input type="checkbox" data-id="<?= $e->card_id; ?>" data-index="<?= $count; ?>" class="employee">
+											</td>
+											<td><?= $e->employee_id; ?></td>
+											<td><?= ucwords($e->emp_name); ?></td>
+											<td><?= $e->contact_number; ?></td>
+											<td><?= $e->project_name; ?></td>
+											<td><?= $e->designation_name; ?></td>
+											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
+											<td>
+												<a href="<?= base_url(); ?>Employee_cards/print_cards/<?= $e->card_id; ?>" class="label label-primary">Print</a>
+											</td>
+										</tr>
+										<?php $count++; endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<?php elseif($card_status == '2'): ?>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="tableMain">
+							<div class="table-responsive">
+								<table class="table" id="printed-table" style="cursor: pointer;">
+									<thead>
+										<tr>
+											<th style="padding-left: 10px;">
+												<input type="checkbox" id="mark-all">
+											</th>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Contact</th>
+											<th>Project</th>
+											<th>Designation</th>
+											<th>Date of joining</th>
+											<th>Print Date</th>
+											<th>Action</th>										
+										</tr>
+									</thead>
+									<tbody>
+										<?php $count=0; foreach($employees AS $e): ?>
+										<tr>
+											<td>
+												<input type="checkbox" data-id="<?= $e->card_id; ?>" data-index="<?= $count; ?>" class="employee">
+											</td>
+											<td><?= $e->employee_id; ?></td>
+											<td><?= ucwords($e->emp_name); ?></td>
+											<td><?= $e->contact_number; ?></td>
+											<td><?= $e->project_name; ?></td>
+											<td><?= $e->designation_name; ?></td>
+											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
+											<td><?= ($e->print_date) ? date('d-m-Y', strtotime($e->print_date)) : ''; ?></td>
+											<td>
+												<a href="javascript:void(0);" data-status="<?= $card_status; ?>" data-id="<?= $e->card_id; ?>" data-url="<?= base_url(); ?>Employee_cards/status_update" class="label label-danger change-status">deliver</a>
+											</td>
+										</tr>
+										<?php $count++; endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<?php elseif($card_status == '3'): ?>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="tableMain">
+							<div class="table-responsive">
+								<table class="table" id="delivered-table" style="cursor: pointer;">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Contact</th>
+											<th>Project</th>
+											<th>Designation</th>
+											<th>Date of joining</th>
+											<th>Print Date</th>
+											<th>Deliver Date</th>								
+										</tr>
+									</thead>
+									<tbody>
+										<?php $count=0; foreach($employees AS $e): ?>
+										<tr>
+											<td><?= $e->employee_id; ?></td>
+											<td><?= ucwords($e->emp_name); ?></td>
+											<td><?= $e->contact_number; ?></td>
+											<td><?= $e->project_name; ?></td>
+											<td><?= $e->designation_name; ?></td>
+											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
+											<td><?= ($e->print_date) ? date('d-m-Y', strtotime($e->print_date)) : ''; ?></td>
+											<td>
+												<?= ($e->deliver_date) ? date('d-m-Y', strtotime($e->deliver_date)) : ''; ?>
+											</td>
+										</tr>
+										<?php $count++; endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<?php elseif($card_status == '4'): ?>
+					<div class="row">
+					<div class="col-md-12">
+						<div class="tableMain">
+							<div class="table-responsive">
+								<table class="table" id="receive-table" style="cursor: pointer;">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Contact</th>
+											<th>Project</th>
+											<th>Designation</th>
+											<th>Date of joining</th>
+											<th>Deliver Date</th>	
+											<th>Receive Date</th>							
+										</tr>
+									</thead>
+									<tbody>
+										<?php $count=0; foreach($employees AS $e): ?>
+										<tr>
+											<td><?= $e->employee_id; ?></td>
+											<td><?= ucwords($e->emp_name); ?></td>
+											<td><?= $e->contact_number; ?></td>
+											<td><?= $e->project_name; ?></td>
+											<td><?= $e->designation_name; ?></td>
+											<td><?= ($e->date_of_joining) ? date('d-m-Y', strtotime($e->date_of_joining)) : ''; ?></td>
+											<td>
+												<?= ($e->deliver_date) ? date('d-m-Y', strtotime($e->deliver_date)) : ''; ?>
+											</td>
+											<td>
+												<?= ($e->receive_date) ? date('d-m-Y', strtotime($e->receive_date)) : ''; ?>
+											</td>
+										</tr>
+										<?php $count++; endforeach; ?>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php endif; ?>
 				<div class="row">
 					<div class="col-md-4">
 						

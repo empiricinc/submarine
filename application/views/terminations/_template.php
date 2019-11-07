@@ -1,5 +1,5 @@
 <?php $this->load->view('html/header'); ?>
-<?php  $this->load->view('terminations/components/navbar'); ?>
+<?php  $this->load->view('html/navbar'); ?>
 
 
 	<?php echo $content;  ?>

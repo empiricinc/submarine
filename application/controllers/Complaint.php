@@ -823,20 +823,10 @@ class Complaint extends MY_Controller
 
 		// set document information
 		$pdf->SetTitle('Complaint Report');
-
-		// set default header data
-		// $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE.' 005', PDF_HEADER_STRING);
-
-		// set header and footer fonts
-		// $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 		// set default monospaced font
 		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
-		// set margins
-		// $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-		// $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 		$pdf->SetPrintHeader(false);
 
@@ -869,7 +859,6 @@ class Complaint extends MY_Controller
 		// set color for background
 		$pdf->SetFillColor(255, 255, 127);
 
-		// MultiCell($w, $h, $txt, $border=0, $align='J', $fill=0, $ln=1, $x='', $y='', $reseth=true, $stretch=0, $ishtml=false, $autopadding=true, $maxh=0)
 		$heading = '<img src="'.base_url().'uploads/logo/chip.png" height="50px">
 			<br>
 			<strong style="font-size: 16px;">CHIP Training &amp; Consulting Pvt Ltd.</strong><br>
@@ -878,8 +867,6 @@ class Complaint extends MY_Controller
 		$pdf->WriteHTMLCell(0, 0, '', '', $heading, 0, 1, 0, true, 'C', true);
 
 
-		// $title = '<div></div><h3 style="font-family: helvetica;">Complaint detail and remarks</h3>';
-		// $pdf->WriteHTMLCell(0, 0, '', '', $title, 0, 1, 0, true, '', true);
 		
 		$complaint_detail = '<table border="1px" style="border: 1px solid black; padding: 5px;">
 		<tbody>

@@ -19,7 +19,7 @@ class Disciplinary extends MY_Controller
         $province_id = $this->session->username['provience_id'];
         
         if(!in_array($user_role, $roles))
-            redirect(base_url().'User_panel');
+            redirect(base_url().'dashboard');
 
         if($user_role == 1 || $user_role == 2)
         {
@@ -34,19 +34,16 @@ class Disciplinary extends MY_Controller
                             );
         
 		$this->load->model(array(
-						'User_panel_model',
 						'Disciplinary_model',
-						'Designation_model',
-						'Reports_model',
 						'Province_model',
 						'Departments_model',
 						'Designations_model',
-						'Projects_model',
-						'Disciplinary_model'
+						'Projects_model'
 					));
 
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
+		$this->load->database();
 	}
 
 
@@ -200,8 +197,7 @@ class Disciplinary extends MY_Controller
 
 			$reason = $this->input->post('reason');
 			$other_reason = $this->input->post('other_reason');
-			$reported_by = $this->input->post('reported_by');
-			$reported_date = $this->input->post('reported_date');
+			
 			$evidence = $this->input->post('evidence');
 			$evidence_date = $this->input->post('evidence_date');
 			$description = $this->input->post('description');
@@ -210,7 +206,6 @@ class Disciplinary extends MY_Controller
 			$intensity = $this->input->post('intensity');
 			$subject = $this->input->post('subject');
 
-			// $status = $this->input->post('status');
 			$created_by = $this->input->post('created_by');
 			$created_date = $this->input->post('created_date');
 
@@ -252,7 +247,7 @@ class Disciplinary extends MY_Controller
 						'designation_id' => $designation,
 						'reason_id' => $reason,
 						'other_reason' => $other_reason,
-						'reported_by' => $entry_by,
+						'reported_by' => $reported_by,
 						'reported_date' => $reported_date,
 						'evidence' => $evidence,
 						'evidence_date' => $evidence_date,
@@ -260,9 +255,112 @@ class Disciplinary extends MY_Controller
 						'intensity' => $intensity,
 						'subject' => $subject,
 						'description' => $description,
-						// 'status_id' => $status_id,
 						'created_by' => $entry_by,
 						'created_date' => $today,
+						'type_id' => $type_id,
+						'salary_hold' => $salary_hold,
+						'suspend_from_duty' => $suspend_from_duty,
+						'resignation_date' => $resignation_date,
+						'reported_date_ctc' => $reported_date_ctc,
+						'prior_notice' => $prior_notice,
+						'last_working_date' => $last_working_date,
+						'issue_reporting_date' => $issue_reporting_date,
+						'transfer_type' => $transfer_type,
+						'position_abolish' => $position_abolish,
+						'abolish_date' => $abolish_date,
+						'position_filled_against' => $position_filled_against,
+						'job_position' => $job_position,
+						'transfer_effective_date' => $transfer_effective_date
+					);
+
+			$filtered_data = $this->remove_empty_entries($data);
+			
+			$inv_added = $this->Disciplinary_model->add($data);
+			$disciplinary_id = $this->db->insert_id();
+			
+			if(!empty($_FILES['files']) && $_FILES['files']['size'][0] != 0)
+				$this->upload_files($_FILES, $employee_id, $disciplinary_id);
+
+			
+			if($inv_added)
+			{
+				$this->session->set_flashdata('success', 'Disciplinary initiated successfully.');
+				redirect('Disciplinary/employees', 'refresh');
+			}
+		}
+	}
+
+
+	function update()
+	{
+		$updated_by = $this->session_data['user_id'];
+
+		if(isset($_POST['submit']))
+		{
+			$disciplinary_id = $this->input->post('disciplinary_id');
+			$employee_id = $this->input->post('employee_id');
+			$designation = $this->input->post('designation_id');
+			$department = $this->input->post('department_id');
+			$project = $this->input->post('project_id');
+
+			$type_id = $this->input->post('type_id');
+
+			$reason = $this->input->post('reason');
+			$other_reason = $this->input->post('other_reason');
+
+			$evidence = $this->input->post('evidence');
+			$evidence_date = $this->input->post('evidence_date');
+			$description = $this->input->post('description');
+
+			$complaint_mode = $this->input->post('complaint_mode');
+			$intensity = $this->input->post('intensity');
+			$subject = $this->input->post('subject');
+
+			$salary_hold = $this->input->post('salary_hold');
+			$suspend_from_duty = $this->input->post('suspend_from_duty');
+			$resignation_date = $this->input->post('resignation_date');
+
+			$reported_by = $this->input->post('reported_by');
+			$reported_date = $this->input->post('reported_date');
+			$reported_date_ctc = $this->input->post('reported_date_ctc');
+
+			$prior_notice = $this->input->post('prior_notice');
+			$last_working_date = $this->input->post('last_working_date');
+			$issue_reporting_date = $this->input->post('issue_reporting_date');
+			$transfer_type = $this->input->post('transfer_type');
+
+			$position_abolish = $this->input->post('position_abolish');
+			$abolish_date = $this->input->post('abolish_date');
+			$position_filled_against = $this->input->post('position_filled_against');
+			
+			$job_position = $this->input->post('job_position');
+			$transfer_effective_date = $this->input->post('transfer_effective_date');
+
+			$category = $this->input->post('category');
+
+			$province = $this->input->post('province');
+			$district = $this->input->post('district');
+			$tehsil = $this->input->post('tehsil');
+			$uc = $this->input->post('uc');
+
+			$today = date('Y-m-d');
+			
+			$data = array(
+						'project_id' => $project,
+						'province_id' => $province,
+						'district_id' => $district,
+						'tehsil_id' => $tehsil,
+						'uc_id' => $uc,
+						'department_id' => $department,
+						'designation_id' => $designation,
+						'reason_id' => $reason,
+						'other_reason' => $other_reason,
+						'evidence' => $evidence,
+						'evidence_date' => $evidence_date,
+						'mode' => $complaint_mode,
+						'intensity' => $intensity,
+						'subject' => $subject,
+						'description' => $description,
 						'type_id' => $type_id,
 						'salary_hold' => $salary_hold,
 						'suspend_from_duty' => $suspend_from_duty,
@@ -278,21 +376,25 @@ class Disciplinary extends MY_Controller
 						'abolish_date' => $abolish_date,
 						'position_filled_against' => $position_filled_against,
 						'job_position' => $job_position,
-						'transfer_effective_date' => $transfer_effective_date
+						'transfer_effective_date' => $transfer_effective_date,
+						'category_id' => $category
 					);
 
-			$inv_added = $this->Disciplinary_model->add($data);
-			$disciplinary_id = $this->db->insert_id();
+			$updated_data = $this->remove_empty_entries($data);
 			
-			if(!empty($_FILES['files']) && $_FILES['files']['size'][0] != 0)
-				$this->upload_files($_FILES, $employee_id, $disciplinary_id);
+			$rec_update = $this->Disciplinary_model->update($disciplinary_id, $updated_data);
 
-			
-			if($inv_added)
+			if($rec_update)
 			{
-				$this->session->set_flashdata('success', 'Investigation initiated successfully.');
-				redirect('Disciplinary/employees', 'refresh');
+				$this->session->set_flashdata('success', 'Disciplinary updated successfully.');
 			}
+			else
+			{
+				$this->session->set_flashdata('error', 'Disciplinary updation failed.');
+			}
+
+			redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
+
 		}
 	}
 
@@ -363,7 +465,7 @@ class Disciplinary extends MY_Controller
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 
 		$data['title'] = 'View Detail';
-		$data['detail'] = $this->Disciplinary_model->disciplinary_actions($filtered_conditions)->row();
+		$data['detail'] = $detail = $this->Disciplinary_model->disciplinary_actions($filtered_conditions)->row();
 		
 		if(empty($data['detail']))
 		{
@@ -372,17 +474,61 @@ class Disciplinary extends MY_Controller
 	
 		$data['status_comments'] = $this->Disciplinary_model->get_comments($id, 'status');
 		$data['comments'] = $this->Disciplinary_model->get_comments($id, 'comment');
+		$data['files'] = $this->Disciplinary_model->disciplinary_files($id)->result(); 
 
 		$data['status'] = $this->Disciplinary_model->disciplinary_status()->result();
-		$data['files'] = $this->Disciplinary_model->disciplinary_files()->result();
-		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+		$data['reason_description'] = $this->Disciplinary_model->reason_descriptions($data['detail']->type_id);
 
-		$reason_id = $data['detail']->type_id;
-		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
-		$data['reason_description'] = $this->Disciplinary_model->reason_descriptions($reason_id);
-		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
+		$provinces = $this->Province_model->get($this->session_data['project_id']);
 		
-		$data['form_fields'] = $this->disciplinary_fields_update(ucwords($data['detail']->type_name));
+		/* Districts */
+		$conditions = [
+    			'location_job_position.province_id' => $detail->province_id, 
+    			'location_job_position.company_id' => $this->session_data['project_id'],
+    			'location_job_position.status !=' => '0' 
+    		];
+
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+    	$districts = $this->Disciplinary_model->get_districts($filtered_conditions);
+
+    	/* Tehsils */
+    	$conditions['location_job_position.district_id'] = $detail->district_id;
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+    	$tehsils = $this->Disciplinary_model->get_tehsils($filtered_conditions);
+
+    	/* Union Councils */
+    	$conditions['location_job_position.tehsil_id'] = $detail->tehsil_id;
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+    	$union_councils = $this->Disciplinary_model->get_union_councils($filtered_conditions);
+
+    	/* Job Positions */
+    	$job_positions = $this->Disciplinary_model->job_positions($filtered_conditions);
+    	
+		$position_filled_against = $this->Disciplinary_model->position_filled_against();
+		$transfer_type = $this->Disciplinary_model->transfer_types();
+
+		$disciplinary_types = $this->Disciplinary_model->get_disciplinary_type()->result();
+		$reasons = $this->db->get_where('investigation_reasons')->result();
+		
+		$categories = $this->Disciplinary_model->categories();
+
+		$update_data = [
+			'detail' => $detail, 
+			'provinces' => $provinces, 
+			'districts' => $districts,
+			'tehsils' => $tehsils,
+			'union_councils' => $union_councils,
+			'job_positions' => $job_positions,
+			'position_filled_against' => $position_filled_against,
+			'transfer_type' => $transfer_type,
+			'disciplinary_types' => $disciplinary_types,
+			'reasons' => $reasons,
+			'type' => ucwords($detail->type_name),
+			'category' => $categories
+		];
+
+		$data['form_fields'] = $this->load->view('disciplinary/update-view', $update_data, TRUE);
+		$data['disciplinary_detail'] = $this->load->view('disciplinary/disciplinary-detail', $update_data, TRUE);
 
 		$data['content'] = $this->load->view('disciplinary/detail', $data, TRUE);
 		$this->load->view('disciplinary/_template', $data);
@@ -393,12 +539,13 @@ class Disciplinary extends MY_Controller
 	{
 		$this->ajax_check();
 		
+		$disciplinary_id = $this->input->post('disciplinary_id');
 		$status = $this->input->post('status_text');
+
 		$type = $this->Disciplinary_model->get_disciplinary_type()->result();
 		$status_row = $this->Disciplinary_model->get_status_id($status);
 		$status_id = $status_row->id;
 
-		$status_group = array('dpcr', 'issued', 'printed', 'delivered', 'received', 'satisfactory', 're open', 'no action');
 		$output = '<input type="hidden" name="status_id" id="status-id" value="'.$status_id.'">';
 		if($status == 'pending')
 		{
@@ -438,26 +585,9 @@ class Disciplinary extends MY_Controller
 					</div>
 				</div>';
 		} 
-		elseif(in_array($status, $status_group))
-		{
-			$output .= '<div class="row">
-							<div class="col-lg-12">
-								<div class="inputFormMain">
-									<label>Date</label>
-									<input type="text" name="added_date" class="form-control date" required>
-								</div>
-							</div>
-						</div>';
-		}
 		elseif($status == 'not received' OR $status == 'unsatisfactory' OR $status == 'admitted')
 		{
 			$output .= '<div class="row">
-							<div class="col-lg-6">
-								<div class="inputFormMain">
-									<label>Date</label>
-									<input type="text" name="added_date" class="form-control date" required>
-								</div>
-							</div>
 							<div class="col-lg-6">
 								<div class="inputFormMain">
 									<label>Next Action</label>
@@ -473,11 +603,11 @@ class Disciplinary extends MY_Controller
 						</div>';
 		}
 
-		$this->json_response(array('output' => $output));
+		$this->json_response(array('output' => $output, 'status' => $status));
 	}
 
 
-	private function upload_files($files, $employee_id, $disciplinary_id)
+	private function upload_files($files, $disciplinary_id, $employee_id)
     {
     	$data = array();
 
@@ -512,12 +642,13 @@ class Disciplinary extends MY_Controller
             }
             else
             {
-            	echo $this->upload->display_errors();
+            	 // $this->upload->display_errors();
+            	return false;
             }
         }
         
         if(!empty($uploadData)){
-            $insert = $this->Disciplinary_model->upload_files($uploadData);
+            return $this->Disciplinary_model->upload_files($uploadData);
 
         }
     }
@@ -535,7 +666,7 @@ class Disciplinary extends MY_Controller
 			if($uploaded)
 				$this->session->set_flashdata('success', 'Files uploaded successfully.');
 			else
-				$this->session->set_flashdata('error', 'Files uploading failed.');
+				$this->session->set_flashdata('error', 'Files uploading failed.'. $this->upload->display_errors());
 				
 		} else {
 			$this->session->set_flashdata('error', 'There is a problem on server.');
@@ -570,9 +701,9 @@ class Disciplinary extends MY_Controller
 
 
 		if($res)
-			$this->session->set_flashdata('success', 'Disciplinary initiated successfully.');
+			$this->session->set_flashdata('success', 'Comments added successfully.');
 		else
-			$this->session->set_flashdata('error', 'Disciplinary initiatitation Failed.');
+			$this->session->set_flashdata('error', 'Server error.');
 
 
 		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
@@ -645,13 +776,22 @@ class Disciplinary extends MY_Controller
     	$name = $detail->emp_name;
     	$title = $detail->job_title;
     	$cnic = $detail->cnic;
-    	$letter_no = $detail->letter_no;
+    	$letter_no = ($detail->letter_no) ? $this->generate_letter_no($disciplinary_id) : '';
     	$reporting_date = $detail->reported_date;
 
     	$title = str_replace('—', '-', $title);
     	$title_array = explode('-', $title);
     	$month_year = date('M, Y');
     	$current_date = date('d-m-Y');
+
+    	$user_row = $this->Disciplinary_model->get_employee_name($this->session_data['user_id']);
+    	$employee_name = ucwords($user_row->employee_name);
+    	$empName = explode(' ', $employee_name);
+    	$initials = '';
+
+    	foreach ($empName as $n) {
+    		$initials .= $n[0];
+    	}
     	
     	$template = '';
     	if(!empty($title_array[0]))
@@ -662,9 +802,16 @@ class Disciplinary extends MY_Controller
 	    	$tehsil = $title_array[4];
 	    	$uc = $title_array[5];
 
-	    	$template = $data->description;
+	    	$imgName = $this->Disciplinary_model->get_employee_signature($this->session_data['user_id'])->image_name;
 	    	
+	    	$image_path = base_url().'uploads/signatures/'.$imgName;
+
+	    	$template = $data->description;
 	    	$template = str_replace('[[name]]', $name, $template);
+	    	$template = str_replace('[[initial]]', strtoupper($initials), $template);
+	    	
+	    	$template = str_replace('[[signature_disciplinary_name]]', $employee_name, $template);
+	    	$template = str_replace('[[signature_disciplinary]]', '<img src="'.$image_path.'" />', $template);
 	    	$template = str_replace('[[current_month_year]]', $month_year, $template);
 	    	$template = str_replace('[[current_date]]', $current_date, $template);
 	    	$template = str_replace('[[title]]', $title, $template);
@@ -680,14 +827,13 @@ class Disciplinary extends MY_Controller
 	    	$template = str_replace('[[tehsil]]', $tehsil, $template);
 	    	$template = str_replace('[[uc]]', $uc, $template);
     	}
+
     	$this->json_response($template);
     }
 
 
-    function districts()
+    function districts($province_id)
     {
-    	$province_id = $this->input->post('province_id');
-    	
     	$conditions = [
     			'location_job_position.province_id' => $province_id, 
     			'location_job_position.company_id' => $this->session_data['project_id'],
@@ -702,10 +848,8 @@ class Disciplinary extends MY_Controller
 
     }
 
-    function tehsils()
+    function tehsils($district_id)
     {
-    	$district_id = $this->input->post('district_id');
-
     	$conditions = [
     			'location_job_position.district_id' => $district_id, 
     			'location_job_position.company_id' => $this->session_data['project_id'],
@@ -720,10 +864,8 @@ class Disciplinary extends MY_Controller
 
     }
 
-    function union_councils()
+    function union_councils($tehsil_id)
     {
-    	$tehsil_id = $this->input->post('tehsil_id');
-
     	$conditions = [
     			'location_job_position.tehsil_id' => $tehsil_id, 
     			'location_job_position.company_id' => $this->session_data['project_id'],
@@ -764,16 +906,40 @@ class Disciplinary extends MY_Controller
     	$disciplinary_id = $this->input->post('disciplinary_id');
     	$template_content = $this->input->post('template_content');
 
-    	$data = array('template_content' => $template_content);
-
+  		$letter_no = $this->generate_letter_no($disciplinary_id);
+    	$data = array('template_content' => $template_content, 'letter_no' => $letter_no);
     	$updated = $this->Disciplinary_model->update($disciplinary_id, $data);
+
     	if($updated)
     		echo '1';
     	else
     		echo '0';
     }
 
-    function disciplinary_fields_update($type="")
+    private function generate_letter_no($disciplinary_id)
+    {
+    	$this->db->select('dt.type_name, p.name AS province_name, dc.name AS category_name');
+    	$this->db->join('xin_employees xe', 'd.employee_id = xe.employee_id', 'left');
+    	$this->db->join('provinces p', 'xe.provience_id = p.id', 'left');
+    	$this->db->join('disciplinary_type dt', 'd.type_id = dt.id', 'left');
+    	$this->db->join('disciplinary_category dc', 'd.category_id = dc.id', 'left');
+    	$res = $this->db->get_where('disciplinary d', array('d.id' => $disciplinary_id))->row();
+
+    	$type_name = $res->type_name;
+    	$string_array = explode(' ', $type_name);
+    	$acronym = '';
+
+    	foreach ($string_array as $s) {
+    		$acronym .= $s[0];
+    	}
+
+    	$letter_no = strtoupper($acronym) . 'L-' . $res->province_name . '-' . $disciplinary_id . '/' . date('M') . '/' . ucfirst(substr($res->category_name, 0, 1));
+    	
+    	return $letter_no;
+    }
+
+
+    function disciplinary_fields_update($type="", $disciplinary_detail)
     {
     	$output = '';
     	$provinces_string = '';
@@ -785,15 +951,27 @@ class Disciplinary extends MY_Controller
 		$transfer_type = $this->Disciplinary_model->transfer_types();
 
 		foreach ($provinces as $p) {
-			$provinces_string .= "'<option value='".$p->id."'>".ucwords($p->name)."</option>";
+			$selected = '';
+			if($disciplinary_detail->province_id == $p->id)
+				$selected = 'selected';
+
+			$provinces_string .= "'<option value='".$p->id."' ".$selected.">".ucwords($p->name)."</option>";
 		}
 
 		foreach ($position_filled_against as $pfa) {
-			$position_filled_against_string .= "'<option value='".$pfa->id."'>".ucwords($pfa->name)."</option>";
+			$selected = '';
+			if($disciplinary_detail->position_filled_against == $pfa->id)
+				$selected = 'selected';
+
+			$position_filled_against_string .= "'<option value='".$pfa->id."' ".$selected.">".ucwords($pfa->name)."</option>";
 		}
 
 		foreach ($transfer_type as $tt) {
-			$transfer_type_string .= "'<option value='".$tt->id."'>".ucwords($tt->name)."</option>";
+			$selected = '';
+			if($disciplinary_detail->transfer_type == $tt->id)
+				$selected = 'selected';
+
+			$transfer_type_string .= "'<option value='".$tt->id."' ".$selected.">".ucwords($tt->name)."</option>";
 		}
 
 
@@ -1069,10 +1247,407 @@ class Disciplinary extends MY_Controller
 			return $output;
     }
 
-    function update_disciplinary()
+
+    private function format_date($date="")
     {
-    	exit('Page under construction');
+    	if($date != NULL OR $date != "")
+    		return date('d-m-Y', strtotime($date));
+    	else
+    		return false;
     }
+
+    private function replace_null($string="")
+    {
+    	if($string != NULL OR $string != "")
+    		return ucwords($string);
+    	else
+    		return 'N/A';
+    }
+
+    public function report($disciplinary_id=FALSE)
+    {
+    	if($disciplinary_id === FALSE)
+    		show_404();
+
+    	/* Employee Info */
+    	$this->db->select('employee_id');
+    	$this->db->where('id', $disciplinary_id);
+    	$result = $this->db->get('disciplinary')->row();
+    	$employee_id = $result->employee_id;
+
+    	$employee_info = $this->Disciplinary_model->employee_info(array('xe.employee_id' => $employee_id))->row();
+
+    	if(empty($employee_info))
+    		show_404();
+
+    	$job_title = explode('-', $employee_info->job_title);
+
+    	$project = (isset($job_title[0])) ? ucwords($job_title[0]) : '';
+    	$province = (isset($job_title[1])) ? ucwords($job_title[1]) : '';
+    	$district = (isset($job_title[2])) ? ucwords($job_title[2]) : '';
+    	$tehsil = (isset($job_title[3])) ? ucwords($job_title[3]) : '';
+    	$uc = (isset($job_title[4])) ? ucwords($job_title[4]) : '';
+
+
+    	/* Disciplinary Detail */
+    	$conditions = [
+    		'xe.company_id' => $this->session_data['project_id'],
+    		'xe.provience_id' => $this->session_data['province_id'],
+    	];
+
+    	$conditions['di.id'] = $disciplinary_id;
+    	$filtered_conditions = $this->remove_empty_entries($conditions);
+
+    	$disciplinary = $this->Disciplinary_model->disciplinary_actions($filtered_conditions)->row();
+    	$status_comments = $this->Disciplinary_model->get_comments($disciplinary_id, 'status');
+
+
+    	$suspend_from_duty = ($disciplinary->suspend_from_duty) ? 'Yes' : 'No';
+    	$salary_hold = ($disciplinary->salary_hold) ? 'Yes' : 'No';
+    	$position_abolish = ($disciplinary->position_abolish) ? 'Yes' : 'No';
+
+    	/* PDF */
+    	$this->load->library('Pdf');
+    	$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+    	$pdf->SetTitle('Disciplinary Action Detail');
+
+    	$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+		$pdf->SetPrintHeader(false);
+
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+		
+		$pdf->SetFont('times', '', 10);
+
+		$pdf->AddPage();
+		$pdf->setCellPaddings(1, 1, 1, 1);
+		$pdf->setCellMargins(1, 1, 1, 1);
+		$pdf->SetFillColor(255, 255, 127);
+
+
+    	$heading = '<img src="'.base_url().'uploads/logo/chip.png" height="50px">';
+    	$heading .= '<br>';
+    	$heading .= '<strong style="font-size: 16px;">Chip Training &amp; Consulting</strong><br>';
+    	$heading .= '<strong style="font-size: 14px;">Disciplinary Action Detail</strong>';
+    	
+    	$pdf->WriteHTMLCell(0, 0, '', '', $heading, 0, 1, 0, true, 'C', true);
+
+    	$employee_detail = '<h3 style="font-family:helvitica;">Employee Basic Info</h3>';
+    	$employee_detail .= '<table border="0px" style="padding: 5px;">
+			<tbody>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Employee ID</td>
+					<td style="width: 28%; font-family: helvitica;">'.$employee_info->employee_id.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Employee Name</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->emp_name).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">CNIC</td>
+					<td style="width: 28%; font-family: helvitica;">'.$employee_info->cnic.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Personal Contact</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->personal_contact).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">CTC Contact</td>
+					<td style="width: 28%; font-family: helvitica;">'.$employee_info->contact_number.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Other Contact</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->contact_other).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">DOB</td>
+					<td style="width: 28%; font-family: helvitica;">'.$this->format_date($employee_info->date_of_birth).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Other Contact</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->contact_other).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-fmaily: helvitica; font-weight: bold;">Project</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->company_name).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Department</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->department_name).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-fmaily: helvitica; font-weight: bold;">Designation</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($employee_info->designation_name).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Province</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($province).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">District</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($district).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Tehsil</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($tehsil).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Union Council</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($uc).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;"></td>
+					<td style="width: 28%; font-family: helvitica;"></td>
+				</tr>
+				
+			</tbody>
+		</table>
+    		';
+
+    	$disciplinary_detail = '<h3 style="font-family: helvitica;">Disciplinary Action</h3>';
+    	$disciplinary_detail .= '<table border="0px" style="padding: 5px">
+			<tbody>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Disciplinary Type</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($disciplinary->type_name).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Status</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($disciplinary->status_text).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Reason</td>
+					<td style="width: 28%; font-family: helvitica;">'.$disciplinary->reason_text.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Other Reason</td>
+					<td style="width: 28%; font-family: helvitica;">'.$disciplinary->other_reason.'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Suspended</td>
+					<td style="width: 28%; font-family: helvitica;">'.$suspend_from_duty.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Salary Hold</td>
+					<td style="width: 28%; font-family: helvitica;">'.$salary_hold.'</td>
+				</tr>
+
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Position Abolish</td>
+					<td style="width: 28%; font-family: helvitica;">'.$position_abolish.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Abolish Date</td>
+					<td style="width: 28%; font-family: helvitica;">'.$this->format_date($disciplinary->abolish_date).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Position Abolish</td>
+					<td style="width: 28%; font-family: helvitica;">'.$position_abolish.'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Abolish Date</td>
+					<td style="width: 28%; font-family: helvitica;">'.$this->format_date($disciplinary->abolish_date).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Approved By</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($disciplinary->approved_by).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Action Approval Date</td>
+					<td style="width: 28%; font-family: helvitica;">'.$this->format_date($disciplinary->action_approval_date).'</td>
+				</tr>
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Approval Receive Date</td>
+					<td style="width: 28%; font-family: helvitica;">'.$this->format_date($disciplinary->approval_receive_date).'</td>
+				</tr>
+
+				<tr>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Reported By</td>
+					<td style="width: 28%; font-family: helvitica;">'.ucwords($disciplinary->reported_by).'</td>
+					<td style="width: 22%; font-family: helvitica; font-weight: bold;">Reported Date</td>
+					<td style="width: 28%; font-family: helvitica;">'.$this->format_date($disciplinary->reported_date).'</td>
+				</tr>
+
+			</tbody>
+    	</table>
+    	';
+
+    	$status_rows = '';
+    	foreach ($status_comments as $comment) {
+    		$status_rows .= '<tr>
+					<td style="width: 10%; font-family: helvitica;"><strong>'.ucwords($comment->status_text).'</strong></td>
+					<td style="width: 50%; font-family: helvitica;">'.$comment->comment_text.'</td>
+					<td style="width: 25%; font-family: helvitica;">'.ucwords($comment->emp_name).'</td>
+					<td style="width: 15%; font-family: helvitica;">'.$this->format_date($comment->added_date).'</td>
+				</tr>';
+    	}
+
+    	$status_comments = '<h3 style="font-family: helvitica;">Status History</h3>';
+    	$status_comments .= '<table border="1px" style="padding: 5px;">
+			<tbody>
+				<tr>
+					<td style="width: 10%; font-family: helvitica;"><strong>Open</strong></td>
+					<td style="width: 50%; font-family: helvitica;">'.$disciplinary->description.'</td>
+					<td style="width: 25%; font-family: helvitica;">'.ucwords($disciplinary->created_by).'</td>
+					<td style="width: 15%; font-family: helvitica;">'.$this->format_date($disciplinary->created_date).'</td>
+				</tr>
+				'.$status_rows.'
+			</tbody>
+    	</table>';
+
+    	$pdf->WriteHTMLCell(0, 0, '', '', $employee_detail, 0, 1, 0, true, '', true);
+    	$pdf->WriteHTMLCell(0, 0, '', '', $disciplinary_detail, 0, 1, 0, true, '', true);
+    	$pdf->WriteHTMLCell(0, 0, '', '', $status_comments, 0, 1, 0, true, '', true);
+    	ob_clean();
+    	$pdf->Output('Report.pdf', 'I');
+
+    }
+
+
+    function reportXLS()
+    {
+    	$conditions = [
+				'xe.company_id' => $this->session_data['project_id'],
+				'xe.provience_id' => $this->session_data['province_id']
+				];
+
+
+		if(isset($_GET['search']))
+		{
+			$employeeID = $this->input->get('employee_id');
+			$employeeName = $this->input->get('employee_name');
+			$province = (int) $this->input->get('province');
+			$project = (int) $this->input->get('project');
+			$designation = (int) $this->input->get('designation');
+
+			$employee_type = $this->input->get('employee_type');
+			
+			if($employeeName != '')
+				$employeeName = '%'.$employeeName.'%';
+
+			$conditions['xe.employee_id'] = $employeeID;
+			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
+			$conditions['xe.designation_id'] = $designation;
+
+			if($project != 0)
+				$conditions['xe.company_id'] = $project;
+			if($province != 0)
+				$conditions['xe.provience_id'] = $province;
+
+		}
+		
+		$filtered_conditions = $this->remove_empty_entries($conditions);
+		$disciplinary = $this->Disciplinary_model->disciplinary_actions($filtered_conditions)->result();
+
+		$this->load->library('excel');
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->setActiveSheetIndex(0);
+		$sheet = $objPHPExcel->getActiveSheet();
+
+		$range = range('A', 'Z');
+		array_push($range, 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ');
+
+		foreach ($range as $columnID) {
+			$sheet->getColumnDimension($columnID)
+		        ->setAutoSize(true);
+		}
+
+		$sheet->getStyle('A1:AZ1')->getFont()->setBold(true);
+
+		$sheet->SetCellValue('A1', 'Employee ID');
+		$sheet->SetCellValue('B1', 'Name');
+		$sheet->SetCellValue('C1', 'Father Name');
+		$sheet->SetCellValue('D1', 'Personal No');
+		$sheet->SetCellValue('E1', 'Contact No');
+		$sheet->SetCellValue('F1', 'CTC Contact');
+		$sheet->SetCellValue('G1', 'Date of Birth');
+		$sheet->SetCellValue('H1', 'CNIC');
+		$sheet->SetCellValue('I1', 'Job Title');
+		$sheet->SetCellValue('J1', 'Project');
+		$sheet->SetCellValue('K1', 'Department');
+		$sheet->SetCellValue('L1', 'Designation');
+		$sheet->SetCellValue('M1', 'Province');
+		$sheet->SetCellValue('N1', 'District');
+		$sheet->SetCellValue('O1', 'Tehsil');
+		$sheet->SetCellValue('P1', 'Union Council');
+		$sheet->SetCellValue('Q1', 'Type');
+		$sheet->SetCellValue('R1', 'Status');
+		$sheet->SetCellValue('S1', 'Reported By');
+		$sheet->SetCellValue('T1', 'Reported Date');
+		$sheet->SetCellValue('U1', 'Repoted Date CTC');
+		$sheet->SetCellValue('V1', 'Created By');
+		$sheet->SetCellValue('W1', 'Created Date');
+		$sheet->SetCellValue('X1', 'Reason');
+		$sheet->SetCellValue('Y1', 'Other Reason');
+		$sheet->SetCellValue('Z1', 'Subject');
+		$sheet->SetCellValue('AA1', 'Description');
+		$sheet->SetCellValue('AB1', 'Evidence');
+		$sheet->SetCellValue('AC1', 'Evidence Date');
+		$sheet->SetCellValue('AD1', 'Mode');
+		$sheet->SetCellValue('AE1', 'Intensity');
+		$sheet->SetCellValue('AF1', 'Salary Hold');
+		$sheet->SetCellValue('AG1', 'Salary Deduction Days');
+		$sheet->SetCellValue('AH1', 'Salary Deduction Month');
+		$sheet->SetCellValue('AI1', 'Issue Reporting Date');
+		$sheet->SetCellValue('AJ1', 'Suspend from Duty');
+		$sheet->SetCellValue('AK1', 'Resignation Date');
+		$sheet->SetCellValue('AL1', 'Prior Notice');
+		$sheet->SetCellValue('AM1', 'Last Working Date');
+		$sheet->SetCellValue('AN1', 'Transfer Type');
+		$sheet->SetCellValue('AO1', 'Position Aboish');
+		$sheet->SetCellValue('AP1', 'Abolish Date');
+		$sheet->SetCellValue('AQ1', 'Position Filled Against');
+		$sheet->SetCellValue('AR1', 'Transfer Effective Date');
+		$sheet->SetCellValue('AS1', 'Action Approval Date');
+		$sheet->SetCellValue('AT1', 'Approval Receive Date');
+		$sheet->SetCellValue('AU1', 'Approved By');
+		$sheet->SetCellValue('AV1', 'Approved Action');
+		$sheet->SetCellValue('AW1', 'Issue Date');
+		$sheet->SetCellValue('AX1', 'Delivered Date');
+		$sheet->SetCellValue('AY1', 'Letter No');
+		$sheet->SetCellValue('AZ1', 'Security Deposit Paid');
+
+
+		$rowCount = 2;
+		foreach ($disciplinary as $element) {
+			$sheet->SetCellValue('A' . $rowCount, $element->employee_id);
+			$sheet->SetCellValue('B' . $rowCount, ucwords($element->emp_name));
+			$sheet->SetCellValue('C' . $rowCount, ucwords($element->father_name));
+			$sheet->SetCellValue('D' . $rowCount, $element->personal_contact);
+			$sheet->SetCellValue('E' . $rowCount, $element->contact_number);
+			$sheet->SetCellValue('F' . $rowCount, $element->contact_other);
+			$sheet->SetCellValue('G' . $rowCount, ($element->date_of_birth) ? date('d-m-Y', strtotime($element->date_of_birth)) : '');
+			$sheet->SetCellValue('H' . $rowCount, $element->cnic);
+			$sheet->SetCellValue('I' . $rowCount, $element->job_title);
+			$sheet->SetCellValue('J' . $rowCount, $element->project_name);
+			$sheet->SetCellValue('K' . $rowCount, $element->department_name);
+			$sheet->SetCellValue('L' . $rowCount, $element->designation_name);
+			$sheet->SetCellValue('M' . $rowCount, $element->province_id);
+			$sheet->SetCellValue('N' . $rowCount, $element->district_id);
+			$sheet->SetCellValue('O' . $rowCount, $element->tehsil_id);
+			$sheet->SetCellValue('P' . $rowCount, $element->uc_id);
+			$sheet->SetCellValue('Q' . $rowCount, ucwords($element->type_name));
+			$sheet->SetCellValue('R' . $rowCount, ucwords($element->status_text));
+			$sheet->SetCellValue('S' . $rowCount, $element->reported_by);
+			$sheet->SetCellValue('T' . $rowCount, ($element->reported_date) ? date('d-m-Y', strtotime($element->reported_date)) : '');
+			$sheet->SetCellValue('U' . $rowCount, ($element->reported_date_ctc) ? date('d-m-Y', strtotime($element->reported_date_ctc)) : '');
+			$sheet->SetCellValue('V' . $rowCount, ucwords($element->created_by_name));
+			$sheet->SetCellValue('W' . $rowCount, ($element->created_date) ? date('d-m-Y', strtotime($element->created_date)) : '');
+			$sheet->SetCellValue('X' . $rowCount, ucwords($element->reason_text));
+			$sheet->SetCellValue('Y' . $rowCount, $element->other_reason);
+			$sheet->SetCellValue('Z' . $rowCount, $element->subject);
+			$sheet->SetCellValue('AA' . $rowCount, $element->description);
+			$sheet->SetCellValue('AB' . $rowCount, ($element->evidence) ? 'Yes' : 'No');
+			$sheet->SetCellValue('AC' . $rowCount, ($element->evidence_date) ? date('d-m-Y', strtotime($element->evidence_date)) : '');
+			$sheet->SetCellValue('AD' . $rowCount, ($element->mode) ? 'Yes' : 'No');
+			$sheet->SetCellValue('AE' . $rowCount, $element->intensity);
+			$sheet->SetCellValue('AF' . $rowCount, ($element->salary_hold) ? 'Yes' : 'No');
+			$sheet->SetCellValue('AG' . $rowCount, $element->salary_deduction_days);
+			$sheet->SetCellValue('AH' . $rowCount, $element->salary_deduction_month);
+			$sheet->SetCellValue('AI' . $rowCount, ($element->issue_reporting_date) ? date('d-m-Y', strtotime($element->issue_reporting_date)) : '');
+			$sheet->SetCellValue('AJ' . $rowCount, ($element->suspend_from_duty) ? 'Yes' : 'No');
+			$sheet->SetCellValue('AK' . $rowCount, ($element->resignation_date) ? date('d-m-Y', strtotime($element->resignation_date)) : '');
+			$sheet->SetCellValue('AL' . $rowCount, ($element->prior_notice) ? 'Yes' : 'No');
+			$sheet->SetCellValue('AM' . $rowCount, ($element->last_working_date) ? date('d-m-Y', strtotime($element->last_working_date)) : '');
+			$sheet->SetCellValue('AN' . $rowCount, $element->transfer_type);
+			$sheet->SetCellValue('AO' . $rowCount, $element->position_abolish);
+			$sheet->SetCellValue('AP' . $rowCount, ($element->abolish_date) ? date('d-m-Y', strtotime($element->abolish_date)) : '');
+			$sheet->SetCellValue('AQ' . $rowCount, $element->position_filled_against);
+			$sheet->SetCellValue('AR' . $rowCount, ($element->transfer_effective_date) ? date('d-m-Y', strtotime($element->transfer_effective_date)) : '');
+			$sheet->SetCellValue('AS' . $rowCount, ($element->action_approval_date) ? date('d-m-Y', strtotime($element->action_approval_date)) : '');
+			$sheet->SetCellValue('AT' . $rowCount, ($element->approval_receive_date) ? date('d-m-Y', strtotime($element->approval_receive_date)) : '');
+			$sheet->SetCellValue('AU' . $rowCount, ($element->approved_by));
+			$sheet->SetCellValue('AV' . $rowCount, $element->approved_action);
+			$sheet->SetCellValue('AW' . $rowCount, ($element->issued_date) ? date('d-m-Y', strtotime($element->issued_date)) : '');
+			$sheet->SetCellValue('AX' . $rowCount, ($element->delivered_date) ? date('d-m-Y', strtotime($element->delivered_date)) : '');
+			$sheet->SetCellValue('AY' . $rowCount, $element->letter_no);
+			$sheet->SetCellValue('AZ' . $rowCount, $element->security_deposit_paid);
+
+			$rowCount++;
+		}
+
+		$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+
+		header('Content-Type: application/vnd.ms-excel');
+		header('Content-Disposition: attachment;filename="disciplinary_report.xlsx"');
+		$objWriter->save('php://output');
+    }
+
 
 
 }

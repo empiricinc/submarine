@@ -1,6 +1,6 @@
 <?php $this->load->view('html/header'); ?>
 <?php 
- $this->load->view('investigation/components/navbar'); 
+ $this->load->view('html/navbar'); 
 ?>
 
 <?php echo $content;  ?>

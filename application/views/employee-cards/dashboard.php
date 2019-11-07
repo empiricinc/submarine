@@ -65,7 +65,7 @@
 					<div class="row">
 						<div class="col-md-7">
 							<div class="tabelHeading">
-								<h3>Ready to Print <span></span></h3>
+								<h3>Pending for Print <span></span></h3>
 							</div>
 						</div>
 						<div class="col-md-5">
@@ -116,7 +116,7 @@
 					<div class="row">
 						<div class="col-md-7">
 							<div class="tabelHeading">
-								<h3>Ready to Deliver <span></span></h3>
+								<h3>Printed <span></span></h3>
 							</div>
 						</div>
 						<div class="col-md-5">

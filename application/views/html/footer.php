@@ -46,7 +46,7 @@
 	</script>
 
 	<script type="text/javascript">
-		$('.btn-group-sm:last').addClass('dropup');
+		// $('.btn-group-sm:last').addClass('dropup');
 	</script>
 
 
