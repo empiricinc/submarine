@@ -152,7 +152,7 @@
 										 ?>
 										<?php 
 											$currentDate = strtotime(date('d-m-Y'));
-											$dob = ($e->date_of_birth) ? strtotime($e->date_of_birth) : '';
+											$dob = ($e->date_of_birth) ? strtotime($e->date_of_birth) : 0;
 
 											$diff = $currentDate - $dob;
 											$age = floor($diff/(365*24*60*60));
@@ -173,7 +173,7 @@
 
 											<input type="hidden" name="insurance_status[]" value="<?= $e->status; ?>">
 											<td>
-												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured' OR $age >= $ageLimit) { ?> disabled <?php } ?> >
+												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured' OR $dob == 0 OR $age >= $ageLimit) { ?> disabled <?php } ?> >
 											</td>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
@@ -185,9 +185,11 @@
 											 $date_of_joining = ($e->doj) ? date('d-m-Y', strtotime($e->doj)) : ''; 
 											?></td>
 
-											<td><?= 
-											$date_of_birth = ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : ''; 
-											?></td>
+											<td>
+												<?php 
+												echo $date_of_birth = ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : '<label class="label label-danger">DOB missing</label>'; 
+												?>	
+											</td>
 											
 											<td>
 												<?php 
@@ -195,7 +197,7 @@
 												?>
 											</td>
 											<td>
-												<?php if($date_of_joining != "" AND $age < $ageLimit): ?>
+												<?php if($date_of_joining != "" AND $dob != 0 AND $age < $ageLimit): ?>
 												<div class="btn-group btn-group-sm dropdown-btns">
 												  	<a class="btn btn-primary dropdown-toggle" href="javscript:void(0);" data-toggle="dropdown">
 												  		<i class="fa fa-cog"></i>

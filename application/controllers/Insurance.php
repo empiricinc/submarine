@@ -62,7 +62,7 @@ class Insurance extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 
 
@@ -143,7 +143,7 @@ class Insurance extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'i.status' => 'pending',
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 
 		$data['insurances'] = $this->Insurance_model->get_pending_insurances($this->remove_empty_entries($conditions), 5, "")->result();
@@ -152,7 +152,7 @@ class Insurance extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'ic.status' => 'pending',
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 
 		$data['pending'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
@@ -203,7 +203,7 @@ class Insurance extends MY_Controller
 						'xe.company_id' => $this->session_data['project_id'],
 						'xe.provience_id' => $this->session_data['province_id'],
 						'ic.id' => $claim_id,
-						'xe.status' => '1'
+						'xe.is_active' => '1'
 						];
 
 			$filtered_conditions = $this->remove_empty_entries($conditions);

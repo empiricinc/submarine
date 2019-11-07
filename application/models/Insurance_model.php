@@ -32,6 +32,7 @@ class Insurance_model extends CI_Model
 
         $this->db->where_not_in('xe.user_role_id', array(1, 2));
         $this->db->order_by('i.id', 'DESC');
+        $this->db->group_by('xe.employee_id');
 		return $this->db->get('insurance i');
 	}
 
