@@ -12,9 +12,15 @@
 								<h3 id="detail-box-title">
 									<?= $title; ?>
 									<br>
-									<?php if($detail->status_text == 'delivered' AND $detail->exit_interview_status == '0') { ?>
-									<small>(For resignation acceptance <a href="<?= base_url(); ?>Exit_interview/form/<?= $detail->resignation_id; ?>" style="text-decoration: underline !important;">exit interview</a> need to be conducted)</small>
-									<?php } ?>
+					<?php if($detail->status_text == 'delivered' AND $detail->exit_interview_status == '0') { ?>
+					<small>
+						(For resignation acceptance <a href="<?= base_url(); ?>Exit_interview/form/<?= $detail->resignation_id; ?>" style="text-decoration: underline !important;">exit interview</a> need to be conducted)
+					</small>
+					<?php } elseif($detail->exit_interview_status == '1') { ?>
+					<small>
+						<a href="<?= base_url(); ?>Exit_interview/form/<?= $detail->resignation_id; ?>" style="text-decoration: underline !important;">View employee exit interview</a>
+					</small>				
+					<?php } ?>
 								</h3>
 
 								<br>

@@ -171,7 +171,7 @@
 }
 
 tr {
-	cursor: pointer;
+	/*cursor: pointer;*/
 }
 
 .modal-body .form-control {
