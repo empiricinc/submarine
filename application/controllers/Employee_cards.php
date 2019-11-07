@@ -64,7 +64,7 @@ class Employee_cards extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'ec.status' => '0',
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 
 	    $data['card_request'] = $this->Cards_model->get_employee_cards($this->remove_empty_entries($conditions), 5, "")->result();
@@ -117,7 +117,7 @@ class Employee_cards extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'ec.status' => $status,
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 
 		if(isset($_GET['search']))
@@ -177,7 +177,7 @@ class Employee_cards extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'ec.status' => '1',
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 		if($card_ids[0] != "")
@@ -221,7 +221,7 @@ class Employee_cards extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'ec.status' => $card_status,
-					'xe.status' => '1'
+					'xe.is_active' => '1'
 				];
 
 		if(isset($_GET['search']))
