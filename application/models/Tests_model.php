@@ -563,7 +563,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
-		$this->db->join('district', 'xin_jobs.city_name = district.id', 'left');
+		$this->db->join('district', 'xin_jobs.district_id = district.id', 'left');
 		$this->db->join('areas', 'xin_jobs.area_name = areas.id', 'left');
 		$this->db->join('domicile', 'xin_jobs.domicile = domicile.id', 'left');
 		$this->db->join('education', 'xin_jobs.education = education.id', 'left');
