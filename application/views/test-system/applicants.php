@@ -54,6 +54,7 @@
 											<th>applicant's name</th>
 											<th>job title</th>
 											<th>email</th>
+											<th>roll no.</th>
 											<th>exam date</th>
 										</tr>
 									</thead>
@@ -65,10 +66,13 @@
 												<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $applicant->application_id; ?>"><?=$applicant->fullname; ?></a>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?= substr($applicant->job_title, 0, 25).' ...'; ?></a>
+												<a data-toggle="tooltip" title="<?php echo $applicant->job_title; ?>" href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?= substr($applicant->job_title, 0, 25).' ...'; ?></a>
 											</td>
 											<td>
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
+											</td>
+											<td>
+												<?php echo $applicant->rollnumber; ?>
 											</td>
 											<td>
 												<?=date('M d, Y', strtotime($applicant->test_date)); ?>
@@ -251,3 +255,8 @@
 	</div>
 	</div>
 <?php endif; ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>

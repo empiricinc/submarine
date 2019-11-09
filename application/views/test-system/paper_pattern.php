@@ -22,16 +22,17 @@
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="tabelHeading">
-						<h3>paper pattern | <small>for the post of <strong><?php if(!empty($questions_rand)){ $title = $questions_rand[0]->job_title;
-						
-						$new_title = str_replace("CBV—", " ", $title); echo substr($new_title, 0, 13); } else{ echo "No paper in the system yet!"; } ?></strong></small></h3>
+						<h3>paper pattern | <small>for the post of: <strong><?php if(!empty($questions_rand)){ echo $title = $questions_rand[0]->job_title; } ?></strong></small></h3>
 					</div>
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4 text-right">
 					<strong>Total Marks: </strong>
-					<?php //echo $questions_rand[0]->total_marks; ?>
+					<?php $query = $this->db->query('SELECT job_id, SUM(marks) as total FROM exam_paper group by job_id')->result();
+						foreach ($query as $value){
+							$total = $value->total;
+					} echo $total; ?>
 				</div>
-			</div>
+			</div><hr>
 			<form action="<?php //echo base_url('tests/applicants_test'); ?>" method="post">
 				<ul id="list">
 					<?php $counter = 1;  ?>

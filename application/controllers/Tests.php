@@ -107,6 +107,7 @@ class Tests extends MY_Controller{
 		$data['addopt'] = $this->Tests_model->add_choices($id);
 		$data['title'] = 'Tests System | Add Answers';
 		$data['content'] = 'test-system/add_answers';
+		$data['opt_exist'] = $this->Tests_model->options_exist();
 		$this->load->view('test-system/components/template', $data); 
 	}
 	// Create answers for a question with its ID...
@@ -118,24 +119,23 @@ class Tests extends MY_Controller{
 		$options_array = $_POST['option'];
 		$ques_id = $_POST['que_id'];
 		$options_len = count($options_array);
-		// $data = $this->input->post('mark');
-		// Take the checkbox value and insert it into the database with the status of 1 or 0
-		//$chkbox = 0;
+		$status = $_POST['mark'];
+		$correct = '';
+		// Take the radio button value and insert it into the database with the status of 1 or 0
 		for($i = 0; $i < $options_len; $i++){
+			if($status == $i+1) // If the radio button was checked, the status will be 1, else 0. 
+				$correct = 1; 
+			else
+				$correct = 0;
 			$data = array(
 				'q_id' => $ques_id,
 				'ans_name' => $_POST['option'][$i],
-				//'status' => $chkbox
+				'status' => $correct			
 			);
-			// if(isset($_POST['mark1'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// if(isset($_POST['mark2'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// if(isset($_POST['mark3'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// if(isset($_POST['mark4'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// echo "<pre>"; print_r($data); exit();
 			$this->Tests_model->create_answers($data);
 		}
-		$this->session->set_flashdata('success', '<strong>Good Job! </strong>  Anwers have been added successfully!');
-		return redirect('tests/all_questions');
+		$this->session->set_flashdata('success', '<strong>Good Job! </strong>  Answers have been added successfully!');
+		return redirect("tests/add_options/{$_POST['que_id']}");
 	}
 	// View single record...
 	public function view_single($id){
@@ -278,13 +278,16 @@ class Tests extends MY_Controller{
 		$length = count($answers);
 		$length = count($question_id);
 		for($j = 0; $j < $length; $j++){
+			$answer = isset($_POST['answer']) ? $answers : 0;
 			$data = array(
 			'question_id' => $_POST['question_id'][$j],
-			'answer_id'   => $_POST['answer'][$j],
+			'answer_id'   => $answer[$j],
 			'applicant_id' => $_POST['applicant_id']
 			);
-				$this->Tests_model->submit_paper($data);
+			// echo "<pre>"; print_r($data);
+			$this->Tests_model->submit_paper($data);
 		}
+		// exit;
 		// Check the applicant's id twice, so that there's no chance of duplicate entry.
 		$exists = $this->db->get_where('test_result', array('rollnumber' => $applicant_id));
 		if($exists->num_rows() > 0){
@@ -301,8 +304,7 @@ class Tests extends MY_Controller{
 	}
 	// Redirect the user to the test submitted page, where he can check his/her result, marks, failed/passed and more...
 	public function test_submitted(){
-		// $data['title'] = 'Test System | Test Submitted';
-		// $data['content'] = 'test-system/test_submitted';
+		// After teh applicant submit the paper, destroy the session and get him/her outta there.
 		$this->session->sess_destroy();
 		$this->load->view('test-system/test_submitted');
 	}
@@ -701,6 +703,14 @@ class Tests extends MY_Controller{
 		$this->pagination->initialize($config);
 		$data['papers'] = $this->Tests_model->get_jobs_papers($limit, $offset);
 		$data['title'] = 'Test System | Papers List';
+		$data['content'] = 'test-system/papers_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Search in papers.
+	public function papers_search(){
+		$keyword = $this->input->get('search_papers');
+		$data['results'] = $this->Tests_model->search_papers($keyword);
+		$data['title'] = 'Test System | Search Results';
 		$data['content'] = 'test-system/papers_list';
 		$this->load->view('test-system/components/template', $data);
 	}

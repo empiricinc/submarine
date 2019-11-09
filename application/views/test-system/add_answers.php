@@ -27,26 +27,26 @@
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input name="option[]" type="text" class="form-control" placeholder="1. Write answer here..." required>
-							<input type="checkbox" name="mark1"> Mark as correct
+							<input name="option[]" type="text" class="form-control" placeholder="1. Write answer here..." required value="<?php if(!empty($opt_exist)){ echo $opt_exist[0]->ans_name; } ?>">
+							<input type="radio" name="mark" value="1" <?php if(!empty($opt_exist) AND $opt_exist[0]->status == 1): ?> checked <?php endif; ?>> Mark as correct
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input name="option[]" type="text" class="form-control" placeholder="2. Write answer here..." required>
-							<input type="checkbox" name="mark2"> Mark as correct
+							<input name="option[]" type="text" class="form-control" placeholder="2. Write answer here..." required value="<?php if(!empty($opt_exist)){ echo $opt_exist[1]->ans_name; } ?>">
+							<input type="radio" name="mark" value="2" <?php if(!empty($opt_exist) AND $opt_exist[1]->status == 1): ?> checked <?php endif; ?>> Mark as correct
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input name="option[]" type="text" class="form-control" placeholder="3. Write answer here..." required>
-							<input type="checkbox" name="mark3"> Mark as correct
+							<input name="option[]" type="text" class="form-control" placeholder="3. Write answer here..." required value="<?php if(!empty($opt_exist)){ echo $opt_exist[2]->ans_name; } ?>">
+							<input type="radio" name="mark" value="3" <?php if(!empty($opt_exist) AND $opt_exist[2]->status == 1): ?> checked <?php endif; ?>> Mark as correct
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input name="option[]" type="text" class="form-control" placeholder="4. Write answer here..." required>
-							<input type="checkbox" name="mark4"> Mark as correct
+							<input name="option[]" type="text" class="form-control" placeholder="4. Write answer here..." required value="<?php if(!empty($opt_exist)){ echo $opt_exist[3]->ans_name; } ?>">
+							<input type="radio" name="mark" value="4" <?php if(!empty($opt_exist) AND $opt_exist[3]->status == 1): ?> checked <?php endif; ?>> Mark as correct
 						</div>
 					</div>
 					<div class="col-lg-12">

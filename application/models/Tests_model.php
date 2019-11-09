@@ -32,6 +32,13 @@ class Tests_model extends CI_Model{
 			return FALSE;
 		}
 	}
+	// Check database for answers if exist.
+	public function options_exist(){
+		$this->db->select('ans_id, q_id, ans_name, status');
+		$this->db->from('ex_answers');
+		$this->db->where('q_id', $this->uri->segment(3));
+		return $this->db->get()->result();
+	}
 	// Creating answers for the questions 
 	public function create_answers($data){
 		$this->db->insert('ex_answers', $data);
@@ -68,9 +75,9 @@ class Tests_model extends CI_Model{
 								ex_questions.question as quest,
 								xin_jobs.job_id');
 		$this->db->from('ex_answers');
-		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id');
-		$this->db->join('exam_paper', 'ex_questions.id = exam_paper.que_id');
-		$this->db->join('xin_jobs', 'exam_paper.job_id = xin_jobs.job_id');
+		$this->db->join('ex_questions', 'ex_questions.id = ex_answers.q_id', 'left');
+		$this->db->join('exam_paper', 'ex_questions.id = exam_paper.que_id', 'left');
+		$this->db->join('xin_jobs', 'exam_paper.job_id = xin_jobs.job_id', 'left');
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -300,6 +307,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->where('rollnumber NOT IN (SELECT rollnumber FROM test_result)');
 		$this->db->limit($limit, $offset);
+		$this->db->order_by('assign_test.test_date', 'DESC');
 		$exams = $this->db->get();
 		return $exams->result();
 	}
@@ -462,6 +470,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id');
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id');
+		$this->db->order_by('test_result.sdt', 'DESC');
 		$this->db->limit(10);
 		return $this->db->get()->result();
 	}
@@ -485,6 +494,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id', 'left');
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->order_by('test_result.sdt', 'DESC');
 		$this->db->limit($limit, $offset);
 		return $this->db->get()->result();
 	}
@@ -510,8 +520,8 @@ class Tests_model extends CI_Model{
 							age.name as age_name,
 							education.id,
 							education.name as edu_name,
-							city.id,
-							city.name as city_name1,
+							district.id,
+							district.name as city_name1,
 							provinces.id,
 							provinces.name as prov_name,
 							domicile.id,
@@ -520,7 +530,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('age', 'xin_job_applications.age = age.id', 'left');
 		$this->db->join('education', 'xin_job_applications.education = education.id', 'left');
-		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
+		$this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
 		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
 		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
 		$this->db->where('xin_job_applications.application_id', $applicant_id);
@@ -538,8 +548,8 @@ class Tests_model extends CI_Model{
 							xin_companies.name as compName,
 							provinces.id,
 							provinces.name as provName,
-							city.id,
-							city.name as cityName,
+							district.id,
+							district.name as cityName,
 							areas.id,
 							areas.name as areaName,
 							domicile.id,
@@ -553,7 +563,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('provinces', 'xin_jobs.province = provinces.id', 'left');
-		$this->db->join('city', 'xin_jobs.city_name = city.id', 'left');
+		$this->db->join('district', 'xin_jobs.city_name = district.id', 'left');
 		$this->db->join('areas', 'xin_jobs.area_name = areas.id', 'left');
 		$this->db->join('domicile', 'xin_jobs.domicile = domicile.id', 'left');
 		$this->db->join('education', 'xin_jobs.education = education.id', 'left');
@@ -700,6 +710,17 @@ class Tests_model extends CI_Model{
 		$this->db->from('exam_paper');
 		$this->db->group_by('exam_paper.job_id');
 		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
+	}
+	// Search papers.
+	public function search_papers($keyword){
+		$this->db->select('exam_paper.*,
+							xin_jobs.job_id,
+							xin_jobs.job_title');
+		$this->db->from('exam_paper');
+		$this->db->join('xin_jobs', 'exam_paper.job_id = xin_jobs.job_id', 'left');
+		$this->db->like('xin_jobs.job_title', $keyword);
+		$this->db->group_by('exam_paper.job_id');
 		return $this->db->get()->result();
 	}
 }
