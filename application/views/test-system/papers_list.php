@@ -54,7 +54,7 @@
 			<?php endforeach; endif; ?>
 			<?php if(empty($papers) AND empty($results)): ?>
 				<div class="alert alert-danger text-center">
-					<p><strong>Oops!</strong> The keyword <strong>( <?php echo $_GET['search_papers']; ?> )</strong> you just entered was Not Found.</p>
+					<p><strong>Oops!</strong> Results for the keyword <strong>( <?php echo $_GET['search_papers']; ?> )</strong> was not found.</p>
 				</div>
 			<?php endif; ?>
 			<div class="row">
