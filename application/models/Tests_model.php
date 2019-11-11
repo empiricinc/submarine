@@ -669,7 +669,7 @@ class Tests_model extends CI_Model{
 		}
 	}
 	// Get paper pattern. Answers for questions saved previously.
-	public function get_paper_pattern(){
+	public function get_paper_pattern($job_id){
 		$this->db->select('exam_paper.*,
 							ex_answers.ans_id,
 							ex_answers.ans_name,
@@ -683,6 +683,7 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_companies', 'exam_paper.project_id = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'exam_paper.designation_id = xin_designations.designation_id', 'left');
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = exam_paper.job_id', 'left');
+		$this->db->where('xin_jobs.job_id', $job_id);
 		$query = $this->db->get();
 		return $query->result();
 	}

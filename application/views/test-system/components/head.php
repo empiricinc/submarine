@@ -49,7 +49,7 @@
           <li class=""><a href="<?php echo base_url('tests'); ?>">Home</a></li>
           <li><a href="<?php echo base_url('tests/add_questions'); ?>">create exam</a></li>
           <li><a href="<?php echo base_url('tests/all_questions'); ?>">questions</a></li>
-          <li><a href="<?php echo base_url('tests/results'); ?>">results</a></li>
+          <li><a href="<?php echo base_url('tests/results'); ?>">results / reports</a></li>
           <li><a href="<?php echo base_url('tests/add_result'); ?>">add result</a></li>
           <li><a href="<?php echo base_url('tests/create_paper'); ?>">create paper</a></li>
           <li><a href="<?php echo base_url('tests/applicants'); ?>">applicants</a></li>
@@ -57,7 +57,7 @@
           <li><a href="<?php echo base_url('tests/projects'); ?>">projects</a></li>
           <li><a href="<?php echo base_url('tests/jobs'); ?>">jobs</a></li>
           <li><a href="<?php echo base_url('tests/list_papers'); ?>">papers</a></li>
-          <li><a href="<?php echo base_url('tests/reports'); ?>">reports</a></li>
+          <!-- <li><a href="<?php //echo base_url('tests/reports'); ?>"></a></li> -->
           <li>
             <a href="#">
               <span class="dot"></span>

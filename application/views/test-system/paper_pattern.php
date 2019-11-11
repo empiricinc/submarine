@@ -22,7 +22,7 @@
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="tabelHeading">
-						<h3>paper pattern | <small>for the post of: <strong><?php if(!empty($questions_rand)){ echo $title = $questions_rand[0]->job_title; } ?></strong></small></h3>
+						<h3>paper pattern | <small>for the post of: <strong data-toggle="tooltip" title="<?php echo $questions_rand[0]->job_title; ?>" data-placement="bottom"><?php if(!empty($questions_rand)){ echo substr($questions_rand[0]->job_title, 0, 56).' &hellip;'; } ?></strong></small></h3>
 					</div>
 				</div>
 				<div class="col-lg-4 text-right">
@@ -67,3 +67,8 @@
 		</div>
 	</section>
 </section>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip()
+	});
+</script>

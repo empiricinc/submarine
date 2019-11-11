@@ -669,7 +669,7 @@ class Tests extends MY_Controller{
 		$data['title'] = 'Test System | Question Paper';
 		$data['content'] = 'test-system/paper_pattern';
 		$data['qdash'] = $this->Tests_model->question_paper($job_id);
-		$data['questions_rand'] = $this->Tests_model->get_paper_pattern();
+		$data['questions_rand'] = $this->Tests_model->get_paper_pattern($job_id);
 		$this->load->view('test-system/components/template', $data);
 	}
 	// Paper detail, click on a job title and view the paper.

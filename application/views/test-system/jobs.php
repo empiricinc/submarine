@@ -62,7 +62,7 @@
 									foreach($jobs_list as $job): ?>
 									<tr>
 										<td>
-											<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25).' ...'; ?></a>
+											<a data-toggle="tooltip" title="<?= $job->job_title; ?>" data-placement="right" href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25).' ...'; ?></a>
 										</td>
 										<td>
 											<?php echo $job->prov_name; ?>
@@ -153,7 +153,7 @@
 										foreach($results as $job): ?>
 									<tr>
 										<td>
-											<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25); ?></a>
+											<a data-toggle="tooltip" title="<?= $job->job_title; ?>" data-placement="right" href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25); ?></a>
 										</td>
 										<td>
 											<?php echo $job->prov_name; ?>
@@ -251,3 +251,8 @@
 	</div>
 </div>
 <?php endif; ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>

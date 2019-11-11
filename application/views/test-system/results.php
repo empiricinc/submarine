@@ -119,9 +119,9 @@
 											<td><?php echo $result->obtain_marks; ?></td>
 											<td>
 												<?php if($result->obtain_marks >= 15): ?>
-													Passed
+													<button class="btn btn-success btn-xs">Passed</button>
 												<?php else: ?>
-													Failed
+													<button class="btn btn-danger btn-xs">Failed</button>
 												<?php endif; ?>
 											</td>
 										</tr>
