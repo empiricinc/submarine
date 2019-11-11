@@ -54,14 +54,6 @@
 						</select>
 						<span></span>
 					</div>
-					<!-- <div class="filterSelect hide">
-						<select name="district" class="form-control district" id="district">
-							<option value="">District</option>
-							
-						</select>
-						<span></span>
-					</div> -->
-					
 
 					<div class="filterSelectBtn">
 						<button type="submit" name="search" class="btn btnSubmit" id="search">Search</button>

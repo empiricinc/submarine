@@ -21,7 +21,8 @@
 
 		dateFormat:'yy-mm-dd',
 
-		yearRange: '1900:' + (new Date().getFullYear() + 15),
+		yearRange: '2019:' + (new Date().getFullYear() + 15),
+		// yearRange: '-1:+1',
 
 		beforeShow: function(input) {
 

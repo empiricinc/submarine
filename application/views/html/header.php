@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>HRMS</title>
+	<title>HRMS | <?= ucwords(str_replace('_', ' ', $this->uri->segment(1))); ?></title>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,7 +24,6 @@
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/style.css">
 	<link rel="stylesheet" href="<?= base_url(); ?>assets/css/custom.css">
 
-	<!-- <link rel="stylesheet" href="<?php echo base_url();?>skin/css/core.css"> -->
 	<link rel="stylesheet" href="<?php echo base_url();?>skin/vendor/DataTables/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo base_url();?>skin/vendor/DataTables/Responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo base_url();?>skin/vendor/DataTables/Buttons/css/buttons.dataTables.min.css">

@@ -658,7 +658,7 @@
 			
 			if(template_content == '')
 			{
-				toastr.error('Template can\'t be empty.');
+				toastr.error('Letter can\'t be empty.');
 				return;
 			}
 
@@ -677,6 +677,24 @@
 			});
 		});
 
+	</script>
+
+	<script type="text/javascript">
+		$('#print-letter').on('click', function() {
+			var content = tinymce.get('template').getContent();
+			if(content == '')
+			{
+				toastr.error('Letter can\'t be empty.');
+				return;
+			}
+			var print_window = window.open('_blank');
+			print_window.document.write(content);
+			print_window.document.close();
+
+			print_window.focus();
+			print_window.print();
+			print_window.close();
+		});
 	</script>
 
 

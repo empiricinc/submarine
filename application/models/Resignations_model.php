@@ -128,6 +128,20 @@ class Resignations_model extends CI_Model {
     }
 
 
+    public function acceptance_letter_template()
+    {
+        $this->db->select('description');
+        $this->db->where('name', 'Resignation Acceptance');
+        return $this->db->get('document_templates')->row();
+    }
 
+    public function employee_detail_for_letter($resignation_id)
+    {
+        $this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ebi.job_title, ebi.cnic, xer.notice_date, xer.resignation_date');
+        $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
+        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
+        $this->db->where('xer.resignation_id', $resignation_id);
+        return $this->db->get('xin_employee_resignations xer')->row();
+    }
 
 }

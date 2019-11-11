@@ -63,7 +63,7 @@
 						<div class="col-lg-6">
 							<div class="inputFormMain">
 								<input type="file" name="attachments[]" value="" id="insurance-files" class="form-control" data-toggle="tooltip" title="Insurance Files" multiple>
-								<small class="form-text text-muted">Supported file formats (.txt, .doc, .docx, .pdf)</small>
+								<small class="form-text text-muted">Supported file formats (.png, .jpg, .jpeg, .txt, .doc, .docx, .pdf)</small>
 							</div>
 						</div>
 					</div>

@@ -36,16 +36,6 @@
 						<span></span>
 					</div>
 
-					<!-- <div class="filterSelect">
-						<select name="training_format" class="form-control">
-							<option value="">Training Format</option>
-							<option value="1">Induction</option>
-							<option value="2">Refresher</option>
-
-						</select>
-						<span></span>
-					</div> -->
-				
 					<div class="filterSelect">
 						<select name="province" class="form-control province">
 							<option value="">Province</option>
@@ -55,14 +45,7 @@
 						</select>
 						<span></span>
 					</div>
-					<!-- <div class="filterSelect hide">
-						<select name="district" class="form-control district" id="district">
-							<option value="">District</option>
-							
-						</select>
-						<span></span>
-					</div> -->
-					
+
 
 					<div class="filterSelectBtn">
 						<button type="submit" name="search" class="btn btnSubmit" id="search">Search</button>
@@ -115,22 +98,6 @@
 						        <tbody>
 						        	<?php $count = 1; ?>
 						        	<?php foreach($training AS $t): ?>
-						        	<?php 
-										// $label = '';
-										// $format = '';
-										// if($t->status == "1") 
-										// {
-										// 	$label = "label label-success";
-										// 	$format = "induction";
-										// }
-										// elseif($t->status == "2" || $t->status == "3")
-										// {
-										// 	$label = "label label-primary";
-										// 	$format = "refresher";
-										// }
-
-
-									?>
 
 									<tr data="<?= $t->trg_id; ?>" style="cursor: default;">
 										<td><?= ucwords($t->company); ?></td>

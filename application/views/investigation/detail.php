@@ -52,15 +52,15 @@
 				</div>
 			</div>
 			<div class="row" style="margin-left: 0px; margin-right: 0px; margin-top: 5px;">
-				<?php if(isset($errors)): ?>
-					<div class="alert alert-danger" data-dismiss="alert">
-						<?php echo $errors; ?>
-					</div>
-				<?php endif; ?>
 				
 				<?php if($this->session->flashdata('success')): ?>
 					<div class="alert alert-info" data-dismiss="alert">
 						<?php echo $this->session->flashdata('success'); ?>
+					</div>
+
+				<?php elseif($this->session->flashdata('error')): ?>
+					<div class="alert alert-danger" data-dismiss="alert">
+						<?php echo $this->session->flashdata('error'); ?>
 					</div>
 				<?php endif; ?>
 			</div>
@@ -189,7 +189,7 @@
 							<ul class="pl-15">
 							<?php foreach($files AS $f): ?>
 								<li>
-									<a href="<?= base_url(); ?>uploads/disciplinary_files/<?= $f->file_name; ?>" target="_blank">
+									<a href="<?= base_url(); ?>uploads/investigation_files/<?= $f->file_name; ?>" target="_blank">
 										<?= $f->original_name; ?>
 									</a>
 									<small>

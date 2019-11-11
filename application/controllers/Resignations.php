@@ -264,17 +264,9 @@ class Resignations extends MY_Controller
         $this->load->model('Disciplinary_model');
         $resignation_id = $this->input->post('resignation_id');
 
-        $this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ebi.job_title, ebi.cnic, xer.notice_date, xer.resignation_date');
-        $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
-        $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
-        $this->db->where('xer.resignation_id', $resignation_id);
-        $detail = $this->db->get('xin_employee_resignations xer')->row();
-
-        $this->db->select('description');
-        $this->db->where('name', 'Resignation Acceptance');
-        $data = $this->db->get('document_templates')->row();
+        $detail = $this->Resignations_model->employee_detail_for_letter($resignation_id);
+        $data = $this->Resignations_model->acceptance_letter_template();
         
-
         $name = ucwords($detail->emp_name);
         $title = $detail->job_title;
         $cnic = $detail->cnic;
@@ -301,10 +293,10 @@ class Resignations extends MY_Controller
         if(!empty($title_array[0]))
         {
             $short_title = $title_array[1];
-            $province = $title_array[2];
-            $district = $title_array[3];
-            $tehsil = $title_array[4];
-            $uc = $title_array[5];
+            $province = ucwords($title_array[2]);
+            $district = ucwords($title_array[3]);
+            $tehsil = ucwords($title_array[4]);
+            $uc = ucwords($title_array[5]);
 
             $this->db->select('MAX(id) AS id');
             $disciplinary_id = $this->db->get('disciplinary')->row()->id;

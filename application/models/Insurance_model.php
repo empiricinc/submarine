@@ -209,6 +209,12 @@ class Insurance_model extends CI_Model
         return $this->db->get('insurance_files_checklist')->result();
     }
 
+    function update_employee_status($employee_id, $data)
+    {
+        $this->db->where('employee_id', $employee_id);
+        return $this->db->update('xin_employees', $data);
+    }
+
 }
 
 

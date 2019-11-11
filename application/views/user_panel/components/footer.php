@@ -1284,6 +1284,8 @@
 			var attachments = $('#insurance-files')[0].files;
 			$.each(attachments, function(index) {
 				var extension = attachments[index].name.split('.').pop();
+				extension = extension.toLowerCase();
+				
 				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'pdf']) == -1)
 					error = 1;
 			});

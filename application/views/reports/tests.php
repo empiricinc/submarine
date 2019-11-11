@@ -71,7 +71,7 @@
 							</div>
 							<div class="col-md-2 text-right">
 								<div class="tabelTopBtn">
-								<a href="http://localhost/submarine/Reports/testsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
+								<a href="<?= base_url(); ?>Reports/testsXLS?<?= $query_string; ?>" target="_blank" class="btn"><i class="fa fa-file-excel-o"></i> Export Data</a>
 								</div>
 							</div>
 						</div>

@@ -325,18 +325,23 @@
 					</div>
 
 					<div class="col-lg-8">
-						<div class="col-lg-8 plr-0">
-							<h3 class="mt-0"><i class="fa fa-ticket"></i> Template</h3>
+						<div class="col-lg-4 plr-0">
+							<h3 class="mt-0"><i class="fa fa-envelope-square"></i> Template</h3>
 						</div>
-						<div class="col-lg-4 pr-0" style="text-align: right; padding-right: 5px;">
+						<div class="col-lg-8 pr-0" style="text-align: right; padding-right: 5px;">
 							<button type="button" class="btn btn-sm btn-success" id="save-template-btn" data-type="<?= $detail->type_id; ?>">
 								<i class="fa fa-save"></i>
 								SAVE
 							</button>
 
-							<button type="button" class="btn btn-sm btn-primary" id="load-template-btn" data-type="<?= $detail->type_id; ?>">
-								<i class="fa fa-paste"></i>
+							<button type="button" class="btn btn-sm btn-primary" id="load-template-btn" data-type="<?= $detail->type_id; ?>" <?php if($detail->template_content) { ?> disabled <?php } ?>>
+								<i class="fa fa-download"></i>
 								LOAD TEMPLATE
+							</button>
+
+							<button type="button" class="btn btn-sm btn-danger" id="print-letter">
+								<i class="fa fa-print"></i>
+								PRINT LETTER
 							</button>
 						</div>
 						<div class="col-lg-12 plr-0">

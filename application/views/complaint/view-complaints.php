@@ -32,38 +32,6 @@
 								<span></span>
 							</div>
 	
-							<!-- <div class="filterSelect">
-								<select name="province" class="form-control province">
-									<option value="">Province</option>
-									<?php foreach($province AS $p): ?>
-									<option value="<?= $p->id; ?>"><?= $p->name; ?></option>
-									<?php endforeach; ?>
-								</select>
-								<span></span>
-							</div>
-
-							<div class="filterSelect hide">
-								<select name="district" class="form-control district" id="district">
-									<option value="">District</option>
-									
-								</select>
-								<span></span>
-							</div>
-							<div class="filterSelect hide">
-								<select name="tehsil" class="form-control tehsil" id="tehsil">
-									<option value="">Tehsil</option>
-									
-								</select>
-								<span></span>
-							</div>
-							<div class="filterSelect hide">
-								<select name="uc" class="form-control uc" id="uc">
-									<option value="">UC</option>
-									
-								</select>
-								<span></span>
-							</div> -->
-
 							<div class="filterSelectBtn">
 								<button type="submit" name="search" id="complaint-search-btn" class="btn btnSubmit">Search</button>
 							</div>
@@ -108,7 +76,6 @@
 											<table class="table table-hover" id="complaints-table">
 												<thead>
 													<tr>
-														<!-- <th>#</th> -->
 														<th>Complaint No</th>
 														<th>Subject</th>
 														<th>Name</th>
@@ -151,8 +118,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-4"></div>
-								<div class="col-md-4">
+								<div class="col-md-4 col-md-offset-4">
 									<?php echo $this->pagination->create_links(); ?>
 								</div>
 							</div>

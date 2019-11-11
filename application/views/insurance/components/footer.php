@@ -4,7 +4,7 @@
         <div class="modal-content">
         	<div class="modal-header hide-from-print">
     			<button type="button" class="close" data-dismiss="modal" aria-label="Close"> 
-    				<span aria-hidden="true">×</span> 
+    				<span aria-hidden="true">&times;</span> 
     			</button>
 
     			<strong class="modal-title">Insurance Claim Form</strong> 
@@ -65,7 +65,7 @@
 					<div class="col-lg-12">
 						<div class="inputFormMain">
 							<input type="file" name="attachments[]" value="" class="form-control insurance-files" data-toggle="tooltip" title="Insurance Files" multiple required>
-								<small class="form-text text-muted">Supported file formats (.txt, .doc, .docx, .pdf)</small>
+								<small class="form-text text-muted">Supported file formats (.png, .jpg, .jpeg, .txt, .doc, .docx, .pdf)</small>
 						</div>
 					</div>
 					<div class="col-lg-12">
@@ -596,6 +596,7 @@
 			var attachments = $(this)[0].files;
 			$.each(attachments, function(index) {
 				var extension = attachments[index].name.split('.').pop();
+				extension = extension.toLowerCase();
 
 				if($.inArray(extension, ['txt', 'doc', 'docx', 'png', 'jpg', 'jpeg', 'pdf']) == -1)
 					error = 1;

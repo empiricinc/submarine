@@ -57,14 +57,50 @@ class Insurance extends MY_Controller
 		return $conditions;
 	}
 
-	private function sc_employees($search_query, $table)
+
+	public function dashboard()
 	{
+		$data['title'] = 'Insurance Dashboard';
+
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id'],
+					'i.status' => 'pending',
+					'xe.is_active' => '1'
+				];
+
+		$data['insurances'] = $this->Insurance_model->get_pending_insurances($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id'],
+					'ic.status' => 'pending'
+				];
+
+		$data['pending'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$conditions['ic.status'] = 'inprogress';
+		$data['inprogress'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$conditions['ic.status'] = 'completed';
+		$data['completed'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
+
+		$data['content'] = $this->load->view('insurance/dashboard', $data, TRUE);
+		$this->load->view('insurance/_template', $data);
+	}
+
+
+	public function list_employees()
+	{
+		$this->load->library('pagination');
+
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'xe.is_active' => '1'
 				];
 
+		$data['query_string'] = $_SERVER['QUERY_STRING'];
 
 		if(isset($_GET))
 		{
@@ -92,32 +128,15 @@ class Insurance extends MY_Controller
 				$conditions['xe.status'] = $employee_status;
 			}
 
-
-			if($status != "")
-			{
-				if($table == 'insurance')
-					$conditions['i.status'] = $status;
-				elseif($table == 'insurance_claims')
-					$conditions['ic.status'] = $status;
-			}
+			$conditions['i.status'] = $status;
 			
 		} 
 
-		return $this->remove_empty_entries($conditions);
-
-	}
-
-
-	public function list_employees()
-	{
-		$this->load->library('pagination');
-
-		$query_string = $data['query_string'] = $_SERVER['QUERY_STRING'];
-		$conditions = $this->sc_employees($query_string, 'insurance');
+		$filtered_conditions = $this->remove_empty_entries($conditions);
 
 		/* Pagination */
 		
-		$total_rows = $this->Insurance_model->get_employees($conditions)->num_rows();
+		$total_rows = $this->Insurance_model->get_employees($filtered_conditions)->num_rows();
 		$url = 'Insurance/list_employees';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
@@ -125,7 +144,7 @@ class Insurance extends MY_Controller
 
 		$offset = $this->input->get('page');
 		$data['title'] = 'Employees Insurance List';
-		$data['employees'] = $this->Insurance_model->get_employees($conditions, $this->limit, $offset)->result();
+		$data['employees'] = $this->Insurance_model->get_employees($filtered_conditions, $this->limit, $offset)->result();
 		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
@@ -135,55 +154,60 @@ class Insurance extends MY_Controller
 		$this->load->view('insurance/_template', $data);
 	}
 
-	public function dashboard()
-	{
-		$data['title'] = 'Insurance Dashboard';
-
-		$conditions = [
-					'xe.company_id' => $this->session_data['project_id'],
-					'xe.provience_id' => $this->session_data['province_id'],
-					'i.status' => 'pending',
-					'xe.is_active' => '1'
-				];
-
-		$data['insurances'] = $this->Insurance_model->get_pending_insurances($this->remove_empty_entries($conditions), 5, "")->result();
-
-		$conditions = [
-					'xe.company_id' => $this->session_data['project_id'],
-					'xe.provience_id' => $this->session_data['province_id'],
-					'ic.status' => 'pending',
-					'xe.is_active' => '1'
-				];
-
-		$data['pending'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
-
-		$conditions['ic.status'] = 'inprogress';
-		$data['inprogress'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
-
-		$conditions['ic.status'] = 'completed';
-		$data['completed'] = $this->Insurance_model->get_insurance_claims($this->remove_empty_entries($conditions), 5, "")->result();
-
-		$data['content'] = $this->load->view('insurance/dashboard', $data, TRUE);
-		$this->load->view('insurance/_template', $data);
-	}
 
 	public function view_claims($offset="")
 	{
 		$this->load->library('pagination');
 
-		$query_string = $data['query_string'] = $_SERVER['QUERY_STRING'];
-		$conditions = $this->sc_employees($query_string, 'insurance_claims');
+		$conditions = [
+					'xe.company_id' => $this->session_data['project_id'],
+					'xe.provience_id' => $this->session_data['province_id']
+				];
+
+		$data['query_string'] = $_SERVER['QUERY_STRING'];
+
+		if(isset($_GET))
+		{
+			$employeeID = (int) $this->input->get('employee_id');
+			$employeeName = $this->input->get('employee_name');
+			$province = (int) $this->input->get('province');
+			$designation = (int) $this->input->get('designation');
+			$project = (int) $this->input->get('project');
+			$status = $this->input->get('status');
+			$employee_status = $this->input->get('employee_status');
+			
+			if($employeeName != '')
+				$employeeName = '%'.$employeeName.'%';
+
+			$conditions['xe.employee_id'] = $employeeID;
+			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
+			if($province != 0)
+				$conditions['xe.provience_id'] = $province;
+			if($project != 0)
+				$conditions['xe.company_id'] = $project;
+			$conditions['xe.designation_id'] = $designation;
+
+			if($employee_status != "")
+			{
+				$conditions['xe.status'] = $employee_status;
+			}
+
+			$conditions['ic.status'] = $status;
+			
+		} 
+
+		$filtered_conditions = $this->remove_empty_entries($conditions);
 
 		/* Pagination */
 
-		$total_rows = $this->Insurance_model->get_insurance_claims($conditions)->num_rows();
+		$total_rows = $this->Insurance_model->get_insurance_claims($filtered_conditions)->num_rows();
 		$url = 'Insurance/view_claims';
 		
 		$this->pagination_initializer($this->limit, $this->num_links, $total_rows, $url, TRUE);
 		/* end pagination */
 
 		$data['title'] = 'Insurance Claims';
-		$data['insurance_claims'] = $this->Insurance_model->get_insurance_claims($conditions, $this->limit, $offset)->result();
+		$data['insurance_claims'] = $this->Insurance_model->get_insurance_claims($filtered_conditions, $this->limit, $offset)->result();
 		
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
@@ -280,6 +304,10 @@ class Insurance extends MY_Controller
 				$this->Insurance_model->add_files_checklist($data);
 
 				$this->session->set_flashdata('success', '<strong>Success!</strong> Insurance claim submitted');
+
+				if($type == 'death')
+					$this->Insurance_model->update_employee_status($employee_id, array('status' => '7', 'is_active' => '0'));
+
 			}
 			else
 			{
@@ -594,8 +622,40 @@ class Insurance extends MY_Controller
         $conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
+					'xe.is_active' => '1',
 					'i.status' => $this->input->get('status')
 				];
+
+		if(isset($_GET))
+		{
+			$employeeID = (int) $this->input->get('employee_id');
+			$employeeName = $this->input->get('employee_name');
+			$province = (int) $this->input->get('province');
+			$designation = (int) $this->input->get('designation');
+			$project = (int) $this->input->get('project');
+			$status = $this->input->get('status');
+			$employee_status = $this->input->get('employee_status');
+			
+			if($employeeName != '')
+				$employeeName = '%'.$employeeName.'%';
+
+			$conditions['xe.employee_id'] = $employeeID;
+			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
+			if($province != 0)
+				$conditions['xe.provience_id'] = $province;
+			if($project != 0)
+				$conditions['xe.company_id'] = $project;
+			$conditions['xe.designation_id'] = $designation;
+
+			if($employee_status != "")
+			{
+				$conditions['xe.status'] = $employee_status;
+			}
+
+			$conditions['i.status'] = $status;
+			
+		} 
+
 
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 		$employees = $this->Insurance_model->get_employees($filtered_conditions)->result();
@@ -661,8 +721,37 @@ class Insurance extends MY_Controller
 					'ic.status' => $this->input->get('status')
 				];
 
-		$filtered_conditions = $this->remove_empty_entries($conditions);
+		if(isset($_GET))
+		{
+			$employeeID = (int) $this->input->get('employee_id');
+			$employeeName = $this->input->get('employee_name');
+			$province = (int) $this->input->get('province');
+			$designation = (int) $this->input->get('designation');
+			$project = (int) $this->input->get('project');
+			$status = $this->input->get('status');
+			$employee_status = $this->input->get('employee_status');
+			
+			if($employeeName != '')
+				$employeeName = '%'.$employeeName.'%';
 
+			$conditions['xe.employee_id'] = $employeeID;
+			$conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
+			if($province != 0)
+				$conditions['xe.provience_id'] = $province;
+			if($project != 0)
+				$conditions['xe.company_id'] = $project;
+			$conditions['xe.designation_id'] = $designation;
+
+			if($employee_status != "")
+			{
+				$conditions['xe.status'] = $employee_status;
+			}
+
+			$conditions['ic.status'] = $status;
+			
+		} 
+
+		$filtered_conditions = $this->remove_empty_entries($conditions);
 		$claims = $this->Insurance_model->insurance_claims_report($filtered_conditions);
 		
 		if(count($claims) == 0)

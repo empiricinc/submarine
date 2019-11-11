@@ -773,10 +773,10 @@ class Disciplinary extends MY_Controller
     	$data = $this->Disciplinary_model->get_template($type_id);
     	$detail = $this->Disciplinary_model->disciplinary_actions(array('di.id' => $disciplinary_id))->row();
     	
-    	$name = $detail->emp_name;
+    	$name = ucwords($detail->emp_name);
     	$title = $detail->job_title;
     	$cnic = $detail->cnic;
-    	$letter_no = ($detail->letter_no) ? $this->generate_letter_no($disciplinary_id) : '';
+    	$letter_no = ($detail->letter_no) ? $detail->letter_no : $this->generate_letter_no($disciplinary_id);
     	$reporting_date = $detail->reported_date;
 
     	$title = str_replace('—', '-', $title);
@@ -797,10 +797,10 @@ class Disciplinary extends MY_Controller
     	if(!empty($title_array[0]))
     	{
 	    	$short_title = $title_array[1];
-	    	$province = $title_array[2];
-	    	$district = $title_array[3];
-	    	$tehsil = $title_array[4];
-	    	$uc = $title_array[5];
+	    	$province = ucwords($title_array[2]);
+	    	$district = ucwords($title_array[3]);
+	    	$tehsil = ucwords($title_array[4]);
+	    	$uc = ucwords($title_array[5]);
 
 	    	$imgName = $this->Disciplinary_model->get_employee_signature($this->session_data['user_id'])->image_name;
 	    	
@@ -933,7 +933,8 @@ class Disciplinary extends MY_Controller
     		$acronym .= $s[0];
     	}
 
-    	$letter_no = strtoupper($acronym) . 'L-' . $res->province_name . '-' . $disciplinary_id . '/' . date('M') . '/' . ucfirst(substr($res->category_name, 0, 1));
+    	$category = (ucfirst(substr($res->category_name, 0, 1))) ? ucfirst(substr($res->category_name, 0, 1)) : 'N';
+    	$letter_no = strtoupper($acronym) . 'L-' . $res->province_name . '-' . $disciplinary_id . '/' . date('M') . '/' . $category;
     	
     	return $letter_no;
     }

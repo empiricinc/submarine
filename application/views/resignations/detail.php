@@ -18,7 +18,7 @@
 					</small>
 					<?php } elseif($detail->exit_interview_status == '1') { ?>
 					<small>
-						<a href="<?= base_url(); ?>Exit_interview/form/<?= $detail->resignation_id; ?>" style="text-decoration: underline !important;">View employee exit interview</a>
+						<a href="<?= base_url(); ?>Exit_interview/form/<?= $detail->resignation_id; ?>" style="text-decoration: underline !important;">View employee's exit interview</a>
 					</small>				
 					<?php } ?>
 								</h3>
@@ -307,8 +307,8 @@
 						<div class="col-lg-12">
 							<div class="col-lg-8 plr-0">
 								<h3>
-									<i class=""></i>
-									Resignation Acceptance Letter
+									<i class="fa fa-envelope-square"></i>
+									Acceptance Letter
 								</h3>
 							</div>
 							<div class="col-lg-4" style="margin-top: 15px; text-align: right; padding-right: 5px;">
@@ -317,7 +317,7 @@
 									</button>
 
 									<button type="button" class="btn btn-sm btn-primary" id="load-template">
-										<i class="fa fa-copy"></i> Load Template
+										<i class="fa fa-download"></i> Load Template
 									</button>	
 
 									<button type="button" class="btn btn-sm btn-danger" id="print-letter">

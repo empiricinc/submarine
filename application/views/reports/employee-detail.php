@@ -344,7 +344,7 @@
 
 					<div class="row">
 						<div class="col-lg-12">
-							<div class="col-lg-3 col-print-3">
+							<div class="col-lg-2 col-print-2">
 								<label>Contract Type</label>
 							</div>
 							<div class="col-lg-3 col-print-3">

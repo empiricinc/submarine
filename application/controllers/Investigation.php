@@ -385,7 +385,7 @@ class Investigation extends MY_Controller
 			if($uploaded)
 				$this->session->set_flashdata('success', 'Files uploaded successfully.');
 			else
-				$this->session->set_flashdata('error', 'Files uploading failed.');
+				$this->session->set_flashdata('error', 'Files uploading failed.'. $this->upload->display_errors());
 				
 		} else {
 			$this->session->set_flashdata('error', 'There is a problem on server.');
@@ -517,7 +517,7 @@ class Investigation extends MY_Controller
             }
             else
             {
-            	echo $this->upload->display_errors();
+            	return false;
             }
         }
         
