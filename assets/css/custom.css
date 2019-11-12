@@ -545,6 +545,10 @@ tr {
 	border-right: 0px !important;
 }
 
+.table-hover>tbody>tr {
+	cursor: pointer;
+}
+
 
 .warning-label {
 	display: inline;

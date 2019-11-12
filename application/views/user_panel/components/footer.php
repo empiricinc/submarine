@@ -406,10 +406,6 @@
 
 	$('.payroll-month').datepicker({dateFormat:'mm/yy'});
 
-	$('.date-onward').datepicker({
-		minDate: 0
-	});
-
 	$('.dataTable').DataTable();
 
 

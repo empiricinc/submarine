@@ -49,12 +49,12 @@
 				</div>
 				<div class="col-lg-6">
 					<div class="inputFormMain">
-						<input type="text" name="notice_date" class="form-control date" id="notice-date" placeholder="Notice Date" required>
+						<input type="text" name="notice_date" class="form-control date-onward" id="notice-date" placeholder="Notice Date" required>
 					</div>
 				</div>
 				<div class="col-lg-6">
 					<div class="inputFormMain">
-						<input type="text" name="resignation_date" class="form-control date" id="resignation-date" placeholder="Resignation Date" required>
+						<input type="text" name="resignation_date" class="form-control date-onward" id="resignation-date" placeholder="Resignation Date" required>
 					</div>
 				</div>
 				<div class="col-lg-12">

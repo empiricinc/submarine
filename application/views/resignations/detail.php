@@ -40,14 +40,14 @@
 								</div>
 
 
-								<?php if($detail->status_text != 'accepted' AND $detail->status_text != 'rejected' AND $detail->status_text != 'reversion'): ?>
+								<?php if($detail->status_text != 'accepted' AND $detail->status_text != 'rejected' AND $detail->status_text != 'reversal'): ?>
 									<button type="button" class="btn btn-sm btn-danger resignation-status-btn" data-text="rejected">
 										<i class="fa fa-trash"></i> DELETE
 									</button>
 								<?php endif; ?>
 								
 								<?php if($detail->status_text == 'accepted' || $detail->status_text == 'rejected'): ?>
-									<button type="button" class="btn btn-sm btn-warning reversion-btn" data-text="reversion">
+									<button type="button" class="btn btn-sm btn-warning reversion-btn" data-text="reversal">
 										<i class="fa fa-archive"></i> REVERSAL
 									</button>
 								<?php endif; ?>
@@ -234,7 +234,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="col-lg-2 col-print-2">
-								<label>Reversion Reason</label>
+								<label>Reversal Reason</label>
 							</div>
 							<div class="col-lg-3 col-print-3">
 								<?= $detail->reversion_reason; ?>

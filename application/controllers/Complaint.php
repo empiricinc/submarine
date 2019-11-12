@@ -749,7 +749,6 @@ class Complaint extends MY_Controller
             
             // Load and initialize upload library
             $this->load->library('upload', $config);
-            $this->upload->initialize($config);
             
             // Upload file to server
             if($this->upload->do_upload('file')){

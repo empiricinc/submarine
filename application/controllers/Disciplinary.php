@@ -512,6 +512,14 @@ class Disciplinary extends MY_Controller
 		
 		$categories = $this->Disciplinary_model->categories();
 
+		$previous_disciplinary = $this->Disciplinary_model->previous_action($detail->employee_id, $id);
+
+		$previous_type = (!empty($previous_disciplinary)) ? $previous_disciplinary->type_name : '';
+		$previous_status = (!empty($previous_disciplinary)) ? $previous_disciplinary->status_text : '';
+		$previous_action_status = ($previous_type) ? '<label class="purple-label">'.ucwords($previous_type) .' | '.ucwords($previous_status).'</label>' : '<label class="purple-label">N/A</label>';
+
+		$data['previous_action'] = $previous_action_status;
+
 		$update_data = [
 			'detail' => $detail, 
 			'provinces' => $provinces, 
@@ -627,7 +635,6 @@ class Disciplinary extends MY_Controller
             
             // Load and initialize upload library
             $this->load->library('upload', $config);
-            $this->upload->initialize($config);
             
             // Upload file to server
             if($this->upload->do_upload('file')){

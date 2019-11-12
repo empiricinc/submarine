@@ -217,6 +217,17 @@ class Disciplinary_model extends CI_Model
 		return $this->db->get('employee_signature')->row();
 	}
 
+	function previous_action($employee_id, $disciplinary_id)
+	{
+		$this->db->select('disciplinary.id, disciplinary_type.type_name, disciplinary_status.status_text');
+		$this->db->join('disciplinary_type', 'disciplinary.type_id = disciplinary_type.id', 'left');
+		$this->db->join('disciplinary_status', 'disciplinary.status_id = disciplinary_status.id', 'left');
+		$this->db->order_by('disciplinary.id', 'DESC');
+		$this->db->limit(1);
+		$this->db->where(array('disciplinary.employee_id' => $employee_id, 'disciplinary.id !=' => $disciplinary_id));
+		return $this->db->get('disciplinary')->row();
+	}
+
 }
 
 

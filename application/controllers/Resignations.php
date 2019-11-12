@@ -87,7 +87,7 @@ class Resignations extends MY_Controller
         $data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
         $data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 
-		$data['title'] = 'List of Resigned Employees';
+		$data['title'] = 'Resignations';
         $data['query_string'] = $_SERVER['QUERY_STRING'];
 
         $data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
@@ -266,7 +266,7 @@ class Resignations extends MY_Controller
 
         $detail = $this->Resignations_model->employee_detail_for_letter($resignation_id);
         $data = $this->Resignations_model->acceptance_letter_template();
-        
+
         $name = ucwords($detail->emp_name);
         $title = $detail->job_title;
         $cnic = $detail->cnic;
@@ -292,11 +292,11 @@ class Resignations extends MY_Controller
         $template = '';
         if(!empty($title_array[0]))
         {
-            $short_title = $title_array[1];
-            $province = ucwords($title_array[2]);
-            $district = ucwords($title_array[3]);
-            $tehsil = ucwords($title_array[4]);
-            $uc = ucwords($title_array[5]);
+            $short_title = (isset($title_array[1])) ? $title_array[1] : '';
+            $province = (isset($title_array[2])) ? ucwords($title_array[2]) : '';
+            $district = (isset($title_array[3])) ? ucwords($title_array[3]) : '';
+            $tehsil = (isset($title_array[4])) ? ucwords($title_array[4]) : '';
+            $uc = (isset($title_array[5])) ? ucwords($title_array[5]) : '';
 
             $this->db->select('MAX(id) AS id');
             $disciplinary_id = $this->db->get('disciplinary')->row()->id;

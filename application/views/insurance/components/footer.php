@@ -54,7 +54,7 @@
 
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<input type="text" name="reporting_date" value="" id="reporting-date" class="form-control date" placeholder="Reporting Date" data-toggle="tooltip" title="Reporting Date" required>
+							<input type="text" name="reporting_date" value="" id="reporting-date" class="form-control date-onward" placeholder="Reporting Date" data-toggle="tooltip" title="Reporting Date" required>
 						</div>
 					</div>
 					<div class="col-lg-6">

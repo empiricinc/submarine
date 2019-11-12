@@ -1326,7 +1326,6 @@ class User_panel extends MY_Controller
 						'description' => $description,
 						'status' => 'pending',
 						'entry_by' => $entry_by
-						// 'file_types_added' => $files_uploaded
 					);
 			
 			$add = $this->Insurance_model->add_claim($data);
@@ -1386,7 +1385,6 @@ class User_panel extends MY_Controller
             
             // Load and initialize upload library
             $this->load->library('upload', $config);
-            $this->upload->initialize($config);
             
             // Upload file to server
             if($this->upload->do_upload('file')){

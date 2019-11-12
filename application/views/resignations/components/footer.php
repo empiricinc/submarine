@@ -238,6 +238,7 @@
 				dataType: 'json',
 				data: {resignation_id: resignation_id},
 				success: function(response) {
+
 					if(response.data == '')
 						toastr.error('No template found.');
 					else

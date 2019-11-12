@@ -47,6 +47,11 @@
 
 	<script type="text/javascript">
 		// $('.btn-group-sm:last').addClass('dropup');
+
+		$('.date-onward').datepicker({
+			minDate: 0
+		});
+
 	</script>
 
 

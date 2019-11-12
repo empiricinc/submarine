@@ -99,21 +99,13 @@
         </ul>
 
         <?php $session = $this->session->userdata('username'); ?>
-        <?php
-          // $image_path = $this->db->get_where('xin_employees', array('employee_id' => $session['user_id']))->row()->profile_picture;
-        ?>
         
         <ul class="nav navbar-nav navbar-right">
           <li><a href="<?= base_url(); ?>Logout">Logout</a></li>
           <li>
             <a href="<?= base_url(); ?>User_panel">
               
-              <?php 
-              // $profile_image = ($image_path) ? base_url().'uploads/profile/'.$image_path : base_url().'uploads/profile/default_male.jpg';
-              ?>
-              
               <?php echo $session['username']; ?>
-              <!-- <img src="<?= $profile_image; ?>" alt=""> -->
             </a>
           </li>
         </ul>

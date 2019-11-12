@@ -333,7 +333,7 @@ class Reports extends MY_Controller
 
 		$data['title'] = 'List of Employees';
 		$data['employees'] = $this->Reports_model->employees($conditions, $this->limit, $offset)->result();
-
+		echo $this->db->last_query();
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']);
