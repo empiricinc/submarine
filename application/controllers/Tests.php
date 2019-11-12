@@ -622,7 +622,7 @@ class Tests extends MY_Controller{
 				'obtain_marks' => $this->input->post('marks_obtained'),
 				'total_marks' => $this->input->post('total_marks')
 			);
-			var_dump($data); exit;
+			// var_dump($data); exit;
 			$this->Tests_model->add_result($data);
 			$this->session->set_flashdata('success', '<strong>Success !</strong> Result has been saved successfully');
 			redirect('tests/total_appeared');
