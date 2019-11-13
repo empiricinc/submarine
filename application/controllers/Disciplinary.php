@@ -546,16 +546,46 @@ class Disciplinary extends MY_Controller
 	public function status_fields()
 	{
 		$this->ajax_check();
-		
-		$disciplinary_id = $this->input->post('disciplinary_id');
+
 		$status = $this->input->post('status_text');
+		$disciplinary_type_name = $this->input->post('type_name');
+		$employee_id = $this->input->post('employee_id');
 
 		$type = $this->Disciplinary_model->get_disciplinary_type()->result();
 		$status_row = $this->Disciplinary_model->get_status_id($status);
 		$status_id = $status_row->id;
 
 		$output = '<input type="hidden" name="status_id" id="status-id" value="'.$status_id.'">';
-		if($status == 'pending')
+
+		$resg_data = '';
+		if(strtolower($disciplinary_type_name) == 'resignation')
+		{
+			$this->db->select('resignation_date, exit_interview_status');
+			$resg_data = $this->db->get_where('xin_employee_resignations', array('employee_id' => $employee_id))->row();
+		}
+
+		if($status == 'pending' && $resg_data != '')
+		{
+			$exit_interview_status = ($resg_data->exit_interview_status) ? 'Yes' : 'No';
+			$resignation_date = ($resg_data->resignation_date) ? date('d-m-Y', strtotime($resg_data->resignation_date)) : '';
+			$output .= '
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<label>Exit Interview</label>
+								<input type="text" name="exit_interview" value="'.$exit_interview_status.'" class="form-control" readonly>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="inputFormMain">
+								<label>Resignation Date</label>
+								<input type="text" name="resignation_date" value="'.$resignation_date.'" class="form-control" readonly>
+							</div>
+						</div>
+					</div>
+			';
+		}
+		elseif($status == 'pending' && $resg_data == '')
 		{
 			$output .= '
 				<div class="row">
@@ -599,7 +629,7 @@ class Disciplinary extends MY_Controller
 							<div class="col-lg-6">
 								<div class="inputFormMain">
 									<label>Next Action</label>
-									<select name="approved_action" class="form-control" required="required">
+									<select name="next_action" class="form-control" required="required">
 										<option value="">SELECT ACTION</option>';
 	
 							foreach($type AS $t) {
@@ -726,6 +756,7 @@ class Disciplinary extends MY_Controller
     	$comments = $this->input->post('comments');
     	$date = $this->input->post('added_date');
 
+    	$next_action = $this->input->post('next_action');
 
     	$data = array(
 					'disciplinary_id' => $disciplinary_id,
@@ -758,6 +789,8 @@ class Disciplinary extends MY_Controller
 
 		if($update)
 		{
+			if($next_action != '')
+				$this->next_disciplinary_action($disciplinary_id, $next_action);
 			$this->session->set_flashdata('success', 'Status updated successfully.');
 		}
 		else
@@ -767,6 +800,35 @@ class Disciplinary extends MY_Controller
 
 
 		redirect('Disciplinary/detail/'.$disciplinary_id, 'refresh');
+    }
+
+
+    private function next_disciplinary_action($disciplinary_id, $next_action)
+    {
+    	$disciplinary = $this->db->get_where('disciplinary', array('disciplinary.id' => $disciplinary_id))->row();
+ 
+    	$created_by = $this->session_data['user_id'];
+    	$created_date = date('Y-m-d');
+
+    	$data = array(
+    				'employee_id' => $disciplinary->employee_id,
+    				'project_id' => $disciplinary->project_id,
+    				'designation_id' => $disciplinary->designation_id,
+    				'department_id' => $disciplinary->department_id,
+    				'reason_id' => $disciplinary->reason_id,
+    				'other_reason' => $disciplinary->other_reason,
+    				'subject' => $disciplinary->subject,
+    				'description' => $disciplinary->description,
+    				'type_id' => $next_action,
+    				'status_id' => '1',
+    				'reported_by' => $disciplinary->reported_by,
+    				'reported_date' => $disciplinary->reported_date,
+    				'category_id' => $disciplinary->category_id,
+    				'created_by' => $created_by,
+    				'created_date' => $created_date
+    			);
+
+    	return $this->Disciplinary_model->add($data);
     }
 
  
@@ -1458,9 +1520,9 @@ class Disciplinary extends MY_Controller
     	$status_rows = '';
     	foreach ($status_comments as $comment) {
     		$status_rows .= '<tr>
-					<td style="width: 10%; font-family: helvitica;"><strong>'.ucwords($comment->status_text).'</strong></td>
+					<td style="width: 15%; font-family: helvitica;"><strong>'.ucwords($comment->status_text).'</strong></td>
 					<td style="width: 50%; font-family: helvitica;">'.$comment->comment_text.'</td>
-					<td style="width: 25%; font-family: helvitica;">'.ucwords($comment->emp_name).'</td>
+					<td style="width: 20%; font-family: helvitica;">'.ucwords($comment->emp_name).'</td>
 					<td style="width: 15%; font-family: helvitica;">'.$this->format_date($comment->added_date).'</td>
 				</tr>';
     	}
@@ -1469,9 +1531,9 @@ class Disciplinary extends MY_Controller
     	$status_comments .= '<table border="1px" style="padding: 5px;">
 			<tbody>
 				<tr>
-					<td style="width: 10%; font-family: helvitica;"><strong>Open</strong></td>
+					<td style="width: 15%; font-family: helvitica;"><strong>Open</strong></td>
 					<td style="width: 50%; font-family: helvitica;">'.$disciplinary->description.'</td>
-					<td style="width: 25%; font-family: helvitica;">'.ucwords($disciplinary->created_by).'</td>
+					<td style="width: 20%; font-family: helvitica;">'.ucwords($disciplinary->created_by).'</td>
 					<td style="width: 15%; font-family: helvitica;">'.$this->format_date($disciplinary->created_date).'</td>
 				</tr>
 				'.$status_rows.'

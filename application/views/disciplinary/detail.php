@@ -77,9 +77,9 @@
 							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="not received">
 								<i class="fa fa-archive"></i> NOT RECEIVED
 							</button>
-							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
+							<!-- <button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
 								<i class="fa fa-archive"></i> NO ACTION
-							</button>
+							</button> -->
 
 					<?php } elseif($detail->status_text == 'received') { ?>
 						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="satisfactory">
@@ -92,7 +92,7 @@
 							UNSATISFACTORY 
 						</button>
 
-						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="admitted"> 
+						<!-- <button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="admitted"> 
 							<i class="fa fa-archive"></i>
 							ADMITTED 
 						</button>
@@ -100,7 +100,7 @@
 						<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="no action">
 								<i class="fa fa-archive"></i> 
 								NO ACTION	
-						</button>
+						</button> -->
 
 						<!-- <button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="re open"> 
 							<i class="fa fa-archive"></i>
@@ -121,6 +121,8 @@
 			</div>
 			<div class="solidLine"></div>
 
+				<input type="hidden" id="disciplinary-type-name" value="<?= $detail->type_name; ?>">
+				<input type="hidden" id="employee-id" value="<?= $detail->employee_id; ?>">
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="col-lg-2"><strong>Employee Name</strong></div>

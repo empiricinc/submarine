@@ -610,13 +610,15 @@
 		
 		$('.disciplinary-status-btn').on('click', function() {
 			var status_text = $(this).data('text');
+			var type_name = $('#disciplinary-type-name').val();
+			var employee_id = $('#employee-id').val();
 			
 			var disciplinaryHandler = $('#disciplinaryHandler').html('');
 			$.ajax({
 				url: '<?= base_url(); ?>Disciplinary/status_fields',
 				type: 'POST',
 				dataType: 'json',
-				data: {status_text: status_text},
+				data: {status_text: status_text, type_name: type_name, employee_id: employee_id},
 				success: function(response) {
 					disciplinaryHandler.append(response.data.output);
 					$('#disciplinary-modal').modal('show');

@@ -10,22 +10,6 @@
 					<form action="<?= base_url(); ?>Disciplinary/view" method="GET" id="complaints-search-form">
 						<div class="selectBoxMain">
 							<div class="filterSelect">
-								<input type="text" name="from_date" class="form-control date" placeholder="From Date">
-							</div>
-							<div class="filterSelect">
-								<input type="text" name="to_date" class="form-control date" placeholder="To Date">
-							</div>
-
-							<div class="filterSelect">
-								<select name="status" id="status" class="form-control">
-									<option value="">Status</option>
-									<?php foreach($status AS $s): ?>
-										<option value="<?= $s->id; ?>"><?= ucwords($s->status_text); ?></option>
-									<?php endforeach; ?>
-								</select>
-								<span></span>
-							</div>
-							<div class="filterSelect">
 								<select name="project" class="form-control">
 									<option value="">Project</option>
 									<?php foreach($project AS $p): ?>
@@ -54,6 +38,24 @@
 								</select>
 								<span></span>
 							</div>
+
+							<div class="filterSelect">
+								<input type="text" name="from_date" class="form-control date" placeholder="From Date">
+							</div>
+							<div class="filterSelect">
+								<input type="text" name="to_date" class="form-control date" placeholder="To Date">
+							</div>
+
+							<div class="filterSelect">
+								<select name="status" id="status" class="form-control">
+									<option value="">Status</option>
+									<?php foreach($status AS $s): ?>
+										<option value="<?= $s->id; ?>"><?= ucwords($s->status_text); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span></span>
+							</div>
+
 
 							<div class="filterSelectBtn">
 								<button type="submit" name="search" id="disciplinary-search-btn" class="btn btnSubmit">Search</button>

@@ -15,8 +15,8 @@ class User_panel extends MY_Controller
         $roles = array(1, 2);
         $user_role = $this->session->username['user_role'];
         
-        if(in_array($user_role, $roles))
-            redirect(base_url().'dashboard');
+        // if(in_array($user_role, $roles))
+        //     redirect(base_url().'dashboard');
         
         $this->session_data = array(
 					        	'user_id' => $this->session->username['employee_id'], 
