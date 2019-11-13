@@ -163,7 +163,7 @@
                       <td><?= $scheduled->cityName; ?></td>
                       <td><?= date('l, M jS, Y', strtotime($scheduled->interview_date)); ?></td>
                       <td>
-                        <a href="<?php if($scheduled->designation_id == 12 OR $scheduled->designation_id == 13){ echo base_url("interview/form_sm/{$scheduled->rollnumber}"); }elseif($scheduled->designation_id == 5){ echo base_url("interview/form_dhcso/{$scheduled->rollnumber}"); }elseif($scheduled->designation_id == 8 OR $scheduled->designation_id == 14){ echo base_url("interview/form_fcm/{$scheduled->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Result</a>
+                        <a href="<?php if($scheduled->designation_id == 12 OR $scheduled->designation_id == 13){ echo base_url("interview/form_sm/{$scheduled->rollnumber}"); }elseif($scheduled->designation_id == 5){ echo base_url("interview/form_dhcso/{$scheduled->rollnumber}"); }elseif($scheduled->designation_id == 8 OR $scheduled->designation_id == 14){ echo base_url("interview/form_fcm/{$scheduled->rollnumber}"); }else{ echo base_url('interview/add_marks'); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Result</a>
                     </td>
                     </tr>
                   <?php endforeach; ?>

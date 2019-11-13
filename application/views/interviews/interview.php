@@ -210,7 +210,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
             <td><?php echo $interview->provName;?></td>
             <td><?php echo date('M d, Y', strtotime($interview->interview_date)); ?></td>
             <td>
-              <a href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Result</a>
+              <a href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); }else{ echo base_url('interview/add_marks'); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Result</a>
             </td>
           </tr>
         <?php } ?>               
