@@ -401,6 +401,8 @@ class Tests extends MY_Controller{
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		$data['all_applicants'] = $this->Tests_model->total_applicants($limit, $offset);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | All Applicants';
 		$data['content'] = 'test-system/applicants';
 		$this->load->view('test-system/components/template', $data);
@@ -476,6 +478,9 @@ class Tests extends MY_Controller{
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['provinces'] = $this->Tests_model->get_provinces();
 		$data['title'] = 'Test System | Jobs';
 		$data['content'] = 'test-system/jobs';
 		$data['jobs_list'] = $this->Tests_model->jobs_list($limit, $offset);
@@ -510,6 +515,8 @@ class Tests extends MY_Controller{
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | Appeared Applicants';
 		$data['content'] = 'test-system/appeared';
 		$data['appeared_list'] = $this->Tests_model->all_appeared($limit, $offset);
@@ -525,24 +532,46 @@ class Tests extends MY_Controller{
 	}
 	// Applicants search
 	public function applicant_search(){
-		$applicant = $this->input->get('search_applicant');
-		$data['results'] = $this->Tests_model->search_applicants($applicant);
+		$project = $this->input->get('project');
+		$designation = $this->input->get('designation');
+		$job_title = $this->input->get('job_title');
+		$rollnumber = $this->input->get('rollnumber');
+		$keyword = $this->input->get('keyword');
+		$date_from = $this->input->get('date_from');
+		$date_to = $this->input->get('date_to');
+		$data['results'] = $this->Tests_model->search_applicants($project, $designation, $keyword, $job_title, $rollnumber, $date_from, $date_to);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | Applicants Search';
 		$data['content'] = 'test-system/applicants';
 		$this->load->view('test-system/components/template', $data);
 	}
 	// Jobs search
 	public function job_search(){
-		$job = $this->input->get('search_job');
-		$data['results'] = $this->Tests_model->search_jobs($job);
+		$project = $this->input->get('project');
+		$designation = $this->input->get('designation');
+		$province = $this->input->get('province');
+		$date_from = $this->input->get('date_from');
+		$date_to = $this->input->get('date_to');
+		$data['results'] = $this->Tests_model->search_jobs($project, $designation, $province, $date_from, $date_to);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['provinces'] = $this->Tests_model->get_provinces();
 		$data['title'] = 'Test System | Jobs Search';
 		$data['content'] = 'test-system/jobs';
 		$this->load->view('test-system/components/template', $data);
 	}
 	// Appeared applicants search
 	public function appeared_search(){
-		$appeared = $this->input->get('search_appeared');
-		$data['results'] = $this->Tests_model->search_appeared($appeared);
+		$keyword = $this->input->get('keyword');
+		$project = $this->input->get('project');
+		$designation = $this->input->get('designation');
+		$rollnumber = $this->input->get('rollnumber');
+		$date_from = $this->input->get('date_from');
+		$date_to = $this->input->get('date_to');
+		$data['results'] = $this->Tests_model->search_appeared($project, $designation, $keyword, $rollnumber, $date_from, $date_to);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | Appeared Applicants Search';
 		$data['content'] = 'test-system/appeared';
 		$this->load->view('test-system/components/template', $data);

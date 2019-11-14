@@ -7,37 +7,74 @@
 <?php if(empty($results)): ?>
 <section class="secMainWidthFilter">
 	<div class="row marg">
-		<div class="col-lg-12">
+		<div class="col-lg-2 no-leftPad">
+			<div class="main-leftFilter">
+				<div class="tabelHeading">
+					<h3>Search Applicants <a href="<?php echo base_url('tests/jobs'); ?>" class="fa fa-refresh"></a></h3>
+				</div>
+				<div class="selectBoxMain">
+					<form method="get" action="<?php echo base_url('tests/job_search'); ?>">
+						<div class="filterSelect">
+							<select class="form-control" id="project" name="project">
+								<option value="">Project</option>
+								<?php foreach($projects as $proj) : ?>
+									<option value="<?php echo $proj->name; ?>">
+										<?php echo $proj->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<select class="form-control" id="designation" name="designation">
+								<option value="">Designation</option>
+								<?php foreach($designations as $desig): ?>
+								<option value="<?php echo $desig->designation_name; ?>">
+									<?php echo $desig->designation_name; ?>
+								</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<select name="province" class="form-control">
+								<option value="">Province</option>
+								<?php foreach($provinces as $prov): ?>
+									<option value="<?= $prov->name ?>">
+										<?= $prov->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_from" class="form-control">
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_to" class="form-control">
+						</div>
+						<div class="filterSelectBtn">
+							<button class="btn btnSubmit">Search</button>
+						</div>
+					</form>
+					<small>[...Job searching between dates is based on the Date Posted...]</small>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-10">
 			<div class="mainTableWhite">
 				<div class="row">
-					<div class="col-md-8">
+					<div class="col-md-10">
 						<div class="tabelHeading">
 							<?php if(empty($job_detail)): ?>
 								<h3>all jobs 
-									<span>(list of the jobs)</span> |
-									<small>search by job title, location, project, recruitement type, or available positions &hellip;</small>
+									<span>(list of the jobs)</span>
 								</h3>
 							<?php else: ?>
 								<h3>job detail 
 									<span>(see the job in detail)</span>
 								</h3>
 							<?php endif; ?>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="tabelTopBtn">
-							<form class="form-inline" action="<?php echo base_url('tests/job_search'); ?>" method="get">
-								<div class="inputFormMain">
-									<div class="input-group">
-										<input type="text" name="search_job" class="form-control" placeholder="Search jobs..." required="" autocomplete="off">
-										<div class="input-group-btn">
-											<button type="submit" class="btn btnSubmit">
-												<i class="fa fa-search"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-							</form>
 						</div>
 					</div>
 				</div>
@@ -106,29 +143,65 @@
 <?php else: ?>
 <section class="secMainWidthFilter">
 	<div class="row marg">
-		<div class="col-lg-12">
+		<div class="col-lg-2 no-leftPad">
+			<div class="main-leftFilter">
+				<div class="tabelHeading">
+					<h3>Search Applicants <a href="<?php echo base_url('tests/jobs'); ?>" class="fa fa-refresh"></a></h3>
+				</div>
+				<div class="selectBoxMain">
+					<form method="get" action="<?php echo base_url('tests/job_search'); ?>">
+						<div class="filterSelect">
+							<select class="form-control" id="project" name="project">
+								<option value="">Project</option>
+								<?php foreach($projects as $proj) : ?>
+									<option value="<?php echo $proj->name; ?>">
+										<?php echo $proj->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<select class="form-control" id="designation" name="designation">
+								<option value="">Designation</option>
+								<?php foreach($designations as $desig): ?>
+								<option value="<?php echo $desig->designation_name; ?>">
+									<?php echo $desig->designation_name; ?>
+								</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<select name="province" class="form-control">
+								<option value="">Province</option>
+								<?php foreach($provinces as $prov): ?>
+									<option value="<?= $prov->name ?>">
+										<?= $prov->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_from" class="form-control">
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_to" class="form-control">
+						</div>
+						<div class="filterSelectBtn">
+							<button class="btn btnSubmit">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-10">
 			<div class="mainTableWhite">
 				<div class="row">
 					<div class="col-md-8">
 						<div class="tabelHeading">
-							<h3>you've searched for : <span><?php echo $_GET['search_job']; ?></span></h3>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="tabelTopBtn">
-							<form class="form-inline" action="<?php echo base_url('tests/job_search'); ?>" method="get">
-								<div class="inputFormMain">
-									<a href="javascript:history.go(-1);" class="form-control">Go back</a>
-									<div class="input-group">
-										<input type="text" name="search_job" class="form-control" placeholder="Search jobs..." required="" autocomplete="off">
-										<div class="input-group-btn">
-											<button type="submit" class="btn btnSubmit">
-												<i class="fa fa-search"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-							</form>
+							<h3>search results</h3>
 						</div>
 					</div>
 				</div>

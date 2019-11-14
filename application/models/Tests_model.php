@@ -389,7 +389,7 @@ class Tests_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// search applicants
-	public function search_applicants($applicant){
+	public function search_applicants($project, $designation, $keyword, $job_title, $rollnumber, $date_from, $date_to){
 		$this->db->select('assign_test.rollnumber,
 							assign_test.test_date,
 							xin_job_applications.application_id,
@@ -397,44 +397,65 @@ class Tests_model extends CI_Model{
 							xin_job_applications.email,
 							xin_job_applications.created_at,
 							xin_jobs.job_id,
-							xin_jobs.job_title');
+							xin_jobs.job_title,
+							xin_jobs.designation_id,
+							xin_jobs.company,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
 		$this->db->from('assign_test');
-		$this->db->join('xin_job_applications', 'assign_test.rollnumber = xin_job_applications.application_id');
+		$this->db->join('xin_job_applications', 'assign_test.rollnumber = xin_job_applications.application_id', 'left');
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
-		$this->db->like('xin_job_applications.fullname', $applicant);
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where('xin_job_applications.fullname', $keyword);
+		$this->db->or_where('xin_companies.name', $project);
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
-		$this->db->or_like('xin_job_applications.email', $applicant);
+		$this->db->or_where('xin_designations.designation_name', $designation);
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
-		$this->db->or_like('xin_job_applications.created_at', $applicant);
-		$this->db->or_like('xin_jobs.job_title', $applicant);
+		$this->db->or_where('xin_jobs.job_title', $job_title);
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
+		$this->db->or_where('assign_test.rollnumber', $rollnumber);
+		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
+		$this->db->or_where('assign_test.test_date >=', $date_from);
+		$this->db->where('assign_test.test_date <=', $date_to);
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM test_result)');
 		return $this->db->get()->result();
 	}
 	// Search Jobs
-	public function search_jobs($job){
+	public function search_jobs($project, $designation, $province, $date_from, $date_to){
 		$this->db->select('xin_jobs.*,
 							xin_job_type.job_type_id,
 							xin_job_type.type,
 							provinces.id,
 							provinces.name as prov_name,
 							xin_companies.company_id,
-							xin_companies.name as comp_name');
+							xin_companies.name as comp_name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
 		$this->db->from('xin_jobs');
 		$this->db->join('xin_job_type', 'xin_jobs.job_type = xin_job_type.job_type_id', 'left');
 		$this->db->join('provinces', 'provinces.id = xin_jobs.province', 'left');
 		$this->db->join('xin_companies', 'xin_companies.company_id = xin_jobs.company', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
 		$this->db->where(array('xin_jobs.status' => 1));
-		$this->db->like('xin_jobs.job_title', $job);
-		$this->db->or_like('provinces.name', $job);
-		$this->db->or_like('xin_companies.name', $job);
-		$this->db->or_like('xin_job_type.type', $job);
-		$this->db->or_like('xin_jobs.job_vacancy', $job);
+		$this->db->where('xin_designations.designation_name', $designation);
+		$this->db->or_where('provinces.name', $province);
+		$this->db->where('xin_jobs.status', 1);
+		$this->db->or_where('xin_companies.name', $project);
+		$this->db->where('xin_jobs.status', 1);
+		$this->db->or_where('xin_jobs.created_at >=', $date_from);
+		$this->db->where('xin_jobs.created_at <=', $date_to);
+		// $this->db->where('xin_jobs.status', 1);
 		$jobs = $this->db->get();
 		return $jobs->result();
 	}
 	// Search appeared.
-	public function search_appeared($appeared){
+	public function search_appeared($project, $designation, $keyword, $rollnumber, $date_from, $date_to){
 		$this->db->select('test_result.rollnumber,
+							test_result.sdt,
+							test_result.obtain_marks,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -443,21 +464,32 @@ class Tests_model extends CI_Model{
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_companies.company_id,
-							xin_companies.name as compName');
+							xin_companies.name as compName,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
 		$this->db->from('test_result');
 		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id', 'left');
 		$this->db->join('xin_jobs', 'xin_jobs.job_id = xin_job_applications.job_id', 'left');
 		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
-		$this->db->like('xin_job_applications.fullname', $appeared);
-		$this->db->or_like('xin_job_applications.email', $appeared);
-		$this->db->or_like('xin_jobs.job_title', $appeared);
-		$this->db->or_like('xin_companies.name', $appeared);
-		return $this->db->get()->result();
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where('xin_job_applications.fullname', $keyword);
+		$this->db->or_where('xin_companies.name', $project);
+		$this->db->where('rollnumber IN(SELECT rollnumber FROM assign_test)');
+		$this->db->or_where('xin_designations.designation_name', $designation);
+		$this->db->where('rollnumber IN(SELECT rollnumber FROM assign_test)');
+		$this->db->or_where('test_result.rollnumber', $rollnumber);
+		$this->db->where('rollnumber IN(SELECT rollnumber FROM assign_test)');
+		$this->db->or_where('test_result.sdt >=', $date_from);
+		$this->db->where('test_result.sdt <=', $date_to);
+		$this->db->where('rollnumber IN(SELECT rollnumber FROM assign_test)');
+		$query = $this->db->get();
+		return $query->result();
 	}
 	// applicants appeared in exam .
 	public function appeared_applicants(){
 		$this->db->select('test_result.rollnumber,
 							test_result.sdt as exam_date,
+							test_result.obtain_marks,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -482,6 +514,7 @@ class Tests_model extends CI_Model{
 	public function all_appeared($limit='', $offset=''){
 		$this->db->select('test_result.rollnumber,
 							test_result.sdt as exam_date,
+							test_result.obtain_marks,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -722,6 +755,12 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_jobs', 'exam_paper.job_id = xin_jobs.job_id', 'left');
 		$this->db->like('xin_jobs.job_title', $keyword);
 		$this->db->group_by('exam_paper.job_id');
+		return $this->db->get()->result();
+	}
+	// Get all provinces.
+	public function get_provinces(){
+		$this->db->select('id, name');
+		$this->db->from('provinces');
 		return $this->db->get()->result();
 	}
 }
