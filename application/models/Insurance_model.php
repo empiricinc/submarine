@@ -15,14 +15,14 @@ class Insurance_model extends CI_Model
 
 	function get_employees($conditions=array(), $limit="", $offset="")
 	{
-		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.status AS employee_status, xc.name as project_name, xdd.department_name, xd.designation_name, ebi.date_of_birth, ebi.date_of_joining AS doj, ebi.contact_number, i.from_date, i.to_date, i.status");
+		$this->db->select("xe.employee_id, CONCAT(xe.first_name, ' ', IFNULL(xe.last_name, '')) AS emp_name, xe.status AS employee_status, xc.name as project_name, xdd.department_name, xd.designation_name, ebi.date_of_birth, ebi.date_of_joining AS doj, ebi.contact_number, i.from_date, i.to_date, i.status, g.gender_name");
 
         $this->db->join('xin_employees xe', 'i.employee_id = xe.employee_id', 'left');
 		$this->db->join('xin_companies xc', 'xe.company_id = xc.company_id', 'left');
 		$this->db->join('xin_designations xd', 'xe.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments xdd', 'xe.department_id = xdd.department_id', 'left');
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
-        
+        $this->db->join('gender g', 'ebi.gender = g.gender_id', 'left');
 
 		$this->db->limit($limit, $offset);
 

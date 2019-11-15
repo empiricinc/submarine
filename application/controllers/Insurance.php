@@ -226,8 +226,7 @@ class Insurance extends MY_Controller
 			$conditions = [
 						'xe.company_id' => $this->session_data['project_id'],
 						'xe.provience_id' => $this->session_data['province_id'],
-						'ic.id' => $claim_id,
-						'xe.is_active' => '1'
+						'ic.id' => $claim_id
 						];
 
 			$filtered_conditions = $this->remove_empty_entries($conditions);

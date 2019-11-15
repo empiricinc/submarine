@@ -113,6 +113,15 @@ class Resignations_model extends CI_Model {
             return false;
     }
 
+    public function resignation_status_text($employee_id)
+    {
+        $this->db->select('rs.status_text');
+        
+        $this->db->join('resignation_status rs', 'xer.status = rs.id', 'left');
+        $this->db->where('xer.employee_id', $employee_id);
+        return $this->db->get('xin_employee_resignations xer')->row();
+    }
+
     public function get_status_comments($resignation_id)
     {
         $this->db->select('rs.status_text, rc.comment_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS employee_name, rc.added_date, rc.created_at');
@@ -141,6 +150,20 @@ class Resignations_model extends CI_Model {
         $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
         $this->db->join('employee_basic_info ebi', 'xe.employee_id = ebi.user_id', 'left');
         $this->db->where('xer.resignation_id', $resignation_id);
+        return $this->db->get('xin_employee_resignations xer')->row();
+    }
+
+    public function update_location_job_position($data, $job_code)
+    {
+        $this->db->where('job_code', $job_code);
+        return $this->db->update('location_job_position', $data);
+    }
+
+    public function get_resignation_date($resignation_id)
+    {
+        $this->db->select('xer.resignation_date, xe.job_code');
+        $this->db->where('xer.resignation_id', $resignation_id);
+        $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
         return $this->db->get('xin_employee_resignations xer')->row();
     }
 

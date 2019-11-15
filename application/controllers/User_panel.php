@@ -544,6 +544,9 @@ class User_panel extends MY_Controller
 		$data['title'] = "Resignation Form";
 		$data['emp'] = $this->User_panel_model->get_name_designation($employee_id);
 		$data['reasons'] = $this->User_panel_model->get_resignation_reasons();
+
+		$resg_status = $this->Resignations_model->resignation_status_text($employee_id);
+		$data['resignation_status'] = ($resg_status) ? $resg_status->status_text : '';
 		
 		$data['content'] = $this->load->view("user_panel/resignation", $data, TRUE);
 		$this->load->view('user_panel/_template', $data);
@@ -552,13 +555,13 @@ class User_panel extends MY_Controller
 
 	public function add_resignation()
 	{
-
 		$employee_id = $this->session_data['user_id'];
 
 		$title = $this->input->post('title');
 		$reason = $this->input->post('reason');
 		$notice_date = $this->input->post('notice_date');
 		$resignation_date = $this->input->post('resignation_date');
+		// $last_working_date = $this->input->post('last_working_date');
 		$other_reason_text = $this->input->post('other_reason');
 		$subject = $this->input->post('subject');
 		$description = $this->input->post('description');
@@ -570,6 +573,7 @@ class User_panel extends MY_Controller
 					'employee_id' => $employee_id,
 					'notice_date' => $notice_date,
 					'resignation_date' => $resignation_date,
+					// 'last_working_date' => $last_working_date,
 					'reason' => $other_reason_text,
 					'added_by' => $employee_id,
 					'created_at' => $entry_time, 

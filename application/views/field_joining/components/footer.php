@@ -94,7 +94,7 @@
 						<div class="col-lg-12"><hr></div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="cnic_no" value="" id="check-cnic-no" class="form-control cnic-no" placeholder="CNIC No" data-toggle="tooltip" title="CNIC No" required>
+								<input type="text" name="cnic_no" value="" id="check-cnic-no" class="form-control cnic-no" placeholder="CNIC No (digits only)" data-toggle="tooltip" title="CNIC No (digits only)" pattern="[0-9]{13}" required>
 							</div>
 						</div>
 						<div class="col-lg-6">
@@ -104,7 +104,7 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="dob" value="" id="check-dob" class="form-control date" placeholder="Date Of Birth" data-toggle="tooltip" title="Date of Birth" required>
+								<input type="text" name="dob" value="" id="check-dob" class="form-control dob" placeholder="Date Of Birth" data-toggle="tooltip" title="Date of Birth" required>
 							</div>
 						</div>
 						<div class="col-lg-6">

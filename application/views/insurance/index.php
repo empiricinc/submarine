@@ -128,9 +128,10 @@
 											<th>Contact</th>
 											<th>Project</th>
 											<th>Department</th>
-											<th>Designation</th>											
+											<th>Designation</th>		
 											<th>Date of joining</th>
 											<th>Date of birth</th>
+											<th>Age</th>
 											<th>Status</th>	
 											<th>Action</th>	
 										</tr>
@@ -157,8 +158,14 @@
 											$diff = $currentDate - $dob;
 											$age = floor($diff/(365*24*60*60));
 
-											$ageLimit = 60; //#e1e4e7
-											$backgroundColor = ($age > $ageLimit) ? 'background: #8ef5ff8c;' : '';
+											$maxAgeLimit = 60;
+											$minAgeLimit = 18;
+											if(strtolower($e->gender_name) == 'male')
+												$maxAgeLimit = 60; //#e1e4e7
+											else
+												$maxAgeLimit = 55;
+
+											$backgroundColor = ($age > $maxAgeLimit OR $age < $minAgeLimit) ? 'background: #8ef5ff8c;' : '';
 
 
 										 ?>
@@ -173,7 +180,7 @@
 
 											<input type="hidden" name="insurance_status[]" value="<?= $e->status; ?>">
 											<td>
-												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured' OR $dob == 0 OR $age >= $ageLimit) { ?> disabled <?php } ?> >
+												<input type="checkbox" data-id="<?= $e->employee_id; ?>"  class="record" <?php if($e->doj == '' OR $e->status == 'insured' OR $dob == 0 OR $age >= $maxAgeLimit OR $age < $minAgeLimit) { ?> disabled <?php } ?> >
 											</td>
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
@@ -190,14 +197,14 @@
 												echo $date_of_birth = ($e->date_of_birth) ? date('d-m-Y', strtotime($e->date_of_birth)) : '<label class="label label-danger">DOB missing</label>'; 
 												?>	
 											</td>
-											
+											<td><?= $age; ?></td>
 											<td>
 												<?php 
 													echo '<label class="label '.$label.'" id="label-'. $e->employee_id.'">'.$e->status.'</label>'; 
 												?>
 											</td>
 											<td>
-												<?php if($date_of_joining != "" AND $dob != 0 AND $age < $ageLimit): ?>
+												<?php if($date_of_joining != "" AND $dob != 0 AND $age < $maxAgeLimit AND $age > $minAgeLimit): ?>
 												<div class="btn-group btn-group-sm dropdown-btns">
 												  	<a class="btn btn-primary dropdown-toggle" href="javscript:void(0);" data-toggle="dropdown">
 												  		<i class="fa fa-cog"></i>

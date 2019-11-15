@@ -48,14 +48,31 @@
 
 							<div class="filterSelect">
 								<select name="status" id="status" class="form-control">
-									<option value="">Status</option>
+									<option value="">Disciplinary Status</option>
 									<?php foreach($status AS $s): ?>
 										<option value="<?= $s->id; ?>"><?= ucwords($s->status_text); ?></option>
 									<?php endforeach; ?>
 								</select>
 								<span></span>
 							</div>
+							
+							<div class="filterSelect">
+								<select name="type" id="type" class="form-control">
+									<option value="">Disciplinary Type</option>
+									<?php foreach($type AS $t): ?>
+										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
 
+							<div class="filterSelect">
+								<select name="province" id="province" class="form-control">
+									<option value="">Province</option>
+									<?php foreach($province AS $p): ?>
+									<option value="<?= $p->id; ?>"><?= ucwords($p->name); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
 
 							<div class="filterSelectBtn">
 								<button type="submit" name="search" id="disciplinary-search-btn" class="btn btnSubmit">Search</button>
@@ -106,7 +123,7 @@
 													<th>Designation</th>
 													<th>Reason</th>
 													<th>Type</th>
-													<th>Date</th>
+													<th>Created date</th>
 													<th>Status</th>
 												</tr>
 											</thead>
@@ -124,7 +141,7 @@
 														<td>
 															<?= ucwords($c->type_name); ?>
 														</td>
-														<td><?= date('d-m-Y', strtotime($c->reported_date)); ?></td>
+														<td><?= date('d-m-Y', strtotime($c->created_date)); ?></td>
 														<td>
 															<label class="label label-primary"><?= $c->status_text; ?></label>
 														</td>

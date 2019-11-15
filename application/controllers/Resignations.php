@@ -167,17 +167,10 @@ class Resignations extends MY_Controller
 
         if($status_text == 'accepted')
         {
-            $status = 5;
-            $is_active = 0;
-            $this->Resignations_model->employee_status($resignation_id, $status, $is_active);
-        }
-        elseif($status_text == 'reversal')
-        {
-            $status = 1;
-            $is_active = 1;
-            $this->Resignations_model->employee_status($resignation_id, $status, $is_active);
-        }
+            $this->update_job_position($resignation_id, '0');
 
+        }
+        
         if($add_comment)
             $this->session->set_flashdata('success', 'Status updated successfully.');
         else
@@ -226,6 +219,7 @@ class Resignations extends MY_Controller
 
         if($added)
         {
+            $this->update_job_position($resignation_id, '1');
             $this->session->set_flashdata('success', 'Resignation was reversed successfully.');
         }
         else
@@ -234,26 +228,27 @@ class Resignations extends MY_Controller
         }
 
         redirect('Resignations/detail/'.$resignation_id, 'refresh');
-
     }
 
     public function cron_resignations()
     {
         $current_date = date('Y-m-d');
 
-        $this->db->select('resignation_id, employee_id');
-        $this->db->where(array('resignation_date <=' => $current_date, 'status' => '1'));
-        $result = $this->db->get('xin_employee_resignations')->result();
+        $this->db->select('xer.resignation_id, xer.employee_id, xe.job_code');
+        $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
+        $this->db->where(array('xer.resignation_date =' => $current_date));
+        $result = $this->db->get('xin_employee_resignations xer')->result();
 
         foreach ($result as $r) {
             $employee_id = $r->employee_id;
             $resignation_id = $r->resignation_id;
+            $job_code = $r->job_code;
 
             $this->db->where(array('employee_id' => $employee_id, 'is_active' => '1'));
             $this->db->update('xin_employees', array('is_active' => '0', 'status' => '5'));
 
-            $this->db->where(array('resignation_id' => $resignation_id));
-            $this->db->update('xin_employee_resignations', array('status' => '2'));
+            $this->db->where(array('job_code' => $job_code));
+            $this->db->update('location_job_position', array('status' => '0'));
         }
     }
 
@@ -349,6 +344,30 @@ class Resignations extends MY_Controller
             echo '1';
         else
             echo '0';
+    }
+
+
+    private function update_job_position($resignation_id="", $status)
+    {
+        $resignation_date = '';
+
+        $data = $this->Resignations_model->get_resignation_date($resignation_id);
+        $job_code = $data->job_code;
+        
+        if($status == 0)
+            $resignation_date = $data->resignation_date;
+
+        $update = array(
+                'resignation_date' => $resignation_date, 
+                'status' => $status
+            );
+
+       
+        if($job_code != '')
+            return $this->Resignations_model->update_location_job_position($update, $job_code);
+        else
+            return false;
+
     }
 
 }

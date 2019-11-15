@@ -18,7 +18,22 @@
 					<?php echo $this->session->flashdata('error'); ?>
 				</div>
 				<?php } ?>
+
+				<?php 
+					$btnDisabled = '';
+
+					if($resignation_status != '' AND $resignation_status != 'rejected')
+					{
+						$btnDisabled = 'disabled';
+						
+						echo '<div class="alert alert-info">
+								Resignation request in process.
+							</div>';
+					}
+				?>
+
 			</div>
+
 			
 			<form method="POST" action="<?= base_url(); ?>User_panel/add_resignation">
 				<div class="col-lg-6">
@@ -57,6 +72,11 @@
 						<input type="text" name="resignation_date" class="form-control date-onward" id="resignation-date" placeholder="Resignation Date" required>
 					</div>
 				</div>
+				<!-- <div class="col-lg-12">
+					<div class="inputFormMain">
+						<input type="text" name="last_working_date" class="form-control date-onward" placeholder="Last Working Date" required>
+					</div>
+				</div> -->
 				<div class="col-lg-12">
 					<div class="inputFormMain">
 						<input type="text" name="subject" class="form-control" id="resg-subject" placeholder="Subject" required>
@@ -68,9 +88,10 @@
 					</div>
 				</div>
 				<div class="col-lg-6"></div>
+
 				<div class="col-lg-6">
 					<div class="submitBtn">
-						<button type="submit" class="btn btnSubmit btn-block" id="resg-submit">Submit</button>
+						<button type="submit" class="btn btnSubmit btn-block" id="resg-submit" <?= $btnDisabled; ?>>Submit</button>
 					</div>
 				</div>
 			</form>

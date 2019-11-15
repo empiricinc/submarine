@@ -49,7 +49,22 @@
 		// $('.btn-group-sm:last').addClass('dropup');
 
 		$('.date-onward').datepicker({
-			minDate: 0
+			minDate: 0,
+			changeYear: true,
+			dateFormat: 'yy-mm-dd'
+		});
+
+		$('.prev-date').datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeYear: true,
+			maxDate: 0
+		});
+
+		$('.dob').datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeYear: true,
+			minDate: new Date(1960, 10, 25),
+        	maxDate: '-17Y'
 		});
 
 	</script>

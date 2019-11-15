@@ -1,6 +1,6 @@
 <div class="modal fade" id="disciplinary-modal">
 	<div class="modal-dialog">
-		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST" novalidate>
+		<form action="<?= base_url(); ?>Disciplinary/update_disciplinary_status" method="POST">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -24,14 +24,14 @@
 						<div class="col-lg-12">
 							<div class="inputFormMain">
 								<label>Comments</label>
-								<textarea name="comments" id="comments" class="form-control noresize" rows="5" required="required"></textarea>
+								<textarea name="comments" id="comments" class="form-control noresize" rows="5" required></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="submit" class="btn btnSubmit">Update</button>
-					<!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+					<button type="submit" id="status-update-btn" class="btn btnSubmit">Update</button>
+					<button type="button" class="btn btnSubmit" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</form>
@@ -308,297 +308,19 @@
 	<script type="text/javascript">
 		$('#type').on('change', function() {
 			var type = $('#type option:selected').text();
-			$('.disciplinary').html('');
-
-			if(type == 'Warning' || type == 'Final Warning' || type == 'Explanation' || type == 'Suspension' || type == 'Query')
-			{
-				$('.disciplinary').append(`<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Evidence</label>
-									<select name="evidence" id="evidence" class="form-control" required>
-										<option value="">SELECT EVIDENCE</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Evidence Date</label>
-									<input type="text" name="evidence_date" class="form-control date">
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Salary Hold</label>
-									<select name="salary_hold" id="salary" class="form-control" required="required">
-										<option value="">SALARY HOLD</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>`);
-			}
-
-			else if(type == 'Show Cause')
-			{
-				$('.disciplinary').append(`<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Evidence</label>
-									<select name="evidence" id="evidence" class="form-control" required="required">
-										<option value="">SELECT EVIDENCE</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Evidence Date</label>
-									<input type="text" name="evidence_date" class="form-control date">
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Salary Hold</label>
-									<select name="salary_hold" id="salary" class="form-control" required="required">
-										<option value="">SALARY HOLD</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Suspende from Duty</label>
-									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>`);
-			}
-
-			else if(type == 'Resign')
-			{
-				$('.disciplinary').html(`<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Evidence</label>
-									<select name="evidence" id="evidence" class="form-control" required="required">
-										<option value="">SELECT EVIDENCE</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Evidence Date</label>
-									<input type="text" name="evidence_date" class="form-control date">
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Salary Hold</label>
-									<select name="salary_hold" id="salary" class="form-control" required="required">
-										<option value="">SALARY HOLD</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Suspende from Duty</label>
-									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>`);
-			}
-
-			else if(type == 'Contract Closure')
-			{
-				$('.disciplinary').html(`<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Issue Reporting Date</label>
-									<input type="text" name="issue_reporting_date" class="form-control date">
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Salary Hold</label>
-									<select name="salary_hold" id="salary" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Last Working Date</label>
-									<input type="text" name="last_working_date" class="form-control date">
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Position Abolish</label>
-									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Abolish Date</label>
-									<input type="text" name="abolish_date" class="form-control date">
-								</div>
-							</div>`);
-			}
-
-			else if(type == 'Refusal')
-			{
-				$('.disciplinary').html(`<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Issue Reporting Date</label>
-									<input type="text" name="issue_reporting_date" class="form-control date">
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Salary Hold</label>
-									<select name="salary" id="salary" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Last Working Date</label>
-									<input type="text" name="last_working_date" class="form-control date">
-								</div>
-							</div>`);
-			}
-
-			else if(type == 'Transfer')
-			{
-				var provinces = "";
-				var position_filled_against = "";
-				var transfer_type = "";
-
-				<?php if(isset($province_string)): ?>
-					provinces += "<?= $province_string; ?>";
-				<?php endif; ?>
-
-				<?php if(isset($position_filled_against_string)): ?>
-					position_filled_against += "<?= $position_filled_against_string; ?>";
-				<?php endif; ?>
-
-				<?php if(isset($transfer_type_string)): ?>
-					transfer_type += "<?= $transfer_type_string; ?>"
-				<?php endif; ?>
-
-				$('.disciplinary').html(`<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Transfer Type</label>
-									<select name="salary_hold" id="salary" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										${transfer_type}
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Position Abolish</label>
-									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										<option value="1">Yes</option>
-										<option value="0">No</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Abolish Date</label>
-									<input type="text" name="abolish_date" class="form-control date">
-								</div>
-							</div>
-
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Reporting Date To CTC</label>
-									<input type="text" name="reported_date_ctc" class="form-control date">
-								</div>
-							</div>
-
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Province</label>
-									<select name="province" id="province" class="form-control province" required="required">
-										<option value="">SELECT OPTION</option>
-										${provinces}
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>District</label>
-									<select name="district" id="district" class="form-control district" required="required">
-										<option value="">SELECT OPTION</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Tehsil</label>
-									<select name="tehsil" id="tehsil" class="form-control tehsil" required="required">
-										<option value="">SELECT OPTION</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>UC</label>
-									<select name="uc" id="uc" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Position Filled Against</label>
-									<select name="position_filled_against" id="position_filled_against" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-										${position_filled_against}
-									</select>
-								</div>
-							</div>
-
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>New Job Position</label>
-									<select name="job_position" id="job_position" class="form-control" required="required">
-										<option value="">SELECT OPTION</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="col-lg-4">
-								<div class="inputFormMain">
-									<label>Transfer Effective Date</label>
-									<input type="text" name="transfer_effective_date" class="form-control date">
-								</div>
-							</div>`);
-			}
+			var type = $('#type option:selected').text();
+			$('#disciplinaryHandler').html('');
+			
+			$.ajax({
+				url: '<?= base_url(); ?>Disciplinary/update_status_fields',
+				type: 'POST',
+				dataType: 'html',
+				data: {type: type},
+				success: function(response) {
+					console.log(response);
+					$('#disciplinaryHandler').append(response);
+				}
+			});
 
 			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
 			$('input').attr('autocomplete','off');

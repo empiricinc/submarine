@@ -108,7 +108,7 @@ class Disciplinary extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $this->Province_model->get_by_project($this->session_data['project_id']);
-		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
+		$data['reasons'] = $this->Disciplinary_model->disciplinary_reasons()->result();
 		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
 
 		$data['content'] = $this->load->view('disciplinary/employees', $data, TRUE);
@@ -134,7 +134,7 @@ class Disciplinary extends MY_Controller
 		$data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
 		$data['provinces'] = $provinces = $this->Province_model->get_by_project($this->session_data['project_id']);
-		$data['reasons'] = $this->db->get_where('investigation_reasons')->result();
+		$data['reasons'] = $this->Disciplinary_model->disciplinary_reasons()->result();
 		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result(); 
 
 		$position_filled_against = $this->Disciplinary_model->position_filled_against();
@@ -414,17 +414,21 @@ class Disciplinary extends MY_Controller
 			$project = (int) $this->input->get('project');
 			$department = (int) $this->input->get('department');
 			$designation = (int) $this->input->get('designation');
-			// $action = $this->input->get('action');
+			$province = (int) $this->input->get('province');
+			
 			$status = $this->input->get('status');
+			$type = $this->input->get('type');
 
 			if($complaintNo != '')
 				$complaintNo = '%'.$complaintNo.'%';
 
-			$conditions['di.reported_date >='] = $fromDate;
-			$conditions['di.reported_date <='] = $toDate;
+			$conditions['di.created_date >='] = $fromDate;
+			$conditions['di.created_date <='] = $toDate;
 			$conditions['di.department_id'] = $department;
 			$conditions['di.designation_id'] = $designation;
 			$conditions['di.status_id'] = $status;
+			$conditions['di.type_id'] = $type;
+			$conditions['xe.provience_id'] = $province;
 
 			if($project != 0)
 				$conditions['di.project_id'] = $project;
@@ -446,8 +450,10 @@ class Disciplinary extends MY_Controller
 		$data['project'] = $this->Projects_model->get($this->session_data['project_id']); 
 		$data['department'] = $this->Departments_model->get_by_project($this->session_data['project_id']); 
 		$data['designation'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
+		$data['province'] = $this->Province_model->get();
 
 		$data['status'] = $this->Disciplinary_model->disciplinary_status()->result();
+		$data['type'] = $this->Disciplinary_model->get_disciplinary_type()->result();
 
 		$data['content'] = $this->load->view('disciplinary/view', $data, TRUE);
 
@@ -508,7 +514,7 @@ class Disciplinary extends MY_Controller
 		$transfer_type = $this->Disciplinary_model->transfer_types();
 
 		$disciplinary_types = $this->Disciplinary_model->get_disciplinary_type()->result();
-		$reasons = $this->db->get_where('investigation_reasons')->result();
+		$reasons = $this->Disciplinary_model->disciplinary_reasons()->result();
 		
 		$categories = $this->Disciplinary_model->categories();
 
@@ -626,7 +632,7 @@ class Disciplinary extends MY_Controller
 		elseif($status == 'not received' OR $status == 'unsatisfactory' OR $status == 'admitted')
 		{
 			$output .= '<div class="row">
-							<div class="col-lg-6">
+							<div class="col-lg-12">
 								<div class="inputFormMain">
 									<label>Next Action</label>
 									<select name="next_action" class="form-control" required="required">
@@ -1317,6 +1323,305 @@ class Disciplinary extends MY_Controller
 			return $output;
     }
 
+
+    function update_status_fields($type="")
+    {
+    	$output = '';
+    	$provinces_string = '';
+		$position_filled_against_string = '';
+		$transfer_type_string = '';
+
+		$provinces = $this->Province_model->get($this->session_data['project_id']);
+		$position_filled_against = $this->Disciplinary_model->position_filled_against();
+		$transfer_type = $this->Disciplinary_model->transfer_types();
+
+		foreach ($provinces as $p) {
+			$selected = '';
+			if($disciplinary_detail->province_id == $p->id)
+				$selected = 'selected';
+
+			$provinces_string .= "'<option value='".$p->id."' ".$selected.">".ucwords($p->name)."</option>";
+		}
+
+		foreach ($position_filled_against as $pfa) {
+			$selected = '';
+			if($disciplinary_detail->position_filled_against == $pfa->id)
+				$selected = 'selected';
+
+			$position_filled_against_string .= "'<option value='".$pfa->id."' ".$selected.">".ucwords($pfa->name)."</option>";
+		}
+
+		foreach ($transfer_type as $tt) {
+			$selected = '';
+			if($disciplinary_detail->transfer_type == $tt->id)
+				$selected = 'selected';
+
+			$transfer_type_string .= "'<option value='".$tt->id."' ".$selected.">".ucwords($tt->name)."</option>";
+		}
+
+
+    	if($type == 'Warning' || $type == 'Final Warning' || $type == 'Explanation' || $type == 'Suspension' || $type == 'Query')
+		{
+			$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence</label>
+									<select name="evidence" id="evidence" class="form-control" required>
+										<option value="">SELECT EVIDENCE</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence Date</label>
+									<input type="text" name="evidence_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SALARY HOLD</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>';
+		}
+		elseif($type == 'Show Cause') {
+			$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence</label>
+									<select name="evidence" id="evidence" class="form-control" required="required">
+										<option value="">SELECT EVIDENCE</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence Date</label>
+									<input type="text" name="evidence_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SALARY HOLD</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Suspende from Duty</label>
+									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>';
+		} elseif($type == 'Resign') {
+			$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence</label>
+									<select name="evidence" id="evidence" class="form-control" required="required">
+										<option value="">SELECT EVIDENCE</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Evidence Date</label>
+									<input type="text" name="evidence_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SALARY HOLD</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Suspende from Duty</label>
+									<select name="suspend_from_duty" id="suspend" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>';
+		} elseif($type == 'Contract Closure') {
+			$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Issue Reporting Date</label>
+									<input type="text" name="issue_reporting_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Last Working Date</label>
+									<input type="text" name="last_working_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Position Abolish</label>
+									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Abolish Date</label>
+									<input type="text" name="abolish_date" class="form-control date">
+								</div>
+							</div>';
+		} elseif($type == 'Refusal') {
+			$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Issue Reporting Date</label>
+									<input type="text" name="issue_reporting_date" class="form-control date">
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Salary Hold</label>
+									<select name="salary" id="salary" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Last Working Date</label>
+									<input type="text" name="last_working_date" class="form-control date">
+								</div>
+							</div>';
+		} elseif($type == 'Transfer') {
+			$output .= '<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Transfer Type</label>
+									<select name="salary_hold" id="salary" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										'.$transfer_type_string.'
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Position Abolish</label>
+									<select name="position_abolish" id="position_abolish" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										<option value="1">Yes</option>
+										<option value="0">No</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Abolish Date</label>
+									<input type="text" name="abolish_date" class="form-control date">
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Reporting Date To CTC</label>
+									<input type="text" name="reported_date_ctc" class="form-control date">
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Province</label>
+									<select name="province" id="province" class="form-control province" required="required">
+										<option value="">SELECT OPTION</option>
+										'.$provinces_string.'
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>District</label>
+									<select name="district" id="district" class="form-control district" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Tehsil</label>
+									<select name="tehsil" id="tehsil" class="form-control tehsil" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>UC</label>
+									<select name="uc" id="uc" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Position Filled Against</label>
+									<select name="position_filled_against" id="position_filled_against" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+										'.$position_filled_against_string.'
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>New Job Position</label>
+									<select name="job_position" id="job_position" class="form-control" required="required">
+										<option value="">SELECT OPTION</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-lg-4">
+								<div class="inputFormMain">
+									<label>Transfer Effective Date</label>
+									<input type="text" name="transfer_effective_date" class="form-control date">
+								</div>
+							</div>';
+		}
+
+		return $output;
+    }
 
     private function format_date($date="")
     {
