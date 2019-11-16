@@ -169,18 +169,45 @@ h4 {
                     </td>
                     <td>
                       <?php if($contract->status == 5): ?>
-                        <button class="btn btn-warning btn-xs">Finished</button>
+                        <button data-toggle="modal" data-target="#finishReason<?= $contract->user_id; ?>" class="btn btn-warning btn-xs">Finished</button>
+                        <div class="modal fade" id="finishReason<?= $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <!--Header-->
+                              <div class="modal-header">
+                                <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to finishing contract...</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                              <!--Body-->
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col-md-6 col-md-offset-3 text-center">
+                                    <p><?php echo $contract->rejection_reason; ?></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--Footer-->
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <?php elseif($contract->status == 6): ?>
+                        <button class="btn btn-danger btn-xs">Rejected</button>
                       <?php endif; ?>
                     </td>
                     <td>
-                      <?php if($contract->status == 5): ?>
+                      <?php if($contract->status == 6): ?>
                       <a data-toggle="modal" data-target="#reason<?= $contract->user_id; ?>" href="#reason"><?php echo substr($contract->rejection_reason, 0, 15).'...'; ?></a>
                       <div class="modal fade" id="reason<?= $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                               <!--Header-->
                             <div class="modal-header">
-                              <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Rejection Reason... </h4>
+                              <h4 style="display: inline-block;" class="modal-title" id="myModalLabel"><?php if($contract->status == 5): ?>Rejection Reason... <?php elseif($contract->status == 6): ?>Reason to finish contract... <?php endif; ?></h4>
                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                               </button>

@@ -161,9 +161,9 @@ class Dashboard extends MY_Controller {
 
 			//'date_of_birth' => $user[0]->date_of_birth,
 
-			'date_of_joining' => $user[0]->date_of_joining,
+			//'date_of_joining' => $user[0]->date_of_joining,
 
-			'contact_no' => $user[0]->contact_no,
+			//'contact_no' => $user[0]->contact_no,
 
 			'last_four_employees' => $this->Xin_model->last_four_employees(),
 

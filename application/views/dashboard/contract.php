@@ -34,7 +34,7 @@ if($finished){
 ?>
 <style type="text/css">
 .ui-datepicker {
-    display: none !important;
+    display: block;
 }
 .form-control.ddfield {
     height: 36px !important;
@@ -79,6 +79,9 @@ h4 {
   });
   $(document).ready(function() {
       $('#contact_list2').DataTable();
+  });
+   $(document).ready(function(){
+    $('.date').ui-datepicker();
   });
 </script>
 <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
@@ -417,11 +420,11 @@ h4 {
                         <div class="row">
                           <div class="col-md-6">
                             <label>Date From</label>
-                            <input type="date" name="date_from" class="form-control date">
+                            <input type="text" name="date_from" class="form-control date" autocomplete="off" placeholder="Starting date">
                           </div>
                           <div class="col-md-6">
                             <label>Date To</label>
-                            <input type="date" name="date_to" class="form-control date">
+                            <input type="text" name="date_to" class="form-control date" autocomplete="off" placeholder="Ending date">
                           </div>
                         </div><br>
                         <div class="row">
@@ -460,14 +463,15 @@ h4 {
                         <?php
                           if($exp_cont->contract_type != 1 AND $exp_cont->status != 5 AND $exp_cont->status != 6):
                           $date1=date_create(date('Y-m-d'));
-                          $date2=date_create(date('Y-m-d', strtotime($exp_cont->to_date)));
+                          $date2=date_create(date('Y-m-d', strtotime($exp_cont->to_date))); 
                           $diff=date_diff($date1, $date2);
                         ?>
                         <tr>
                           <td>CTC-<?= $contract->name.'-'.$exp_cont->user_id; ?></td>
                           <td><?= $exp_cont->name; ?></td>
                           <td>
-                            <?php echo $diff->format("%a day(s)"); ?>
+                            <?php if($diff->format("%a day(s)") > date('Y-m-d')): ?>
+                            <?php echo $diff->format("%a day(s)"); elseif($diff->format("%a day(s)") < date('Y-m-d')): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
                           </td>
                           <td>
                             <a data-toggle="tooltip" title="<?php echo date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>
@@ -570,11 +574,38 @@ h4 {
                     </td>
                     <td>
                       <?php if($cont->status == 5): ?>
-                        <button class="btn btn-warning btn-xs">Finished</button>
+                        <button data-toggle="modal" data-target="#finishReason<?= $cont->user_id; ?>" class="btn btn-warning btn-xs">Finished</button>
+                        <div class="modal fade" id="finishReason<?= $cont->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <!--Header-->
+                              <div class="modal-header">
+                                <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Reason to finishing contract...</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                              <!--Body-->
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col-md-6 col-md-offset-3 text-center">
+                                    <p><?php echo $cont->rejection_reason; ?></p>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--Footer-->
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      <?php elseif($cont->status == 6): ?>
+                        <button class="btn btn-danger btn-xs">Rejected</button>
                       <?php endif; ?>
                     </td>
                     <td>
-                      <?php if($cont->status == 5): ?>
+                      <?php if($cont->status == 6): ?>
                       <a data-toggle="modal" data-target="#reason<?= $cont->user_id; ?>" href="#reason"><?php echo substr($cont->rejection_reason, 0, 15).'...'; ?></a>
                       <div class="modal fade" id="reason<?= $cont->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">

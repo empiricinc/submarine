@@ -125,7 +125,7 @@ h4 {
             </div>
           </div>
           <div class="col-lg-8 text-right" id="printBtn" style="display: none; font-size: 30px; margin-top: 5px;">
-            <a data-toggle="tooltip" title="Activate Contracts" href="<?= base_url('contract/activate_all_contracts'); ?>"><i class="fa fa-arrow-circle-right"></i></a>
+            <a data-toggle="tooltip" title="Activate Contracts" href="<?php if(!empty($pen_contracts) AND $pen_contracts[0]->long_description==''){ echo "Some of the contracts haven't been created. Create them first."; }else{ echo base_url('contract/activate_all_contracts'); } ?>"><i class="fa fa-arrow-circle-right"></i></a>
             <a target="blank" data-toggle="tooltip" title="Print Contracts" href="<?= base_url('contract/print_all_contracts'); ?>"><i class="fa fa-print"></i></a>
           </div>
         </div>

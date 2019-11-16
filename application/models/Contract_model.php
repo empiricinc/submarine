@@ -925,5 +925,35 @@ class Contract_model extends CI_Model {
 	 	$query = $this->db->get();
 	 	return $query->result();
 	 }
+	 // Applicant data for offer letter.
+	 public function applicant_data(){
+	 	$this->db->select('xin_job_applications.application_id,
+	 								xin_job_applications.job_id,
+	 								xin_job_applications.fullname,
+	 								xin_job_applications.province,
+	 								xin_job_applications.city_name,
+	 								xin_job_applications.cnic,
+	 								xin_job_applications.created_at,
+	 								xin_jobs.job_id,
+	 								xin_jobs.job_title,
+	 								xin_jobs.designation_id,
+	 								xin_jobs.company,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name,
+	 								provinces.id,
+	 								provinces.name,
+	 								district.id,
+	 								district.name as dist_name');
+	 	$this->db->from('xin_job_applications');
+	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+	 	$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+	 	$this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
+	 	$this->db->where('xin_job_applications.application_id', $this->uri->segment(3));
+	 	$query = $this->db->get();
+	 	// echo $this->db->last_query();
+	 	return $query->row();
+	 }
 }
 ?>

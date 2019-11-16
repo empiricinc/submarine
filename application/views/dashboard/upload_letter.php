@@ -21,7 +21,7 @@
                 <select name="offer_letter_type" class="form-control" id="offer_type">
                   <option value="">Select type...</option>
                   <?php foreach($letters as $letter): ?>
-                    <option value="<?php echo $letter->offer_letter_text; ?>">
+                    <option value="<?php echo htmlspecialchars($letter->offer_letter_text); ?>">
                       <?php echo $letter->offer_letter_type; ?>
                     </option>
                   <?php endforeach; ?>
@@ -51,6 +51,13 @@
 <!-- Script -->
 <script type="text/javascript" src="<?php echo base_url('assets/tinymce/plugins/variable/plugin.js'); ?>"></script>
 <script type="text/javascript">
+  var name = '<?php echo $applicant->fullname; ?>';
+  var designation = '<?php echo $applicant->designation_name; ?>';
+  var province = '<?php echo $applicant->name; ?>';
+  var district = '<?php echo $applicant->dist_name; ?>';
+  var start_date = '<?php echo date("M d, Y", strtotime($applicant->created_at)); ?>';
+  var date = '<?php echo date("M y"); ?>';
+  var cnic = '<?php echo $applicant->cnic; ?>';
 tinymce.init({
     // basic tinyMCE stuff
     selector: ".editor",
@@ -58,8 +65,18 @@ tinymce.init({
     height: 200,
     theme: 'modern',
     menubar: true,
-    // toolbar: "bold,italic,mybutton,code",
+    skin: "lightgray",
+    height: 700,
+    toolbar: "undo redo | styleselect | alignleft alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullscreen | forecolor backcolor emoticons | visualchars code template | fullpage spellchecker formatselect | fontname",
     statusbar: true,
+    setup: function(ed)
+    {
+      ed.on('init', function()
+      {
+        this.getDoc().body.style.fontSize = '30';
+        this.getDoc().body.style.fontFamily = 'Book Antiqua';
+      });
+    },
     // Adding more variables to the form, but we don't need to add more vars.
     // setup : function(ed) {
     //     window.tester = ed;
@@ -75,22 +92,48 @@ tinymce.init({
     //     });
     // },
     // variable plugin related
-    plugins: "variable, code",
+    plugins: "variable, code, advlist, autolink, image, lists, charmap, print, preview, hr, pagebreak, anchor, searchreplace, wordcount, visualblocks, visualchars, fullscreen, insertdatetime, media, nonbreaking, save, table, contextmenu, directionality, emoticons, template, paste, textcolor, fullpage, spellchecker",
     variable_mapper: {  // Will look for variables in replace them with the text.
-        name: 'Shahid Qamar',
-        designation: 'CHW',
+        name: name,
+        designation: designation,
         address: 'Hayat Abad, Phase III',
-        district: 'Peshawar',
-        province: 'KP',
-        cnic: '1420245324532',
-        start_date: '2019-10-01',
-        end_date: '2019-12-31',
-        date: '2019-10-01'
-    }
+        district: district,
+        province: province,
+        cnic: cnic,
+        start_date: start_date,
+        end_date: start_date,
+        date: date
+    },
+    templates: [
+      { 
+        title: 'New Table',
+        description: 'Creates a new table',
+        content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"></th></tr><tr><td></td><td> </td></tr><tr><td></td></tr></table></div>'
+      },
+      { 
+        title: 'Story',
+        // src: 'htpp://localhost/submarine/tests',
+        description: 'The Jungle Book',
+        content: 'Once upon a time, there was a jungle, a boy went into that. A lion came and took the boy with itself. The boy grown up in the jungle. They named the boy Tarzan...'
+      },
+      {
+        title: 'List with Dates',
+        description: 'New list with date formats in it...',
+        content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
+      }
+    ],
+    template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+    template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+    height: 600,
+    image_caption: true,
+    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+    noneditable_noneditable_class: "mceNonEditable",
+    toolbar_drawer: 'sliding',
+    contextmenu: "link image imagetools table",
     // variable_prefix: '{{',
     // variable_suffix: '}}'
     // variable_class: 'bbbx-my-variable',
-    //variable_valid: ['username', 'sender', 'phone', 'community_name', 'email']
+    //variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date']
 });
 
 // Get offer letter from database to the textarea.

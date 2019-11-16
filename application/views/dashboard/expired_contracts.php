@@ -34,7 +34,7 @@ if($finished){
 ?>
 <style type="text/css">
 .ui-datepicker {
-    display: none !important;
+    display: block;
 }
 .form-control.ddfield {
     height: 36px !important;
@@ -68,12 +68,15 @@ h4 {
 }
 </style>
 <script type="text/javascript">
-                    $(document).ready(function() {
-                        $('#contact_list1').DataTable();
-                    });
-                    $(document).ready(function() {
-                        $('#contact_list2').DataTable();
-                    });
+  $(document).ready(function() {
+      $('#contact_list1').DataTable();
+  });
+  $(document).ready(function() {
+      $('#contact_list2').DataTable();
+  });
+   $(document).ready(function(){
+    $('.date').ui-datepicker();
+  });
 </script>
 <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
     <section class="secIndexTable">
@@ -81,7 +84,7 @@ h4 {
             <div class="row">
               <div class="col-md-10"><br>
                 <div class="tabelHeading">
-                    <h3>list of all expired contracts | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
+                    <h3>list of contracts to be expired | <small><a href="javascript:history.go(-1);"><div class="label label-primary">back</div></a></small></h3>
                 </div>
               </div>
               <div class="col-md-2">
@@ -108,11 +111,11 @@ h4 {
                         <div class="row">
                           <div class="col-md-6">
                             <label>Date From</label>
-                            <input type="date" name="date_from" class="form-control date">
+                            <input type="text" name="date_from" class="form-control date" autocomplete="off" placeholder="Starting date">
                           </div>
                           <div class="col-md-6">
                             <label>Date To</label>
-                            <input type="date" name="date_to" class="form-control date">
+                            <input type="text" name="date_to" class="form-control date" autocomplete="off" placeholder="Ending date">
                           </div>
                         </div><br>
                         <div class="row">
@@ -139,7 +142,7 @@ h4 {
                       <table class="table">
                         <thead>
                             <tr>
-                              <th>sr #</th>
+                              <th>employee iD</th>
                               <th>manager</th>
                               <th>type</th>
                               <th>days left</th>
@@ -150,7 +153,7 @@ h4 {
                         <tbody>
                         <?php foreach($expired_contracts as $exp_cont): ?>
                         <?php
-                          if($exp_cont->contract_type != 1):
+                          if($exp_cont->contract_type != 1 AND $exp_cont->status != 5 AND $exp_cont->status != 6):
                           $date1=date_create(date('Y-m-d'));
                           $date2=date_create(date('Y-m-d', strtotime($exp_cont->to_date)));
                           $diff=date_diff($date1, $date2);
@@ -160,10 +163,21 @@ h4 {
                           <td><?= $exp_cont->contract_manager; ?></td>
                           <td><?= $exp_cont->name; ?></td>
                           <td>
-                            <?php echo $diff->format("%a days"); ?>
+                            <?php if($diff->format("%a day(s)") > date('Y-m-d')): ?>
+                            <?php echo $diff->format("%a day(s)"); elseif($diff->format("%a day(s)") < date('Y-m-d')): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
                           </td>
                           <td>
-                            <button class="btn btn-warning btn-xs">Expiring</button>
+                            <?php if($exp_cont->status == 1): ?>
+                              <button class="btn btn-success btn-xs">Active</button>
+                            <?php elseif($exp_cont->status == 2): ?>
+                              <button class="btn btn-info btn-xs">Printed</button>
+                            <?php elseif($exp_cont->status == 3): ?>
+                              <button class="btn btn-info btn-xs">Distributed</button>
+                            <?php elseif($exp_cont->status == 4): ?>
+                              <button class="btn btn-info btn-xs">Attached</button>
+                            <?php elseif($exp_cont->status == 5): ?>
+                              <button class="btn btn-info btn-xs">Finished</button>
+                            <?php endif; ?>
                           </td>
                           <td>
                             <a data-toggle="tooltip" title="<?= date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>

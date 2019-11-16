@@ -410,6 +410,7 @@ class Contract extends MY_Controller {
 	public function create_contract(){
 		$data['cr_contract'] = $this->Contract_model->get_contract_byID();
 		$data['types'] = $this->Contract_model->get_contract_formats();
+		$data['applicant'] = $this->Contract_model->applicant_data();
 		$data['subview'] = $this->load->view('dashboard/create_contract', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
@@ -525,6 +526,7 @@ class Contract extends MY_Controller {
 	public function extend(){
 		$data['extension'] = $this->Contract_model->get_for_extension();
 		$data['types'] = $this->Contract_model->get_contract_formats();
+		$data['path_url'] = '';
 		$data['subview'] = $this->load->view('dashboard/create_contract', $data, TRUE);
 		$this->load->view('layout_main', $data);
 	}
@@ -937,6 +939,7 @@ class Contract extends MY_Controller {
   public function upload_offer_letter($user_id){
   	$data['letters'] = $this->Contract_model->get_offer_letters();
   	$data['letter_exists'] = $this->Contract_model->offer_letter_exists(); // If letter exists, put in textarea.
+  	$data['applicant'] = $this->Contract_model->applicant_data();
   	$data['subview'] = $this->load->view('dashboard/upload_letter', $data, TRUE);
     $this->load->view('layout_main', $data); // Page load.
   }
@@ -944,7 +947,7 @@ class Contract extends MY_Controller {
   public function create_offer_letter(){
   	$user_id = $this->input->post('user_id');
   	$data = array(
-  		'attachment' => $this->input->post('offer_letter')
+  		'attachment' => htmlentities($this->input->post('offer_letter'))
   	);
   	$this->Contract_model->upload_offer_letter($user_id, $data);
   	$this->session->set_flashdata('success', '<strong>Success !</strong> Offer letter has been generated successfully!');
