@@ -462,16 +462,16 @@ h4 {
                           foreach($expired_contracts as $exp_cont): ?>
                         <?php
                           if($exp_cont->contract_type != 1 AND $exp_cont->status != 5 AND $exp_cont->status != 6):
-                          $date1=date_create(date('Y-m-d'));
-                          $date2=date_create(date('Y-m-d', strtotime($exp_cont->to_date))); 
-                          $diff=date_diff($date1, $date2);
+                          $date1 = date_create(date('Y-m-d'));
+                          $date2 = date_create(date('Y-m-d', strtotime($exp_cont->to_date))); 
+                          $diff = date_diff($date1, $date2);
                         ?>
                         <tr>
                           <td>CTC-<?= $contract->name.'-'.$exp_cont->user_id; ?></td>
                           <td><?= $exp_cont->name; ?></td>
                           <td>
-                            <?php if($diff->format("%a day(s)") > date('Y-m-d')): ?>
-                            <?php echo $diff->format("%a day(s)"); elseif($diff->format("%a day(s)") < date('Y-m-d')): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
+                            <?php if($date2 > $date1): ?>
+                            <?php echo $diff->format("%a day(s) left"); elseif($date2 <= $date1): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
                           </td>
                           <td>
                             <a data-toggle="tooltip" title="<?php echo date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>

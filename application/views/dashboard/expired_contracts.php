@@ -163,8 +163,8 @@ h4 {
                           <td><?= $exp_cont->contract_manager; ?></td>
                           <td><?= $exp_cont->name; ?></td>
                           <td>
-                            <?php if($diff->format("%a day(s)") > date('Y-m-d')): ?>
-                            <?php echo $diff->format("%a day(s)"); elseif($diff->format("%a day(s)") < date('Y-m-d')): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
+                            <?php if($date2 > $date1): ?>
+                            <?php echo $diff->format("%a day(s) left"); elseif($date2 <= $date1): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
                           </td>
                           <td>
                             <?php if($exp_cont->status == 1): ?>
