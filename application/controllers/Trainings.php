@@ -1082,7 +1082,7 @@ class Trainings extends CI_Controller{
     // --------------------------------------------------------------------------------
     // Exporting Events.
     public function exportExcel(){
-    	$filename = 'Events_'.date('M y').'.csv';
+    	$filename = 'Events_'.date('M Y').'.csv';
     	header("Content-Description: File Transfer");
     	header("Content-Disposition: attachment; filename=$filename");
     	header("Content-Type: application/csv; "); 
@@ -1098,16 +1098,17 @@ class Trainings extends CI_Controller{
     }
     // Exporting Trainings.
     public function export_trainings() {
-		$fileName = 'Trainings_'.date('M Y').'.csv';
+		$filename = 'Trainings_'.date('M Y').'.csv';
 		header("Content-Description: File Transfer");
-		header("Content-Disposition: attachment; filename=$fileName");
+		header("Content-Disposition: attachment; filename=$filename");
 		header("Content-Type: application/csv; ");
 		$trainings = $this->Trainings_model->get_trainings_report();
 		$file = fopen('php://output', 'w');
-		$header = array("Trg Type","Location","Trainers","Facilitator","Started On","Ended On","Venue","Hall Detail","Sessions","Approval Type","Announcement","No, of Trainees");
+		$header = array("Trg Type","Location","Trainers","Facilitator","Started On","Ended On","Venue","Hall Detail","Sessions","Approval Type","Announcement","Number of Trainees");
 		fputcsv($file, $header);
         foreach ($trainings as $key=>$trg){
-            fputcsv($file, array($trg['type'], $trg['prov_name'], $trg['first_name'], $trg['facilitator_name'], $trg['start_date'], $trg['end_date'], $trg['location'], $trg['hall_detail'], $trg['session'], $trg['approval_type'], $trg['created_at'], $trg['trainees']));
+        	$trainers = $trg['first_name'].' '.$trg['last_name'].', '.$trg['trainer_two']; // Trainers
+            fputcsv($file, array($trg['type'], $trg['prov_name'], $trainers, $trg['facilitator_name'], $trg['start_date'], $trg['end_date'], $trg['location'], $trg['hall_detail'], $trg['session'], $trg['approval_type'], $trg['created_at'], $trg['trainees']));
         }
         fclose($file);
         exit;

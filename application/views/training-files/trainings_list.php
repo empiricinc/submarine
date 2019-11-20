@@ -118,7 +118,7 @@
 												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
+												<?= $training->trainer_two; ?>
 											</td>
 											<td>
 												<?=$training->facilitator_name; ?>
@@ -146,11 +146,17 @@
 														View
 													</span> &nbsp;
 												</a>
-												<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
+												<?php if($training->trainee_employees==''){ ?>
+													<span data-toggle="tooltip" title="No trainees registered." class="label label-success">
+														No Data
+													</span> &nbsp;
+												<?php }else{ ?>
+												<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id;  ?>">
 													<span class="label label-success">
 														Atdnc
 													</span> &nbsp;
 												</a>
+												<?php } ?>
 												<a href="">
 													<span class="label label-info">
 														Trg Mtrl
@@ -402,5 +408,10 @@
 				}
 			});
 		});
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
 	});
 </script>
