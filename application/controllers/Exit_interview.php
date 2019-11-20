@@ -36,6 +36,7 @@ class Exit_interview extends MY_Controller
 
         $this->load->database();
         $this->load->model('Exit_interview_model');
+        $this->load->model('Resignations_model');
 	}
 
     public function remove_empty_entries($conditions)
@@ -53,7 +54,6 @@ class Exit_interview extends MY_Controller
         if($resignation_id == "")
             show_404();
 
-        $this->load->model('Resignations_model');
         $this->load->model('Designations_model');
 
         $conditions = [
@@ -151,7 +151,6 @@ class Exit_interview extends MY_Controller
 
     private function add($resignation_id, $data)
     {
-        $this->load->model('Resignations_model');
 
         if($this->Exit_interview_model->add($data))
         {
@@ -171,13 +170,14 @@ class Exit_interview extends MY_Controller
     {
         if($this->Exit_interview_model->update($interview_id, $data))
         {
+            $this->Resignations_model->update($resignation_id, array('exit_interview_status' => '1'));
             $this->session->set_flashdata('success', 'Record updated successfully.');
         }
         else
         {
             $this->session->set_flashdata('error', 'Record updation failed.');
         }
-
+        
         redirect('Exit_interview/form/'.$resignation_id, 'refresh');
     }
 

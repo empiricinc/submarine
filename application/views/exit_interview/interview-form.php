@@ -9,6 +9,9 @@
 						<div class="col-lg-12">
 							<div class="tabelHeading">
 								<h3>
+									<a href="<?= base_url(); ?>Resignations/detail/<?php echo $this->uri->segment(3); ?>" class="btn btn-sm btn-default">
+										<i class="fa fa-arrow-back"></i> Back
+									</a>
 									<?= $title; ?>
 								</h3>
 

@@ -14,7 +14,7 @@
         			
         		</div>
         		<div class="modal-footer">
-        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close"> 
+        			<button type="button" class="btn btnSubmit" data-dismiss="modal" aria-label="Close">
         				Close 
         			</button>
         		</div>
@@ -369,53 +369,12 @@
 	
 
 	<script type="text/javascript">
-
-	$(document).ready(function(){
-
-
-		$(".add-new-form").click(function(){
-
-			$(".add-form").slideToggle('slow');
-
+		$('.payroll-month').datepicker({
+			changeYear: true,
+			maxDate: 0,
+			dateFormat:'yy-mm'
 		});
-
-		// $('.select2').select2();
-		// $('#resg-reason').select2({
-		// 	placeholder: 'SELECT A REASON',
-		// 	allowClear: true
-		// });
-
-
-
-	$('.date').datepicker({
-
-		changeMonth: true,
-		changeYear: true,
-		dateFormat:'yy-mm-dd',
-		yearRange: '1900:' + (new Date().getFullYear() + 15),
-
-		beforeShow: function(input) {
-
-			$(input).datepicker("widget").show();
-
-		}
-
-		});
-
-	});	
-
-	$('.payroll-month').datepicker({dateFormat:'mm/yy'});
-
-	$('.dataTable').DataTable();
-
-
-
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();   
-	});
-
 	</script> 
-
 
 	<script>
 		$('.policy-table tr').on('click', function() {
@@ -572,33 +531,6 @@
 
 		$('#basic-information-form').on('submit', function(e) {
 			e.preventDefault();
-			var error = 0;
-			$.each($('.contact-no'), function(index, val) {
-
-				if(!$(this).val().match(/^\d+$/))
-				{
-					toastr.error('Contact No must not contain letters');
-					error = 1;
-					return;
-				}
-				
-			});
-
-			$.each($('.contact-no'), function(index, val) {
-				
-				if($(this).val().length > 11 || $(this).val().length < 11)
-				{
-					toastr.error('Invalid contact no provided.');
-					toastr.error('Contact No must not exceed 11 digits.');
-					error = 1;
-					return;
-				}
-				
-			});
-
-			
-			if(error == 1)
-				return;
 
 			$.ajax({
 				url: '<?= base_url(); ?>User_panel/update_employee',

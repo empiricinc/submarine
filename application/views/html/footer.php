@@ -30,8 +30,7 @@
 	  height: 300
 	});
 	</script>
-	
-	<footer></footer>
+
 
     <script>
       $('.navbar-brand').on('click', function(e) {
@@ -46,7 +45,25 @@
 	</script>
 
 	<script type="text/javascript">
+		$('[data-toggle="tooltip"]').tooltip(); 
+	</script>
+
+	<script type="text/javascript">
 		// $('.btn-group-sm:last').addClass('dropup');
+
+		function reloadDatepicker(elem) {
+		    $(elem).datepicker({
+				dateFormat: 'yy-mm-dd',
+				changeYear: true,
+				maxDate: 0
+			});
+		}
+
+		$('.date').datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeYear: true,
+			maxDate: 0
+		});
 
 		$('.date-onward').datepicker({
 			minDate: 0,
@@ -65,6 +82,19 @@
 			changeYear: true,
 			minDate: new Date(1960, 10, 25),
         	maxDate: '-17Y'
+		});
+
+		$('.discplinary-reporting-date').datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeYear: true,
+			// minDate: '+2d',
+			maxDate: 0
+		});
+
+		$('.payroll-month').datepicker({
+			changeYear: true,
+			maxDate: 0,
+			dateFormat:'yy-mm'
 		});
 
 	</script>

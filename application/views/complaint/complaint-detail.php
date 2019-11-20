@@ -196,8 +196,8 @@
 				<center><img src="<?= base_url(); ?>uploads/logo/chip.png" height="50px" alt="CHIP Logo"></center>
 			</div>
 			<div class="col-print-12">
-				<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4><h4></h4></center>
-				<center><h4>Complaint Detail And Remarks</h4></center>
+				<center><h4>CHIP Training &amp; Consulting Pvt Ltd.</h4></center>
+				<center><h5>Complaint Detail And Remarks</h5></center>
 			</div>
 			<div class="col-print-12">
 				<hr>

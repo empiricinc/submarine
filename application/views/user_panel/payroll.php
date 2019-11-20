@@ -3,33 +3,43 @@
 	<div class="mainInputBg remove-padding-print remove-margin-print no-border-print">
 		<div class="salary-slip-header hide-print">
 			<div class="row">
-				<div class="col-lg-12">
+				<div class="col-lg-10">
 					<div class="tabelHeading">
 						<h3><?= $title; ?></h3>
 					</div>
 				</div>	
+				<?php if(!empty($payroll)): ?>
+				<div class="col-lg-2 text-right">
+					<button type="button" class="btn btn-warning print-payslip">
+						<i class="fa fa-print"></i> Print
+					</button>
+				</div>
+				<?php endif; ?>
 			</div>
 
 			<div class="row">
-				<div class="">
+				<form action="<?= base_url(); ?>User_panel/payroll" method="POST">
+				<!-- <div class=""> -->
 					<div class="col-md-3">
 						<div class="inputFormMain">
 							<input type="text" name="salary_month" id="salary-month" class="form-control payroll-month" placeholder="Payroll Month/Year" required>
 						</div>
 					</div>
-					<div class="col-md-1">
+					<div class="col-md-3 pr-0">
 						<div class="submitBtn">
-							<button type="button" class="btn btnSubmit print-payslip"><i class="fa fa-print"></i> Print</button>
-						</div>
-						
+							<button type="submit" class="btn btnSubmit" id="load-salary-slip">
+								<i class="fa fa-download"></i> Load
+							</button>
+						</div>	
 					</div>
-				</div>
+				<!-- </div> -->
+				</form>
 			</div>
 
 			<div class="solidLine"></div>
 		</div>
 		
-
+		<?php if(!empty($payroll)): ?>
 		<div class="row">
 			<div class="col-lg-12">
 				<!-- Salary slip row -->
@@ -41,6 +51,7 @@
 							</div>
 							<div class="col-md-12">
 								<center><h4>CHIP Training & Consulting Pvt Ltd.<h4></center>
+								<center><h5>Employee Salary Slip</h5></center>
 							</div>
 							<div class="col-md-12">
 								<hr>
@@ -52,50 +63,40 @@
 						<div class="row">
 							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Salary slip #</label></div>
-								<div class="col-md-4 col-print-3">1</div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->salary_id)) ? $payroll->salary_id : ''; ?></div>
 
-								<div class="col-md-2 col-print-3"><label>Employee ID</label></div>
-								<div class="col-md-4 col-print-3"><?= $basic_info->employee_id; ?></div>
+								<div class="col-md-2 col-print-3"><label>Salary Month</label></div>
+								<div class="col-md-4 col-print-3">
+									<?php echo (isset($payroll->sdt)) ? date('M, Y', strtotime($payroll->sdt)) : ''; ?>
+								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Name</label></div>
-								<div class="col-md-4 col-print-3"><?= ucwords($basic_info->emp_name); ?></div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->emp_name)) ? ucwords($payroll->emp_name) : ''; ?></div>
 
 								<div class="col-md-2 col-print-3"><label>CNIC</label></div>
-								<div class="col-md-4 col-print-3"><?= $basic_info->cnic; ?></div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->cnic)) ? $payroll->cnic : ''; ?></div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-12 col-print-12">
 								<div class="col-md-2 col-print-3"><label>Project</label></div>
-								<div class="col-md-4 col-print-3"><?= $basic_info->company_name; ?></div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->company_name)) ? $payroll->company_name : ''; ?></div>
 
 								<div class="col-md-2 col-print-3"><label>Designation</label></div>
-								<div class="col-md-4 col-print-3"><?= $basic_info->designation_name; ?></div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->designation_name)) ? $payroll->designation_name : ''; ?></div>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col-md-12 col-print-12">
-								<div class="col-md-2 col-print-3"><label>Gross Salary</label></div>
-								<div class="col-md-4 col-print-3"><?= (isset($salary->gross_salary)) ? $salary->gross_salary : 0; ?></div>
-
 								<div class="col-md-2 col-print-3"><label>Basic Salary</label></div>
-								<div class="col-md-4 col-print-3"><?= (isset($salary->basic_salary)) ? $salary->basic_salary : 0; ?></div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12 col-print-12">
-								<div class="col-md-2 col-print-3"><label>Payment Date</label></div>
-								<div class="col-md-4 col-print-3"></div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12 col-print-12">
-								<div class="col-md-2 col-print-3"><label>Description</label></div>
-								<div class="col-md-4 col-print-3">None</div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->payroll_basic_salary)) ? $payroll->payroll_basic_salary : 0; ?></div>
+
+								<div class="col-md-2 col-print-3"><label>Net Salary</label></div>
+								<div class="col-md-4 col-print-3"><?= (isset($payroll->payroll_net_salary)) ? $payroll->payroll_net_salary : 0; ?></div>
 							</div>
 						</div>
 
@@ -112,21 +113,21 @@
 										<tr>
 											<td width="60%">House Rent Allowance</td>
 											<td>
-												<?= $house_rent = (isset($salary->house_rent_allowance)) ? $salary->house_rent_allowance : 0; ?>
+												<?= $house_rent = (isset($payroll->house_rent_allowance)) ? $payroll->house_rent_allowance : 0; ?>
 													
 											</td>
 										</tr>
 										<tr>
 											<td>Medical Allowance</td>
 											<td>
-												<?= $medical = (isset($salary->medical_allowance)) ? $salary->medical_allowance : 0; ?>
+												<?= $medical = (isset($payroll->medical_allowance)) ? $payroll->medical_allowance : 0; ?>
 													
 											</td>
 										</tr>
 										<tr>
 											<td>Travel Allowance</td>
 											<td>
-												<?= $travel = (isset($salary->travelling_allowance)) ? $salary->travelling_allowance : 0; ?>
+												<?= $travel = (isset($payroll->travelling_allowance)) ? $payroll->travelling_allowance : 0; ?>
 													
 											</td>
 										</tr>
@@ -147,19 +148,19 @@
 										<tr>
 											<td width="50%">TAX</td>
 											<td>
-												<?= $tax = (isset($salary->tax_deduction)) ? $salary->tax_deduction : 0; ?>
+												<?= $tax = (isset($payroll->tax_deduction)) ? $payroll->tax_deduction : 0; ?>
 											</td>
 										</tr>
 										<tr>
 											<td>EOBI</td>
 											<td>
-												<?= $eobi = (isset($salary->eobi)) ? $salary->eobi : 0; ?>	
+												<?= $eobi = (isset($payroll->eobi)) ? $payroll->eobi : 0; ?>	
 											</td>
 										</tr>
 										<tr>
 											<td>Provident Fund</td>
 											<td>
-												<?= $provident_fund = (isset($salary->provident_fund)) ? $salary->provident_fund : 0; ?>
+												<?= $provident_fund = (isset($payroll->provident_fund)) ? $payroll->provident_fund : 0; ?>
 											</td>
 										</tr>
 										<tr>
@@ -176,6 +177,12 @@
 				<!-- ./End of salary slip row -->
 			</div>
 		</div>
+
+		<?php else: ?>
+			<div class="row">
+				<center><p>No Record Found.</p></center>
+			</div>
+		<?php endif; ?>
 			
 	</div>
 </section>

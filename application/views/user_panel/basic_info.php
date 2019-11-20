@@ -34,6 +34,7 @@
 								<li class="nav-item">
 									<a href="#contract" data-toggle="tab">Contract</a>
 								</li>
+
 							</ul>	
 					</div>
 					
@@ -234,13 +235,13 @@
 											<div class="col-lg-4">
 												<div class="inputFormMain">
 													<label>Contact no</label>
-													<input type="text" name="personal_contact_no" value="<?= $basic_info->personal_contact; ?>" id="personal_contact-no" class="form-control contact-no" placeholder="Personal contact no"  data-toggle="tooltip" title="Personal contact no" >
+													<input type="text" name="personal_contact_no" value="<?= $basic_info->personal_contact; ?>" id="personal_contact-no" class="form-control contact-no" placeholder="Personal contact no" data-toggle="tooltip" title="Contact No must not exceed 11 digits" pattern="[0-9]{11}">
 												</div>
 											</div>
 											<div class="col-lg-4">
 												<div class="inputFormMain">
 													<label>Other contact</label>
-													<input type="text" name="contact_no" value="<?= $basic_info->contact_number; ?>" id="contact-no" class="form-control contact-no" placeholder="CTC mobile number"  data-toggle="tooltip" title="CTC mobile number" >
+													<input type="text" name="contact_no" value="<?= $basic_info->contact_number; ?>" id="contact-no" class="form-control contact-no" placeholder="CTC mobile number" data-toggle="tooltip" title="Contact No must not exceed 11 digits" pattern="[0-9]{11}">
 												</div>
 											</div>
 										</div>
@@ -249,7 +250,7 @@
 											<div class="col-lg-4">
 												<label>CTC contact</label>
 												<div class="inputFormMain">
-													<input type="text" name="other_contact_no" value="<?= $basic_info->contact_other; ?>" id="other-contact-no" class="form-control contact-no" placeholder="Other contact"  data-toggle="tooltip" title="Other contact" >
+													<input type="text" name="other_contact_no" value="<?= $basic_info->contact_other; ?>" id="other-contact-no" class="form-control contact-no" placeholder="Other contact" data-toggle="tooltip" title="Contact No must not exceed 11 digits" pattern="[0-9]{11}">
 												</div>
 											</div>
 											<div class="col-lg-4">
@@ -766,6 +767,7 @@
 									</div>
 									<?php endif; ?>
 								</div>
+
 							</div>
 						</div>
 

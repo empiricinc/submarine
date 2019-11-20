@@ -13,6 +13,8 @@
     		<div class="modal-body">
     			<div class="inputFormMain">
     				<input type="hidden" name="resignation_id" value="<?= $detail->resignation_id; ?>">
+    				<input type="hidden" name="resignation_date" value="<?= $detail->resignation_date; ?>">
+    				<input type="hidden" name="employee_id" value="<?= $detail->employee_id; ?>">
     				<input type="hidden" name="status_text" class="status-text" value="">
     				<input type="text" name="added_date" class="form-control date" placeholder="Date" required>
     			</div>
@@ -137,57 +139,6 @@
 
 <?php $this->load->view('html/footer'); ?>
 	
-
-	<script type="text/javascript">
-
-	$(document).ready(function(){
-
-
-		$(".add-new-form").click(function(){
-
-			$(".add-form").slideToggle('slow');
-
-		});
-
-		// $('.select2').select2();
-		// $('#resg-reason').select2({
-		// 	placeholder: 'SELECT A REASON',
-		// 	allowClear: true
-		// });
-
-
-
-		$('.date').datepicker({
-
-		changeMonth: true,
-
-		changeYear: true,
-
-		dateFormat:'yy-mm-dd',
-
-		yearRange: '1900:' + (new Date().getFullYear() + 15),
-
-		beforeShow: function(input) {
-
-			$(input).datepicker("widget").show();
-
-		}
-
-		});
-
-	});	
-
-	$('.dataTable').DataTable();
-
-
-
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();   
-	});
-
-	</script> 
-
-
 	<script>
 		$('.resignation-table tr').on('click', function() {
 

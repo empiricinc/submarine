@@ -75,69 +75,23 @@
 
 <?php $this->load->view('html/footer'); ?>
 
-
 	<script type="text/javascript">
-
-	$(document).ready(function(){
-		$(".add-new-form").click(function(){
-
-			$(".add-form").slideToggle('slow');
-
-		});
-
-		$('.select2').select2();
-		$('#resg-reason').select2({
-			placeholder: 'SELECT A REASON',
-			allowClear: true
-		});
-
-
-
-		$('.date').datepicker({
-
-		changeMonth: true,
-
-		changeYear: true,
-
-		dateFormat:'yy-mm-dd',
-
-		yearRange: '1900:' + (new Date().getFullYear() + 15),
-
-		beforeShow: function(input) {
-
-			$(input).datepicker("widget").show();
-
-		}
-
-		});
-
-	});	
-
-
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();   
-	});
-
-	</script> 
-
-
-	<script>
-	
-		 $('#complaints-handler').on('click', '#status-btn .label', function() {
-	    	var status = $(this).data('status');
-	    	$('#status').val(status);
-	    	$('#disciplinary-search-btn').trigger('click');
-	    });
-
-	</script>
-
-	<script type="text/javascript">
-		$('#investigations-list>tr').on('click', function() {
+		$('#disciplinary-list>tr').on('click', function() {
 			var id = $(this).attr('data');
 
 			window.location = "<?= base_url(); ?>Disciplinary/detail/" + id;
 			return;
 			
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('#disciplinary-table tr').on('click', function() {
+			var employee_id = $(this).data('id');
+			if(employee_id == undefined)
+				return;
+
+			window.location = "<?= base_url(); ?>Disciplinary/employee_disciplinary/" + employee_id;
 		});
 	</script>
 
@@ -283,18 +237,6 @@
 
 
 	<script type="text/javascript">
-		$('#investigation-table tr').on('click', function() {
-
-			var employee_id = $(this).data('id');
-			if(employee_id == undefined)
-				return;
-
-			window.location = "<?= base_url(); ?>Disciplinary/employee_disciplinary/" + employee_id;
-			
-		});
-	</script>
-
-	<script type="text/javascript">
 		$('#reason').on('change', function() {
 			var reason = $(this).val();
 			if(reason == 'other')
@@ -308,22 +250,40 @@
 	<script type="text/javascript">
 		$('#type').on('change', function() {
 			var type = $('#type option:selected').text();
-			var type = $('#type option:selected').text();
-			$('#disciplinaryHandler').html('');
+
+			$('.disciplinary').html('');
 			
 			$.ajax({
-				url: '<?= base_url(); ?>Disciplinary/update_status_fields',
+				url: '<?= base_url(); ?>Disciplinary/form_fields',
 				type: 'POST',
 				dataType: 'html',
 				data: {type: type},
 				success: function(response) {
-					console.log(response);
-					$('#disciplinaryHandler').append(response);
+					$('.disciplinary').append(response);
+					reloadDatepicker('.date');
+					$('input').attr('autocomplete','off');
 				}
 			});
 
-			$('.date').datepicker({dateFormat: 'yy-mm-dd'});
-			$('input').attr('autocomplete','off');
+		});
+	</script>
+
+	<script type="text/javascript">
+		$('#disciplinary-type').on('change', function() {
+			var disciplinary_type = $('#disciplinary-type option:selected').text();
+
+			$('#disciplinary-fields').html('');
+
+			$.ajax({
+				url: '<?= base_url(); ?>Disciplinary/form_fields',
+				type: 'POST',
+				dataType: 'html',
+				data: {type: disciplinary_type},
+				success: function(response) {
+					$('#disciplinary_type').append(response);
+				}
+			});
+			
 		});
 	</script>
 
@@ -345,7 +305,7 @@
 					disciplinaryHandler.append(response.data.output);
 					$('#disciplinary-modal').modal('show');
 
-					$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+					reloadDatepicker('.date');
 					$('input').attr('autocomplete','off');
 				}
 

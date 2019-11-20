@@ -7,8 +7,16 @@
 					<div class="tabelHeading">
 						<h3>Search Criteria <a href="javascript:void(0);" class="fa fa-refresh" onclick="$('#disciplinary-search-form')[0].reset();"></a></h3>
 					</div>
-					<form action="<?= base_url(); ?>Disciplinary/view" method="GET" id="complaints-search-form">
+					<form action="<?= base_url(); ?>Disciplinary/view" method="GET" id="disciplinary-search-form">
 						<div class="selectBoxMain">
+							<div class="filterSelect">
+								<input type="text" name="employee_id" class="form-control" placeholder="Employee ID" pattern="[0-9]*" title="Employee ID contain digits only">	
+							</div>
+
+							<div class="filterSelect">
+								<input type="text" name="employee_name" class="form-control" placeholder="Employee Name">
+							</div>
+
 							<div class="filterSelect">
 								<select name="project" class="form-control">
 									<option value="">Project</option>
@@ -127,7 +135,7 @@
 													<th>Status</th>
 												</tr>
 											</thead>
-											<tbody id="investigations-list">
+											<tbody id="disciplinary-list">
 												
 												<?php $count=1; foreach($disciplinary_actions AS $c): ?>
 

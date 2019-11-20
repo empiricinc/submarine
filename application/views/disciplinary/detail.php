@@ -41,10 +41,16 @@
 							<i class="fa fa-comments"></i> COMMENTS
 						</button>
 
-					<?php if($detail->status_text != 'delete'): ?>
-						<?php if($detail->status_text == 'open' OR $detail->status_text == 'pending'): ?>
+					<?php if($detail->status_text != 'delete' && $detail->status_text != 'withdrawn'): ?>
+						<?php if(in_array($detail->status_text, ['open', 'dpcr', 'pending'])): ?>
 							<button type="button" class="btn btn-sm btn-danger disciplinary-status-btn" data-text="cancelled">
 								<i class="fa fa-trash"></i> DELETE
+							</button>
+						<?php endif; ?>
+
+						<?php if($detail->type_name == 'suspension' && in_array($detail->status_text, ['issued', 'printed', 'delivered'])): ?>
+							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="withdrawn">
+								<i class="fa fa-archive"></i> Withdrawn
 							</button>
 						<?php endif; ?>
 						
@@ -70,7 +76,7 @@
 								<i class="fa fa-archive"></i> DELIVER
 							</button>
 
-						<?php } elseif($detail->status_text == 'delivered') { ?>
+						<?php } elseif($detail->status_text == 'delivered' && in_array($detail->type_name, ['show cause', 'explanation'])) { ?>
 							<button type="button" class="btn btn-sm btn-primary disciplinary-status-btn" data-text="received">
 								<i class="fa fa-archive"></i> RECEIVED
 							</button>

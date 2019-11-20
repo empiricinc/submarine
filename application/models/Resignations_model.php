@@ -91,15 +91,16 @@ class Resignations_model extends CI_Model {
         return $this->db->update('xin_employee_resignations', $data);
     }
 
-    public function employee_status($resignation_id, $status, $is_active)
-    {
-        $this->db->select('employee_id');
-        $rec = $this->db->get('xin_employee_resignations')->row();
-        $employee_id = $rec->employee_id;
+    // public function employee_status($resignation_id, $status="0", $is_active="0")
+    // {
+    //     $this->db->select('employee_id');
+    //     $this->db->where('resignation_id', $resignation_id);
+    //     $rec = $this->db->get('xin_employee_resignations')->row();
+    //     $employee_id = $rec->employee_id;
 
-        $this->db->where('employee_id', $employee_id);
-        return $this->db->update('xin_employees', array('status' => $status, 'is_active' => $is_active));
-    }
+    //     $this->db->where('employee_id', $employee_id);
+    //     return $this->db->update('xin_employees', array('status' => $status, 'is_active' => $is_active));
+    // }
 
     public function check_resignation_status($employee_id)
     {
@@ -165,6 +166,12 @@ class Resignations_model extends CI_Model {
         $this->db->where('xer.resignation_id', $resignation_id);
         $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
         return $this->db->get('xin_employee_resignations xer')->row();
+    }
+
+    public function update_employee_resignation_status($employee_id = "", $status="0", $is_active="0")
+    {
+        $this->db->where('employee_id', $employee_id);
+        return $this->db->update('xin_employees', array('status' => $status, 'is_active' => $is_active));
     }
 
 }

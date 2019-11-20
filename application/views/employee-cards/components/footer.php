@@ -288,70 +288,6 @@
 <?php $this->load->view('html/footer'); ?>
 	
 
-	<script type="text/javascript">
-
-	$(document).ready(function(){
-
-
-		$(".add-new-form").click(function(){
-
-			$(".add-form").slideToggle('slow');
-
-		});
-
-		// $('.select2').select2();
-		// $('#resg-reason').select2({
-		// 	placeholder: 'SELECT A REASON',
-		// 	allowClear: true
-		// });
-
-
-
-		$('.date').datepicker({
-
-		changeMonth: true,
-
-		changeYear: true,
-
-		dateFormat:'yy-mm-dd',
-
-		yearRange: '1900:' + (new Date().getFullYear() + 15),
-
-		beforeShow: function(input) {
-
-			$(input).datepicker("widget").show();
-
-		}
-
-		});
-
-	});	
-
-	$(function() {
-    	$('.year').datepicker({
-	        changeYear: true,
-	        showButtonPanel: true,
-	        dateFormat: 'yy',
-	        onClose: function(dateText, inst) { 
-	            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-	            $(this).datepicker('setDate', new Date(year, 1));
-	        }
-    	});
-	 
-		 $(".year").focus(function () {
-		        $(".ui-datepicker-month").hide();
-	    });
-	});
-
-
-
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();   
-	});
-
-	</script> 
-
-
 	<script>
 		$('#employee-table tr').on('click', function() {
 		
@@ -361,19 +297,6 @@
 
 
 			window.location = "<?= base_url(); ?>Reports/employee_detail/"+id;
-			// $('#employee-handler').html('');
-
-			// $.ajax({
-			// 	url: '<?= base_url(); ?>Reports/get_employee_detail',
-			// 	type: 'POST',
-			// 	dataType: 'html',
-			// 	data: {id: id},
-			// 	success: function(response)
-			// 	{
-			// 		$('#employee-handler').append(response);
-			// 		$('#employee-detail-modal').modal('show');
-			// 	}
-			// });
 			
 		});
 

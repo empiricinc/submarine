@@ -49,7 +49,7 @@
 
 				<div class="col-lg-6">
 					<div class="inputFormMain">
-						<select data-plugin="select_hrm" name="reason" id="resg-reason" class="form-control" required="required">
+						<select name="reason" id="resg-reason" class="form-control" required="required">
 							<option value="">SELECT REASON OF RESIGNATION</option>
 							<?php foreach($reasons AS $r): ?>
 							<option value="<?= $r->reason_id; ?>"><?= $r->reason_text; ?></option>
@@ -64,7 +64,7 @@
 				</div>
 				<div class="col-lg-6">
 					<div class="inputFormMain">
-						<input type="text" name="notice_date" class="form-control date-onward" id="notice-date" placeholder="Notice Date" required>
+						<input type="text" name="notice_date" class="form-control date" id="notice-date" placeholder="Notice Date" required>
 					</div>
 				</div>
 				<div class="col-lg-6">

@@ -43,7 +43,7 @@
 						
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="doj" value="" id="doj" class="form-control date" placeholder="Date Of Joining" data-toggle="tooltip" title="Date Of Joining">
+								<input type="text" name="doj" value="" id="doj" class="form-control prev-date" placeholder="Date Of Joining" data-toggle="tooltip" title="Date Of Joining">
 							</div>
 						</div>
 					</div>
@@ -138,51 +138,6 @@
 
 
 <?php $this->load->view('html/footer'); ?>
-	
-
-	<script type="text/javascript">
-
-	$(document).ready(function(){
-
-
-		$(".add-new-form").click(function(){
-
-			$(".add-form").slideToggle('slow');
-
-		});
-
-
-		$('.date').datepicker({
-
-		changeMonth: true,
-
-		changeYear: true,
-
-		dateFormat:'yy-mm-dd',
-
-		yearRange: '1900:' + (new Date().getFullYear() + 15),
-
-		beforeShow: function(input) {
-
-			$(input).datepicker("widget").show();
-
-		}
-
-		});
-
-	});	
-
-	$('.dataTable').DataTable();
-
-
-
-	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();   
-	});
-
-	</script> 
-
-
 
 	<script type="text/javascript">
 		$('.province').on('change', function() {

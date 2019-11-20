@@ -553,4 +553,19 @@ class User_panel_model extends CI_Model
         return $this->db->get('xin_employees')->row();
     }
 
+    public function employee_payroll($employee_id, $salary_month)
+    {
+        $this->db->select('xe.employee_id, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ebi.cnic, xd.department_name, xdd.designation_name, es.salary_id, es.basic_salary, es.gross_salary, es.sdt, p.basic_salary AS payroll_basic_salary, p.total_allowance, p.total_deduction, p.net_salary AS payroll_net_salary, ea.house_rent_allowance, ea.medical_allowance, ea.travelling_allowance, ed.eobi, ed.provident_fund, ed.tax_deduction');
+        $this->db->join('xin_employees xe', 'es.user_id = xe.employee_id', 'left');
+        $this->db->join('employee_basic_info ebi', 'es.user_id = ebi.user_id', 'left');
+        $this->db->join('xin_departments xd', 'xe.department_id = xd.department_id', 'left');
+        $this->db->join('xin_designations xdd', 'xe.designation_id = xdd.designation_id', 'left');
+
+        $this->db->join('payroll p', 'es.user_id = p.user_id', 'left');
+        $this->db->join('employee_deductions ed', 'es.user_id = ed.user_id', 'left');
+        $this->db->join('employee_allowances ea', 'es.user_id = ea.user_id', 'left');
+        
+        return $this->db->get_where('employee_salary es', array('es.user_id' => $employee_id, 'DATE_FORMAT(es.sdt, "%Y-%m") =' => $salary_month))->row();
+    }
+
 }

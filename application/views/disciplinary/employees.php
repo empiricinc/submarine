@@ -8,7 +8,7 @@
 				<form action="<?= base_url(); ?>Disciplinary/employees" method="GET" id="employee-search-form">
 					<div class="selectBoxMain">
 						<div class="filterSelect">
-							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID">
+							<input type="text" name="employee_id" class="form-control" placeholder="Employee ID" pattern="[0-9]*" title="Employee ID contain digits only">
 						</div>
 						<div class="filterSelect">
 							<input type="text" name="employee_name" class="form-control" placeholder="Employee Name">
@@ -108,13 +108,12 @@
 					<div class="col-md-12">
 						<div class="tableMain">
 							<div class="table-responsive">
-								<table class="table table-hover" id="investigation-table" style="cursor: pointer;">
+								<table class="table table-hover" id="disciplinary-table" style="cursor: pointer;">
 									<thead>
 										<tr>
 											<th>ID</th>
 											<th>Name</th>
 											<th>Contact</th>
-											<!-- <th>Email</th> -->
 											<th>Project</th>
 											<th>Department</th>
 											<th>Designation</th>
@@ -127,7 +126,6 @@
 											<td><?= $e->employee_id; ?></td>
 											<td><?= ucwords($e->emp_name); ?></td>
 											<td><?= $e->contact_number; ?></td>
-											<!-- <td><?= $e->email; ?></td> -->
 											<td><?= $e->company_name; ?></td>
 											<td><?= $e->department_name; ?></td>
 											<td><?= $e->designation_name; ?></td>

@@ -137,6 +137,7 @@ class Resignations extends MY_Controller
 
         $added_by = $this->session_data['user_id'];
         $resignation_id = $this->input->post('resignation_id');
+        $resignation_date = $this->input->post('resignation_date');
         $employee_id = $this->input->post('employee_id');
         $status_text = $this->input->post('status_text');
         $added_date = $this->input->post('added_date');
@@ -168,7 +169,8 @@ class Resignations extends MY_Controller
         if($status_text == 'accepted')
         {
             $this->update_job_position($resignation_id, '0');
-
+            if(date('Y-m-d') == $resignation_date)
+                $this->Resignations_model->update_employee_resignation_status($employee_id, '5', '0');
         }
         
         if($add_comment)
@@ -188,6 +190,7 @@ class Resignations extends MY_Controller
         $added_by = $this->session_data['user_id'];
 
         $resignation_id = $this->input->post('resignation_id');
+        $employee_id = $this->input->post('employee_id');
         $added_date = $this->input->post('added_date');
         $status_text = $this->input->post('status_text');
         $status_id = $this->Resignations_model->get_status_id($status_text)->id;
@@ -220,6 +223,8 @@ class Resignations extends MY_Controller
         if($added)
         {
             $this->update_job_position($resignation_id, '1');
+            /* On resignation reversion status => 1, is_active => 1 */
+            $this->Resignations_model->update_employee_resignation_status($employee_id, '1', '1');
             $this->session->set_flashdata('success', 'Resignation was reversed successfully.');
         }
         else
@@ -352,8 +357,9 @@ class Resignations extends MY_Controller
         $resignation_date = '';
 
         $data = $this->Resignations_model->get_resignation_date($resignation_id);
+
         $job_code = $data->job_code;
-        
+
         if($status == 0)
             $resignation_date = $data->resignation_date;
 
