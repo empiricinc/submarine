@@ -1082,7 +1082,7 @@ class Trainings extends CI_Controller{
     // --------------------------------------------------------------------------------
     // Exporting Events.
     public function exportExcel(){
-    	$filename = 'Event_'.date('M y').'.csv';
+    	$filename = 'Events_'.date('M y').'.csv';
     	header("Content-Description: File Transfer");
     	header("Content-Disposition: attachment; filename=$filename");
     	header("Content-Type: application/csv; "); 
