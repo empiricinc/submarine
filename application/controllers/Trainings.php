@@ -4,9 +4,6 @@
 *  Author: Saddam
 *  Filepath: application / controllers / Trainings.php
 */
-use PhpOffice\PhpSpreadsheet\Spreadsheet; // use the phpspreadsheet libraries.
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
 class Trainings extends CI_Controller{
 	function __construct(){
 		parent::__construct();
@@ -1084,74 +1081,36 @@ class Trainings extends CI_Controller{
     // Export to excel.
     // --------------------------------------------------------------------------------
     // Exporting Events.
-    public function exportExcel() {
-		$fileName = 'Events Report.xlsx';  
-		$ucpos_data = $this->Trainings_model->get_events_report();
-		$spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-       	$sheet->setCellValue('A1', 'Title');
-        $sheet->setCellValue('B1', 'Province');
-        $sheet->setCellValue('C1', 'District');
-        $sheet->setCellValue('D1', 'Project');
-		$sheet->setCellValue('E1', 'Designation');
-        $sheet->setCellValue('F1', 'Training Type');      
-        $sheet->setCellValue('G1', 'Start Date');      
-        $sheet->setCellValue('H1', 'End Date');      
-        $rows = 2;
-        foreach ($ucpos_data as $val){
-            $sheet->setCellValue('A' . $rows, $val['title']);
-            $sheet->setCellValue('B' . $rows, $val['provName']);
-            $sheet->setCellValue('C' . $rows, $val['cityName']);
-            $sheet->setCellValue('D' . $rows, $val['compName']);
-            $sheet->setCellValue('E' . $rows, $val['designation_name']);
-	    	$sheet->setCellValue('F' . $rows, $val['type']);
-            $sheet->setCellValue('G' . $rows, $val['start_date']);
-            $sheet->setCellValue('H' . $rows, $val['end_date']);
-            $rows++;
-        } 
-        $writer = new Xlsx($spreadsheet);
-		$writer->save("uploads/".$fileName);
-		header("Content-Type: application/vnd.ms-excel");
-        redirect(base_url()."/uploads/".$fileName);              
+    public function exportExcel(){
+    	$filename = 'Event_'.date('M y').'.csv';
+    	header("Content-Description: File Transfer");
+    	header("Content-Disposition: attachment; filename=$filename");
+    	header("Content-Type: application/csv; "); 
+		$events = $this->Trainings_model->get_events_report(); // Get data.
+		$file = fopen('php://output', 'w'); // File creation
+		$header = array("Event ID","Title","Province","district","Project","Designation","Trg Type","Start Date","End Date");
+		fputcsv($file, $header);
+		foreach ($events as $key=>$event){
+			fputcsv($file, array($event['event_id'], $event['title'], $event['provName'], $event['cityName'], $event['compName'], $event['designation_name'], $event['type'], $event['start_date'], $event['end_date']));	
+		}
+		fclose($file);
+		exit;
     }
     // Exporting Trainings.
     public function export_trainings() {
-		$fileName = 'Induction Trainings.xlsx';  
-		$ucpos_data = $this->Trainings_model->get_trainings_report();
-		$spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-       	$sheet->setCellValue('A1', 'Trg Type');
-        $sheet->setCellValue('B1', 'Location');
-        $sheet->setCellValue('C1', 'Trainers');
-        $sheet->setCellValue('D1', 'Facilitator');
-		$sheet->setCellValue('E1', 'Started On');
-        $sheet->setCellValue('F1', 'Ended On');      
-        $sheet->setCellValue('G1', 'Venue');      
-        $sheet->setCellValue('H1', 'Hall Detail');      
-        $sheet->setCellValue('I1', 'Sessions');     
-        $sheet->setCellValue('J1', 'Approval Type');     
-        $sheet->setCellValue('K1', 'Announcement');
-        $sheet->setCellValue('L1', 'No. of Trainees');
-        $rows = 2;
-        foreach ($ucpos_data as $val){
-            $sheet->setCellValue('A' . $rows, $val['type']);
-            $sheet->setCellValue('B' . $rows, $val['prov_name']);
-            $sheet->setCellValue('C' . $rows, $val['first_name'].' '.$val['last_name']);
-            $sheet->setCellValue('D' . $rows, $val['facilitator_name']);
-            $sheet->setCellValue('E' . $rows, $val['start_date']);
-	    	$sheet->setCellValue('F' . $rows, $val['end_date']);
-            $sheet->setCellValue('G' . $rows, $val['venue']);
-            $sheet->setCellValue('H' . $rows, $val['hall_detail']);
-            $sheet->setCellValue('I' . $rows, $val['session']);
-            $sheet->setCellValue('J' . $rows, $val['approval_type']);
-            $sheet->setCellValue('K' . $rows, $val['created_at']);
-            $sheet->setCellValue('L' . $rows, $val['trainees']);
-            $rows++;
-        } 
-        $writer = new Xlsx($spreadsheet);
-		$writer->save("uploads/".$fileName);
-		header("Content-Type: application/vnd.ms-excel");
-        redirect(base_url()."/uploads/".$fileName);              
+		$fileName = 'Trainings_'.date('M Y').'.csv';
+		header("Content-Description: File Transfer");
+		header("Content-Disposition: attachment; filename=$fileName");
+		header("Content-Type: application/csv; ");
+		$trainings = $this->Trainings_model->get_trainings_report();
+		$file = fopen('php://output', 'w');
+		$header = array("Trg Type","Location","Trainers","Facilitator","Started On","Ended On","Venue","Hall Detail","Sessions","Approval Type","Announcement","No, of Trainees");
+		fputcsv($file, $header);
+        foreach ($trainings as $key=>$trg){
+            fputcsv($file, array($trg['type'], $trg['prov_name'], $trg['first_name'], $trg['facilitator_name'], $trg['start_date'], $trg['end_date'], $trg['location'], $trg['hall_detail'], $trg['session'], $trg['approval_type'], $trg['created_at'], $trg['trainees']));
+        }
+        fclose($file);
+        exit;
     }
 }
 
