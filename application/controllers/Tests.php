@@ -278,7 +278,7 @@ class Tests extends MY_Controller{
 		$length = count($answers);
 		$length = count($question_id);
 		for($j = 0; $j < $length; $j++){
-			$answer = isset($_POST['answer']) ? $answers : 0;
+			$answer = isset($_POST['answer']) ? $answers : '0';
 			$data = array(
 			'question_id' => $_POST['question_id'][$j],
 			'answer_id'   => $answer[$j],
