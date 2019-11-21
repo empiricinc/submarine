@@ -1,3 +1,4 @@
+<?php $session = $this->session->userdata('username'); ?>
 <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
   <section class="secIndexTable">
     <div class="mainTableWhite">
@@ -28,7 +29,9 @@
                 </select>
               </div><br><br><br>
               <div class="col-lg-12">
-                <textarea class='editor' name='offer_letter' id='letter_type'><?php if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?></textarea><br><br>
+                <textarea class='editor' name='offer_letter' id='letter_type'>
+                  <?php if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?>
+                </textarea><br><br>
               </div>
               <div class="col-lg-12">
                 <?php if(empty($letter_exists)): ?>
@@ -45,35 +48,38 @@
     </div>
   </section>
 </section>
-<link rel="stylesheet" type="text/css" href="<?php echo base_url('assets/tinymce/plugins/variable/style.css'); ?>">
 <!-- TinyMCE script -->
 <script src='<?= base_url(); ?>assets/tinymce/tinymce.min.js'></script>
-<!-- Script -->
-<script type="text/javascript" src="<?php echo base_url('assets/tinymce/plugins/variable/plugin.js'); ?>"></script>
+
 <script type="text/javascript">
-  var name = '<?php echo $applicant->fullname; ?>';
-  var designation = '<?php echo $applicant->designation_name; ?>';
-  var province = '<?php echo $applicant->name; ?>';
-  var district = '<?php echo $applicant->dist_name; ?>';
-  var start_date = '<?php echo date("M d, Y", strtotime($applicant->created_at)); ?>';
+  var name = '<?php if(!empty($applicant)){ echo trim($applicant->fullname); } ?>';
+  var designation = '<?php if(!empty($applicant)){ echo trim($applicant->designation_name); } ?>';
+  var province = '<?php if(!empty($applicant)){ echo trim($applicant->name); } ?>';
+  var district = '<?php if(!empty($applicant)){ echo trim($applicant->dist_name); } ?>';
+  var start_date = '<?php if(!empty($applicant)){ echo date("F jS, Y", strtotime($applicant->created_at)); } ?>';
   var date = '<?php echo date("M y"); ?>';
-  var cnic = '<?php echo $applicant->cnic; ?>';
+  var cnic = '<?php  if(!empty($applicant)){ echo trim($applicant->cnic); } ?>';
+  var session = '<?php echo substr(ucfirst($session["username"]), 0, 1); ?>';
+  var logged_user = '<?php echo ucfirst($session["username"]); ?>';
+  var logged_email = '<?php echo trim($session['email']); ?>';
 tinymce.init({
     // basic tinyMCE stuff
     selector: ".editor",
     // content_css: 'style.css',
+    fontsize_formats: "8px 10px 11px 12px 14px 15px 24px 36px",
+    lineheight_formats: "1px 2px 4px 6px 8px 9px 10px 11px 12px 14px 16px 18px 20px 22px 24px 26px 36px",
     height: 200,
     theme: 'modern',
     menubar: true,
     skin: "lightgray",
     height: 700,
-    toolbar: "undo redo | styleselect | alignleft alignright alignjustify | bullist numlist outdent indent | link image | print preview media fullscreen | forecolor backcolor emoticons | visualchars code template | fullpage spellchecker formatselect | fontname",
+    toolbar: "undo redo | styleselect | alignleft alignright alignjustify aligncenter | bullist numlist outdent indent | link image | print preview media fullscreen | forecolor backcolor emoticons | visualchars code template | formatselect fontsizeselect lineheightselect",
     statusbar: true,
     setup: function(ed)
     {
       ed.on('init', function()
       {
-        this.getDoc().body.style.fontSize = '30';
+        // this.getDoc().body.style.fontSize = '150';
         this.getDoc().body.style.fontFamily = 'Book Antiqua';
       });
     },
@@ -92,7 +98,7 @@ tinymce.init({
     //     });
     // },
     // variable plugin related
-    plugins: "variable, code, advlist, autolink, image, lists, charmap, print, preview, hr, pagebreak, anchor, searchreplace, wordcount, visualblocks, visualchars, fullscreen, insertdatetime, media, nonbreaking, save, table, contextmenu, directionality, emoticons, template, paste, textcolor, fullpage, spellchecker",
+    plugins: "variable, code, advlist, autolink, image, lists, charmap, print, preview, hr, pagebreak, anchor, searchreplace, wordcount, visualblocks, visualchars, fullscreen, insertdatetime, media, nonbreaking, save, table, contextmenu, directionality, emoticons, template, paste, textcolor, fullpage, spellchecker, lineheight",
     variable_mapper: {  // Will look for variables in replace them with the text.
         name: name,
         designation: designation,
@@ -102,7 +108,10 @@ tinymce.init({
         cnic: cnic,
         start_date: start_date,
         end_date: start_date,
-        date: date
+        date: date,
+        session: session,
+        logged_user: logged_user,
+        logged_email: logged_email
     },
     templates: [
       { 

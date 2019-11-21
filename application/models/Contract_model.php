@@ -30,7 +30,13 @@ class Contract_model extends CI_Model {
 			 	 					xin_designations.designation_id,
 			 	 					xin_designations.designation_name,
 		                     provinces.id,
-		                     xin_departments.department_id');
+		                     provinces.name as provName,
+		                     xin_departments.department_id,
+		                     xin_job_applications.application_id,
+		                     xin_job_applications.cnic,
+		                     xin_job_applications.city_name,
+		                     district.id,
+		                     district.name as cityName');
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
 		$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
@@ -38,7 +44,9 @@ class Contract_model extends CI_Model {
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-      $this->db->order_by('employee_contract.id', 'DESC');
+      $this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
+      $this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
+      // $this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();

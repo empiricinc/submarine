@@ -409,8 +409,10 @@ class Contract extends MY_Controller {
 	// Create new contract.
 	public function create_contract(){
 		$data['cr_contract'] = $this->Contract_model->get_contract_byID();
+		// $data['extension'] = $this->Contract_model->get_for_extension();
 		$data['types'] = $this->Contract_model->get_contract_formats();
 		$data['applicant'] = $this->Contract_model->applicant_data();
+		$data['path_url'] = '';
 		$data['subview'] = $this->load->view('dashboard/create_contract', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
@@ -608,6 +610,7 @@ class Contract extends MY_Controller {
 	      $from_date = date('l, F jS, Y', strtotime($print->from_date));
 	      $to_date = date('l, F jS, Y', strtotime($print->to_date));
 	    }
+	    ob_start();
 	    $pdf->AddPage(); // Data will be loaded to the page here.
 	    $html =  $content.'Starts From: <strong>'.$from_date.'</strong> till <strong>'.$to_date.'</strong>.';
 	    $pdf->writeHTML($html, true, false, true, false, '');
@@ -639,6 +642,7 @@ class Contract extends MY_Controller {
 	    $pdf->setPrintFooter(false);
 	        // Add a page
 	    $contracts = $this->Contract_model->print_bulk();
+	    ob_start();
 	    foreach($contracts as $print){
 		    // $title = $print->title;
 		    $content = $print->long_description;
@@ -659,7 +663,14 @@ class Contract extends MY_Controller {
 	}
 	// Activate multiple contract at once. (Bulk activate)
 	public function activate_all_contracts(){
-		if($this->Contract_model->activate_bulk()){	
+		// $data = array(
+		// 	'status' => 1
+		// );
+		// $ids = $this->input->post('print');
+		// $this->db->where_in('user_id', $ids);
+		// return $this->db->update('employee_contract', $data);
+		// redirect($_SERVER['HTTP_REFERER']);
+		if($this->Contract_model->activate_bulk($id)){	
 	       $this->session->set_flashdata('messageactive', 'Contracts activated successfully.');
 			redirect($_SERVER['HTTP_REFERER']); 
 	    }else {
@@ -940,6 +951,7 @@ class Contract extends MY_Controller {
   	$data['letters'] = $this->Contract_model->get_offer_letters();
   	$data['letter_exists'] = $this->Contract_model->offer_letter_exists(); // If letter exists, put in textarea.
   	$data['applicant'] = $this->Contract_model->applicant_data();
+  	$data['path_url'] = '';
   	$data['subview'] = $this->load->view('dashboard/upload_letter', $data, TRUE);
     $this->load->view('layout_main', $data); // Page load.
   }

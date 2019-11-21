@@ -107,8 +107,14 @@ h4 {
               </h3></a>
           </div>
         </div>
-        <div class="col-md-3 text-right" id="printBtn" style="font-size: 30px; margin-top: 8px; display: none;">
-          <a data-toggle="tooltip" title="Activate all Contracts" href="<?= base_url('contract/activate_all_contracts'); ?>"><i class="fa fa-arrow-circle-right"></i></a>
+        <form action="<?php echo base_url('contract/activate_all_contracts'); ?>" method="post">
+        <div class="col-md-3 text-right" id="printBtn" style="font-size: 30px; margin-top: 8px; display: block;">
+          <?php $check = $this->db->get_where('employee_contract', array('long_description =' => NULL, 'status' => 0))->result(); ?>
+          <?php if(!$check): ?>
+            <a data-toggle="tooltip" title="Activate all Contracts" href="<?= base_url('contract/activate_all_contracts'); ?>"><i class="fa fa-arrow-circle-right"></i></a>
+          <?php else: ?>
+            <a data-toggle="tooltip" title="Create Contracts first then you can activate them."><i class="fa fa-arrow-circle-right"></i></a>
+          <?php endif; ?>
           <a data-toggle="tooltip" title="Print all Contracts" target="blank" href="<?= base_url('contract/print_all_contracts'); ?>"><i class="fa fa-print"></i></a>
         </div>
           <div class="col-md-2 text-right">
@@ -149,7 +155,8 @@ h4 {
                   <?php if($contract->user_id): ?>
                     <tr>
                       <td>
-                        <input type="checkbox" name="print" id="checkPrint" style="display: block;">
+                          <input type="checkbox" name="print[]" id="checkPrint" style="display: block;" value="<?php echo $contract->user_id; ?>">
+                          </form>
                       </td>
                       <td>
                         CTC-<?php echo '0'.$contract->user_id; ?>
@@ -345,7 +352,11 @@ h4 {
                                   <div class="row">
                                     <div class="col-md-10 col-md-offset-1">
                                       <h3 class="text-center"><strong>Description</strong></h3>
-                                      <p><?php echo $contract->long_description; ?></p>
+                                      <?php $session1 = $this->session->userdata('username'); ?>
+                                      <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
+                                      $subject = $contract->long_description;
+                                      $replace = array('{{name}}' => $contract->first_name.' '.$contract->last_name, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->cityName, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->from_date)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic);
+                                      echo str_replace($find, $replace, $subject); ?>
                                     </div>
                                   </div>
                                 </div>

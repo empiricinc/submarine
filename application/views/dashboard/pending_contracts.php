@@ -125,7 +125,12 @@ h4 {
             </div>
           </div>
           <div class="col-lg-8 text-right" id="printBtn" style="display: none; font-size: 30px; margin-top: 5px;">
-            <a data-toggle="tooltip" title="Activate Contracts" href="<?php if(!empty($pen_contracts) AND $pen_contracts[0]->long_description==''){ echo "Some of the contracts haven't been created. Create them first."; }else{ echo base_url('contract/activate_all_contracts'); } ?>"><i class="fa fa-arrow-circle-right"></i></a>
+            <?php $check = $this->db->get_where('employee_contract', array('long_description =' => NULL, 'status' => 0))->result(); ?>
+            <?php if(!$check): ?>
+              <a data-toggle="tooltip" title="Activate Contracts" href="<?php echo base_url('contract/activate_all_contracts'); ?>"><i class="fa fa-arrow-circle-right"></i></a>
+            <?php else: ?>
+              <a data-toggle="tooltip" title="Create Contracts first then you can activate them." data-placement="left"><i class="fa fa-arrow-circle-right"></i></a>
+            <?php endif; ?>
             <a target="blank" data-toggle="tooltip" title="Print Contracts" href="<?= base_url('contract/print_all_contracts'); ?>"><i class="fa fa-print"></i></a>
           </div>
         </div>
@@ -242,7 +247,7 @@ h4 {
                         <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
                         <a data-toggle="tooltip" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>">
                           <i class="fa fa-check-circle"></i></a>
-                        <a data-toggle="tooltip" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?= base_url() ?>contract/activatecontract/<?= $contract->user_id; ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id="activate"></i></a>
+                        <a data-toggle="tooltip" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description === NULL){ echo base_url('contract/activate_first'); }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
                         <a data-toggle="modal" data-target="#rejectContract<?= $contract->user_id; ?>" href="#rejectModal">
                           <i class="fa fa-close"></i>
                         </a>
