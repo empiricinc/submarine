@@ -38,7 +38,7 @@
 					</div>
 					<div class="col-md-5">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_cnic" class="form-control" id="applicant_name" style="color: #aeafaf;" value="<?php //echo $applicant_detail->fullname; ?>">
+							<input type="text" name="applicant_cnic" class="form-control" id="applicant_name" style="color: #aeafaf;" value="<?php echo $applicant_detail->cnic; ?>">
 						</div>
 					</div>
 					<div class="col-md-1">
@@ -62,7 +62,7 @@
 					</div>
 					<div class="col-lg-9">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_code" class="form-control" id="designation" style="color: #aeafaf;" value="<?php //echo $applicant_detail->designation_name; ?>">
+							<input type="text" name="applicant_code" class="form-control" id="designation" style="color: #aeafaf;" value="<?php echo $applicant_detail->cityName; ?>">
 						</div>
 					</div>
 					<div class="col-md-3">
