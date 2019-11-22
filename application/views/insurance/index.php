@@ -155,8 +155,13 @@
 											$currentDate = strtotime(date('d-m-Y'));
 											$dob = ($e->date_of_birth) ? strtotime($e->date_of_birth) : 0;
 
-											$diff = $currentDate - $dob;
-											$age = floor($diff/(365*24*60*60));
+											$age = 0;
+											if($dob != 0)
+											{
+												$diff = $currentDate - $dob;
+												$age = floor($diff/(365*24*60*60));
+											}
+											
 
 											$maxAgeLimit = 60;
 											$minAgeLimit = 18;

@@ -17,7 +17,7 @@
 			<?php } elseif($this->session->flashdata('error')) {  ?>
 			<div class="col-lg-12">
 				<div class="alert alert-danger" data-dismiss="alert">
-					<strong>Error!</strong> <?= $this->session->flashdata('error'); ?>
+					<?= $this->session->flashdata('error'); ?>
 				</div>
 			</div>
 			<?php } ?>

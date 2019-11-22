@@ -62,7 +62,7 @@ class Disciplinary_model extends CI_Model
 			return $this->db->get('disciplinary AS di');
 		}
 
-		$this->db->select('di.id, di.created_date, xe.employee_id, xc.name AS project_name, xd.designation_name, xds.department_name, dr.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ds.status_text, dt.type_name');
+		$this->db->select('di.id, di.created_date, di.previous_disciplinary, xe.employee_id, xc.name AS project_name, xd.designation_name, xds.department_name, dr.reason_text, CONCAT(xe.first_name, " ", IFNULL(xe.last_name, "")) AS emp_name, ds.status_text, dt.type_name');
 		$this->db->join('xin_companies AS xc', 'di.project_id = xc.company_id', 'left');
 		$this->db->join('xin_designations AS xd', 'di.designation_id = xd.designation_id', 'left');
 		$this->db->join('xin_departments AS xds', 'di.department_id = xds.department_id', 'left');
@@ -226,14 +226,12 @@ class Disciplinary_model extends CI_Model
 		return $this->db->get('employee_signature')->row();
 	}
 
-	function previous_action($employee_id, $disciplinary_id)
+	function previous_action($disciplinary_id)
 	{
 		$this->db->select('disciplinary.id, disciplinary_type.type_name, disciplinary_status.status_text');
 		$this->db->join('disciplinary_type', 'disciplinary.type_id = disciplinary_type.id', 'left');
 		$this->db->join('disciplinary_status', 'disciplinary.status_id = disciplinary_status.id', 'left');
-		$this->db->order_by('disciplinary.id', 'DESC');
-		$this->db->limit(1);
-		$this->db->where(array('disciplinary.employee_id' => $employee_id, 'disciplinary.id !=' => $disciplinary_id));
+		$this->db->where(array('disciplinary.id' => $disciplinary_id));
 		return $this->db->get('disciplinary')->row();
 	}
 

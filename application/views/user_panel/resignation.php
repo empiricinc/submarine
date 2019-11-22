@@ -22,7 +22,7 @@
 				<?php 
 					$btnDisabled = '';
 
-					if($resignation_status != '' AND $resignation_status != 'rejected')
+					if($resignation_status != '' AND $resignation_status != 'rejected' && !$this->session->flashdata('success'))
 					{
 						$btnDisabled = 'disabled';
 						
@@ -62,12 +62,12 @@
 						<input type="text" name="other_reason" class="form-control" id="resg-other-reason" placeholder="Other Reason">
 					</div>
 				</div>
-				<div class="col-lg-6">
+				<!-- <div class="col-lg-6">
 					<div class="inputFormMain">
 						<input type="text" name="notice_date" class="form-control date" id="notice-date" placeholder="Notice Date" required>
 					</div>
-				</div>
-				<div class="col-lg-6">
+				</div> -->
+				<div class="col-lg-12">
 					<div class="inputFormMain">
 						<input type="text" name="resignation_date" class="form-control date-onward" id="resignation-date" placeholder="Resignation Date" required>
 					</div>

@@ -174,4 +174,9 @@ class Resignations_model extends CI_Model {
         return $this->db->update('xin_employees', array('status' => $status, 'is_active' => $is_active));
     }
 
+    public function get_status()
+    {
+        return $this->db->get('resignation_status')->result();
+    }
+
 }

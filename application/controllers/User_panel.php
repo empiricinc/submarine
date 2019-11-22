@@ -555,9 +555,8 @@ class User_panel extends MY_Controller
 
 		$title = $this->input->post('title');
 		$reason = $this->input->post('reason');
-		$notice_date = $this->input->post('notice_date');
+		// $notice_date = $this->input->post('notice_date');
 		$resignation_date = $this->input->post('resignation_date');
-		// $last_working_date = $this->input->post('last_working_date');
 		$other_reason_text = $this->input->post('other_reason');
 		$subject = $this->input->post('subject');
 		$description = $this->input->post('description');
@@ -567,9 +566,8 @@ class User_panel extends MY_Controller
 
 		$data = array(
 					'employee_id' => $employee_id,
-					'notice_date' => $notice_date,
+					'notice_date' => date('Y-m-d'),
 					'resignation_date' => $resignation_date,
-					// 'last_working_date' => $last_working_date,
 					'reason' => $other_reason_text,
 					'added_by' => $employee_id,
 					'created_at' => $entry_time, 

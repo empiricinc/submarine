@@ -17,3 +17,10 @@
 				$('#respondent-not-found-other-reason').prop('readonly', true);
 		});
 	</script>
+
+	<script type="text/javascript">
+		$('#exit-interviews-table>tbody>tr').on('click', function() {
+			var resignation_id = $(this).data('id');
+			window.location = "<?= base_url(); ?>Exit_interview/form/" + resignation_id;
+		});
+	</script>

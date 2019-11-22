@@ -523,8 +523,10 @@ class Disciplinary extends MY_Controller
 		$reasons = $this->Disciplinary_model->disciplinary_reasons()->result();
 		
 		$categories = $this->Disciplinary_model->categories();
-
-		$previous_disciplinary = $this->Disciplinary_model->previous_action($detail->employee_id, $id);
+		
+		$previous_disciplinary = NULL;
+		if($detail->previous_disciplinary !== NULL)
+			$previous_disciplinary = $this->Disciplinary_model->previous_action($detail->previous_disciplinary);
 
 		$previous_type = (!empty($previous_disciplinary)) ? $previous_disciplinary->type_name : '';
 		$previous_status = (!empty($previous_disciplinary)) ? $previous_disciplinary->status_text : '';
@@ -810,7 +812,7 @@ class Disciplinary extends MY_Controller
 		if($update)
 		{
 			if($next_action != '')
-				$this->next_disciplinary_action($disciplinary_id, $next_action);
+				$this->next_disciplinary_action($disciplinary_id, $next_action, $comments);
 			$this->session->set_flashdata('success', 'Status updated successfully.');
 		}
 		else
@@ -823,7 +825,7 @@ class Disciplinary extends MY_Controller
     }
 
 
-    private function next_disciplinary_action($disciplinary_id, $next_action)
+    private function next_disciplinary_action($disciplinary_id, $next_action, $comments)
     {
     	$disciplinary = $this->db->get_where('disciplinary', array('disciplinary.id' => $disciplinary_id))->row();
  
@@ -838,14 +840,15 @@ class Disciplinary extends MY_Controller
     				'reason_id' => $disciplinary->reason_id,
     				'other_reason' => $disciplinary->other_reason,
     				'subject' => $disciplinary->subject,
-    				'description' => $disciplinary->description,
+    				'description' => $comments,
     				'type_id' => $next_action,
     				'status_id' => '1',
     				'reported_by' => $disciplinary->reported_by,
     				'reported_date' => $disciplinary->reported_date,
     				'category_id' => $disciplinary->category_id,
     				'created_by' => $created_by,
-    				'created_date' => $created_date
+    				'created_date' => $created_date,
+    				'previous_disciplinary' => $disciplinary_id
     			);
 
     	return $this->Disciplinary_model->add($data);
@@ -1722,6 +1725,24 @@ class Disciplinary extends MY_Controller
 		$objWriter->save('php://output');
     }
 
+
+    function cron_disciplinary()
+    {
+    	if(!$this->input->is_cli_request())
+    		show_404();
+
+    	$date = date('Y-m-d');
+    	$this->db->select('d.employee_id');
+    	$this->db->join('disciplinary_status ds', 'd.status_id = ds.id', 'left');
+    	$this->db->where(array('ds.status_text' => 'issued', 'd.last_working_date' => $date));
+    	$result = $this->db->get('disciplinary d')->result();
+    	
+    	foreach ($result as $r) {
+    		$this->db->where('employee_id', $r->employee_id);
+    		$this->db->update('xin_employees xe', array('status' => '9', 'is_active' => '0'));
+    	}
+
+    }
 
 
 }

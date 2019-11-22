@@ -71,6 +71,7 @@
 										<option value="<?= $t->id; ?>"><?= ucwords($t->type_name); ?></option>
 									<?php endforeach; ?>
 								</select>
+								<span></span>
 							</div>
 
 							<div class="filterSelect">
@@ -80,6 +81,7 @@
 									<option value="<?= $p->id; ?>"><?= ucwords($p->name); ?></option>
 									<?php endforeach; ?>
 								</select>
+								<span></span>
 							</div>
 
 							<div class="filterSelectBtn">
@@ -137,22 +139,23 @@
 											</thead>
 											<tbody id="disciplinary-list">
 												
-												<?php $count=1; foreach($disciplinary_actions AS $c): ?>
+												<?php $count=1; foreach($disciplinary_actions AS $d): ?>
 
-													<tr data="<?= $c->id; ?>">
-														<td><?= $c->employee_id; ?></td>
-														<td><?= ucwords($c->emp_name); ?></td>
-														<td><?= $c->project_name; ?></td>
-														<td><?= $c->department_name; ?></td>
-														<td><?= $c->designation_name; ?></td>
-														<td><?= $c->reason_text; ?></td>
+													<tr data="<?= $d->id; ?>">
+														<td><?= $d->employee_id; ?></td>
+														<td><?= ucwords($d->emp_name); ?></td>
+														<td><?= $d->project_name; ?></td>
+														<td><?= $d->department_name; ?></td>
+														<td><?= $d->designation_name; ?></td>
+														<td><?= $d->reason_text; ?></td>
 														<td>
-															<?= ucwords($c->type_name); ?>
+															<?= ucwords($d->type_name); ?>
 														</td>
-														<td><?= date('d-m-Y', strtotime($c->created_date)); ?></td>
+														<td><?= date('d-m-Y', strtotime($d->created_date)); ?></td>
 														<td>
-															<label class="label label-primary"><?= $c->status_text; ?></label>
+															<label class="label label-primary"><?= $d->status_text; ?></label>
 														</td>
+
 													</tr>
 												<?php $count++; endforeach; ?>
 											</tbody>

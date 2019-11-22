@@ -66,7 +66,7 @@ class Insurance extends MY_Controller
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
 					'i.status' => 'pending',
-					'xe.is_active' => '1'
+					'xe.status' => '1'
 				];
 
 		$data['insurances'] = $this->Insurance_model->get_pending_insurances($this->remove_empty_entries($conditions), 5, "")->result();
@@ -97,7 +97,7 @@ class Insurance extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.is_active' => '1'
+					'xe.status' => '1'
 				];
 
 		$data['query_string'] = $_SERVER['QUERY_STRING'];
@@ -363,6 +363,7 @@ class Insurance extends MY_Controller
 
 			if($rec_update) {
 
+					$new_status = ($status == 'insured') ? '0' : '1';
 					$data = array(
 						'insurance_id' => $insurance_id,
 						'from_date' => $from_date,
@@ -423,7 +424,7 @@ class Insurance extends MY_Controller
 								'insurance_id' => $insurance_id,
 								'from_date' => $from_date,
 								'to_date' => $to_date,
-								'status' => 'insured',
+								'status' => '1',
 								'entry_by' => $updated_by,
 								'entry_at' => $updated_at
 							);
@@ -620,7 +621,7 @@ class Insurance extends MY_Controller
         $conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.is_active' => '1',
+					'xe.status' => '1',
 					'i.status' => $this->input->get('status')
 				];
 

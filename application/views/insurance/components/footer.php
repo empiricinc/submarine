@@ -82,7 +82,7 @@
 					</div>
 	    		</div>
 	    		<div class="modal-footer">
-	    			<div class="col-lg-12">
+	    			<div class="col-lg-12 pr-0">
 		    			<button type="submit" class="btn btnSubmit" id="insurance-form-btn"> 
 		    				Submit 
 		    			</button>
@@ -402,7 +402,7 @@
 			var insurance_status = $('#status-'+emp_id).val();
 			var dataHandler = $('#status-modal .modal-body').html('');
 
-			if(employee_status != '1')
+			if(employee_status != '1' && insurance_status == 'uninsured')
 			{
 				toastr.error('Inactive employees can\'t be insured');
 				return;

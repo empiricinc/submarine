@@ -53,8 +53,7 @@ class Terminations extends MY_Controller
 		$conditions = [
 					'xe.company_id' => $this->session_data['project_id'],
 					'xe.provience_id' => $this->session_data['province_id'],
-					'xe.status <' => '5',
-					'xe.is_active' => '1'
+					'xe.status' => '1'
 				];
 		$filtered_conditions = $this->remove_empty_entries($conditions);
 		$exclude_user_roles = array(1, 2);

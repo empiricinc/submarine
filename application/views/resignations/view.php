@@ -30,6 +30,16 @@
 							</select>
 							<span></span>
 						</div>
+
+						<div class="filterSelect">
+							<select name="status" class="form-control">
+								<option value="">Status</option>
+								<?php foreach($resignation_status AS $r): ?>
+								<option value="<?= $r->id; ?>"><?= ucwords($r->status_text); ?></option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
 						
 						<div class="filterSelect">
 							<input type="text" name="from_date" class="form-control date" placeholder="From Date">

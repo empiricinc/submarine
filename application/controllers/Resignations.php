@@ -64,6 +64,7 @@ class Resignations extends MY_Controller
             $employeeName = $this->input->get('employee_name');
             $project = (int) $this->input->get('project');
             $designation = (int) $this->input->get('designation');
+            $status = (int) $this->input->get('status');
             
             if($employeeName != '')
                 $employeeName = '%'.$employeeName.'%';
@@ -72,6 +73,7 @@ class Resignations extends MY_Controller
             $conditions['xer.resignation_date <='] = $toDate;
             $conditions['CONCAT_WS(" ", xe.first_name, xe.last_name) LIKE'] = $employeeName;
             $conditions['xe.designation_id'] = $designation;
+            $conditions['xer.status'] = $status;
             if($project != 0)
                 $conditions['xe.company_id'] = $project;
             
@@ -92,6 +94,8 @@ class Resignations extends MY_Controller
 
         $data['projects'] = $this->Projects_model->get($this->session_data['project_id']); 
         $data['designations'] = $this->Designations_model->get_by_project($this->session_data['project_id']);
+        $data['resignation_status'] = $this->Resignations_model->get_status();
+
 		$data['content'] = $this->load->view('resignations/view', $data, TRUE);
 		$this->load->view('resignations/_template', $data);
 	}
@@ -169,10 +173,13 @@ class Resignations extends MY_Controller
         if($status_text == 'accepted')
         {
             $this->update_job_position($resignation_id, '0');
+
             if(date('Y-m-d') == $resignation_date)
                 $this->Resignations_model->update_employee_resignation_status($employee_id, '5', '0');
+
+            
         }
-        
+      
         if($add_comment)
             $this->session->set_flashdata('success', 'Status updated successfully.');
         else
@@ -237,6 +244,9 @@ class Resignations extends MY_Controller
 
     public function cron_resignations()
     {
+        if(!$this->input->is_cli_request())
+            show_404();
+        
         $current_date = date('Y-m-d');
 
         $this->db->select('xer.resignation_id, xer.employee_id, xe.job_code');
