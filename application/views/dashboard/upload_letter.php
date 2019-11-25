@@ -57,6 +57,7 @@
   var province = '<?php if(!empty($applicant)){ echo trim($applicant->name); } ?>';
   var district = '<?php if(!empty($applicant)){ echo trim($applicant->dist_name); } ?>';
   var start_date = '<?php if(!empty($applicant)){ echo date("F jS, Y", strtotime($applicant->created_at)); } ?>';
+  var gender = '<?php if(!empty($applicant) AND $applicant->gender == 0){ echo 'Mr.'; }else{ echo 'Ms.'; } ?>';
   var date = '<?php echo date("M y"); ?>';
   var cnic = '<?php  if(!empty($applicant)){ echo trim($applicant->cnic); } ?>';
   var session = '<?php echo substr(ucfirst($session["username"]), 0, 1); ?>';
@@ -111,7 +112,8 @@ tinymce.init({
         date: date,
         session: session,
         logged_user: logged_user,
-        logged_email: logged_email
+        logged_email: logged_email,
+        gender: gender
     },
     templates: [
       { 
@@ -139,10 +141,10 @@ tinymce.init({
     noneditable_noneditable_class: "mceNonEditable",
     toolbar_drawer: 'sliding',
     contextmenu: "link image imagetools table",
-    // variable_prefix: '{{',
-    // variable_suffix: '}}'
-    // variable_class: 'bbbx-my-variable',
-    //variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date']
+    variable_prefix: '{{',
+    variable_suffix: '}}',
+    variable_class: 'bbbx-my-variable',
+    variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date', 'session', 'gender', 'logged_user', 'logged_email']
 });
 
 // Get offer letter from database to the textarea.

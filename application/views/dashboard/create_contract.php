@@ -27,10 +27,10 @@
             <!-- Textarea -->
             <input type="hidden" name="user_id" value="<?php echo $this->uri->segment(3); ?>">
               <div class="col-lg-4">
-                <input type="text" name="from_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['from_date'])); }elseif(!empty($extension)){ echo date('Y/m/d', strtotime($extension['from_date'])); }else{ echo date('Y-m-d'); } ; ?>">
+                <input type="text" id="from_date" name="from_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['from_date'])); }elseif(!empty($extension)){ echo date('Y/m/d', strtotime($extension['from_date'])); }else{ echo date('Y-m-d'); } ; ?>">
               </div>
               <div class="col-lg-4">
-                <input type="text" name="to_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['to_date'])); }elseif(!empty($extension)){ echo date('Y/m/d', strtotime($extension['to_date'])); }else{ echo date('Y-m-d'); } ; ?>">
+                <input type="text" id="to_date" name="to_date" class="form-control date" value="<?php if(!empty($cr_contract)){ echo date('Y/m/d', strtotime($cr_contract['to_date'])); }elseif(!empty($extension)){ echo date('Y/m/d', strtotime($extension['to_date'])); }else{ echo date('Y-m-d'); } ; ?>">
               </div>
               <div class="col-lg-4">
                 <select class="form-control" id="contract_type">
@@ -70,7 +70,9 @@
   var designation = '<?php if(!empty($applicant)){ echo trim($applicant->designation_name); } ?>';
   var province = '<?php if(!empty($applicant)){ echo trim($applicant->name); } ?>';
   var district = '<?php if(!empty($applicant)){ echo trim($applicant->dist_name); } ?>';
-  var start_date = '<?php if(!empty($applicant)){ echo date("F jS, Y", strtotime($applicant->created_at)); } ?>';
+  var start_date = new Date($('#from_date').val()).toDateString();
+  var end_date = new Date($('#to_date').val()).toDateString();
+  var gender = '<?php if(!empty($applicant) AND $applicant->gender == '0'){ echo 'Mr.'; }else{ echo 'Ms.'; } ?>';
   var date = '<?php echo date('F y'); ?>';
   var cnic = '<?php if(!empty($applicant)){ echo trim($applicant->cnic); } ?>';
   var session = '<?php echo substr(ucfirst($session["username"]), 0, 1); ?>';
@@ -101,11 +103,12 @@ tinymce.init({
         province: province,
         cnic: cnic,
         start_date: start_date,
-        end_date: start_date,
+        end_date: end_date,
         date: date,
         session: session,
         logged_user: logged_user,
-        logged_email: logged_email
+        logged_email: logged_email,
+        gender: gender
     },
     templates: [
       { 
@@ -133,10 +136,10 @@ tinymce.init({
     noneditable_noneditable_class: "mceNonEditable",
     toolbar_drawer: 'sliding',
     contextmenu: "link image imagetools table",
-    // variable_prefix: '{{',
-    // variable_suffix: '}}'
-    // variable_class: 'bbbx-my-variable',
-    //variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date']
+    variable_prefix: '{{',
+    variable_suffix: '}}',
+    variable_class: 'bbbx-my-variable',
+    variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date', 'session', 'logged_user', 'cell', 'gender']
 });
 // Get offer letter from database to the textarea.
 $(function() {

@@ -610,10 +610,13 @@ class Contract_model extends CI_Model {
 		return true;
 	}
 	// Contract extension
-	public function contract_extension($id = '', $data = ''){
-		$this->db->where('user_id', $id);
-		$this->db->update('employee_contract', $data);
-		return true;
+	public function contract_extension($data = ''){
+		$this->db->insert('employee_contract', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	// Extend multiple contracts at once.
 	public function extend_bulk($date, $data){
@@ -629,9 +632,10 @@ class Contract_model extends CI_Model {
 		return true;
 	}
 	// Reject contract.
-	public function reject_contract($id = '', $data = ''){
-		$this->db->where('user_id', $id);
+	public function reject_contract($user_id = '', $data = ''){
+		$this->db->where('user_id', $user_id);
 		$this->db->update('employee_contract', $data);
+		return true;
 	}
 	// Count finished contracts
 	public function count_finished(){
@@ -677,10 +681,6 @@ class Contract_model extends CI_Model {
 		$this->db->from('employee_contract');
 		$this->db->where('status', 0);
 		return $this->db->get()->result();
-	}
-	// Activate multiple contracts at once. (Bulk activate)
-	public function activate_bulk(){
-		return $this->db->where('status', 0)->update('employee_contract', array('status' => 1));
 	}
 	// Add multiple to distributed.
 	public function distribute_bulk(){
@@ -938,6 +938,7 @@ class Contract_model extends CI_Model {
 	 	$this->db->select('xin_job_applications.application_id,
 	 								xin_job_applications.job_id,
 	 								xin_job_applications.fullname,
+	 								xin_job_applications.gender,
 	 								xin_job_applications.province,
 	 								xin_job_applications.city_name,
 	 								xin_job_applications.cnic,

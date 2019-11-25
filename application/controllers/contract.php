@@ -456,7 +456,7 @@ class Contract extends MY_Controller {
 	}
 	// Activate contract first, then activate it.
 	public function activate_first(){
-		echo "You need to create and then verify the contract first, then you can activate it !";
+		echo "You need to create the contract first, then you can activate it !";
 	}
 	// Multiple files upload. Contract copies upload.
 	function contract_upload(){
@@ -511,13 +511,12 @@ class Contract extends MY_Controller {
 	 	}
 	}
 	// Rejecting a contract.
-	public function reject(){
-		$id = $this->input->post("user_id");
+	public function reject($user_id){
 		$data = array(
-			'rejection_reason' => $this->input->post('reason'),
+			'rejection_reason' => 'The contract has been rejected because of unexpected reasons.',
 			'status' => 6
 		);
-		if($this->Contract_model->reject_contract($id, $data)){
+		if($this->Contract_model->reject_contract($user_id, $data)){
 			$this->session->set_flashdata('messageactive', 'Contract has been rejected!');
 			redirect($_SERVER['HTTP_REFERER']);
 		}else{
@@ -527,6 +526,7 @@ class Contract extends MY_Controller {
 	// Extend contract.
 	public function extend(){
 		$data['extension'] = $this->Contract_model->get_for_extension();
+		$data['applicant'] = $this->Contract_model->applicant_data();
 		$data['types'] = $this->Contract_model->get_contract_formats();
 		$data['path_url'] = '';
 		$data['subview'] = $this->load->view('dashboard/create_contract', $data, TRUE);
@@ -534,14 +534,15 @@ class Contract extends MY_Controller {
 	}
 	// Save the updated data to database.
 	public function extend_contract(){
-		$id = $this->input->post('user_id');
+		// $id = $this->input->post('user_id');
 		$data = array(
+			'user_id' => $this->input->post('user_id'),
 			'from_date' => $this->input->post('from_date'),
 			'to_date' => $this->input->post('to_date'),
 			'long_description' => $this->input->post('long_description'),
-			'status' => 1
+			'status' => 0
 		);
-		$this->Contract_model->contract_extension($id, $data);
+		$this->Contract_model->contract_extension($data);
 		$this->session->set_flashdata('messageactive', 'Contract has been extended successfully!');
 		redirect('contract');
 	}
@@ -553,7 +554,7 @@ class Contract extends MY_Controller {
 		$data = array(
 			'from_date' => $this->input->post('date_from'),
 			'to_date' => $this->input->post('date_to'),
-			'status' => 1
+			'status' => 0
 		);
 		if($this->Contract_model->extend_bulk($date, $data)){
 			$this->session->set_flashdata('messageactive', '<strong>Woohoo ! </strong> Contracts have been extended successfully!');
@@ -588,11 +589,12 @@ class Contract extends MY_Controller {
 	// Print contract letter.
 	public function print_contract($user_id){
 		$this->load->library('Pdf');
-	    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	    $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
 	    $pdf->SetTitle('Employment Contract');
 	    $pdf->SetHeaderMargin(30);
-	    $pdf->SetTopMargin(20);
-	    $pdf->setFooterMargin(20);
+	    $pdf->setMargins(10, 20, 10, true);
+	    $pdf->SetTopMargin(0.4);
+	    $pdf->setFooterMargin(0.97);
 	    $pdf->SetAutoPageBreak(true);
 	    $pdf->SetCreator(PDF_CREATOR);
 	    $pdf->SetAuthor('Saddam');
@@ -603,16 +605,21 @@ class Contract extends MY_Controller {
 	    $pdf->setPrintHeader(false);
 	    $pdf->setPrintFooter(false);
 	        // Add a page
+	    ob_start();
 	    $data = $this->Contract_model->contract_print($user_id);
 	    foreach($data as $print){
 	      // $title = $print->title;
-	      $content = $print->long_description;
-	      $from_date = date('l, F jS, Y', strtotime($print->from_date));
-	      $to_date = date('l, F jS, Y', strtotime($print->to_date));
+	    	$session1 = $this->session->userdata('username');
+	    	$find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
+	    	$contract = $this->Contract_model->applicant_data();
+	      	$content = $print->long_description;
+	      	$replace =  array('{{name}}' => $contract->fullname, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->dist_name, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->created_at)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic);
 	    }
-	    ob_start();
-	    $pdf->AddPage(); // Data will be loaded to the page here.
-	    $html =  $content.'Starts From: <strong>'.$from_date.'</strong> till <strong>'.$to_date.'</strong>.';
+	    $width = $pdf->pixelsToUnits(600);
+	    $height = $pdf->pixelsToUnits(705);
+	    $resolution = array($width, $height);
+	    $pdf->AddPage('P', $resolution); // Data will be loaded to the page here.
+	    $html =  str_replace($find, $replace, $content);
 	    $pdf->writeHTML($html, true, false, true, false, '');
 	    ob_clean();
 	    $pdf->Output(md5(time()).'.pdf', 'I');
@@ -648,7 +655,6 @@ class Contract extends MY_Controller {
 		    $content = $print->long_description;
 		    $from_date = date('l jS F, Y', strtotime($print->from_date));
 		    $to_date = date('l jS F, Y', strtotime($print->to_date));
-	    
 		    $pdf->AddPage(); // Data will be loaded to the page here.
 		    $html =  $content.'Starts from <strong>'.$from_date.'</strong> till <strong>'.$to_date.'.';
 		    $pdf->writeHTML($html, true, false, true, false, '');
@@ -663,19 +669,17 @@ class Contract extends MY_Controller {
 	}
 	// Activate multiple contract at once. (Bulk activate)
 	public function activate_all_contracts(){
-		// $data = array(
-		// 	'status' => 1
-		// );
-		// $ids = $this->input->post('print');
-		// $this->db->where_in('user_id', $ids);
-		// return $this->db->update('employee_contract', $data);
-		// redirect($_SERVER['HTTP_REFERER']);
-		if($this->Contract_model->activate_bulk($id)){	
-	       $this->session->set_flashdata('messageactive', 'Contracts activated successfully.');
-			redirect($_SERVER['HTTP_REFERER']); 
-	    }else {
-	        echo 'Activating contracts not successful, try again !';
-	    }
+		$data = array(
+			'status' => 1
+		);
+		$ids = $this->input->post('print');
+		$this->db->where_in('user_id', $ids);
+		if($this->db->update('employee_contract', $data)){
+			$this->session->set_flashdata('messageactive', 'Contracts activated successfully');
+			redirect($_SERVER['HTTP_REFERER']);
+		}else{
+			echo "The operation wasn't successful, please try again.";
+		}
 	}
 	// Distribute contracts
 	public function distribute($id){
