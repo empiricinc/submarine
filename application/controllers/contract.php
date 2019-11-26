@@ -673,12 +673,17 @@ class Contract extends MY_Controller {
 			'status' => 1
 		);
 		$ids = $this->input->post('print');
-		$this->db->where_in('user_id', $ids);
-		if($this->db->update('employee_contract', $data)){
-			$this->session->set_flashdata('messageactive', 'Contracts activated successfully');
-			redirect($_SERVER['HTTP_REFERER']);
+		if(isset($_POST['print'])){ // If checkbox is not checked, contract can't be activated.
+			$this->db->where_in('user_id', $ids);
+			if($this->db->update('employee_contract', $data)){
+				$this->session->set_flashdata('messageactive', 'Contracts activated successfully');
+				redirect($_SERVER['HTTP_REFERER']);
+			}else{
+				echo "The operation wasn't successful, please try again.";
+			}
 		}else{
-			echo "The operation wasn't successful, please try again.";
+			echo "Just gimme one good reason of submitting an empty form, and I'll let you do it.";
+			return false;
 		}
 	}
 	// Distribute contracts
@@ -690,24 +695,6 @@ class Contract extends MY_Controller {
 			echo "Distributing contracts was not successful, try again !";
 		}
 	}
-        // Bulk distribute.
-	public function bulk_distribute(){
-		if($this->Contract_model->distribute_bulk()){
-			$this->session->set_flashdata('messageactive', 'Contracts have been added to distributed!');
-			redirect($_SERVER['HTTP_REFERER']);
-		}else{
-			echo "The action was not successful, please try again!";
-		}
-	}
-        // Bulk attach
-	public function bulk_attach(){
-		if($this->Contract_model->attach_bulk()){
-			$this->session->set_flashdata('messageactive', 'Contracts have been attached to personal file.');
-			redirect($_SERVER['HTTP_REFERER']);
-		}else{
-			echo "The action was not successful, please try again!";
-		}
-	}
 	// Attach to personal file.
 	public function attach($id){
 		if($this->Contract_model->attach_to_file($id)){
@@ -717,7 +704,11 @@ class Contract extends MY_Controller {
 			echo "Attachment wasn't successful, try again !";
 		}
 	}
-
+	// Status change in bulk.
+	public function bulk_update(){
+		print_r($_POST);
+		
+	}
 	// get opened and closed tickets for chart
 
 	public function tickets_data()

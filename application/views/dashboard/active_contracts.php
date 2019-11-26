@@ -107,225 +107,227 @@ $(document).ready(function() {
   $distributed = $this->Contract_model->count_distributed_contracts();
   $attached = $this->Contract_model->count_attached_contracts();
 ?>
-<section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
-  <section class="secIndexTable">
-    <div class="mainTableWhite">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="tabelHeading">
-            <h3>active contracts' list | <small><a href="javascript:history.go(-1);"><div class="label label-warning">back</div></a>&nbsp;<a href=""><div class="label label-primary">active</div></a></small></h3>
+<form action="<?php echo base_url('contract/bulk_update'); ?>" method="post">
+  <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
+    <section class="secIndexTable">
+      <div class="mainTableWhite">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="tabelHeading">
+              <h3>active contracts' list | <small><a href="javascript:history.go(-1);"><div class="label label-warning">back</div></a>&nbsp;<a href=""><div class="label label-primary">active</div></a></small></h3>
+            </div>
+          </div>
+          <div class="col-md-5 text-right">
+            <div class="tabelTopBtn status-btns">
+              <span id="active" class="btn"><b><?= $active; ?></b> Active</span>
+              <span id="printed" class="btn"><b><?= $printed; ?></b> Printed</span>
+              <span id="distributed" class="btn"><b><?= $distributed; ?></b> Distributed</span>
+              <span id="attached" class="btn"><b><?= $attached; ?></b> Attached to File</span>
+            </div>
+          </div>
+          <div class="col-md-3 text-right" id="printBtn" style="display: block; font-size: 30px; margin-top: 5px; margin-left: -14px;">
+            <button class="btn btn-success" disabled><i class="fa fa-arrow-right"></i></button>
+            <a data-toggle="tooltip" title="Print contracts." data-placement="left" target="blank" href="<?php echo base_url('contract/print_all_contracts'); ?>" class="btn btn-primary"><i class="fa fa-print"></i></a>
+            <button data-toggle="tooltip" title="Distribute contracts." data-placement="left" type="submit" name="distribute_bulk" class="btn btn-info"><i class="fa fa-share"></i></button>
+            <button data-toggle="tooltip" title="Attach to personal file." data-placement="left" type="submit" name="attach_bulk" class="btn btn-primary"><i class="fa fa-forward"></i></button>
           </div>
         </div>
-        <div class="col-md-5 text-right">
-          <div class="tabelTopBtn status-btns">
-            <span id="active" class="btn"><b><?= $active; ?></b> Active</span>
-            <span id="printed" class="btn"><b><?= $printed; ?></b> Printed</span>
-            <span id="distributed" class="btn"><b><?= $distributed; ?></b> Distributed</span>
-            <span id="attached" class="btn"><b><?= $attached; ?></b> Attached to File</span>
-          </div>
-        </div>
-        <div class="col-md-3 text-right" id="printBtn" style="display: none; font-size: 30px; margin-top: 5px; margin-left: -14px;">
-          <a data-toggle="tooltip" title="Activated contracts, no further action needed, you can print them if not printed !" data-placement="left" href="javascript:void(0)"><i class="fa fa-arrow-circle-right" style="color: green;"></i></a>
-          <a target="blank" data-toggle="tooltip" title="Print Contracts" data-placement="left" href="<?= base_url('contract/print_all_contracts'); ?>"><i class="fa fa-print"></i></a>
-          <a target="blank" data-toggle="tooltip" title="Add to distributed" data-placement="left" href="<?= base_url('contract/bulk_distribute'); ?>"><i class="fa fa-share"></i></a>
-          <a target="blank" data-toggle="tooltip" title="Attach to personal file" data-placement="left" href="<?= base_url('contract/bulk_attach'); ?>"><i class="fa fa-forward"></i></a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="tableMain">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th><input type="checkbox" name="checkPrint" id="checkAll"></th>
-                    <th>emp iD</th>
-                    <th>name</th>
-                    <th>project</th>
-                    <th>designation</th>
-                    <th>contract duration</th>
-                    <th>manger</th>
-                    <th>type</th>
-                    <th>submission date</th>
-                    <th>action</th>
-                  </tr>
-                </thead>
-                <tbody id="filter_results">
-                <?php
-                  foreach ($active_contracts as $contract){
-                  $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
-                  if($contract->status == 1){
-                ?>
-                <?php if($contract->employee_id): ?>
-                  <tr>
-                    <td>
-                      <input type="checkbox" name="print" id="checkPrint">
-                    </td>
-                    <td>
-                      CTC-<?= $contract->name.'-'.$contract->employee_id; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->first_name;?>
-                    </td>
-                    <td>
-                      <?php echo $contract->name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->designation_name; ?>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->from_date)).' - '.date('M d, Y', strtotime($contract->to_date)); ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->contract_manager; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->cont_type; ?>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
-                    </td>
-                    <td>
-                      <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->employee_id; ?>" class="btn btn-primary btn-xs">Print</a>
-                    </td>
-                  </tr>
-                <?php endif; ?>
-                  <?php } } ?>
-                </tbody>
-              </table>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="tableMain">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th><input type="checkbox" id="checkAll"></th>
+                      <th>emp iD</th>
+                      <th>name</th>
+                      <th>project</th>
+                      <th>designation</th>
+                      <th>contract duration</th>
+                      <th>manger</th>
+                      <th>type</th>
+                      <th>submission date</th>
+                      <th>action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="filter_results">
+                  <?php
+                    foreach ($active_contracts as $contract){
+                    $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
+                    if($contract->status == 1){
+                  ?>
+                  <?php if($contract->employee_id): ?>
+                    <tr>
+                      <td>
+                        <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $contract->user_id; ?>">
+                      </td>
+                      <td>
+                        CTC-<?= $contract->name.'-'.$contract->employee_id; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->first_name;?>
+                      </td>
+                      <td>
+                        <?php echo $contract->name; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->designation_name; ?>
+                      </td>
+                      <td>
+                        <?php echo date('M d, Y', strtotime($contract->from_date)).' - '.date('M d, Y', strtotime($contract->to_date)); ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->contract_manager; ?>
+                      </td>
+                      <td>
+                        <?php echo $contract->cont_type; ?>
+                      </td>
+                      <td>
+                        <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
+                      </td>
+                      <td>
+                        <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->employee_id; ?>" class="btn btn-primary btn-xs">Print</a>
+                      </td>
+                    </tr>
+                  <?php endif; ?>
+                    <?php } } ?>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6 text-center">
-          <?php echo $this->pagination->create_links(); ?>
+        <div class="row">
+          <div class="col-md-3"></div>
+          <div class="col-md-6 text-center">
+            <?php echo $this->pagination->create_links(); ?>
+          </div>
+          <div class="col-md-3"></div>
         </div>
-        <div class="col-md-3"></div>
       </div>
-    </div>
+    </section>
   </section>
-</section>
-<?php } ?>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('#checkAll').click(function(){
-      $('input:checkbox').not(this).prop('checked', this.checked);
+  <?php } ?>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('#checkAll').click(function(){
+        $('input:checkbox').not(this).prop('checked', this.checked);
+      });
     });
-  });
-  // Show and hide buttons for printing and activating contracts.
-  $(function () {
-    $("#checkAll").click(function () {
-      if ($(this).is(":checked")) {
-        $("#printBtn").hide(1500, "swing");
-        $("#printBtn").show(1500, "swing");
-      } else {
-        $("#printBtn").show(1500, "linear");
-        $("#printBtn").hide(1500, "linear");
-      }
-    });
-  });
-</script>
-<!-- Change data with status change -->
-<script type="text/javascript">
-  $(document).ready(function(){
-    var status = 0;
-    $('.btn').on('click', function(){
-      $('#filter_results').html('');
-      status = $(this).attr('id');
-      if(status == 'active')
-        status = 1;
-      else if(status == 'printed')
-        status = 2;
-      else if(status == 'distributed')
-        status = 3;
-      else if(status == 'attached')
-        status = 4;
-      else
-        status = 1;
-      $.ajax({
-        url: '<?= base_url(); ?>contract/get_printed/' + status,
-        type: 'post',
-        dataType: 'json',
-        data: {status: status},
-        success: function(res){
-          result = "";
-          $.each(res, function(key, val){
-            var fromDate = new Date(val.from_date).toDateString();
-            var toDate = new Date(val.to_date).toDateString();
-            var subDate = new Date(val.sdt).toDateString();
-            if(val.status == 1){
-              result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td>
-                  <a data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/${val.user_id}" class="btn btn-primary btn-xs">Print</a>
-                </td>
-              </tr>
-            `;
-            }else if(val.status == 2){
-              result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td>
-                  <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.employee_id}" class="btn btn-primary btn-xs">Distribute</a>
-                </td>
-              </tr>
-            `;
-          }else if(val.status == 3){
-            result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td>
-                  <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.employee_id}" class="btn btn-primary btn-xs">Attach to File</a>
-                </td>
-              </tr>
-            `;
-          }else if(val.status == 4){
-            result += `
-              <tr>
-                <td><input type="checkbox" name="print" id="checkPrint"></td>
-                <td>CTC-${val.name}-${val.employee_id}</td>
-                <td>${val.first_name}</td>
-                <td>${val.name}</td>
-                <td>${val.designation_name}</td>
-                <td>${fromDate} - ${toDate}</td>
-                <td>${val.contract_manager}</td>
-                <td>${val.cont_type}</td>
-                <td>${subDate}</td>
-                <td><button data-toggle="tooltip" title="Attached to personal file, no further actions needed!" class="btn btn-success btn-xs">Completed !</button></td>
-              </tr>
-            `;
-          }
-          });
-          $('#filter_results').append(result);
+    // Show and hide buttons for printing and activating contracts.
+    $(function () {
+      $("#checkAll").click(function () {
+        if ($(this).is(":checked")) {
+          $("#printBtn").hide(1500, "swing");
+          $("#printBtn").show(1500, "swing");
+        } else {
+          $("#printBtn").show(1500, "linear");
+          $("#printBtn").hide(1500, "linear");
         }
       });
     });
-  });
-</script>
+  </script>
+  <!-- Change data with status change -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var status = 0;
+      $('.btn').on('click', function(){
+        $('#filter_results').html('');
+        status = $(this).attr('id');
+        if(status == 'active')
+          status = 1;
+        else if(status == 'printed')
+          status = 2;
+        else if(status == 'distributed')
+          status = 3;
+        else if(status == 'attached')
+          status = 4;
+        else
+          status = 1;
+        $.ajax({
+          url: '<?= base_url(); ?>contract/get_printed/' + status,
+          type: 'post',
+          dataType: 'json',
+          data: {status: status},
+          success: function(res){
+            result = "";
+            $.each(res, function(key, val){
+              var fromDate = new Date(val.from_date).toDateString();
+              var toDate = new Date(val.to_date).toDateString();
+              var subDate = new Date(val.sdt).toDateString();
+              if(val.status == 1){
+                result += `
+                <tr>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
+                  <td>CTC-${val.name}-${val.employee_id}</td>
+                  <td>${val.first_name}</td>
+                  <td>${val.name}</td>
+                  <td>${val.designation_name}</td>
+                  <td>${fromDate} - ${toDate}</td>
+                  <td>${val.contract_manager}</td>
+                  <td>${val.cont_type}</td>
+                  <td>${subDate}</td>
+                  <td>
+                    <a data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/${val.user_id}" class="btn btn-primary btn-xs">Print</a>
+                  </td>
+                </tr>
+              `;
+              }else if(val.status == 2){
+                result += `
+                <tr>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
+                  <td>CTC-${val.name}-${val.employee_id}</td>
+                  <td>${val.first_name}</td>
+                  <td>${val.name}</td>
+                  <td>${val.designation_name}</td>
+                  <td>${fromDate} - ${toDate}</td>
+                  <td>${val.contract_manager}</td>
+                  <td>${val.cont_type}</td>
+                  <td>${subDate}</td>
+                  <td>
+                    <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.employee_id}" class="btn btn-primary btn-xs">Distribute</a>
+                  </td>
+                </tr>
+              `;
+            }else if(val.status == 3){
+              result += `
+                <tr>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
+                  <td>CTC-${val.name}-${val.employee_id}</td>
+                  <td>${val.first_name}</td>
+                  <td>${val.name}</td>
+                  <td>${val.designation_name}</td>
+                  <td>${fromDate} - ${toDate}</td>
+                  <td>${val.contract_manager}</td>
+                  <td>${val.cont_type}</td>
+                  <td>${subDate}</td>
+                  <td>
+                    <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.employee_id}" class="btn btn-primary btn-xs">Attach to File</a>
+                  </td>
+                </tr>
+              `;
+            }else if(val.status == 4){
+              result += `
+                <tr>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
+                  <td>CTC-${val.name}-${val.employee_id}</td>
+                  <td>${val.first_name}</td>
+                  <td>${val.name}</td>
+                  <td>${val.designation_name}</td>
+                  <td>${fromDate} - ${toDate}</td>
+                  <td>${val.contract_manager}</td>
+                  <td>${val.cont_type}</td>
+                  <td>${subDate}</td>
+                  <td><button data-toggle="tooltip" title="Attached to personal file, no further actions needed!" class="btn btn-success btn-xs">Completed !</button></td>
+                </tr>
+              `;
+            }
+            });
+            $('#filter_results').append(result);
+          }
+        });
+      });
+    });
+  </script>
+</form>

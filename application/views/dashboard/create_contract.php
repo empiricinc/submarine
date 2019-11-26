@@ -36,7 +36,11 @@
                 <select class="form-control" id="contract_type">
                   <option value="">Select Type...</option>
                   <?php foreach($types as $type): ?>
-                    <option value="<?php echo htmlspecialchars($type->contract_format); ?>">
+                    <option value="<?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                  $subject = $type->contract_format;
+                 $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => date("F jS, Y", strtotime($applicant->created_at)), '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
+                      <?php echo htmlspecialchars(str_replace($find, $replace, $subject)); ?>">
                       <?php echo $type->name; ?>
                     </option>
                   <?php endforeach; ?>
@@ -44,6 +48,9 @@
               </div><br><br><br>
               <div class="col-lg-12">
                 <textarea class='editor' name='long_description'>
+                  <?php
+
+                  ?>
                   <?php if(!empty($cr_contract)){ echo $cr_contract['long_description']; }elseif(!empty($extension)){ echo $extension['long_description']; } ?>
                 </textarea><br><br>
               </div>
@@ -66,18 +73,6 @@
 <script src='<?= base_url(); ?>assets/tinymce/tinymce.min.js'></script>
 <!-- Script -->
 <script>
-  var name = '<?php if(!empty($applicant)){ echo trim($applicant->fullname); } ?>';
-  var designation = '<?php if(!empty($applicant)){ echo trim($applicant->designation_name); } ?>';
-  var province = '<?php if(!empty($applicant)){ echo trim($applicant->name); } ?>';
-  var district = '<?php if(!empty($applicant)){ echo trim($applicant->dist_name); } ?>';
-  var start_date = new Date($('#from_date').val()).toDateString();
-  var end_date = new Date($('#to_date').val()).toDateString();
-  var gender = '<?php if(!empty($applicant) AND $applicant->gender == '0'){ echo 'Mr.'; }else{ echo 'Ms.'; } ?>';
-  var date = '<?php echo date('F y'); ?>';
-  var cnic = '<?php if(!empty($applicant)){ echo trim($applicant->cnic); } ?>';
-  var session = '<?php echo substr(ucfirst($session["username"]), 0, 1); ?>';
-  var logged_user = '<?php echo ucfirst(trim($session["username"])); ?>';
-  var logged_email = '<?php echo trim($session['email']); ?>';
 tinymce.init({ 
   selector:'.editor',
   theme: 'modern',
@@ -95,21 +90,6 @@ tinymce.init({
         });
     },
     plugins: "variable, code, advlist, autolink, image, lists, charmap, print, preview, hr, pagebreak, anchor, searchreplace, wordcount, visualblocks, visualchars, fullscreen, insertdatetime, media, nonbreaking, save, table, contextmenu, directionality, emoticons, template, paste, textcolor, fullpage, spellchecker, lineheight",
-    variable_mapper: {  // Will look for variables in replace them with the text.
-        name: name,
-        designation: designation,
-        address: 'Hayat Abad, Phase III',
-        district: district,
-        province: province,
-        cnic: cnic,
-        start_date: start_date,
-        end_date: end_date,
-        date: date,
-        session: session,
-        logged_user: logged_user,
-        logged_email: logged_email,
-        gender: gender
-    },
     templates: [
       { 
         title: 'New Table',
@@ -127,19 +107,7 @@ tinymce.init({
         description: 'New list with date formats in it...',
         content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
       }
-    ],
-    template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
-    template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
-    height: 600,
-    image_caption: true,
-    quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
-    noneditable_noneditable_class: "mceNonEditable",
-    toolbar_drawer: 'sliding',
-    contextmenu: "link image imagetools table",
-    variable_prefix: '{{',
-    variable_suffix: '}}',
-    variable_class: 'bbbx-my-variable',
-    variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date', 'session', 'logged_user', 'cell', 'gender']
+    ]
 });
 // Get offer letter from database to the textarea.
 $(function() {

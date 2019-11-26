@@ -22,7 +22,11 @@
                 <select name="offer_letter_type" class="form-control" id="offer_type">
                   <option value="">Select type...</option>
                   <?php foreach($letters as $letter): ?>
-                    <option value="<?php echo htmlspecialchars($letter->offer_letter_text); ?>">
+                    <option value="<?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                  $subject = $letter->offer_letter_text;
+                 $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => date("F jS, Y", strtotime($applicant->created_at)), '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
+                      <?php echo str_replace($find, $replace, $subject); ?>">
                       <?php echo $letter->offer_letter_type; ?>
                     </option>
                   <?php endforeach; ?>
@@ -30,7 +34,12 @@
               </div><br><br><br>
               <div class="col-lg-12">
                 <textarea class='editor' name='offer_letter' id='letter_type'>
-                  <?php if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?>
+                  <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                  // $contract = $this->Contract_model->applicant_data();
+                  $subject = $letter_exists['attachment'];
+                 $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => date("F jS, Y", strtotime($applicant->created_at)), '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
+                  <?php echo str_replace($find, $replace, $subject);//if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?>
                 </textarea><br><br>
               </div>
               <div class="col-lg-12">
@@ -52,17 +61,6 @@
 <script src='<?= base_url(); ?>assets/tinymce/tinymce.min.js'></script>
 
 <script type="text/javascript">
-  var name = '<?php if(!empty($applicant)){ echo trim($applicant->fullname); } ?>';
-  var designation = '<?php if(!empty($applicant)){ echo trim($applicant->designation_name); } ?>';
-  var province = '<?php if(!empty($applicant)){ echo trim($applicant->name); } ?>';
-  var district = '<?php if(!empty($applicant)){ echo trim($applicant->dist_name); } ?>';
-  var start_date = '<?php if(!empty($applicant)){ echo date("F jS, Y", strtotime($applicant->created_at)); } ?>';
-  var gender = '<?php if(!empty($applicant) AND $applicant->gender == 0){ echo 'Mr.'; }else{ echo 'Ms.'; } ?>';
-  var date = '<?php echo date("M y"); ?>';
-  var cnic = '<?php  if(!empty($applicant)){ echo trim($applicant->cnic); } ?>';
-  var session = '<?php echo substr(ucfirst($session["username"]), 0, 1); ?>';
-  var logged_user = '<?php echo ucfirst($session["username"]); ?>';
-  var logged_email = '<?php echo trim($session['email']); ?>';
 tinymce.init({
     // basic tinyMCE stuff
     selector: ".editor",
@@ -100,51 +98,33 @@ tinymce.init({
     // },
     // variable plugin related
     plugins: "variable, code, advlist, autolink, image, lists, charmap, print, preview, hr, pagebreak, anchor, searchreplace, wordcount, visualblocks, visualchars, fullscreen, insertdatetime, media, nonbreaking, save, table, contextmenu, directionality, emoticons, template, paste, textcolor, fullpage, spellchecker, lineheight",
-    variable_mapper: {  // Will look for variables in replace them with the text.
-        name: name,
-        designation: designation,
-        address: 'Hayat Abad, Phase III',
-        district: district,
-        province: province,
-        cnic: cnic,
-        start_date: start_date,
-        end_date: start_date,
-        date: date,
-        session: session,
-        logged_user: logged_user,
-        logged_email: logged_email,
-        gender: gender
-    },
-    templates: [
-      { 
-        title: 'New Table',
-        description: 'Creates a new table',
-        content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"></th></tr><tr><td></td><td> </td></tr><tr><td></td></tr></table></div>'
-      },
-      { 
-        title: 'Story',
-        // src: 'htpp://localhost/submarine/tests',
-        description: 'The Jungle Book',
-        content: 'Once upon a time, there was a jungle, a boy went into that. A lion came and took the boy with itself. The boy grown up in the jungle. They named the boy Tarzan...'
-      },
-      {
-        title: 'List with Dates',
-        description: 'New list with date formats in it...',
-        content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>'
-      }
-    ],
+    // variable_mapper: {  // Will look for variables in replace them with the text.
+    //     name: name,
+    //     designation: designation,
+    //     address: 'Hayat Abad, Phase III',
+    //     district: district,
+    //     province: province,
+    //     cnic: cnic,
+    //     start_date: start_date,
+    //     end_date: start_date,
+    //     date: date,
+    //     session: session,
+    //     logged_user: logged_user,
+    //     logged_email: logged_email,
+    //     gender: gender
+    // },
     template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
     template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
     height: 600,
     image_caption: true,
     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
     noneditable_noneditable_class: "mceNonEditable",
-    toolbar_drawer: 'sliding',
-    contextmenu: "link image imagetools table",
-    variable_prefix: '{{',
-    variable_suffix: '}}',
-    variable_class: 'bbbx-my-variable',
-    variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date', 'session', 'gender', 'logged_user', 'logged_email']
+    //toolbar_drawer: 'sliding',
+    //contextmenu: "link image imagetools table",
+    //variable_prefix: '{{',
+    //variable_suffix: '}}',
+    //variable_class: 'bbbx-my-variable',
+    //variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date', 'session', 'gender', 'logged_user', 'logged_email']
 });
 
 // Get offer letter from database to the textarea.

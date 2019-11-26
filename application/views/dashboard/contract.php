@@ -174,7 +174,7 @@ h4 {
                           <?php echo $contract->dom_name; ?>
                         </td>
                         <td>
-                          <?php echo $contract->gender_name; ?>
+                          <?php if($contract->gender == 0){ echo 'Male'; }else{ echo 'Female'; } ?>
                         </td>
                         <td>
                           <?php echo $contract->email; ?>
@@ -327,7 +327,8 @@ h4 {
                                       <?php $session1 = $this->session->userdata('username'); ?>
                                       <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
                                       $subject = $contract->long_description;
-                                      $replace = array('{{name}}' => $contract->first_name.' '.$contract->last_name, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->cityName, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->from_date)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic);
+                                      $gender = $contract->gender == 0 ? 'Mr.' : 'Ms.';
+                                      $replace = array('{{name}}' => $contract->first_name.' '.$contract->last_name, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->cityName, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->from_date)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic, '{{gender}}' => $gender);
                                       echo str_replace($find, $replace, $subject); ?>
                                     </div>
                                   </div>

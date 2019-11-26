@@ -181,7 +181,7 @@ h4 {
                       <?php echo $contract->dom_name; ?>
                     </td>
                     <td>
-                      <?php echo $contract->gender_name; ?>
+                      <?php if($contract->gender == 0){ echo "Male"; }else{ echo "Female"; } ?>
                     </td>
                     <td>
                       <?php echo $contract->email; ?>

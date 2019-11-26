@@ -35,6 +35,7 @@ class Contract_model extends CI_Model {
 		                     xin_job_applications.application_id,
 		                     xin_job_applications.cnic,
 		                     xin_job_applications.city_name,
+		                     xin_job_applications.gender,
 		                     district.id,
 		                     district.name as cityName');
 		$this->db->from('employee_contract');
@@ -52,7 +53,7 @@ class Contract_model extends CI_Model {
 	 	return $query->result();
 	}
 	// Contract information -- Manager.
-	public function contract_information_manager($projid, $provid) {
+	public function contract_information_manager($limit, $offset, $projid, $provid) {
 	 	$this->db->select('employee_contract.*,
 			 	 					xin_contract_type.contract_type_id,
 			 	 					xin_contract_type.name as cont_type,
@@ -70,7 +71,13 @@ class Contract_model extends CI_Model {
 			 	 					xin_designations.designation_id,
 			 	 					xin_designations.designation_name,
 	                        provinces.id,
-	                        xin_departments.department_id');
+	                        xin_departments.department_id,
+	                        xin_job_applications.application_id,
+		                     xin_job_applications.cnic,
+		                     xin_job_applications.city_name,
+		                     xin_job_applications.gender,
+		                     district.id,
+		                     district.name as cityName');
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
 		$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
@@ -78,9 +85,11 @@ class Contract_model extends CI_Model {
 		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
+      $this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
+      $this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
       $this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
       $this->db->order_by('employee_contract.id', 'DESC');
-		$this->db->limit(10);
+		$this->db->limit($limit, $offset);
 	 	$query = $this->db->get();
 	 	return $query->result();
 	}
@@ -255,8 +264,6 @@ class Contract_model extends CI_Model {
 			 	 					xin_job_applications.email,
 			 	 					xin_job_applications.message,
 			 	 					xin_job_applications.created_at,
-			 	 					gender.gender_id,
-			 	 					gender.gender_name,
 			 	 					provinces.id,
 			 	 					provinces.name,
 			 	 					city.id,
@@ -266,7 +273,7 @@ class Contract_model extends CI_Model {
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
 		$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
-		$this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
+		// $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
 		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
 		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
@@ -492,7 +499,6 @@ class Contract_model extends CI_Model {
 			 	 					xin_contract_type.contract_type_id,
 			 	 					xin_contract_type.name as cont_type,
 			 	 					xin_employees.employee_id,
-			 	 					xin_employees.user_id,
 			 	 					xin_employees.first_name,
 			 	 					xin_employees.last_name,
 			 	 					xin_employees.company_id as compID,
@@ -525,7 +531,6 @@ class Contract_model extends CI_Model {
 			 	 					xin_contract_type.contract_type_id,
 			 	 					xin_contract_type.name as cont_type,
 			 	 					xin_employees.employee_id,
-			 	 					xin_employees.user_id,
 			 	 					xin_employees.first_name,
 			 	 					xin_employees.last_name,
 			 	 					xin_employees.company_id as compID,
