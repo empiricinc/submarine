@@ -152,10 +152,11 @@ class Resignations extends MY_Controller
                         'status' => $status_id,
                         );
 
-        if($status_text == 'accepted' || $status_text == 'rejected')
+        if($status_text == 'issued' || $status_text == 'delete')
         {
             $updated_data['decision_by'] = $added_by;
             $updated_data['decision_date'] = $added_date;
+
         }
 
         $update_resignation = $this->Resignations_model->update($resignation_id, $updated_data);
@@ -170,13 +171,12 @@ class Resignations extends MY_Controller
 
         $add_comment = $this->Resignations_model->add($data);
 
-        if($status_text == 'accepted')
+        if($status_text == 'issued')
         {
             $this->update_job_position($resignation_id, '0');
 
             if(date('Y-m-d') == $resignation_date)
                 $this->Resignations_model->update_employee_resignation_status($employee_id, '5', '0');
-
             
         }
       
@@ -251,7 +251,7 @@ class Resignations extends MY_Controller
 
         $this->db->select('xer.resignation_id, xer.employee_id, xe.job_code');
         $this->db->join('xin_employees xe', 'xer.employee_id = xe.employee_id', 'left');
-        $this->db->where(array('xer.resignation_date =' => $current_date));
+        $this->db->where(array('xer.resignation_date =' => $current_date, 'exit_interview_status' => '1'));
         $result = $this->db->get('xin_employee_resignations xer')->result();
 
         foreach ($result as $r) {

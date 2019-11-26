@@ -43,7 +43,7 @@
 						
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="doj" value="" id="doj" class="form-control prev-date" placeholder="Date Of Joining" data-toggle="tooltip" title="Date Of Joining">
+								<input type="text" name="doj" value="" id="doj" class="form-control field-joining-date" placeholder="Date Of Joining" data-toggle="tooltip" title="Date Of Joining">
 							</div>
 						</div>
 					</div>
@@ -99,7 +99,7 @@
 						</div>
 						<div class="col-lg-6">
 							<div class="inputFormMain">
-								<input type="text" name="cnic_expiry" value="" id="check-cnic-expiry" class="form-control date cnic-expiry" placeholder="CNIC Expiry" data-toggle="tooltip" title="CNIC Expiry" required>
+								<input type="text" name="cnic_expiry" value="" id="check-cnic-expiry" class="form-control date-onward cnic-expiry" placeholder="CNIC Expiry" data-toggle="tooltip" title="CNIC Expiry" required>
 							</div>
 						</div>
 						<div class="col-lg-6">

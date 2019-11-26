@@ -885,7 +885,11 @@ class Disciplinary extends MY_Controller
     		$initials .= $n[0];
     	}
     	
+    	
     	$template = '';
+    	if(!empty($data))
+    		$template = $data->description;
+
     	if(!empty($title_array[0]))
     	{
 	    	$short_title = $title_array[1];
@@ -898,7 +902,6 @@ class Disciplinary extends MY_Controller
 	    	
 	    	$image_path = base_url().'uploads/signatures/'.$imgName;
 
-	    	$template = $data->description;
 	    	$template = str_replace('[[name]]', $name, $template);
 	    	$template = str_replace('[[initial]]', strtoupper($initials), $template);
 	    	

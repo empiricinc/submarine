@@ -61,8 +61,7 @@
 
 		$('.date').datepicker({
 			dateFormat: 'yy-mm-dd',
-			changeYear: true,
-			maxDate: 0
+			changeYear: true
 		});
 
 		$('.date-onward').datepicker({
@@ -95,6 +94,20 @@
 			changeYear: true,
 			maxDate: 0,
 			dateFormat:'yy-mm'
+		});
+
+		$('.disciplinary-reporting-date').datepicker({
+			changeYear: false,
+			maxDate: 0,
+			minDate: '-2d',
+			dateFormat: 'yy-mm-dd'
+		});
+
+		$('.field-joining-date').datepicker({
+			changeYear: false,
+			maxDate: 0,
+			minDate: '-7d',
+			dateFormat: 'yy-mm-dd'
 		});
 
 	</script>

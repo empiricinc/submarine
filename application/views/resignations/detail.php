@@ -13,9 +13,11 @@
 									<?= $title; ?>
 									<br>
 					
+					<?php if($detail->status_text != 'deleted'): ?>
 					<small>
 						<a href="<?= base_url(); ?>Exit_interview/form/<?= $detail->resignation_id; ?>" style="text-decoration: underline !important;">Employee's Exit Interview Form</a>
-					</small>				
+					</small>
+					<?php endif; ?>				
 
 								</h3>
 
@@ -35,14 +37,10 @@
 									</div>
 								</div>
 
-
-								<?php if($detail->status_text != 'accepted' AND $detail->status_text != 'rejected' AND $detail->status_text != 'reversal'): ?>
-									<button type="button" class="btn btn-sm btn-danger resignation-status-btn" data-text="rejected">
-										<i class="fa fa-trash"></i> DELETE
-									</button>
-								<?php endif; ?>
 								
-								<?php if($detail->status_text == 'accepted' || $detail->status_text == 'rejected'): ?>
+							<?php if($detail->status_text != 'deleted'): ?>
+								
+								<?php if(in_array($detail->status_text, array('issued', 'printed', 'delivered'))): ?>
 									<button type="button" class="btn btn-sm btn-warning reversion-btn" data-text="reversal">
 										<i class="fa fa-archive"></i> REVERSAL
 									</button>
@@ -69,20 +67,19 @@
 										<i class="fa fa-archive"></i> DELIVER
 									</button>
 
-								<?php } elseif($detail->status_text == 'delivered') { ?>
-
-									<button type="button" class="btn btn-sm btn-primary resignation-status-btn" data-text="accepted" 
-									<?php if($detail->exit_interview_status == '0') { ?>
-										disabled
-									<?php } ?>
-									>
-										<i class="fa fa-archive"></i> ACCEPTED
-									</button>
-
-									<button type="button" class="btn btn-sm btn-primary resignation-status-btn" data-text="rejected">
-										<i class="fa fa-archive"></i> REJECTED
-									</button>
 								<?php } ?>
+
+								<?php if(!in_array($detail->status_text, array('issued', 'printed', 'delivered', 'reversal'))) { ?>
+
+									<button type="button" class="btn btn-sm btn-danger resignation-status-btn" data-text="deleted">
+										<i class="fa fa-trash"></i> DELETE
+									</button>
+
+								<?php } ?>
+
+							<?php endif; ?>
+							
+
 							</div>
 						</div>
 						<div class="col-md-2 text-right">
@@ -307,6 +304,7 @@
 									Acceptance Letter
 								</h3>
 							</div>
+							<?php if(in_array($detail->status_text, array('issued', 'printed', 'delivered'))): ?>
 							<div class="col-lg-4" style="margin-top: 15px; text-align: right; padding-right: 5px;">
 									<button type="button" class="btn btn-sm btn-success" id="save-letter">
 										<i class="fa fa-save"></i> Save
@@ -320,6 +318,7 @@
 										<i class="fa fa-print"></i> Print Letter
 									</button>
 							</div>
+							<?php endif; ?>
 						</div>
 					</div>
 
