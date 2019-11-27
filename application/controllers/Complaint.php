@@ -401,10 +401,78 @@ class Complaint extends MY_Controller
 		$this->load->view('complaint/_template', $data);
 	}
 
+
+	function get_provinces()
+	{
+		$this->ajax_check();
+		$project_id = $this->input->post('project_id');
+		$provinces = $this->Complaint_model->get_project_provinces($project_id);
+		$designations = $this->Complaint_model->get_project_designations($project_id);
+		$employees = $this->Complaint_model->get_project_employees($project_id);
+		$query = $this->db->last_query();
+		$this->json_response(array('provinces' => $provinces, 'designations' => $designations, 'employees' => $employees, 'query' => $query));
+	}
+
+	function get_districts()
+	{
+		$this->ajax_check();
+		$project_id = $this->input->post('project_id');
+		$province_id = $this->input->post('province_id');
+
+		$districts = $this->Complaint_model->get_project_districts($province_id, $project_id);
+		$designations = $this->Complaint_model->get_project_designations($project_id, $province_id, 'province');
+		$employees = $this->Complaint_model->get_project_employees($project_id, $province_id, 'province');
+
+		$this->json_response(array('districts' => $districts, 'designations' => $designations, 'employees' => $employees));
+	}
+
+	function get_tehsils()
+	{
+		$this->ajax_check();
+		$project_id = $this->input->post('project_id');
+		$district_id = $this->input->post('district_id');
+		$tehsils = $this->Complaint_model->get_project_tehsils($district_id, $project_id);
+		$designations = $this->Complaint_model->get_project_designations($project_id, $district_id, 'district');
+		$employees = $this->Complaint_model->get_project_employees($project_id, $district_id, 'district');
+
+		$this->json_response(array('tehsils' => $tehsils, 'designations' => $designations, 'employees' => $employees));
+	}
+
+	function get_union_councils()
+	{
+		$this->ajax_check();
+		$project_id = $this->input->post('project_id');
+		$tehsil_id = $this->input->post('tehsil_id');
+		$union_councils = $this->Complaint_model->get_project_ucs($tehsil_id, $project_id);
+		$designations = $this->Complaint_model->get_project_designations($project_id, $tehsil_id, 'tehsil');
+		$employees = $this->Complaint_model->get_project_employees($project_id, $tehsil_id, 'tehsil');
+
+		$this->json_response(array('ucs' => $union_councils, 'designations' => $designations, 'employees' => $employees));
+	}
+
+	function get_uc_designations()
+	{
+		$this->ajax_check();
+		$project_id = $this->input->post('project_id');
+		$uc_id = $this->input->post('uc_id');
+		$designations = $this->Complaint_model->get_project_designations($project_id, $uc_id, 'uc');
+		$employees = $this->Complaint_model->get_project_employees($project_id, $uc_id, 'uc');
+
+		$this->json_response(array('designations' => $designations, 'employees' => $employees));
+	}
+
+	function get_employees()
+	{
+		$this->ajax_check();
+		$designation_id = $this->input->post('designation_id');
+		$employees = $this->Complaint_model->get_employees_by_designation($designation_id);
+
+		$this->json_response($employees);
+	}
+
 	
 	function add()
 	{
-
 		if(isset($_POST['submit']))
 		{
 			$this->form_validation->set_rules('project', 'Project', 'required');
@@ -480,6 +548,33 @@ class Complaint extends MY_Controller
 		{
 			show_404();
 		}
+	}
+
+	function district($province_id="")
+	{
+		$this->ajax_check();
+		$this->db->where('province_id', $province_id);
+		$district = $this->db->get('district')->result();
+
+		$this->json_response($district);
+	}
+
+	function tehsil($district_id="")
+	{
+		$this->ajax_check();
+		$this->db->where('district_id', $district_id);
+		$tehsil = $this->db->get('tehsil')->result();
+
+		$this->json_response($tehsil);
+	}
+
+	function uc($tehsil_id="")
+	{
+		$this->ajax_check();
+		$this->db->where('tehsil_id', $tehsil_id);
+		$uc = $this->db->get('union_councel');
+
+		$this->json_response($uc);
 	}
 
 

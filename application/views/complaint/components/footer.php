@@ -131,6 +131,8 @@
 	<script type="text/javascript">
 		function ucwords($str)
 		{
+			if($str == null)
+				return;
 			$str = $str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
 			    return letter.toUpperCase();
 			});
@@ -189,12 +191,12 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Investigation/get_provinces',
+				url: '<?= base_url(); ?>Complaint/get_provinces',
 				type: 'POST',
 				dataType: 'json',
 				data: {project_id: project},
 				success: function (response) {
-					// console.log(response.data.query);
+					console.log(response.data.query);
 					var province = response.data.provinces;
 					var designation = response.data.designations;
 					var employees = response.data.employees;
@@ -232,12 +234,12 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Investigation/get_districts',
+				url: '<?= base_url(); ?>Complaint/get_districts',
 				type: 'POST',
 				dataType: 'json',
 				data: {province_id: province, project_id: project},
 				success: function (response) {
-
+					console.log(response.data.query);
 					var district = response.data.districts;
 					var designation = response.data.designations;
 					var employees = response.data.employees;
@@ -272,7 +274,7 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Investigation/get_tehsils',
+				url: '<?= base_url(); ?>Complaint/get_tehsils',
 				type: 'POST',
 				dataType: 'json',
 				data: {district_id: district, project_id: project},
@@ -309,7 +311,7 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Investigation/get_union_councils',
+				url: '<?= base_url(); ?>Complaint/get_union_councils',
 				type: 'POST',
 				dataType: 'json',
 				data: {tehsil_id: tehsil, project_id: project},
@@ -346,7 +348,7 @@
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Investigation/get_uc_designations',
+				url: '<?= base_url(); ?>Complaint/get_uc_designations',
 				type: 'POST',
 				dataType: 'json',
 				data: {uc_id: uc, project_id: project},
@@ -368,23 +370,35 @@
 		$('#designation').on('change', function() {
 			
 			var designation = $(this).val();
+			var project = $('#project option:selected').val();
+			var province = $('#province option:selected').val();
+			var district = $('#district option:selected').val();
+			var tehsil = $('#tehsil option:selected').val();
+			var uc = $('#uc option:selected').val();
 			var employeeHandler = $('#employee').html('<option value="">Select Employee</option>');
 
 			if(designation == "")
 				return;
 
 			$.ajax({
-				url: '<?= base_url(); ?>Investigation/get_employees',
+				url: '<?= base_url(); ?>Complaint/get_employees',
 				type: 'POST',
 				dataType: 'json',
-				data: {designation_id: designation},
+				data: {designation_id: designation, project_id: project, province_id: province, district_id: district, tehsil_id: tehsil, uc_id: uc},
 				success: function(response) {
-					var obj = response.data;
+					console.log(response.data.query);
+					var employees = response.data.employees;
 					var emp_list = '';
-					$.each(obj, function(index, el) {
+					$.each(employees, function(index, el) {
 						emp_list += `<option value="${el.employee_id}">${ucwords(el.employee_name)}</option>`;
 					});
 
+					var designation = response.data.designations;
+					var designation_list = '';
+
+					employee_designation_tree(employees, designation);
+
+					$('.tree').css('visibility', 'visible');
 					employeeHandler.append(emp_list);
 				}
 			});
