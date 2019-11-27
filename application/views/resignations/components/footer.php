@@ -16,7 +16,7 @@
     				<input type="hidden" name="resignation_date" value="<?= $detail->resignation_date; ?>">
     				<input type="hidden" name="employee_id" value="<?= $detail->employee_id; ?>">
     				<input type="hidden" name="status_text" class="status-text" value="">
-    				<input type="text" name="added_date" class="form-control date" placeholder="Date" required>
+    				<input type="text" name="added_date" class="form-control date-onward" placeholder="Date" required>
     			</div>
     			<div class="inputFormMain">
     				<textarea name="description" class="form-control" placeholder="Description" rows="5" required></textarea>

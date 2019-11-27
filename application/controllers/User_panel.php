@@ -53,7 +53,16 @@ class User_panel extends MY_Controller
 
 	public function basic_info()
 	{
-		$employee_id = $this->session->username['employee_id'];
+		// $employee_id = $this->session->username['employee_id'];
+
+		if ($this->uri->segment(3) === 'id')
+		{
+		    $employee_id = $this->uri->segment(4);
+		}
+		else
+		{
+		    $employee_id = $this->session->username['employee_id'];
+		}
 
 		if(!empty($employee_id))
 		{
@@ -421,11 +430,10 @@ class User_panel extends MY_Controller
 	{
 		$employee_id = $this->session->username['employee_id'];
 		$date = $this->input->post('salary_month');
-		$salary_month = date('Y-m', strtotime($date));
+		$salary_month = $data['salary_month'] = date('Y-m', strtotime($date));
 
 		$data['title'] = "Payroll Information";
 		$data['payroll'] = $this->User_panel_model->employee_payroll($employee_id, $salary_month);
-		$data['salary_month'] = $salary_month;
 		
 		$data['content'] = $this->load->view("user_panel/payroll", $data, TRUE);;
 		$this->load->view('user_panel/_template', $data);

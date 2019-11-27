@@ -261,6 +261,7 @@
 				success: function(response) {
 					$('.disciplinary').append(response);
 					reloadDatepicker('.date');
+					
 					$('input').attr('autocomplete','off');
 				}
 			});

@@ -77,7 +77,7 @@
 
 						<div class="col-lg-12">
 							<div class="inputFormMain">
-								<textarea name="description" id="description" class="form-control" rows="5" placeholder="Description" required></textarea>
+								<textarea name="description" id="description" class="form-control vresize" rows="5" placeholder="Description" required></textarea>
 							</div>
 						</div>
 					</div>

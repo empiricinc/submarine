@@ -105,8 +105,13 @@
 
 		$('.field-joining-date').datepicker({
 			changeYear: false,
-			maxDate: 0,
+			maxDate: '+7d',
 			minDate: '-7d',
+			dateFormat: 'yy-mm-dd'
+		});
+
+		$('.disciplinary-last-working-date').datepicker({
+			changeYear: true,
 			dateFormat: 'yy-mm-dd'
 		});
 
