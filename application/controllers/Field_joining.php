@@ -139,7 +139,6 @@ class Field_joining extends MY_Controller
 
 		$data['marital_status'] = $this->db->get('marital_status')->result();
 
-		$data['employees_table'] = $this->load->view('field_joining/employees-table', $data, TRUE);
 		$data['content'] = $this->load->view('field_joining/employees', $data, TRUE);
 		$this->load->view('field_joining/_template', $data);
 	}
