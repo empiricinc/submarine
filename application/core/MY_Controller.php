@@ -3,7 +3,7 @@
 class MY_Controller extends CI_Controller
 {
     public $limit = 10;
-    public $num_links = 5;
+    public $num_links = 3;
     public $permissions = array();
 
     public function __construct() {
@@ -31,11 +31,11 @@ class MY_Controller extends CI_Controller
 
         
     function ajax_check()
-        {
-            if (!$this->input->is_ajax_request()) {
-               exit('No direct script access allowed');
-            }
+    {
+        if (!$this->input->is_ajax_request()) {
+           exit('No direct script access allowed');
         }
+    }
 
     public function json_response($data)
     {
