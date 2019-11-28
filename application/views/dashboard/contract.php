@@ -90,7 +90,7 @@ h4 {
         <div class="col-md-12">
           <div class="headingMain">
             <h1>
-              Contract Management Dashboard
+              Contract Management Dashboard | <small><a href="<?php echo base_url('contract/contract_setup'); ?>"><i class="fa fa-plus"></i> Templates</a></small>
             </h1>
           </div>
         </div>
@@ -109,12 +109,8 @@ h4 {
             </div>
           </div>
           <div class="col-md-3 text-right" id="printBtn" style="font-size: 30px; margin-top: 8px; display: block;">
-            <?php $check = $this->db->get_where('employee_contract', array('long_description =' => NULL, 'status' => 0))->result(); ?>
-            <?php if(!$check): ?>
-              <button data-toggle="tooltip" title="Activate Multiple contracts." type="submit" name="activate_bulk" class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
-            <?php else: ?>
-              <button data-toggle="tooltip" title="Activate Multiple contracts." type="submit" class="btn btn-primary" name="activate_bulk"><i class="fa fa-arrow-right"></i></button>
-            <?php endif; ?>
+            <button data-toggle="tooltip" title="Activate Multiple contracts." type="submit" name="activate_bulk" class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
+            <button data-toggle="tooltip" title="Generate Contracts" type="submit" name="generate_bulk" class="btn btn-info">Generate</button>
             <a data-toggle="tooltip" title="Print all Contracts" target="blank" href="<?= base_url('contract/print_all_contracts'); ?>" class="btn btn-primary"><i class="fa fa-print"></i></a>
           </div>
             <div class="col-md-2 text-right">
@@ -310,7 +306,7 @@ h4 {
                       <td>
                         <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modalviewDetail<?php echo $i; ?>">View Contract</button>
                           <div class="modal fade" id="modalviewDetail<?php echo $i; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
+                            <div class="modal-dialog modal-lg" role="document">
                               <div class="modal-content">
                                   <!--Header-->
                                 <div class="modal-header">
@@ -322,8 +318,8 @@ h4 {
                                 <!--Body-->
                                 <div class="modal-body">
                                   <div class="row">
-                                    <div class="col-md-10 col-md-offset-1">
-                                      <h3 class="text-center"><strong>Description</strong></h3>
+                                    <div class="col-md-10 col-md-offset-1" id="printThis">
+                                      <!-- <h3 class="text-center"><strong>Description</strong></h3> -->
                                       <?php $session1 = $this->session->userdata('username'); ?>
                                       <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
                                       $subject = $contract->long_description;
@@ -335,9 +331,10 @@ h4 {
                                 </div>
                                 <!--Footer-->
                                 <div class="modal-footer">
-                                  <?php if($contract->status == 1): ?>
-                                    <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
-                                  <?php endif; ?>
+                                  <!-- <?php //if($contract->status == 1): ?>
+                                    <a target="blank" href="<?php //echo base_url(); ?>contract/print_contract/<?php //echo $contract->user_id; ?>" class="btn btn-primary">Print</a>
+                                  <?php //endif; ?> -->
+                                  <button onclick="printDiv('printThis');" class="btn btn-primary">Print</button>
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                               </div>
@@ -652,4 +649,13 @@ $(function () {
     }
   });
 });
+</script>
+<script type="text/javascript">
+  function printDiv(printThis){
+    var printContent = document.getElementById(printThis).innerHTML;
+    var originalContent = document.body.innerHTML;
+    document.body.innerHTML = printContent;
+    window.print();
+    document.body.innerHTML = originalContent;
+  }
 </script>

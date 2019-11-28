@@ -969,5 +969,99 @@ class Contract_model extends CI_Model {
 	 	// echo $this->db->last_query();
 	 	return $query->row();
 	 }
+	 // All applicants' data for contracts generation.
+	 public function applicants_data($ids){
+	 	$this->db->select('xin_job_applications.application_id,
+	 								xin_job_applications.job_id,
+	 								xin_job_applications.fullname,
+	 								xin_job_applications.gender,
+	 								xin_job_applications.province,
+	 								xin_job_applications.city_name,
+	 								xin_job_applications.cnic,
+	 								xin_job_applications.created_at,
+	 								xin_jobs.job_id,
+	 								xin_jobs.job_title,
+	 								xin_jobs.designation_id,
+	 								xin_jobs.company,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name,
+	 								provinces.id,
+	 								provinces.name,
+	 								district.id,
+	 								district.name as dist_name');
+	 	$this->db->from('xin_job_applications');
+	 	$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+	 	$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+	 	$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+	 	$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+	 	$this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
+	 	$this->db->where_in('xin_job_applications.application_id', $ids);
+	 	$query = $this->db->get();
+	 	// echo $this->db->last_query();
+	 	return $query->result();
+	 }
+	 // --------------------- Contract template setup --------------------------//
+	 // Get designations.
+	 public function get_designations(){
+	 	return $this->db->get('xin_designations')->result();
+	 }
+	 // Add new template.
+	 public function add_template($data){
+	 	$this->db->insert('xin_contract_type', $data);
+	 	if($this->db->affected_rows() > 0){
+	 		return true;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 // Check for existing templates. View and edit the existing template.
+	 public function template_exists($id){
+	 	$this->db->select('xin_contract_type.contract_type_id,
+	 								xin_contract_type.name,
+	 								xin_contract_type.contract_format,
+	 								xin_contract_type.designation,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('xin_contract_type');
+	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
+	 	$this->db->where('xin_contract_type.contract_type_id', $id);
+	 	return $this->db->get()->row_array();
+	 }
+	 // Count all templates to display pagination.
+	 public function count_templates(){
+	 	return $this->db->from('xin_contract_type')->count_all_results();
+	 }
+	 // Get templates
+	 public function get_templates($limit, $offset){
+	 	$this->db->select('xin_contract_type.*,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('xin_contract_type');
+	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
+	 	$this->db->limit($limit, $offset);
+	 	return $this->db->get()->result();
+	 }
+	 // Delete template.
+	 public function delete_template($id){
+	 	$this->db->where('contract_type_id', $id);
+	 	$this->db->delete('xin_contract_type');
+	 }
+	 // Update the template.
+	 public function update_template($id, $data){
+	 	$this->db->where('contract_type_id', $id);
+	 	$this->db->update('xin_contract_type', $data);
+	 	return true;
+	 }
+	 // Search templates.
+	 public function search_templates($keyword){
+	 	$this->db->select('xin_contract_type.*,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('xin_contract_type');
+	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
+	 	$this->db->like('xin_contract_type.name', $keyword);
+	 	$this->db->or_like('xin_designations.designation_name', $keyword);
+	 	return $this->db->get()->result();
+	 }
 }
 ?>

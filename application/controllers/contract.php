@@ -673,16 +673,55 @@ class Contract extends MY_Controller {
 			'status' => 1
 		);
 		$ids = $this->input->post('print');
-		if(isset($_POST['print'])){ // If checkbox is not checked, contract can't be activated.
+		if(isset($_POST['activate_bulk'])){ // If checkbox is not checked, contract can't be activated.
 			$this->db->where_in('user_id', $ids);
 			if($this->db->update('employee_contract', $data)){
-				$this->session->set_flashdata('messageactive', 'Contracts activated successfully');
+				$this->session->set_flashdata('messageactive', 'Contracts activated successfully.');
 				redirect($_SERVER['HTTP_REFERER']);
 			}else{
 				echo "The operation wasn't successful, please try again.";
 			}
+		}elseif(isset($_POST['generate_bulk'])){
+			$session = $this->session->userdata('username');
+			$applicants = $this->Contract_model->applicants_data($ids);
+			$formats = $this->db->get_where('xin_contract_type', array('contract_type_id' => 4))->row();
+            for($i = 0; $i < count($applicants); $i++){
+            	$find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{end_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+            	$start_date = date("F jS, Y", strtotime($applicants[$i]->created_at));
+            	$end_date = date('F jS, Y', strtotime($applicants[$i]->created_at));
+            	$gender = $applicants[$i]->gender == 0 ? "Mr." : "Ms.";
+        		$replace = array(
+            		'{{name}}' => $applicants[$i]->fullname,
+            		'{{designation}}'=>$applicants[$i]->designation_name,
+            		'{{district}}' => $applicants[$i]->dist_name,
+            		'{{date}}'=>date("M y"),
+            		'{{start_date}}' => $start_date,
+            		'{{end_date}}' => $end_date,
+            		'{{session}}'=> substr(strtoupper($session['username']), 0, 2),
+            		'{{logged_user}}' => ucfirst($session['username']),
+            		'{{logged_email}}' => $session['email'],
+            		'{{cnic}}' => $applicants[$i]->cnic,
+            		'{{gender}}' => $gender,
+            		'{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
+            		'{{province}}' => $applicants[$i]->name
+        		);
+            	$subject = $formats->contract_format;
+            	$save_format = str_replace($find, $replace, $subject);
+				$data2 = array(
+					'long_description' => $save_format
+				);
+				$this->db->where_in('user_id', $ids);
+				if($this->db->where('status', 0)->update('employee_contract', $data2)){
+					$this->session->set_flashdata('messageactive', 'Contracts generated successfully.');
+					redirect('contract');
+				}else{
+					echo "The operation wasn't successful, please try again.";
+					return false;
+				} // else.
+            } // For loop.
+            // exit;
 		}else{
-			echo "Just gimme one good reason of submitting an empty form, and I'll let you do it.";
+			echo "Select at least one checkbox from the list.";
 			return false;
 		}
 	}
@@ -1009,8 +1048,103 @@ class Contract extends MY_Controller {
 	  	$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
 	    $this->load->view('layout_main', $data); // Page load.
 	}
-
-	
+	// -------------------------- Contract setup (creating templates) ----------------------- //
+	// Load the form.
+	public function contract_setup(){
+		$data['parth_url'] = '';
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['subview'] = $this->load->view('dashboard/contract_setup', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
+	}
+	// Add new template.
+	public function add_template(){
+		$data = array(
+			'designation' => $this->input->post('designation'),
+			'name' => $this->input->post('cont_type'),
+			'contract_format' => $this->input->post('contract_format'),
+			'created_at' => $this->input->post('created_at')
+		);
+		if($this->Contract_model->add_template($data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template added successfully.');
+			redirect('contract/templates');
+		}else{
+			echo "The operation wasn't successful";
+		}
+	}
+	// Template list.
+	public function templates($offset = NULL){
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/templates');
+		$config['total_rows'] = $this->Contract_model->count_templates();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['path_url'] = '';
+		$data['templates'] = $this->Contract_model->get_templates($limit, $offset);
+		$data['subview'] = $this->load->view('dashboard/template_list', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
+	}
+	// View / Edit template
+	public function edit_template($id){
+		$data['path_url'] = '';
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['edit_template'] = $this->Contract_model->template_exists($id);
+		$data['subview'] = $this->load->view('dashboard/contract_setup', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
+	}
+	// Delete template.
+	public function delete_template($id){
+		if($this->Contract_model->delete_template($id)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been deleted successfully.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}else{
+			echo "The operation wasn't successful, try again.";
+		}
+	}
+	// Update template.
+	public function update_template(){
+		$id = $this->input->post('contract_type_id');
+		$data = array(
+			'designation' => $this->input->post('designation'),
+			'name' => $this->input->post('cont_type'),
+			'contract_format' => $this->input->post('contract_format')
+		);
+		if($this->Contract_model->update_template($id, $data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been updated successfully.');
+			redirect('contract/templates');
+		}else{
+			echo "The operation wasn't successful, try again.";
+		}
+	}
+	// Search templates.
+	public function search_templates(){
+		$keyword = $this->input->get('search_templates');
+		$data['results'] = $this->Contract_model->search_templates($keyword);
+		$data['path_url'] = '';
+		$data['subview'] = $this->load->view('dashboard/template_list', $data, TRUE);
+		$this->load->view('layout_main', $data);
+	}
 
 	// get company wise salary
 

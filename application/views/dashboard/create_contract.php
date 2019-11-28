@@ -36,10 +36,12 @@
                 <select class="form-control" id="contract_type">
                   <option value="">Select Type...</option>
                   <?php foreach($types as $type): ?>
-                    <option value="<?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                    <option value="<?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{end_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
                   $subject = $type->contract_format;
-                 $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
-                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => date("F jS, Y", strtotime($applicant->created_at)), '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
+                  $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  $start_date = date("F jS, Y", strtotime($cr_contract['from_date']));
+                  $end_date = date('F jS, Y', strtotime($cr_contract['to_date']));
+                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => $start_date, "{{end_date}}" => $end_date, '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
                       <?php echo htmlspecialchars(str_replace($find, $replace, $subject)); ?>">
                       <?php echo $type->name; ?>
                     </option>
