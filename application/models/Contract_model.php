@@ -1045,6 +1045,7 @@ class Contract_model extends CI_Model {
 	 public function delete_template($id){
 	 	$this->db->where('contract_type_id', $id);
 	 	$this->db->delete('xin_contract_type');
+	 	return true;
 	 }
 	 // Update the template.
 	 public function update_template($id, $data){

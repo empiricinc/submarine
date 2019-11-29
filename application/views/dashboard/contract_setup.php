@@ -21,8 +21,9 @@
             <input type="hidden" name="contract_type_id" value="<?php echo $this->uri->segment(3); ?>">
             <div class="col-lg-4">
               <select name="designation" class="form-control" required="">
-                <option value="">Select Cadre</option>.
-                <option value="<?php if(!empty($edit_template)){ echo $edit_template['designation'];  ?>"selected><?php echo $edit_template['designation_name']; } ?></option>
+                <option value="">Select Cadre</option>
+                <?php if(!empty($edit_template)): ?>
+                <option value="<?php echo $edit_template['designation']; ?>"selected><?php echo $edit_template['designation_name']; ?></option><?php endif; ?>
                  <?php foreach($designations as $designation): ?>
                 <option value="<?php echo $designation->designation_id; ?>">
                   <?php echo $designation->designation_name; ?>
@@ -33,7 +34,8 @@
               <div class="col-lg-4">
                <select name="cont_type" class="form-control" required="">
                  <option value="">Select Type</option>
-                 <option value="<?php if(!empty($edit_template)){ echo @$edit_template['name'];  ?>" selected><?php echo @$edit_template['name']; } ?></option>
+                 <?php if(!empty($edit_template)): ?>
+                 <option value="<?php echo $edit_template['name'];  ?>" selected><?php echo $edit_template['name']; ?></option><?php endif; ?>
                  <option value="Probation">Probation</option>
                  <option value="Regular">Regular</option>
                  <option value="Extension">Extension</option>
@@ -68,7 +70,7 @@ tinymce.init({
   theme: 'modern',
   fontsize_formats: "8px 9px 10px 11px 12px 14px 15px 24px 36px",
   lineheight_formats: "1px 2px 4px 6px 8px",
-  height: 500,
+  height: 200,
   toolbar: "undo redo | styleselect | alignleft alignright alignjustify aligncenter | bullist numlist outdent indent | link image | print preview media fullscreen | forecolor backcolor emoticons | code template | fontsizeselect formatselect lineheightselect",
     statusbar: true,
     setup: function(ed)

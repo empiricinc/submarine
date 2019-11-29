@@ -1060,15 +1060,20 @@ class Contract extends MY_Controller {
 	public function add_template(){
 		$data = array(
 			'designation' => $this->input->post('designation'),
-			'name' => $this->input->post('cont_type'),
+			'name' => trim($this->input->post('cont_type')),
 			'contract_format' => $this->input->post('contract_format'),
 			'created_at' => $this->input->post('created_at')
 		);
-		if($this->Contract_model->add_template($data)){
-			$this->session->set_flashdata('success', '<strong>Success! </strong>Template added successfully.');
+		// Check for existing record in the database, if exists, stop inserting more.
+		$where = array('designation'=>$_POST['designation'], 'name'=>$_POST['cont_type']);
+		$existing_record = $this->db->select('designation,name')->from('xin_contract_type')->where($where)->get()->result();
+		// print_r($existing_record);
+		if($existing_record){ // If record does exist, show a message. (return false).
+			echo "The Template for this Cadre has been created, try another one.";
+		}else{ // Insert the data into the database.
+			$this->Contract_model->add_template($data);
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been created successfully.');
 			redirect('contract/templates');
-		}else{
-			echo "The operation wasn't successful";
 		}
 	}
 	// Template list.

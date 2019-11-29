@@ -23,7 +23,7 @@
             <?php if(empty($results)): ?>
                 <h3>template list</h3>
               <?php else: ?>
-                <h3>serach results <small><a href="javascrip:history.go(-1)">Back</a></small></h3>
+                <h3>serach results <small><a href="javascript:history.go(-1)">Back</a></small></h3>
               <?php endif; ?>
           </div>
         </div>
@@ -84,7 +84,7 @@
                   <?php endforeach; endif; ?>
                    <?php if(empty($results) AND empty($templates)): ?>
                     <div class="alert alert-danger text-center">
-                      <p><strong>Sorry. </strong> We were unable to find results for the keyword "<?php echo $_GET['search_templates']; ?>". <a href="<?php echo base_url('contract/templates'); ?>">Return</a></p>
+                      <p><strong>Sorry. </strong> We were unable to find results for the keyword "<?php echo $_GET['search_templates']; ?>". <a href="javascript:history.go(-1);">Return</a></p>
                     </div>
                   <?php endif; ?>
                 </tbody>
