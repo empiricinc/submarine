@@ -133,7 +133,7 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if(!empty($letters)): if($sl3['accessLevel3']):  // IF condition for Access Level. 
+                        <?php if(!empty($letters)): //if($sl3['accessLevel3']):  // IF condition for Access Level. 
                           foreach($letters as $accepted): 
                             if($accepted->status == 1): ?>
                         <tr>
@@ -146,7 +146,8 @@ h4 {
                             <a href="javascript:void(0);" class="btn btn-success btn-xs">Accepted <i class="fa fa-check-circle"></i></a>
                           </td>
                         </tr>
-                          <?php endif; endforeach; endif; endif; ?>
+                          <?php endif; endforeach; //endif; 
+                        endif; ?>
                           <?php if(!empty($results)): foreach($results as $result): ?>
                           <tr>
                             <td>CTC-<?= $result->user_id; ?></td>

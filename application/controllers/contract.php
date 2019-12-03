@@ -141,14 +141,15 @@ class Contract extends MY_Controller {
 			redirect('');
 
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id']; 
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id']; 
 
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-      	$data['sl2'] = $this->session->userdata('accessLevel');
-		$user_session['sl4'] = $this->session->userdata('accessLevel'); // var_dump($user_session['sl4']['accessLevel3']); exit;
-		if(!$user_session['sl4']['accessLevel3']){ redirect(''); } // If it wan't accessLevel3, user will be redirected to the login screen.
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+       	// $data['sl2'] = $this->session->userdata('accessLevel');
+		// $user_session['sl4'] = $this->session->userdata('accessLevel'); 
+		// var_dump($user_session['sl4']['accessLevel3']); exit;
+		// if(!$user_session['sl4']['accessLevel3']){ redirect(''); } // If it wan't accessLevel3, user will be redirected to the login screen.
 		 
 		// get user > added by
 
@@ -182,37 +183,17 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-
-		if($data['sl2']){
-			$data['all_contract']=$this->Contract_model->contract_information($limit, $offset);
-		}else{
-			$data['all_contract']=$this->Contract_model->contract_information_manager($projid, $provid);
-		}
-
-		if($data['sl2']){
-			$data['expired_contracts'] = $this->Contract_model->get_by_date();
-		}else{
-			$data['expired_contracts'] = $this->Contract_model->get_by_date_manager($projid, $provid);
-		}
-
-		if($data['sl2']){
-			$data['pending_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
-		}else{
-			$data['pending_contracts'] = $this->Contract_model->get_pending_contracts_manager($projid, $provid, $limit, $offset);
-		}
-
-		if($data['sl2']){
-			$data['rejected_contracts'] = $this->Contract_model->rejected_contracts($limit, $offset);
-		}else{
-			$data['rejected_contracts'] = $this->Contract_model->rejected_contracts_manager($projid, $provid, $limit, $offset);
-		}
+		$data['all_contract']=$this->Contract_model->contract_information($limit, $offset);
+		$data['expired_contracts'] = $this->Contract_model->get_by_date();
+		$data['pending_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
+		$data['rejected_contracts'] = $this->Contract_model->rejected_contracts($limit, $offset);
 		//$data['list_jobs'] = $this->Contract_model->jobs_list(); 
         $data['path_url'] = 'dashboard';
-        $role_resources_ids = $this->Xin_model->user_role_resource();            
-		if(in_array('45',$role_resources_ids)) {
+        //$role_resources_ids = $this->Xin_model->user_role_resource();            
+		// if(in_array('45',$role_resources_ids)) {
 			$data['subview'] = $this->load->view('dashboard/contract', $data, TRUE);
 			$this->load->view('layout_main', $data); //page load
-		}
+		// }
 	}
 	// List of all pending contracts
 	public function pending_contracts($offset = NULL){
@@ -224,12 +205,12 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-     	$data['sl2'] = $this->session->userdata('accessLevel');  
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //    	$data['sl2'] = $this->session->userdata('accessLevel');  
 		 
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -254,11 +235,7 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		if($data['sl2']){
-			$data['pen_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
-		}else{
-			$data['pen_contracts'] = $this->Contract_model->get_pending_contracts_manager($projid, $provid, $limit, $offset);
-		}
+		$data['pen_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/pending_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
@@ -272,12 +249,12 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');  
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');  
 		 
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -302,12 +279,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		if($data['sl2']){
-			$data['active_contracts'] = $this->Contract_model->all_active_contracts($limit, $offset);
-		}else{
-			$data['active_contracts'] = $this->Contract_model->all_active_contracts_manager($projid, $provid, $limit, $offset);
-		}
-      $data['path_url'] = 'dashboard';
+		$data['active_contracts'] = $this->Contract_model->all_active_contracts($limit, $offset);
+      	$data['path_url'] = 'dashboard';
 		$data['subview'] = $this->load->view('dashboard/active_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
@@ -321,12 +294,12 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');  
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');  
 		 
 		$this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -351,11 +324,7 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		if($data['sl2']){
-			$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
-		}else{
-			$data['expired_contracts'] = $this->Contract_model->all_expired_contracts_manager($projid, $provid, $limit, $offset);
-		}
+		$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/expired_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data);
 	}
@@ -369,12 +338,12 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');
 
       	$this->load->library('pagination');
 		$config['base_url'] = base_url('contract/all_rejected');
@@ -398,11 +367,7 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		if($data['sl2']){
-			$data['rej_contracts'] = $this->Contract_model->rejected_contracts($limit, $offset);
-		}else{
-			$data['rej_contracts'] = $this->Contract_model->rejected_contracts_manager($projid, $provid, $limit, $offset);
-		}
+		$data['rej_contracts'] = $this->Contract_model->rejected_contracts($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/rejected_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
 	}
@@ -526,6 +491,7 @@ class Contract extends MY_Controller {
 	// Extend contract.
 	public function extend(){
 		$data['extension'] = $this->Contract_model->get_for_extension();
+		$data['cr_contract'] = $this->Contract_model->get_contract_byID();
 		$data['applicant'] = $this->Contract_model->applicant_data();
 		$data['types'] = $this->Contract_model->get_contract_formats();
 		$data['path_url'] = '';
@@ -566,18 +532,18 @@ class Contract extends MY_Controller {
 	// View printed contracts by status.
 	public function get_printed($status = ''){
 		$session = $this->session->userdata('username');
-		$projid = $session['project_id'];
-	   	$provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //   	$provid = $session['provience_id'];
 
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-      $data['sl2'] = $this->session->userdata('accessLevel');
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //     	$data['sl2'] = $this->session->userdata('accessLevel');
 
-		if($data['sl2']){
+		// if($data['sl2']){
 			$printed = $this->Contract_model->printed_contracts($status);
-		}else{
-			$printed = $this->Contract_model->printed_contracts_manager($projid, $provid, $status);
-		}
+		// }else{
+			// $printed = $this->Contract_model->printed_contracts_manager($projid, $provid, $status);
+		// }
 		echo json_encode($printed);
 	}
 	// View contract detail. view images and other important things.
@@ -681,45 +647,48 @@ class Contract extends MY_Controller {
 			}else{
 				echo "The operation wasn't successful, please try again.";
 			}
-		}elseif(isset($_POST['generate_bulk'])){
-			$session = $this->session->userdata('username');
-			$applicants = $this->Contract_model->applicants_data($ids);
-			$formats = $this->db->get_where('xin_contract_type', array('contract_type_id' => 4))->row();
-            for($i = 0; $i < count($applicants); $i++){
-            	$find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{end_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
-            	$start_date = date("F jS, Y", strtotime($applicants[$i]->created_at));
-            	$end_date = date('F jS, Y', strtotime($applicants[$i]->created_at));
-            	$gender = $applicants[$i]->gender == 0 ? "Mr." : "Ms.";
-        		$replace = array(
-            		'{{name}}' => $applicants[$i]->fullname,
-            		'{{designation}}'=>$applicants[$i]->designation_name,
-            		'{{district}}' => $applicants[$i]->dist_name,
-            		'{{date}}'=>date("M y"),
-            		'{{start_date}}' => $start_date,
-            		'{{end_date}}' => $end_date,
-            		'{{session}}'=> substr(strtoupper($session['username']), 0, 2),
-            		'{{logged_user}}' => ucfirst($session['username']),
-            		'{{logged_email}}' => $session['email'],
-            		'{{cnic}}' => $applicants[$i]->cnic,
-            		'{{gender}}' => $gender,
-            		'{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
-            		'{{province}}' => $applicants[$i]->name
-        		);
-            	$subject = $formats->contract_format;
-            	$save_format = str_replace($find, $replace, $subject);
-				$data2 = array(
-					'long_description' => $save_format
-				);
-				$this->db->where_in('user_id', $ids);
-				if($this->db->where('status', 0)->update('employee_contract', $data2)){
-					$this->session->set_flashdata('messageactive', 'Contracts generated successfully.');
-					redirect('contract');
-				}else{
-					echo "The operation wasn't successful, please try again.";
-					return false;
-				} // else.
-            } // For loop.
-            // exit;
+		}elseif(isset($_POST['generate_bulk'])){ // If the generate button's clicked !
+			foreach ($ids as $value){
+				$session = $this->session->userdata('username');
+				$applicants = $this->Contract_model->applicants_data($value);
+				$formats = $this->db->get_where('xin_contract_type', array('contract_type_id' => 4))->row();
+	            $applicant='';
+				foreach($applicants as $applicant){
+	            	$find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{end_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+	            	$start_date = date("F jS, Y", strtotime($applicant->created_at));
+	            	$end_date = date('F jS, Y', strtotime($applicant->created_at));
+	            	$gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+	        		$replace = array(
+	            		'{{name}}' => $applicant->fullname,
+	            		'{{designation}}'=>$applicant->designation_name,
+	            		'{{district}}' => $applicant->dist_name,
+	            		'{{date}}'=>date("M y"),
+	            		'{{start_date}}' => $start_date,
+	            		'{{end_date}}' => $end_date,
+	            		'{{session}}'=> substr(strtoupper($session['username']), 0, 2),
+	            		'{{logged_user}}' => ucfirst($session['username']),
+	            		'{{logged_email}}' => $session['email'],
+	            		'{{cnic}}' => $applicant->cnic,
+	            		'{{gender}}' => $gender,
+	            		'{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
+	            		'{{province}}' => $applicant->name
+	        		);
+	            	$subject = $formats->contract_format;
+	            	$save_format = str_replace($find, $replace, $subject);
+					$data2 = array(
+						'long_description' => $save_format
+					);
+					//$this->db->where_in('user_id', $ids);	
+					//echo "<pre>"; print_r($replace); 
+					//$this->db->where('status', 0)->update('employee_contract', $data2);
+					// $this->session->set_flashdata('messageactive', 'Contracts generated successfully.');
+					// redirect('contract');
+	            } // 2nd foreach.
+					$this->db->where_in('user_id', $value);	
+					$this->db->where('status', 0)->update('employee_contract', $data2);
+			} // 1st foreach
+			$this->session->set_flashdata('messageactive', 'Contracts generated successfully.');
+			redirect($_SERVER['HTTP_REFERER']);
 		}else{
 			echo "Select at least one checkbox from the list.";
 			return false;
@@ -749,31 +718,18 @@ class Contract extends MY_Controller {
 		
 	}
 	// get opened and closed tickets for chart
-
 	public function tickets_data()
-
 	{
-
 		/* Define return | here result is used to return user data and error for error message */
-
 		$Return = array('opened'=>'', 'closed'=>'');
-
 		// open
-
 		$Return['opened'] = $this->Xin_model->all_open_tickets();
-
 		// closed
-
 		$Return['closed'] = $this->Xin_model->all_closed_tickets();
-
 		$this->output($Return);
-
 		exit;
-
 	}
-
  public function activatecontract($id) {
-
     if($this->Contract_model->addtoAcctiveContract($id)) // call the method from the controller
 	    {
 	       // echo 'update successful...';  	
@@ -797,8 +753,8 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 	    $this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -824,8 +780,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');
 	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
 	    $data['pen_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
 	    $data['rej_letters'] = $this->Contract_model->rejected_offer_letters($limit, $offset);
@@ -842,8 +798,8 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 	    $this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -868,8 +824,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');
 
 		$data['pend_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/pending_offer_letters', $data, TRUE);
@@ -886,8 +842,8 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 	    $this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -912,8 +868,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');
 
 		$data['rejected_letters'] = $this->Contract_model->rejected_offer_letters($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
@@ -929,8 +885,8 @@ class Contract extends MY_Controller {
 		if(!empty($offset)){
 			$this->uri->segment(3);
 		}
-		$projid = $session['project_id'];
-	    $provid = $session['provience_id'];
+		// $projid = $session['project_id'];
+	 //    $provid = $session['provience_id'];
 
 	    $this->load->library('pagination');
 		$config['uri_segment'] = 3;
@@ -956,8 +912,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		 
-		$data['sl3'] = $this->session->userdata('accessLevel');  
-        $data['sl2'] = $this->session->userdata('accessLevel');
+		// $data['sl3'] = $this->session->userdata('accessLevel');  
+  //       $data['sl2'] = $this->session->userdata('accessLevel');
 	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
 	    $data['subview'] = $this->load->view('dashboard/accepted_offer_letters', $data, TRUE);
 	    $this->load->view('layout_main', $data); // Page load.
@@ -1067,9 +1023,8 @@ class Contract extends MY_Controller {
 		// Check for existing record in the database, if exists, stop inserting more.
 		$where = array('designation'=>$_POST['designation'], 'name'=>$_POST['cont_type']);
 		$existing_record = $this->db->select('designation,name')->from('xin_contract_type')->where($where)->get()->result();
-		// print_r($existing_record);
 		if($existing_record){ // If record does exist, show a message. (return false).
-			echo "The Template for this Cadre has been created, try another one.";
+			echo "The Template for this Cadre has already been created, try another one.";
 		}else{ // Insert the data into the database.
 			$this->Contract_model->add_template($data);
 			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been created successfully.');
@@ -1150,242 +1105,119 @@ class Contract extends MY_Controller {
 		$data['subview'] = $this->load->view('dashboard/template_list', $data, TRUE);
 		$this->load->view('layout_main', $data);
 	}
-
 	// get company wise salary
-
 	public function payroll_company_wise()
-
 	{
-
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'c_am'=>'','c_color'=>'');
-
 		$c_name = array();
-
 		$c_am = array();	
-
 		$c_color = array('#ff4dff','#a64dff','#cc33ff','#9966ff','#0099ff','#33cc33','#ff4dff','#ff1aff','#0099cc','#ff0066');
-
 		$someArray = array();
-
 		$j=0;
-
 		foreach($this->Xin_model->all_companies_chart() as $comp) {
-
 		$company_pay = $this->Xin_model->get_company_make_payment($comp->company_id);
-
 		$c_name[] = htmlspecialchars_decode($comp->name);
-
 		$c_am[] = $company_pay[0]->paidAmount;
-
 		$someArray[] = array(
-
 		  'label'   => htmlspecialchars_decode($comp->name),
-
 		  'value' => $company_pay[0]->paidAmount,
-
 		  'bgcolor' => $c_color[$j]
-
 		  );
-
 		  $j++;
-
 		}
-
 		$Return['c_name'] = $c_name;
-
 		$Return['c_am'] = $c_am;
-
 		$Return['chart_data'] = $someArray;
-
 		$this->output($Return);
-
 		exit;
-
 	}
-
-	
-
 	// get location|station wise salary
-
 	public function payroll_location_wise()
-
 	{
-
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'c_am'=>'','c_color'=>'');
-
 		$c_name = array();
-
 		$c_am = array();	
-
 		$c_color = array('#3e70c9','#f59345','#f44236','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
-
 		$someArray = array();
-
 		$j=0;
-
 		foreach($this->Xin_model->all_location_chart() as $location) {
-
 		$location_pay = $this->Xin_model->get_location_make_payment($location->location_id);
-
 		$c_name[] = htmlspecialchars_decode($location->location_name);
-
 		$c_am[] = $location_pay[0]->paidAmount;
-
 		$someArray[] = array(
-
 		  'label'   => htmlspecialchars_decode($location->location_name),
-
 		  'value' => $location_pay[0]->paidAmount,
-
 		  'bgcolor' => $c_color[$j]
-
 		  );
-
 		  $j++;
-
 		}
-
 		$Return['c_name'] = $c_name;
-
 		$Return['c_am'] = $c_am;
-
 		$Return['chart_data'] = $someArray;
-
 		$this->output($Return);
-
 		exit;
-
 	}
-
-	
-
 	// get department wise salary
-
 	public function payroll_department_wise()
-
 	{
-
 		/* Define return | here result is used to return user data and error for error message */
-
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'c_am'=>'','c_color'=>'');
-
 		$c_name = array();
-
 		$c_am = array();	
-
 		$c_color = array('#3e70c9','#f59345','#f44236','#8A2BE2','#D2691E','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
-
 		$someArray = array();
-
 		$j=0;
-
 		foreach($this->Xin_model->all_departments_chart() as $department) {
-
 		$department_pay = $this->Xin_model->get_department_make_payment($department->department_id);
-
 		$c_name[] = htmlspecialchars_decode($department->department_name);
-
 		$c_am[] = $department_pay[0]->paidAmount;
-
 		$someArray[] = array(
-
 		  'label'   => htmlspecialchars_decode($department->department_name),
-
 		  'value' => $department_pay[0]->paidAmount,
-
 		  'bgcolor' => $c_color[$j]
-
 		  );
-
 		  $j++;
-
 		}
-
 		$Return['c_name'] = $c_name;
-
 		$Return['c_am'] = $c_am;
-
 		$Return['chart_data'] = $someArray;
-
 		$this->output($Return);
-
 		exit;
-
 	}
-
-	
-
 	// get designation wise salary
 
 	public function payroll_designation_wise()
-
 	{
-
 		/* Define return | here result is used to return user data and error for error message */
-
 		$Return = array('chart_data'=>'', 'c_name'=>'', 'c_am'=>'','c_color'=>'');
-
 		$c_name = array();
-
 		$c_am = array();	
-
 		$c_color = array('#1AAF5D','#F2C500','#F45B00','#8E0000','#0E948C','#6495ED','#DC143C','#006400','#556B2F','#9932CC');
-
 		$someArray = array();
-
 		$j=0;
-
 		foreach($this->Xin_model->all_designations_chart() as $designation) {
-
 		$result = $this->Xin_model->get_designation_make_payment($designation->designation_id);
-
 		$c_name[] = htmlspecialchars_decode($designation->designation_name);
-
 		$c_am[] = $result[0]->paidAmount;
-
 		$someArray[] = array(
-
 		  'label'   => htmlspecialchars_decode($designation->designation_name),
-
 		  'value' => $result[0]->paidAmount,
-
 		  'bgcolor' => $c_color[$j]
-
 		  );
-
 		  $j++;
-
 		}
-
 		$Return['c_name'] = $c_name;
-
 		$Return['c_am'] = $c_am;
-
 		$Return['chart_data'] = $someArray;
-
 		$this->output($Return);
-
 		exit;
-
 	}
-
-	
-
 	// set new language
 
 	public function set_language($language = "") {
-
-        
-
         $language = ($language != "") ? $language : "english";
-
         $this->session->set_userdata('site_lang', $language);
-
-        redirect($_SERVER['HTTP_REFERER']);
-
-        
-
+        redirect($_SERVER['HTTP_REFERER']);    
     }
-
 }
 ?>

@@ -142,7 +142,7 @@ h4 {
                     </tr>
                   </thead>
                   <tbody>
-                    <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Levels.
+                    <?php $i=0; //if($sl3['accessLevel3']){ // IF condition for Access Levels.
                       $check_copies = $this->db->select('employee_id')->from('xin_employees')->where('employee_id IN(SELECT emp_id FROM employee_contract_files)')->get()->result();
                       foreach ($pending_contracts as $contract){
                       $i++;
@@ -242,7 +242,7 @@ h4 {
                         </td>
                       </tr>
                     <?php endif; ?>
-                    <?php } } } ?>
+                    <?php } } //} ?>
                   </tbody>
                 </table>
               </div>
@@ -293,7 +293,7 @@ h4 {
                     </tr>
                   </thead>
                   <tbody>
-                    <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Level.
+                    <?php $i=0; //if($sl3['accessLevel3']){ // IF condition for Access Level.
                     foreach ($all_contract as $contract){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
@@ -361,7 +361,7 @@ h4 {
                         <?php endif; ?>
                       </td>
                     </tr>
-                    <?php } } } ?>
+                    <?php } } //} ?>
                   </tbody>
                 </table>
               </div>
@@ -439,7 +439,7 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        <?php //if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($expired_contracts as $exp_cont): ?>
                         <?php
                           if($exp_cont->contract_type != 1 AND $exp_cont->status != 5 AND $exp_cont->status != 6):
@@ -488,7 +488,7 @@ h4 {
                             <!-- Finish contract modal ends. -->
                           </td>
                         </tr>
-                          <?php endif; endforeach; endif; ?>
+                          <?php endif; endforeach; //endif; ?>
                       </tbody>
                     </table>
                   </div>
@@ -531,7 +531,7 @@ h4 {
                   </tr>
                 </thead>
                 <tbody>
-                  <?php if($sl3['accessLevel3']): // IF condition for Access Level.
+                  <?php //if($sl3['accessLevel3']): // IF condition for Access Level.
                    foreach($rejected_contracts as $cont): ?>
                     <?php if(strtotime($cont->to_date) < time() AND $cont->status == 5 OR $cont->status == 6 AND $cont->contract_type != 1): ?>
                   <tr>
@@ -618,7 +618,7 @@ h4 {
                       <?php endif; ?>
                     </td>
                   </tr>
-                <?php endif; endforeach; endif; ?>
+                <?php endif; endforeach; //endif; ?>
                 </tbody>
               </table>
             </div>

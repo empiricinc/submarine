@@ -155,7 +155,7 @@ h4 {
                     </tr>
                   </thead>
                   <tbody>
-                    <?php $i=0; if($sl3['accessLevel3']){ // IF condition for Access Level.
+                    <?php $i=0; //if($sl3['accessLevel3']){ // IF condition for Access Level.
                     foreach ($pen_letters as $letter){
                     $i++;
                     $userDetails = $this->Contract_model->applicantdetails($letter->user_id);
@@ -204,7 +204,7 @@ h4 {
                         <?php endif; ?>
                       </td>
                     </tr>
-                    <?php } } } ?>
+                    <?php } } //} ?>
                   </tbody>
                 </table>
               </div>
@@ -243,7 +243,7 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        <?php //if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($letters as $accepted): 
                             if($accepted->status == 1 OR $accepted->status == 2):
                             ?>
@@ -261,7 +261,7 @@ h4 {
                             <?php endif; ?>
                           </td>
                         </tr>
-                          <?php endif; endforeach; endif; ?>
+                          <?php endif; endforeach; //endif; ?>
                       </tbody>
                     </table>
                   </div>
@@ -300,7 +300,7 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        <?php //if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($rej_letters as $rejected): 
                             if($rejected->status == 3):
                             ?>
@@ -318,7 +318,7 @@ h4 {
                             <?php endif; ?>
                           </td>
                         </tr>
-                          <?php endif; endforeach; endif; ?>
+                          <?php endif; endforeach; //endif; ?>
                       </tbody>
                     </table>
                   </div>

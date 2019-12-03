@@ -141,7 +141,7 @@ h4 {
                     </tr>
                   </thead>
                   <tbody>
-                  <?php if($sl3['accessLevel3']){
+                  <?php //if($sl3['accessLevel3']){
                     $i=0;
                     foreach ($rej_contracts as $contract){
                     $i++;
@@ -232,7 +232,7 @@ h4 {
                       <?php endif; ?>
                     </td>
                   </tr>
-                  <?php } } } ?>
+                  <?php } } //} ?>
                 </tbody>
                 </table>
               </div>

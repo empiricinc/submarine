@@ -52,47 +52,6 @@ class Contract_model extends CI_Model {
 	 	$query = $this->db->get();
 	 	return $query->result();
 	}
-	// Contract information -- Manager.
-	public function contract_information_manager($limit, $offset, $projid, $provid) {
-	 	$this->db->select('employee_contract.*,
-			 	 					xin_contract_type.contract_type_id,
-			 	 					xin_contract_type.name as cont_type,
-			 	 					xin_employees.employee_id,
-			 	 					xin_employees.first_name,
-			 	 					xin_employees.last_name,
-			 	 					xin_employees.company_id as compID,
-			 	 					xin_employees.designation_id as desigID,
-		                     xin_employees.provience_id,
-		                     xin_employees.department_id,
-		                     xin_employees.city_id,
-		                     xin_employees.user_role_id,
-			 	 					xin_companies.company_id,
-			 	 					xin_companies.name,
-			 	 					xin_designations.designation_id,
-			 	 					xin_designations.designation_name,
-	                        provinces.id,
-	                        xin_departments.department_id,
-	                        xin_job_applications.application_id,
-		                     xin_job_applications.cnic,
-		                     xin_job_applications.city_name,
-		                     xin_job_applications.gender,
-		                     district.id,
-		                     district.name as cityName');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-		$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
-		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-      $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
-      $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-      $this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
-      $this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
-      $this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
-      $this->db->order_by('employee_contract.id', 'DESC');
-		$this->db->limit($limit, $offset);
-	 	$query = $this->db->get();
-	 	return $query->result();
-	}
 	// Get records near to expiry, expired contracts.
 	public function get_by_date(){
 		$date1 = date('Y-m-d');
@@ -129,47 +88,6 @@ class Contract_model extends CI_Model {
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
 		$this->db->order_by('employee_contract.id', 'DESC');
-		// $this->db->where("DATEDIFF(NOW(), $str2) BETWEEN 21 AND 1");
-		$this->db->limit(10);
-		$query = $this->db->get();
-		return $query->result();
-	}
-	// Get expired contracts by date --- Manager.
-		public function get_by_date_manager($projid, $provid){
-		$date1 = date('Y-m-d');
-		$str2 = date('Y-m-d', strtotime('+15 days', strtotime($date1)));
-		$this->db->select('employee_contract.id,
-									employee_contract.user_id,
-									employee_contract.from_date,
-									employee_contract.to_date,
-									employee_contract.contract_manager,
-									employee_contract.contract_type,
-									employee_contract.status,
-									employee_contract.sdt,
-									xin_contract_type.contract_type_id,
-									xin_contract_type.name,
-                           xin_employees.employee_id,
-                           xin_employees.provience_id,
-                           xin_employees.company_id,
-                           xin_employees.designation_id,
-                           xin_employees.department_id,
-                           xin_employees.city_id,
-                           xin_employees.user_role_id,
-                           xin_companies.company_id,
-                           xin_designations.designation_id,
-                           xin_departments.department_id,
-                           provinces.id');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-      $this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left'); // This line and below this are added later.
-      $this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-      $this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-      $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-      $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
-		$this->db->where('employee_contract.to_date <=', $str2);
-		$this->db->where('employee_contract.status !=', 0);
-      $this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
-      $this->db->order_by('employee_contract.id', 'DESC');
 		// $this->db->where("DATEDIFF(NOW(), $str2) BETWEEN 21 AND 1");
 		$this->db->limit(10);
 		$query = $this->db->get();
@@ -214,40 +132,6 @@ class Contract_model extends CI_Model {
 		$query = $this->db->get();
         return $query->result();
 	}
-	// All Active contracts -- Manager.
-	public function all_active_contracts_manager($projid, $provid, $limit, $offset){
-		$this->db->select('employee_contract.*,
-			 	 					xin_contract_type.contract_type_id,
-			 	 					xin_contract_type.name as cont_type,
-			 	 					xin_employees.employee_id,
-			 	 					xin_employees.user_id,
-			 	 					xin_employees.first_name,
-			 	 					xin_employees.last_name,
-			 	 					xin_employees.company_id as compID,
-			 	 					xin_employees.designation_id as desigID,
-                           xin_employees.provience_id,
-                           xin_employees.department_id,
-                           xin_employees.user_role_id,
-			 	 					xin_companies.company_id,
-			 	 					xin_companies.name,
-			 	 					xin_designations.designation_id,
-			 	 					xin_designations.designation_name,
-                           provinces.id,
-                           xin_departments.department_id');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-		$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
-		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-      $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
-      $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-		$this->db->where('employee_contract.status', 1);
-		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
-		$this->db->order_by('employee_contract.id', 'DESC');
-		$this->db->limit($limit, $offset);
-		$query = $this->db->get();
-        return $query->result();
-	}
 	// Count pending contracts
 	public function count_contracts(){
 		return $this->db->where(array('status'=> 0))->from('employee_contract')->count_all_results();
@@ -280,41 +164,6 @@ class Contract_model extends CI_Model {
 		$this->db->where('employee_contract.status', 0);
 		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
-	 	$query = $this->db->get();
-	 	return $query->result();
-	}
-	// Pending contracts -- Manager.
-	public function get_pending_contracts_manager($projid, $provid, $limit, $offset){
-		$this->db->select('employee_contract.*,
-	 	 					xin_contract_type.contract_type_id,
-	 	 					xin_contract_type.name as cont_type,
-	 	 					xin_job_applications.application_id,
-	 	 					xin_job_applications.fullname,
-	 	 					xin_job_applications.province,
-	 	 					xin_job_applications.city_name,
-	 	 					xin_job_applications.gender,
-	 	 					xin_job_applications.email,
-	 	 					xin_job_applications.message,
-	 	 					xin_job_applications.created_at,
-	 	 					gender.gender_id,
-	 	 					gender.gender_name,
-	 	 					provinces.id,
-	 	 					provinces.name,
-	 	 					city.id,
-	 	 					city.name as city_name,
-	 	 					domicile.id,
-	 	 					domicile.name as dom_name');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-		$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
-		$this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
-		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
-		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
-		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
-		$this->db->where('employee_contract.status', 0);
-		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
-		$this->db->limit($limit, $offset);
-		$this->db->order_by('employee_contract.id', 'DESC');
 	 	$query = $this->db->get();
 	 	return $query->result();
 	}
@@ -358,46 +207,6 @@ class Contract_model extends CI_Model {
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
-		$this->db->order_by('employee_contract.id', 'DESC');
-		$this->db->limit($limit, $offset);
-		$query = $this->db->get();
-		return $query->result();
-	}
-	// All expired contracts -- Manager.
-	public function all_expired_contracts_manager($projid, $provid, $limit, $offset){
-		$date1 = date('Y-m-d');
-		$str2 = date('Y-m-d', strtotime('+15 days', strtotime($date1)));
-		$this->db->select('employee_contract.id,
-									employee_contract.user_id,
-									employee_contract.from_date,
-									employee_contract.to_date,
-									employee_contract.contract_manager,
-									employee_contract.contract_type,
-									employee_contract.status,
-									employee_contract.sdt,
-									xin_contract_type.contract_type_id,
-									xin_contract_type.name,
-		                     xin_employees.employee_id,
-		                     xin_employees.company_id,
-		                     xin_employees.designation_id,
-		                     xin_employees.department_id,
-		                     xin_employees.provience_id,
-		                     xin_employees.city_id,
-		                     xin_employees.user_role_id,
-		                     xin_companies.company_id,
-		                     xin_designations.designation_id,
-		                     xin_departments.department_id,
-		                     provinces.id');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-     	$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
-     	$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-     	$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-     	$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-     	$this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
-		$this->db->where('employee_contract.to_date <=', $str2);
-		$this->db->where('employee_contract.status !=', 0);
-		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
 		$this->db->order_by('employee_contract.id', 'DESC');
 		$this->db->limit($limit, $offset);
 		$query = $this->db->get();
@@ -451,48 +260,6 @@ class Contract_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
-	// Reject / finished contracts -- Manger
-	public function rejected_contracts_manager($projid, $provid, $limit, $offset){
-		$this->db->select('employee_contract.id,
-									employee_contract.user_id,
-									employee_contract.from_date,
-									employee_contract.to_date,
-									employee_contract.contract_manager,
-									employee_contract.contract_type,
-									employee_contract.status,
-									employee_contract.sdt,
-									employee_contract.rejection_reason,
-									xin_contract_type.contract_type_id,
-									xin_contract_type.name as contType,
-		                     xin_employees.employee_id,
-		                     xin_employees.company_id,
-		                     xin_employees.designation_id,
-		                     xin_employees.department_id,
-		                     xin_employees.provience_id,
-		                     xin_employees.city_id,
-		                     xin_employees.user_role_id,
-		                     xin_companies.company_id,
-		                     xin_companies.name,
-		                     xin_designations.designation_id,
-		                     xin_designations.designation_name,
-		                     xin_departments.department_id,
-		                     provinces.id,
-		                     provinces.name as provName');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-     	$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
-     	$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-     	$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-     	$this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
-     	$this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
-		$this->db->where('employee_contract.status', 5);
-		$this->db->or_where('employee_contract.status', 6);
-		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
-		$this->db->order_by('employee_contract.id', 'DESC');
-		$this->db->limit($limit, $offset);
-		$query = $this->db->get();
-		return $query->result();
-	}
 	// Get printed contracts.
 	public function printed_contracts($status = ''){
 		$this->db->select('employee_contract.*,
@@ -524,38 +291,6 @@ class Contract_model extends CI_Model {
 	  $this->db->order_by('employee_contract.id', 'DESC');
 	  // $this->db->limit(10);
 	  return $this->db->get()->result();
-	}
-	// Printed contracts -- Manager.
-	public function printed_contracts_manager($projid, $provid, $status = ''){
-		$this->db->select('employee_contract.*,
-			 	 					xin_contract_type.contract_type_id,
-			 	 					xin_contract_type.name as cont_type,
-			 	 					xin_employees.employee_id,
-			 	 					xin_employees.first_name,
-			 	 					xin_employees.last_name,
-			 	 					xin_employees.company_id as compID,
-			 	 					xin_employees.designation_id as desigID,
-                           xin_employees.department_id,
-                           xin_employees.provience_id,
-                           xin_employees.city_id,
-                           xin_employees.user_role_id,
-			 	 					xin_companies.company_id,
-			 	 					xin_companies.name,
-			 	 					xin_designations.designation_id,
-			 	 					xin_designations.designation_name,
-		                     xin_departments.department_id,
-                           provinces.id');
-		$this->db->from('employee_contract');
-		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
-		$this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
-		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-      $this->db->join('xin_departments', 'xin_employees.employee_id = xin_departments.department_id', 'left');
-      $this->db->join('provinces', 'xin_employees.provience_id = provinces.id');
-		$this->db->where('employee_contract.status', $status);
-		$this->db->where(array('xin_companies.company_id' => $projid, 'provinces.id' => $provid));
-		// $this->db->limit(10);
-		return $this->db->get()->result();
 	}
 		function applicantdetails($id){
   

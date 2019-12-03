@@ -133,7 +133,7 @@ h4 {
                         </tr>
                       </thead>
                       <tbody>
-                        <?php if(!empty($pend_letters)): if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        <?php if(!empty($pend_letters)): //if($sl3['accessLevel3']): // IF condition for Access Level. 
                           foreach($pend_letters as $pending): 
                             if($pending->status == 0):
                             ?>
@@ -179,7 +179,8 @@ h4 {
                         <?php endif; ?>
                           </td>
                         </tr>
-                          <?php endif; endforeach; endif; endif; ?>
+                          <?php endif; endforeach; //endif; 
+                        endif; ?>
                           <?php if(!empty($results)): foreach($results as $result): ?>
                             <tr>
                           <td>CTC-<?= $result->user_id; ?></td>
