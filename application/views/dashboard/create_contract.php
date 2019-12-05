@@ -36,12 +36,30 @@
                 <select class="form-control" id="contract_type">
                   <option value="">Select Type...</option>
                   <?php foreach($types as $type): ?>
-                    <option value="<?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{end_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                    <option value="<?php $find = array(
+                                                      "{{name}}",
+                                                      "{{designation}}",
+                                                      "{{district}}",
+                                                      "{{date}}",
+                                                      "{{start_date}}",
+                                                      "{{end_date}}",
+                                                      "{{session}}",
+                                                      "{{logged_user}}",
+                                                      "{{logged_email}}",
+                                                      "{{cnic}}",
+                                                      "{{gender}}",
+                                                      "{{address}}",
+                                                      "{{province}}",
+                                                      "{{spinsaree_eobi_salary}}",
+                                                      "{{spinsaree_eobi_benefit}}"
+                                                  );
                   $subject = $type->contract_format;
                   $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  $eobi_salary = $applicant->cnic != 0 ? "Salary granted." : "The employee shall be entitle for EOBI benefits. A contribution shall be deducted from the salary on monthly basis and deposited to EOBI along with employer's contribution as per rules.";
+                  $eobi_benefit = $applicant->cnic != 0 ? "Benefit granted." : "Benefit denied.";
                   $start_date = date("F jS, Y", strtotime($cr_contract['from_date']));
                   $end_date = date('F jS, Y', strtotime($cr_contract['to_date']));
-                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => $start_date, "{{end_date}}" => $end_date, '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
+                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => $start_date, "{{end_date}}" => $end_date, '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name, '{{spinsaree_eobi_salary}}' => $eobi_salary, '{{spinsaree_eobi_benefit}}' => $eobi_benefit); ?>
                       <?php echo htmlspecialchars(str_replace($find, $replace, $subject)); ?>">
                       <?php echo $type->name; ?>
                     </option>
@@ -50,9 +68,6 @@
               </div><br><br><br>
               <div class="col-lg-12">
                 <textarea class='editor' name='long_description'>
-                  <?php
-
-                  ?>
                   <?php if(!empty($cr_contract)){ echo $cr_contract['long_description']; }elseif(!empty($extension)){ echo $extension['long_description']; } ?>
                 </textarea><br><br>
               </div>
