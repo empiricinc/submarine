@@ -157,16 +157,16 @@ $(document).ready(function() {
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
                     if($contract->status == 1){
                   ?>
-                  <?php if($contract->employee_id): ?>
+                  <?php if($contract->user_id): ?>
                     <tr>
                       <td>
                         <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $contract->user_id; ?>">
                       </td>
                       <td>
-                        CTC-<?= $contract->name.'-'.$contract->employee_id; ?>
+                        CTC-<?= $contract->name.'-'.$contract->user_id; ?>
                       </td>
                       <td>
-                        <?php echo $contract->first_name;?>
+                        <?php echo $contract->fullname;?>
                       </td>
                       <td>
                         <?php echo $contract->name; ?>
@@ -187,7 +187,7 @@ $(document).ready(function() {
                         <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
                       </td>
                       <td>
-                        <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->employee_id; ?>" class="btn btn-primary btn-xs">Print</a>
+                        <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
                       </td>
                     </tr>
                   <?php endif; ?>
@@ -259,9 +259,9 @@ $(document).ready(function() {
               if(val.status == 1){
                 result += `
                 <tr>
-                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
-                  <td>CTC-${val.name}-${val.employee_id}</td>
-                  <td>${val.first_name}</td>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.user_id}"></td>
+                  <td>CTC-${val.name}-${val.user_id}</td>
+                  <td>${val.fullname}</td>
                   <td>${val.name}</td>
                   <td>${val.designation_name}</td>
                   <td>${fromDate} - ${toDate}</td>
@@ -276,9 +276,9 @@ $(document).ready(function() {
               }else if(val.status == 2){
                 result += `
                 <tr>
-                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
-                  <td>CTC-${val.name}-${val.employee_id}</td>
-                  <td>${val.first_name}</td>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.user_id}"></td>
+                  <td>CTC-${val.name}-${val.user_id}</td>
+                  <td>${val.fullname}</td>
                   <td>${val.name}</td>
                   <td>${val.designation_name}</td>
                   <td>${fromDate} - ${toDate}</td>
@@ -286,16 +286,16 @@ $(document).ready(function() {
                   <td>${val.cont_type}</td>
                   <td>${subDate}</td>
                   <td>
-                    <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.employee_id}" class="btn btn-primary btn-xs">Distribute</a>
+                    <a data-toggle="tooltip" title="Add to distributed" href="<?= base_url(); ?>contract/distribute/${val.user_id}" class="btn btn-primary btn-xs">Distribute</a>
                   </td>
                 </tr>
               `;
             }else if(val.status == 3){
               result += `
                 <tr>
-                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
-                  <td>CTC-${val.name}-${val.employee_id}</td>
-                  <td>${val.first_name}</td>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.user_id}"></td>
+                  <td>CTC-${val.name}-${val.user_id}</td>
+                  <td>${val.fullname}</td>
                   <td>${val.name}</td>
                   <td>${val.designation_name}</td>
                   <td>${fromDate} - ${toDate}</td>
@@ -303,16 +303,16 @@ $(document).ready(function() {
                   <td>${val.cont_type}</td>
                   <td>${subDate}</td>
                   <td>
-                    <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.employee_id}" class="btn btn-primary btn-xs">Attach to File</a>
+                    <a data-toggle="tooltip" title="Attach to personal file" href="<?= base_url(); ?>contract/attach/${val.user_id}" class="btn btn-primary btn-xs">Attach to File</a>
                   </td>
                 </tr>
               `;
             }else if(val.status == 4){
               result += `
                 <tr>
-                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.employee_id}"></td>
-                  <td>CTC-${val.name}-${val.employee_id}</td>
-                  <td>${val.first_name}</td>
+                  <td><input type="checkbox" name="print[]" id="checkPrint" value="${val.user_id}"></td>
+                  <td>CTC-${val.name}-${val.user_id}</td>
+                  <td>${val.fullname}</td>
                   <td>${val.name}</td>
                   <td>${val.designation_name}</td>
                   <td>${fromDate} - ${toDate}</td>

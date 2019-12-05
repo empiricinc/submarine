@@ -152,7 +152,7 @@ h4 {
                     <?php if($contract->user_id): ?>
                       <tr>
                         <td>
-                            <input type="checkbox" name="print[]" style="display: block;" value="<?php if($contract->long_description == ''){ echo 'Nothing'; }else{ echo $contract->user_id; } ?>" <?php if($contract->long_description == ''): ?> disabled <?php endif; ?>>
+                            <input type="checkbox" name="print[]" style="display: block;" value="<?php echo $contract->user_id; ?>">
                         </td>
                         <td>
                           CTC-<?php echo '0'.$contract->user_id; ?>
@@ -324,7 +324,7 @@ h4 {
                                       <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
                                       $subject = $contract->long_description;
                                       $gender = $contract->gender == 0 ? 'Mr.' : 'Ms.';
-                                      $replace = array('{{name}}' => $contract->first_name.' '.$contract->last_name, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->cityName, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->from_date)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic, '{{gender}}' => $gender);
+                                      $replace = array('{{name}}' => $contract->fullname, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->cityName, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->from_date)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic, '{{gender}}' => $gender);
                                       echo str_replace($find, $replace, $subject); ?>
                                     </div>
                                   </div>
@@ -342,7 +342,7 @@ h4 {
                           </div>
                       </td>
                       <td>
-                        <?php echo $contract->first_name.' '.$contract->last_name;?>
+                        <?php echo $contract->fullname;?>
                       </td>
                       <td>
                         <?php echo $contract->name;?>

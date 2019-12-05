@@ -164,7 +164,7 @@ h4 {
                   ?>
                   <tr>
                     <td>
-                      <input type="checkbox" name="print[]" id="checkPrint" style="display: block;" value="<?php if($contract->long_description == ''){ echo 'Nothing'; }else{ echo $contract->user_id; } ?>" <?php if($contract->long_description == ''): ?> disabled <?php endif; ?>>
+                      <input type="checkbox" name="print[]" id="checkPrint" style="display: block;" value="<?php echo $contract->user_id; ?>">
                     </td>
                     <td>
                       CTC-<?php echo '0'.$contract->user_id; ?>

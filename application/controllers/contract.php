@@ -648,7 +648,7 @@ class Contract extends MY_Controller {
 				echo "The operation wasn't successful, please try again.";
 			}
 		}elseif(isset($_POST['generate_bulk'])){ // If the generate button's clicked !
-			foreach ($ids as $value){
+			foreach($ids as $value){
 				$session = $this->session->userdata('username');
 				$applicants = $this->Contract_model->applicants_data($value);
 				$formats = $this->db->get_where('xin_contract_type', array('contract_type_id' => 4))->row();
@@ -716,6 +716,22 @@ class Contract extends MY_Controller {
 	public function bulk_update(){
 		print_r($_POST);
 		
+	}
+	public function count_age(){
+		$birthday = $this->db->get_where('xin_job_applications', array('application_id'=> 257))->row();
+		$dob = strtotime($birthday->dob);
+		$gender = $birthday->gender;
+		echo $birthday->dob.'<br>'; 
+		echo $gender = 1 ? 'Male': 'Female';   
+		$tdate = time();
+		$age = date('Y', $tdate) - date('Y', $dob);
+		if($age > '60' AND $gender = 0 OR $age > '55' AND $gender = 1){
+			echo "I'm $age years old and I'm not entitled to get an insurance from the company.";
+		}elseif($age < '18'){
+			echo "I'm $age years old and I'm not entitled to get an insurance nor EOBI contract.";
+		}else{
+			echo "<br> I'm $age years old and I'm entitled to get a contract with insurance, Hooray!";
+		}
 	}
 	// get opened and closed tickets for chart
 	public function tickets_data()
