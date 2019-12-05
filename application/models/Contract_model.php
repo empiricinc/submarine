@@ -146,6 +146,7 @@ class Contract_model extends CI_Model {
 			 	 					xin_contract_type.contract_type_id,
 			 	 					xin_contract_type.name as cont_type,
 			 	 					xin_job_applications.application_id,
+			 	 					xin_job_applications.job_id,
 			 	 					xin_job_applications.fullname,
 			 	 					xin_job_applications.province,
 			 	 					xin_job_applications.city_name,
@@ -153,6 +154,13 @@ class Contract_model extends CI_Model {
 			 	 					xin_job_applications.email,
 			 	 					xin_job_applications.message,
 			 	 					xin_job_applications.created_at,
+			 	 					xin_jobs.job_id,
+			 	 					xin_jobs.company,
+			 	 					xin_jobs.designation_id,
+			 	 					xin_companies.company_id,
+			 	 					xin_companies.name as compName,
+			 	 					xin_designations.designation_id,
+			 	 					xin_designations.designation_name,
 			 	 					provinces.id,
 			 	 					provinces.name,
 			 	 					city.id,
@@ -162,6 +170,9 @@ class Contract_model extends CI_Model {
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
 		$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
 		// $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
 		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
 		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
@@ -191,8 +202,11 @@ class Contract_model extends CI_Model {
 									employee_contract.status,
 									employee_contract.sdt,
 									xin_contract_type.contract_type_id,
-									xin_contract_type.name,
+									xin_contract_type.name as contType,
                            xin_employees.employee_id,
+                           xin_employees.first_name,
+                           xin_employees.last_name,
+                           xin_employees.email,
                            xin_employees.company_id,
                            xin_employees.designation_id,
                            xin_employees.department_id,
@@ -200,9 +214,14 @@ class Contract_model extends CI_Model {
                            xin_employees.city_id,
                            xin_employees.user_role_id,
                            xin_companies.company_id,
+                           xin_companies.name,
                            xin_designations.designation_id,
+                           xin_designations.designation_name,
                            xin_departments.department_id,
-                           provinces.id');
+                           provinces.id,
+                           provinces.name as provName,
+                           district.id,
+                           district.name as distName');
 		$this->db->from('employee_contract');
 		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
       $this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
@@ -210,6 +229,7 @@ class Contract_model extends CI_Model {
       $this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
       $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
       $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
+      $this->db->join('district', 'xin_employees.city_id = district.id', 'left');
 		$this->db->where('employee_contract.to_date <=', $str2);
 		$this->db->where('employee_contract.status !=', 0);
 		$this->db->order_by('employee_contract.id', 'DESC');

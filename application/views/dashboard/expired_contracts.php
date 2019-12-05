@@ -143,7 +143,11 @@ h4 {
                         <thead>
                             <tr>
                               <th>employee iD</th>
-                              <th>manager</th>
+                              <th>name</th>
+                              <th>project</th>
+                              <th>designation</th>
+                              <th>province</th>
+                              <th>district</th>
                               <th>type</th>
                               <th>days left</th>
                               <th>status</th>
@@ -159,9 +163,13 @@ h4 {
                           $diff=date_diff($date1, $date2);
                         ?>
                         <tr>
-                          <td>CTC-0<?= $exp_cont->user_id; ?></td>
-                          <td><?= $exp_cont->contract_manager; ?></td>
+                          <td><?= $exp_cont->name.'-'.$exp_cont->designation_name.'-'. $exp_cont->user_id; ?></td>
+                          <td><?= $exp_cont->first_name.' '.$exp_cont->last_name; ?></td>
                           <td><?= $exp_cont->name; ?></td>
+                          <td><?= $exp_cont->designation_name; ?></td>
+                          <td><?= $exp_cont->provName; ?></td>
+                          <td><?= $exp_cont->distName; ?></td>
+                          <td><?= $exp_cont->contType; ?></td>
                           <td>
                             <?php if($date2 > $date1): ?>
                             <?php echo $diff->format("%a day(s) left"); elseif($date2 <= $date1): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>

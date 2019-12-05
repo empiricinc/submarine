@@ -129,15 +129,15 @@ h4 {
                       <th><input type="checkbox" id="checkAll"></th>
                       <th>emp iD</th>
                       <th>name</th>
+                      <th>project</th>
+                      <th>designation</th>
                       <th>province</th>
                       <th>district</th>
                       <th>domicile</th>
                       <th>gender</th>
                       <th>email</th>
-                      <th>message</th>
                       <th>status</th>
                       <th>application date</th>
-                      <th>process date</th>
                       <th>action</th>
                     </tr>
                   </thead>
@@ -155,10 +155,16 @@ h4 {
                             <input type="checkbox" name="print[]" style="display: block;" value="<?php echo $contract->user_id; ?>">
                         </td>
                         <td>
-                          CTC-<?php echo '0'.$contract->user_id; ?>
+                          <?php echo $contract->compName.'-'.$contract->designation_name.'-'.$contract->user_id; ?>
                         </td>
                         <td>
                           <?php echo $contract->fullname; ?>
+                        </td>
+                        <td>
+                          <?php echo $contract->compName; ?>
+                        </td>
+                        <td>
+                          <?php echo $contract->designation_name; ?>
                         </td>
                         <td>
                           <?php echo $contract->name; ?>
@@ -175,40 +181,6 @@ h4 {
                         <td>
                           <?php echo $contract->email; ?>
                         </td>
-                        <td>
-                          <a data-toggle="modal" data-target="#message<?= $contract->application_id; ?>" href="#message">
-                            <?php echo substr($contract->message, 0, 20).'...'; ?>
-                          </a>
-                          <div class="modal fade" id="message<?= $contract->application_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                  <!--Header-->
-                                <div class="modal-header">
-                                  <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Message... </h4>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                  </button>
-                                </div>
-                                <!--Body-->
-                                <div class="modal-body">
-                                  <div class="row">
-                                    <div class="col-md-6 col-md-offset-3 text-center">
-                                      <strong>Message Description</strong>
-                                      <p><?php echo $contract->message; ?></p>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!--Footer-->
-                                <div class="modal-footer">
-                                  <?php if($contract->status == 1): ?>
-                                    <a target="blank" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary">Print</a>
-                                  <?php endif; ?>
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
                         <td align="center">
                           <?php if($contract->status == 0): ?>
                           <a data-toggle="tooltip" title="Pending" data-placement="top" href="<?= base_url('contract/pending_contracts'); ?>">
@@ -222,9 +194,6 @@ h4 {
                         </td>
                         <td>
                           <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
-                        </td>
-                        <td>
-                          <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
                         </td>
                         <td id="allChecked">
                         <?php
