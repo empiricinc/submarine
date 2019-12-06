@@ -68,9 +68,9 @@
 tinymce.init({ 
   selector:'.editor',
   theme: 'modern',
-  fontsize_formats: "8px 9px 10px 11px 12px 14px 15px 24px 36px",
+  fontsize_formats: "8px 9px 10px 11px 12px 14px 15px 18px 20px 22px 24px 36px",
   lineheight_formats: "1px 2px 4px 6px 8px",
-  height: 200,
+  height: 700,
   toolbar: "undo redo | styleselect | alignleft alignright alignjustify aligncenter | bullist numlist outdent indent | link image | print preview media fullscreen | forecolor backcolor emoticons | code template | fontsizeselect formatselect lineheightselect",
     statusbar: true,
     setup: function(ed)
