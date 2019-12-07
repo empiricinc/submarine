@@ -55,11 +55,33 @@
                                                   );
                   $subject = $type->contract_format;
                   $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
-                  $eobi_salary = $applicant->cnic == 0 ? "The employee shall not be entitled for EOBI benefits due ot lack of CNIC, hence no deduction shall be made from salary as part of EOBI contribution." : "The employee shall be entitled for EOBI benefits. A contribution shall be deducted from the salary on monthly basis and deposited to EOBI along with employer's contribution as per rules.";
+                  // If the applicant has a valid CNIC, the sentence below will be printed.
+                  $eobi_cnic = "The employee shall be entitled for EOBI benefits. A contribution shall be deducted from the salary on monthly basis and deposited to EOBI along with employer's contribution as per rules.";
+                  // If the applicant doesn't have valide CNIC, the below sentence will be printed.
+                  $eobi_non_cnic = "The employee shall not be entitled for EOBI benefits due ot lack of CNIC, hence no deduction shall be made from salary as part of EOBI contribution.";
+                  // If the applicant is overage, the below sentence will be printed.
+                  $eobi_overage = "The employee shall not be entitled for EOBI benefits due to overage, hence no deduction shall be made from salary as part of EOBI contribution.";
+                  $eobi_salary = $applicant->cnic != 0 ? $eobi_cnic : $eobi_non_cnic;
                   $eobi_benefit = $applicant->cnic == 0 ? "The employee shall not be provided with death and accidentaal insurance due to lack of CNIC." : "The employee shall be entitled for death and accidental insurace as per employer's policy.";
                   $start_date = date("F jS, Y", strtotime($cr_contract['from_date']));
                   $end_date = date('F jS, Y', strtotime($cr_contract['to_date']));
-                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => $start_date, "{{end_date}}" => $end_date, '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name, '{{spinsaree_eobi_salary}}' => $eobi_salary, '{{spinsaree_eobi_benefit}}' => $eobi_benefit); ?>
+                  $replace = array(
+                                    '{{name}}' => $applicant->fullname,
+                                    '{{designation}}'=>$applicant->designation_name,
+                                    '{{district}}' => $applicant->dist_name,
+                                    '{{date}}'=>date("M y"),
+                                    '{{start_date}}' => $start_date,
+                                    "{{end_date}}" => $end_date,
+                                    '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1),
+                                    '{{session}}' => ucfirst($session['username']),
+                                    '{{logged_email}}' => $session['email'],
+                                    '{{cnic}}' => $applicant->cnic,
+                                    '{{gender}}' => $gender,
+                                    '{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
+                                    '{{province}}' => $applicant->name,
+                                    '{{spinsaree_eobi_salary}}' => $eobi_salary,
+                                    '{{spinsaree_eobi_benefit}}' => $eobi_benefit
+                                  ); ?>
                       <?php echo htmlspecialchars(str_replace($find, $replace, $subject)); ?>">
                       <?php echo $type->name; ?>
                     </option>

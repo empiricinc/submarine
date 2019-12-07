@@ -722,9 +722,10 @@ class Contract extends MY_Controller {
 		$dob = strtotime($birthday->dob);
 		$gender = $birthday->gender;
 		echo $birthday->dob.'<br>'; 
-		echo $gender = 1 ? 'Male': 'Female';   
+		echo $gender = 1 ? 'Male': 'Female'; echo "<br>";   
 		$tdate = time();
 		$age = date('Y', $tdate) - date('Y', $dob);
+		echo ($tdate > $age ? ($age > 10 ? $age : 'Exceptional') : ($gender > 0 ? 'Horrible' : 'Average'));
 		if($age > '60' AND $gender = 0 OR $age > '55' AND $gender = 1){
 			echo "I'm $age years old and I'm not entitled to get an insurance from the company.";
 		}elseif($age < '18'){
