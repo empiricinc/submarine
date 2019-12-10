@@ -55,15 +55,40 @@
                                                   );
                   $subject = $type->contract_format;
                   $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  // EOBI clause.
                   // If the applicant has a valid CNIC, the sentence below will be printed.
                   $eobi_cnic = "The employee shall be entitled for EOBI benefits. A contribution shall be deducted from the salary on monthly basis and deposited to EOBI along with employer's contribution as per rules.";
                   // If the applicant doesn't have valide CNIC, the below sentence will be printed.
                   $eobi_non_cnic = "The employee shall not be entitled for EOBI benefits due ot lack of CNIC, hence no deduction shall be made from salary as part of EOBI contribution.";
                   // If the applicant is overage, the below sentence will be printed.
                   $eobi_overage = "The employee shall not be entitled for EOBI benefits due to overage, hence no deduction shall be made from salary as part of EOBI contribution.";
-                  $eobi_salary = $applicant->cnic != 0 ? $eobi_cnic : $eobi_non_cnic;
-                  $eobi_benefit = $applicant->cnic == 0 ? "The employee shall not be provided with death and accidentaal insurance due to lack of CNIC." : "The employee shall be entitled for death and accidental insurace as per employer's policy.";
-                  $start_date = date("F jS, Y", strtotime($cr_contract['from_date']));
+                  // Insurance clause.
+                  $insurance_cnic = "The employee shall be entitled for death and accidental insurace as per employer's policy.";
+                  $insurace_non_cnic = "The employee shall not be provided with death and accidental insurance due to lack of CNIC.";
+                  $insurance_overage = "The employee shall not be provided with death and accidental insurace due to overage.";
+                  // $eobi_salary = $applicant->cnic != 0 ? $eobi_cnic : $eobi_non_cnic;
+                  $dob = strtotime($applicant->dob); // Applicant's Birth date.
+                  $today = time(); // today's date.
+                  $age = date('Y', $today) - date('Y', $dob); // subtract today's date form Birth date.
+                  // EOBI clasue.
+                  $eobi_salary = '';
+                  if($applicant->cnic == 0 OR $applicant->cnic_expiry_date < date('Y-m-d')){
+                    $eobi_salary .= $eobi_non_cnic;
+                  }elseif($age > '60' AND $applicant->gender == 0 OR $age > '55' AND $applicant->gender == 1){
+                    $eobi_salary .= $eobi_overage;
+                  }else{
+                    $eobi_salary .= $eobi_cnic;
+                  }
+                  // Insurance clasue.
+                  $eobi_benefit = '';
+                  if($applicant->cnic == 0 OR $applicant->cnic_expiry_date < date('Y-m-d')){
+                    $eobi_benefit .= $insurace_non_cnic;
+                  }elseif($age > '60' AND $applicant->gender == 0 OR $age > '55' AND $applicant->gender == 1){
+                    $eobi_benefit .= $insurance_overage;
+                  }else{
+                    $eobi_benefit .= $insurance_cnic;
+                  }
+                  $start_date = date('F jS, Y', strtotime($cr_contract['from_date']));
                   $end_date = date('F jS, Y', strtotime($cr_contract['to_date']));
                   $replace = array(
                                     '{{name}}' => $applicant->fullname,
@@ -71,7 +96,7 @@
                                     '{{district}}' => $applicant->dist_name,
                                     '{{date}}'=>date("M y"),
                                     '{{start_date}}' => $start_date,
-                                    "{{end_date}}" => $end_date,
+                                    '{{end_date}}' => $end_date,
                                     '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1),
                                     '{{session}}' => ucfirst($session['username']),
                                     '{{logged_email}}' => $session['email'],

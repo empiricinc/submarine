@@ -557,35 +557,30 @@ class Contract extends MY_Controller {
 		$this->load->library('Pdf');
 	    $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
 	    $pdf->SetTitle('Employment Contract');
-	    $pdf->SetHeaderMargin(30);
-	    $pdf->setMargins(10, 20, 10, true);
-	    $pdf->SetTopMargin(0.4);
-	    $pdf->setFooterMargin(0.97);
+	    $pdf->SetHeaderMargin(35);
+	    $pdf->SetMargins(12, 22, 12, true);
+	    $pdf->SetTopMargin(10);
+	    $pdf->SetFooterMargin(10);
 	    $pdf->SetAutoPageBreak(true);
 	    $pdf->SetCreator(PDF_CREATOR);
 	    $pdf->SetAuthor('Saddam');
 	    $pdf->SetDisplayMode('real', 'default');
 	    $pdf->SetCreator(PDF_CREATOR);
-	    $pdf->setFontSubsetting(true);
-	    $pdf->setFont('times', '', 12);
-	    $pdf->setPrintHeader(false);
-	    $pdf->setPrintFooter(false);
+	    // $pdf->SetFontSubsetting(true);
+	    $pdf->SetFont('times', '', 12);
+	    $pdf->SetPrintHeader(false);
+	    $pdf->SetPrintFooter(false);
 	        // Add a page
 	    ob_start();
 	    $data = $this->Contract_model->contract_print($user_id);
 	    foreach($data as $print){
-	      // $title = $print->title;
-	    	$session1 = $this->session->userdata('username');
-	    	$find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
-	    	$contract = $this->Contract_model->applicant_data();
-	      	$content = $print->long_description;
-	      	$replace =  array('{{name}}' => $contract->fullname, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->dist_name, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->created_at)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic);
+	      	$content = $print->long_description; // Get the contract description to the print.
 	    }
-	    $width = $pdf->pixelsToUnits(600);
-	    $height = $pdf->pixelsToUnits(705);
+	    $width = $pdf->pixelsToUnits(650);
+	    $height = $pdf->pixelsToUnits(715);
 	    $resolution = array($width, $height);
 	    $pdf->AddPage('P', $resolution); // Data will be loaded to the page here.
-	    $html =  str_replace($find, $replace, $content);
+	    $html =  $content;
 	    $pdf->writeHTML($html, true, false, true, false, '');
 	    ob_clean();
 	    $pdf->Output(md5(time()).'.pdf', 'I');
@@ -599,7 +594,7 @@ class Contract extends MY_Controller {
 	// Print multiple letters at once.
 	public function print_all_contracts(){
 		$this->load->library('Pdf');
-	    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	    $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
 	    $pdf->SetTitle('Employment Contract');
 	    $pdf->SetHeaderMargin(30);
 	    $pdf->SetTopMargin(20);
@@ -619,10 +614,8 @@ class Contract extends MY_Controller {
 	    foreach($contracts as $print){
 		    // $title = $print->title;
 		    $content = $print->long_description;
-		    $from_date = date('l jS F, Y', strtotime($print->from_date));
-		    $to_date = date('l jS F, Y', strtotime($print->to_date));
 		    $pdf->AddPage(); // Data will be loaded to the page here.
-		    $html =  $content.'Starts from <strong>'.$from_date.'</strong> till <strong>'.$to_date.'.';
+		    $html =  $content;
 		    $pdf->writeHTML($html, true, false, true, false, '');
 		}
 	    ob_clean();
@@ -654,25 +647,39 @@ class Contract extends MY_Controller {
 				$formats = $this->db->get_where('xin_contract_type', array('contract_type_id' => 4))->row();
 	            $applicant='';
 				foreach($applicants as $applicant){
-	            	$find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{end_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+	            	$find = array(
+			            		"{{name}}",
+			            		"{{designation}}",
+			            		"{{district}}",
+			            		"{{date}}",
+			            		"{{start_date}}",
+			            		"{{end_date}}",
+			            		"{{session}}",
+			            		"{{logged_user}}",
+			            		"{{logged_email}}",
+			            		"{{cnic}}",
+			            		"{{gender}}",
+			            		"{{address}}",
+			            		"{{province}}"
+	            			);
 	            	$start_date = date("F jS, Y", strtotime($applicant->created_at));
 	            	$end_date = date('F jS, Y', strtotime($applicant->created_at));
 	            	$gender = $applicant->gender == 0 ? "Mr." : "Ms.";
 	        		$replace = array(
-	            		'{{name}}' => $applicant->fullname,
-	            		'{{designation}}'=>$applicant->designation_name,
-	            		'{{district}}' => $applicant->dist_name,
-	            		'{{date}}'=>date("M y"),
-	            		'{{start_date}}' => $start_date,
-	            		'{{end_date}}' => $end_date,
-	            		'{{session}}'=> substr(strtoupper($session['username']), 0, 2),
-	            		'{{logged_user}}' => ucfirst($session['username']),
-	            		'{{logged_email}}' => $session['email'],
-	            		'{{cnic}}' => $applicant->cnic,
-	            		'{{gender}}' => $gender,
-	            		'{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
-	            		'{{province}}' => $applicant->name
-	        		);
+            						'{{name}}' => $applicant->fullname,
+            						'{{designation}}'=>$applicant->designation_name,
+            						'{{district}}' => $applicant->dist_name,
+            						'{{date}}'=>date("M y"),
+            						'{{start_date}}' => $start_date,
+            						'{{end_date}}' => $end_date,
+            						'{{session}}'=> substr(strtoupper($session['username']), 0, 2),
+            						'{{logged_user}}' => ucfirst($session['username']),
+            						'{{logged_email}}' => $session['email'],
+            						'{{cnic}}' => $applicant->cnic,
+            						'{{gender}}' => $gender,
+            						'{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
+            						'{{province}}' => $applicant->name
+	        					);
 	            	$subject = $formats->contract_format;
 	            	$save_format = str_replace($find, $replace, $subject);
 					$data2 = array(
@@ -720,12 +727,18 @@ class Contract extends MY_Controller {
 	public function count_age(){
 		$birthday = $this->db->get_where('xin_job_applications', array('application_id'=> 257))->row();
 		$dob = strtotime($birthday->dob);
-		$gender = $birthday->gender;
+		$gender = $birthday->gender.'<br>';
+		$cnic = $birthday->cnic_expiry_date.'<br>';
+		if($cnic < date('Y-m-d')){
+			echo date('Y-m-d'). "<br> My CNIC has expired. The expiry date is: $cnic and today's date is: ".date('Y-m-d');
+		}else{
+			echo "Not expired. CNIC expiry date is $cnic and the today is ".date('Y-m-d').'<br>';
+		}
 		echo $birthday->dob.'<br>'; 
 		echo $gender = 1 ? 'Male': 'Female'; echo "<br>";   
 		$tdate = time();
-		$age = date('Y', $tdate) - date('Y', $dob);
-		echo ($tdate > $age ? ($age > 10 ? $age : 'Exceptional') : ($gender > 0 ? 'Horrible' : 'Average'));
+		echo $age = date('Y', $tdate) - date('Y', $dob);
+		// echo ($tdate > $age ? ($age > 10 ? $age : 'Exceptional') : ($gender > 0 ? 'Horrible' : 'Average'));
 		if($age > '60' AND $gender = 0 OR $age > '55' AND $gender = 1){
 			echo "I'm $age years old and I'm not entitled to get an insurance from the company.";
 		}elseif($age < '18'){

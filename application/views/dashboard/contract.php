@@ -289,12 +289,7 @@ h4 {
                                   <div class="row">
                                     <div class="col-md-10 col-md-offset-1" id="printThis">
                                       <!-- <h3 class="text-center"><strong>Description</strong></h3> -->
-                                      <?php $session1 = $this->session->userdata('username'); ?>
-                                      <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{cnic}}");
-                                      $subject = $contract->long_description;
-                                      $gender = $contract->gender == 0 ? 'Mr.' : 'Ms.';
-                                      $replace = array('{{name}}' => $contract->fullname, '{{designation}}'=>$contract->designation_name, '{{district}}' => $contract->cityName, '{{date}}'=>date('M y'), '{{start_date}}' => date('M d, Y', strtotime($contract->from_date)), '{{logged_user}}'=> substr(ucfirst($session1['username']), 0, 1), '{{session' => ucfirst($session1['username']), '{{cnic}}' => $contract->cnic, '{{gender}}' => $gender);
-                                      echo str_replace($find, $replace, $subject); ?>
+                                     <?php echo $contract->long_description; ?>
                                     </div>
                                   </div>
                                 </div>
