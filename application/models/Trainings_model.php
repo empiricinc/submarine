@@ -38,28 +38,28 @@ class Trainings_model extends CI_Model{
 		return $query->result();
 	}
 	// Get trainings -- Manager.
-	public function get_trainings_manager($provid, $limit = '', $offset = ''){
-		$this->db->select('xin_trainings.*,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_training_locations.location_id,
-							xin_training_locations.location,
-							provinces.id,
-							provinces.name as prov_name');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
-		$this->db->order_by('xin_trainings.trg_id', 'DESC');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
-	}
+	// public function get_trainings_manager($provid, $limit = '', $offset = ''){
+	// 	$this->db->select('xin_trainings.*,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.location,
+	// 						provinces.id,
+	// 						provinces.name as prov_name');
+	// 	$this->db->from('xin_trainings');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->where(array('xin_trainings.trg_type' => 1, 'xin_trainings.status' => 1));
+	// 	$this->db->order_by('xin_trainings.trg_id', 'DESC');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->limit($limit, $offset);
+	// 	return $this->db->get()->result();
+	// }
 	// All trainings, both Induction and Refreshers.
 	public function get_all_trainings($limit = '', $offset = ''){
 		$this->db->select('xin_trainings.*,
@@ -85,30 +85,30 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Get all trainings -- Manager.
-	public function get_all_trainings_manager($provid, $limit = '', $offset = ''){
-		$this->db->select('xin_trainings.*,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_training_locations.location_id,
-							xin_training_locations.location,
-							provinces.id,
-							provinces.name as prov_name,
-							training_attendance.training_id');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->join('training_attendance', 'xin_trainings.trg_id = training_attendance.training_id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->group_by('xin_trainings.trg_id');
-		$this->db->order_by('xin_trainings.trg_id', 'DESC');
-		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
-	}
+	// public function get_all_trainings_manager($provid, $limit = '', $offset = ''){
+	// 	$this->db->select('xin_trainings.*,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.location,
+	// 						provinces.id,
+	// 						provinces.name as prov_name,
+	// 						training_attendance.training_id');
+	// 	$this->db->from('xin_trainings');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->join('training_attendance', 'xin_trainings.trg_id = training_attendance.training_id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->group_by('xin_trainings.trg_id');
+	// 	$this->db->order_by('xin_trainings.trg_id', 'DESC');
+	// 	$this->db->limit($limit, $offset);
+	// 	return $this->db->get()->result();
+	// }
 	// Retrieve by status.
 	public function get_by_status($status = ''){
 		$this->db->select('xin_trainings.*,
@@ -153,25 +153,25 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Refresher trainings -- Manager.
-	public function refresher_training_manager($provid){
-		$this->db->select('xin_trainings.*,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_training_locations.location_id,
-							xin_training_locations.location');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
-		$this->db->where(array('xin_trainings.trg_type' => 2, 'xin_trainings.status' => 2));
-		$this->db->order_by('xin_trainings.trg_id', 'DESC');
-		$this->db->where(array('xin_trainings.location' => $provid));
-		$this->db->limit(10);
-		return $this->db->get()->result();
-	}
+	// public function refresher_training_manager($provid){
+	// 	$this->db->select('xin_trainings.*,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.location');
+	// 	$this->db->from('xin_trainings');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
+	// 	$this->db->where(array('xin_trainings.trg_type' => 2, 'xin_trainings.status' => 2));
+	// 	$this->db->order_by('xin_trainings.trg_id', 'DESC');
+	// 	$this->db->where(array('xin_trainings.location' => $provid));
+	// 	$this->db->limit(10);
+	// 	return $this->db->get()->result();
+	// }
 	// Count refresher trainings
 	public function count_refresher(){
 		$this->db->where('trg_type', 2);
@@ -202,30 +202,30 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// All refresher trainings -- Manager.
-	public function all_refresher_trainings_manager($provid, $limit = '', $offset = ''){
-		$this->db->select('xin_trainings.*,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_training_locations.location_id,
-							xin_training_locations.location,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							provinces.id,
-							provinces.name as prov_name');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->where(array('xin_trainings.trg_type' => 2));
-		$this->db->order_by('xin_trainings.trg_id', 'DESC');
-		$this->db->where(array('xin_trainings.location' => $provid));
-		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
-	}
+	// public function all_refresher_trainings_manager($provid, $limit = '', $offset = ''){
+	// 	$this->db->select('xin_trainings.*,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.location,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						provinces.id,
+	// 						provinces.name as prov_name');
+	// 	$this->db->from('xin_trainings');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.location = xin_training_locations.location_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->where(array('xin_trainings.trg_type' => 2));
+	// 	$this->db->order_by('xin_trainings.trg_id', 'DESC');
+	// 	$this->db->where(array('xin_trainings.location' => $provid));
+	// 	$this->db->limit($limit, $offset);
+	// 	return $this->db->get()->result();
+	// }
 	// Search in refresher trainings...
 	public function search_refresher($training){
 		$this->db->select('xin_trainings.*,
@@ -353,41 +353,41 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Search trainings -- Manager.
-	public function search_trainings_manager($provid, $training){
-		$this->db->select('xin_trainings.trg_id,
-							xin_trainings.start_date,
-							xin_trainings.end_date,
-							xin_trainings.trg_type,
-							xin_trainings.trainer_one,
-							xin_trainings.facilitator_name,
-							xin_trainings.hall_detail,
-							xin_trainings.session,
-							xin_trainings.approval_type,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_locations.location_id,
-							xin_training_locations.location,
-							provinces.id,
-							provinces.name as prov_name');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->like('xin_trainings.facilitator_name', $training);
-		$this->db->or_like('xin_trainings.approval_type', $training);
-		$this->db->or_like('xin_trainers.first_name', $training);
-		$this->db->or_like('xin_training_types.type', $training);
-		$this->db->or_like('xin_training_locations.location', $training);
-		$this->db->or_like('provinces.name', $training);
-		$this->db->or_like('xin_trainings.session', $training);
-		$this->db->order_by('xin_trainings.trg_id', 'DESC');
-		return $this->db->get()->result();
-	}
+	// public function search_trainings_manager($provid, $training){
+	// 	$this->db->select('xin_trainings.trg_id,
+	// 						xin_trainings.start_date,
+	// 						xin_trainings.end_date,
+	// 						xin_trainings.trg_type,
+	// 						xin_trainings.trainer_one,
+	// 						xin_trainings.facilitator_name,
+	// 						xin_trainings.hall_detail,
+	// 						xin_trainings.session,
+	// 						xin_trainings.approval_type,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.location,
+	// 						provinces.id,
+	// 						provinces.name as prov_name');
+	// 	$this->db->from('xin_trainings');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->like('xin_trainings.facilitator_name', $training);
+	// 	$this->db->or_like('xin_trainings.approval_type', $training);
+	// 	$this->db->or_like('xin_trainers.first_name', $training);
+	// 	$this->db->or_like('xin_training_types.type', $training);
+	// 	$this->db->or_like('xin_training_locations.location', $training);
+	// 	$this->db->or_like('provinces.name', $training);
+	// 	$this->db->or_like('xin_trainings.session', $training);
+	// 	$this->db->order_by('xin_trainings.trg_id', 'DESC');
+	// 	return $this->db->get()->result();
+	// }
 	// Training detail, view single training by training ID.
 	public function training_detail($trg_id){
 		$this->db->select('xin_trainings.*,
@@ -426,44 +426,44 @@ class Trainings_model extends CI_Model{
 		return $result->row_array();
 	}
 	// Training detail -- Manager.
-	public function training_detail_manager($provid, $trg_id){
-		$this->db->select('xin_trainings.*,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_trainers.email,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_training_locations.location_id,
-							xin_training_locations.location,
-							xin_companies.company_id,
-							xin_companies.name,
-							xin_designations.designation_id,
-							xin_designations.designation_name,
-							provinces.id,
-							provinces.name as provName,
-							district.id,
-							district.name as cityName,
-							tehsil.id,
-							tehsil.name as teh_name,
-							union_councel.id,
-							union_councel.name as uc_name');
-		$this->db->from('xin_trainings');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
-		$this->db->join('xin_companies', 'xin_trainings.project = xin_companies.company_id', 'left');
-		// $this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->join('district', 'xin_trainings.district = district.id', 'left');
-		$this->db->join('tehsil', 'xin_trainings.tehsil = tehsil.id', 'left');
-		$this->db->join('union_councel', 'xin_trainings.uc = union_councel.id', 'left');
-		$this->db->where('xin_trainings.trg_id', $trg_id);
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->order_by('xin_trainings.trg_id', 'DESC');
-		$result = $this->db->get();
-		return $result->row_array();
-	}
+	// public function training_detail_manager($provid, $trg_id){
+	// 	$this->db->select('xin_trainings.*,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_trainers.email,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.location,
+	// 						xin_companies.company_id,
+	// 						xin_companies.name,
+	// 						xin_designations.designation_id,
+	// 						xin_designations.designation_name,
+	// 						provinces.id,
+	// 						provinces.name as provName,
+	// 						district.id,
+	// 						district.name as cityName,
+	// 						tehsil.id,
+	// 						tehsil.name as teh_name,
+	// 						union_councel.id,
+	// 						union_councel.name as uc_name');
+	// 	$this->db->from('xin_trainings');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+	// 	$this->db->join('xin_companies', 'xin_trainings.project = xin_companies.company_id', 'left');
+	// 	// $this->db->join('xin_designations', 'xin_companies.designation_id = xin_designations.designation_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->join('district', 'xin_trainings.district = district.id', 'left');
+	// 	$this->db->join('tehsil', 'xin_trainings.tehsil = tehsil.id', 'left');
+	// 	$this->db->join('union_councel', 'xin_trainings.uc = union_councel.id', 'left');
+	// 	$this->db->where('xin_trainings.trg_id', $trg_id);
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->order_by('xin_trainings.trg_id', 'DESC');
+	// 	$result = $this->db->get();
+	// 	return $result->row_array();
+	// }
 	// Create new trainings, insert data into database.
 	public function create_training($data){
 		$this->db->insert('xin_trainings', $data);
@@ -561,25 +561,25 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Search hotels -- Manager.
-	public function search_hotels_manager($provid, $hotel){
-		$this->db->select('xin_training_hotels.hotel_id,
-							xin_training_hotels.province,
-							xin_training_hotels.city,
-							xin_training_hotels.hotel_name,
-							provinces.id as provId,
-							provinces.name,
-							district.id as cityId,
-							district.name as city_name');
-		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
-		$this->db->join('district', 'xin_training_hotels.city = district.id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->like('xin_training_hotels.hotel_name', $hotel);
-		$this->db->or_like('provinces.name', $hotel);
-		$this->db->or_like('district.name', $hotel);
-		$this->db->order_by('xin_training_hotels.hotel_id', 'DESC');
-		return $this->db->get()->result();
-	}
+	// public function search_hotels_manager($provid, $hotel){
+	// 	$this->db->select('xin_training_hotels.hotel_id,
+	// 						xin_training_hotels.province,
+	// 						xin_training_hotels.city,
+	// 						xin_training_hotels.hotel_name,
+	// 						provinces.id as provId,
+	// 						provinces.name,
+	// 						district.id as cityId,
+	// 						district.name as city_name');
+	// 	$this->db->from('xin_training_hotels');
+	// 	$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+	// 	$this->db->join('district', 'xin_training_hotels.city = district.id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->like('xin_training_hotels.hotel_name', $hotel);
+	// 	$this->db->or_like('provinces.name', $hotel);
+	// 	$this->db->or_like('district.name', $hotel);
+	// 	$this->db->order_by('xin_training_hotels.hotel_id', 'DESC');
+	// 	return $this->db->get()->result();
+	// }
 	// Trainer's detail.
 	public function trainer_detail($trainer_id){
 		$this->db->select('*');
@@ -605,23 +605,23 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->row_array();
 	}
 	// Hotel detail -- Manager.
-	public function hotel_detail_manager($provid, $hotel_id){
-		$this->db->select('xin_training_hotels.hotel_id,
-							xin_training_hotels.province,
-							xin_training_hotels.city,
-							xin_training_hotels.hotel_name,
-							provinces.id,
-							provinces.name,
-							district.id,
-							district.name as cityName');
-		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
-		$this->db->join('district', 'xin_training_hotels.city = district.id', 'left', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->where('hotel_id', $hotel_id);
-		$this->db->order_by('xin_training_hotels.hotel_id', 'DESC');
-		return $this->db->get()->row_array();
-	}
+	// public function hotel_detail_manager($provid, $hotel_id){
+	// 	$this->db->select('xin_training_hotels.hotel_id,
+	// 						xin_training_hotels.province,
+	// 						xin_training_hotels.city,
+	// 						xin_training_hotels.hotel_name,
+	// 						provinces.id,
+	// 						provinces.name,
+	// 						district.id,
+	// 						district.name as cityName');
+	// 	$this->db->from('xin_training_hotels');
+	// 	$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+	// 	$this->db->join('district', 'xin_training_hotels.city = district.id', 'left', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->where('hotel_id', $hotel_id);
+	// 	$this->db->order_by('xin_training_hotels.hotel_id', 'DESC');
+	// 	return $this->db->get()->row_array();
+	// }
 	// Modify hotel.
 	public function update_hotel($hotel_id, $data){
 		$this->db->where('hotel_id', $hotel_id);
@@ -736,24 +736,24 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Get location info -- Manager.
-	public function get_training_locations_manager($provid, $limit = '', $offset = ''){
-		$this->db->select('xin_training_locations.location_id,
-							xin_training_locations.province,
-							xin_training_locations.city,
-							xin_training_locations.location,
-							xin_training_locations.description,
-							provinces.id,
-							provinces.name,
-							district.id as city_id,
-							district.name as city_name');
-		$this->db->from('xin_training_locations');
-		$this->db->join('provinces', 'xin_training_locations.province = provinces.id', 'left');
-		$this->db->join('district', 'xin_training_locations.city = district.id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->limit($limit, $offset);
-		$this->db->order_by('xin_training_locations.location_id', 'DESC');
-		return $this->db->get()->result();
-	}
+	// public function get_training_locations_manager($provid, $limit = '', $offset = ''){
+	// 	$this->db->select('xin_training_locations.location_id,
+	// 						xin_training_locations.province,
+	// 						xin_training_locations.city,
+	// 						xin_training_locations.location,
+	// 						xin_training_locations.description,
+	// 						provinces.id,
+	// 						provinces.name,
+	// 						district.id as city_id,
+	// 						district.name as city_name');
+	// 	$this->db->from('xin_training_locations');
+	// 	$this->db->join('provinces', 'xin_training_locations.province = provinces.id', 'left');
+	// 	$this->db->join('district', 'xin_training_locations.city = district.id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->limit($limit, $offset);
+	// 	$this->db->order_by('xin_training_locations.location_id', 'DESC');
+	// 	return $this->db->get()->result();
+	// }
 	// Add location information into the database.
 	public function add_locations($data){
 		$this->db->insert('xin_training_locations', $data);
@@ -822,23 +822,23 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Get stay hotels -- Manager.
-	public function get_stay_hotels_manager($provid, $limit ='', $offset =''){
-		$this->db->select('xin_training_hotels.hotel_id,
-							xin_training_hotels.province,
-							xin_training_hotels.city,
-							xin_training_hotels.hotel_name,
-							provinces.id,
-							provinces.name,
-							district.id as city_id,
-							district.name as city_name');
-		$this->db->from('xin_training_hotels');
-		$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
-		$this->db->join('district', 'xin_training_hotels.city = district.id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->limit($limit, $offset);
-		$this->db->order_by('xin_training_hotels.hotel_id', 'DESC');
-		return $this->db->get()->result();
-	}
+	// public function get_stay_hotels_manager($provid, $limit ='', $offset =''){
+	// 	$this->db->select('xin_training_hotels.hotel_id,
+	// 						xin_training_hotels.province,
+	// 						xin_training_hotels.city,
+	// 						xin_training_hotels.hotel_name,
+	// 						provinces.id,
+	// 						provinces.name,
+	// 						district.id as city_id,
+	// 						district.name as city_name');
+	// 	$this->db->from('xin_training_hotels');
+	// 	$this->db->join('provinces', 'xin_training_hotels.province = provinces.id', 'left');
+	// 	$this->db->join('district', 'xin_training_hotels.city = district.id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->limit($limit, $offset);
+	// 	$this->db->order_by('xin_training_hotels.hotel_id', 'DESC');
+	// 	return $this->db->get()->result();
+	// }
 	// Get room types to show them in the dropdown list.
 	public function get_room_types(){
 		$this->db->select('price_id, room_type, charges, hotel_id');
@@ -964,52 +964,52 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Get completed trainings -- Manager.
-	public function trainings_completed_manager($provid, $limit, $offset){
-		$this->db->select('COUNT(training_attendance.emp_id) as attendees,
-							training_attendance.attendance_id,
-							training_attendance.status,
-							training_attendance.training_id,
-							training_attendance.project_id,
-							training_attendance.attendance_date,
-							xin_trainings.trg_id,
-							xin_trainings.trg_type,
-							xin_trainings.trainer_one,
-							xin_trainings.start_date,
-							xin_trainings.end_date,
-							xin_trainings.session,
-							xin_trainings.target_group,
-							xin_trainings.location,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_trainers.trainer_id,
-							xin_trainers.first_name,
-							xin_trainers.last_name,
-							xin_training_locations.location_id,
-							xin_training_locations.province,
-							xin_training_locations.city,
-							xin_training_locations.location,
-							provinces.id,
-							provinces.name,
-							district.id as city_id,
-							district.name as city_name,
-							xin_employees.employee_id');
-		$this->db->from('training_attendance');
-		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id AND xin_trainers.trainer_id = xin_trainings.trainer_two', 'left');
-		$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->join('district', 'xin_training_locations.city = district.id', 'left');
-		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id', 'left');
-		$this->db->where('xin_trainings.project = training_attendance.project_id');
-		$this->db->group_by('training_attendance.training_id');
-		// $this->db->group_by('training_attendance.attendance_date');
-		$this->db->where('xin_trainings.trg_id = training_attendance.training_id');
-		$this->db->where(array('xin_trainings.location' => $provid));
-		$this->db->order_by('training_attendance.attendance_date', 'DESC');
-		$this->db->limit($limit, $offset);
-		return $this->db->get()->result();
-	}
+	// public function trainings_completed_manager($provid, $limit, $offset){
+	// 	$this->db->select('COUNT(training_attendance.emp_id) as attendees,
+	// 						training_attendance.attendance_id,
+	// 						training_attendance.status,
+	// 						training_attendance.training_id,
+	// 						training_attendance.project_id,
+	// 						training_attendance.attendance_date,
+	// 						xin_trainings.trg_id,
+	// 						xin_trainings.trg_type,
+	// 						xin_trainings.trainer_one,
+	// 						xin_trainings.start_date,
+	// 						xin_trainings.end_date,
+	// 						xin_trainings.session,
+	// 						xin_trainings.target_group,
+	// 						xin_trainings.location,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_trainers.trainer_id,
+	// 						xin_trainers.first_name,
+	// 						xin_trainers.last_name,
+	// 						xin_training_locations.location_id,
+	// 						xin_training_locations.province,
+	// 						xin_training_locations.city,
+	// 						xin_training_locations.location,
+	// 						provinces.id,
+	// 						provinces.name,
+	// 						district.id as city_id,
+	// 						district.name as city_name,
+	// 						xin_employees.employee_id');
+	// 	$this->db->from('training_attendance');
+	// 	$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->join('xin_trainers', 'xin_trainings.trainer_one = xin_trainers.trainer_id AND xin_trainers.trainer_id = xin_trainings.trainer_two', 'left');
+	// 	$this->db->join('xin_training_locations', 'xin_trainings.venue = xin_training_locations.location_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->join('district', 'xin_training_locations.city = district.id', 'left');
+	// 	$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id', 'left');
+	// 	$this->db->where('xin_trainings.project = training_attendance.project_id');
+	// 	$this->db->group_by('training_attendance.training_id');
+	// 	// $this->db->group_by('training_attendance.attendance_date');
+	// 	$this->db->where('xin_trainings.trg_id = training_attendance.training_id');
+	// 	$this->db->where(array('xin_trainings.location' => $provid));
+	// 	$this->db->order_by('training_attendance.attendance_date', 'DESC');
+	// 	$this->db->limit($limit, $offset);
+	// 	return $this->db->get()->result();
+	// }
 	// Get training's expenses for each trainee
 	public function training_expenses($trg_id=''){
 		$this->db->select('xin_training_allowances.*,
@@ -1044,40 +1044,40 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->result();
 	}
 	// Get training expenses -- Manager.
-	public function training_expenses_manager($provid, $trg_id=''){
-		$this->db->select('xin_training_allowances.*,
-							xin_employees.user_id,
-							xin_employees.employee_id,
-							xin_employees.first_name,
-							xin_employees.company_id,
-							xin_employees.designation_id,
-							xin_employees.provience_id
-							training_attendance.emp_id,
-							training_attendance.project_id,
-							training_attendance.status,
-							xin_trainings.trg_id,
-							xin_trainings.trg_type,
-							xin_training_types.training_type_id,
-							xin_training_types.type,
-							xin_companies.company_id,
-							xin_companies.name,
-							xin_designations.designation_id,
-							xin_designations.designation_name');
-		$this->db->from('xin_employees');
-		$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-		$this->db->join('xin_training_allowances', 'xin_companies.company_id = xin_training_allowances.project', 'left');
-		$this->db->join('training_attendance', 'xin_employees.employee_id = training_attendance.emp_id', 'left');
-		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		// $this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
-		$this->db->group_by('training_attendance.emp_id');
-		$this->db->where('xin_employees.employee_id = training_attendance.emp_id');
-		$this->db->where(array('xin_employees.provience_id' => $provid));
-		// $this->db->where('xin_employees.company_id = training_attendance.project_id');
-		$this->db->where('xin_trainings.trg_id', $trg_id);
-		return $this->db->get()->result();
-	}
+	// public function training_expenses_manager($provid, $trg_id=''){
+	// 	$this->db->select('xin_training_allowances.*,
+	// 						xin_employees.user_id,
+	// 						xin_employees.employee_id,
+	// 						xin_employees.first_name,
+	// 						xin_employees.company_id,
+	// 						xin_employees.designation_id,
+	// 						xin_employees.provience_id
+	// 						training_attendance.emp_id,
+	// 						training_attendance.project_id,
+	// 						training_attendance.status,
+	// 						xin_trainings.trg_id,
+	// 						xin_trainings.trg_type,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type,
+	// 						xin_companies.company_id,
+	// 						xin_companies.name,
+	// 						xin_designations.designation_id,
+	// 						xin_designations.designation_name');
+	// 	$this->db->from('xin_employees');
+	// 	$this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+	// 	$this->db->join('xin_training_allowances', 'xin_companies.company_id = xin_training_allowances.project', 'left');
+	// 	$this->db->join('training_attendance', 'xin_employees.employee_id = training_attendance.emp_id', 'left');
+	// 	$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	// $this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+	// 	$this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
+	// 	$this->db->group_by('training_attendance.emp_id');
+	// 	$this->db->where('xin_employees.employee_id = training_attendance.emp_id');
+	// 	$this->db->where(array('xin_employees.provience_id' => $provid));
+	// 	// $this->db->where('xin_employees.company_id = training_attendance.project_id');
+	// 	$this->db->where('xin_trainings.trg_id', $trg_id);
+	// 	return $this->db->get()->result();
+	// }
 	// Get attendance report
 	public function training_report(){
 		$this->db->select('training_attendance.*,
@@ -1097,25 +1097,25 @@ class Trainings_model extends CI_Model{
 		return $report->result();
 	}
 	// Get attendance report -- Manager.
-	public function training_report_manager($provid){
-		$this->db->select('training_attendance.*,
-							xin_trainings.trg_id,
-							xin_trainings.location,
-							xin_employees.employee_id,
-							xin_employees.first_name,
-							xin_companies.company_id,
-							xin_companies.name');
-		$this->db->from('training_attendance');
-		$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
-		$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id', 'left');
-		$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id', 'left');
-		$this->db->where('training_attendance.training_id', 1);
-		$this->db->where(array('xin_trainings.location' => $provid));
-		$this->db->group_by('training_attendance.emp_id');
-		$report = $this->db->get();
-		echo $this->db->last_query();
-		return $report->result();
-	}
+	// public function training_report_manager($provid){
+	// 	$this->db->select('training_attendance.*,
+	// 						xin_trainings.trg_id,
+	// 						xin_trainings.location,
+	// 						xin_employees.employee_id,
+	// 						xin_employees.first_name,
+	// 						xin_companies.company_id,
+	// 						xin_companies.name');
+	// 	$this->db->from('training_attendance');
+	// 	$this->db->join('xin_trainings', 'training_attendance.training_id = xin_trainings.trg_id', 'left');
+	// 	$this->db->join('xin_employees', 'training_attendance.emp_id = xin_employees.employee_id', 'left');
+	// 	$this->db->join('xin_companies', 'training_attendance.project_id = xin_companies.company_id', 'left');
+	// 	$this->db->where('training_attendance.training_id', 1);
+	// 	$this->db->where(array('xin_trainings.location' => $provid));
+	// 	$this->db->group_by('training_attendance.emp_id');
+	// 	$report = $this->db->get();
+	// 	echo $this->db->last_query();
+	// 	return $report->result();
+	// }
 	// Get employees by designation, induction training.
 	public function get_designation_employees($desig_id, $status){
 		$this->db->select('xin_employees.employee_id,
@@ -1170,33 +1170,33 @@ class Trainings_model extends CI_Model{
 		return $query->row_array();
 	}
 	// Get activity reports -- Manger.
-	public function get_activity_report_manager($provid, $activity_id){
-		$this->db->select('xin_activity_reporting.*,
-							xin_trainings.trg_id,
-							xin_trainings.district,
-							xin_trainings.location,
-							xin_trainings.trainee_employees,
-							xin_trainings.trg_type as trgType,
-							xin_trainings.start_date,
-							xin_trainings.end_date,
-							provinces.id,
-							provinces.name,
-							district.id,
-							district.name as cityName,
-							xin_training_types.training_type_id,
-							xin_training_types.type');
-		$this->db->from('xin_activity_reporting');
-		$this->db->join('xin_trainings', 'xin_activity_reporting.trg_id = xin_trainings.trg_id', 'left');
-		$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
-		$this->db->join('district', 'provinces.id = district.province_id', 'left');
-		$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->where('xin_activity_reporting.activity_id', $activity_id);
-		$this->db->or_where('xin_activity_reporting.trg_id', $activity_id);
-		$this->db->group_by('xin_trainings.trg_id');
-		$query = $this->db->get();
-		return $query->row_array();
-	}
+	// public function get_activity_report_manager($provid, $activity_id){
+	// 	$this->db->select('xin_activity_reporting.*,
+	// 						xin_trainings.trg_id,
+	// 						xin_trainings.district,
+	// 						xin_trainings.location,
+	// 						xin_trainings.trainee_employees,
+	// 						xin_trainings.trg_type as trgType,
+	// 						xin_trainings.start_date,
+	// 						xin_trainings.end_date,
+	// 						provinces.id,
+	// 						provinces.name,
+	// 						district.id,
+	// 						district.name as cityName,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type');
+	// 	$this->db->from('xin_activity_reporting');
+	// 	$this->db->join('xin_trainings', 'xin_activity_reporting.trg_id = xin_trainings.trg_id', 'left');
+	// 	$this->db->join('provinces', 'xin_trainings.location = provinces.id', 'left');
+	// 	$this->db->join('district', 'provinces.id = district.province_id', 'left');
+	// 	$this->db->join('xin_training_types', 'xin_trainings.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->where('xin_activity_reporting.activity_id', $activity_id);
+	// 	$this->db->or_where('xin_activity_reporting.trg_id', $activity_id);
+	// 	$this->db->group_by('xin_trainings.trg_id');
+	// 	$query = $this->db->get();
+	// 	return $query->row_array();
+	// }
 	// Events calendar
 	public function store_calendar($data){
 		$this->db->insert('events_calendar', $data);
@@ -1241,37 +1241,37 @@ class Trainings_model extends CI_Model{
     	return $this->db->get()->result(); 	
     }
     // Get events -- Manager.
-    public function get_events_manager($provid, $limit, $offset){
-    	$this->db->select('events_calendar.event_id,
-    						events_calendar.title,
-    						events_calendar.province,
-    						events_calendar.district,
-    						events_calendar.project,
-    						events_calendar.designation,
-    						events_calendar.trg_type,
-    						events_calendar.start_date,
-    						events_calendar.end_date,
-    						provinces.id,
-    						provinces.name as provName,
-    						district.id,
-    						district.name as cityName,
-    						xin_companies.company_id,
-    						xin_companies.name as compName,
-    						xin_designations.designation_id,
-    						xin_designations.designation_name,
-    						xin_training_types.training_type_id,
-    						xin_training_types.type');
-    	$this->db->from('events_calendar');
-    	$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
-    	$this->db->join('district', 'events_calendar.district = district.id', 'left');
-    	$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
-    	$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
-    	$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
-    	$this->db->where(array('provinces.id' => $provid));
-    	$this->db->order_by('events_calendar.event_id', 'DESC');
-    	$this->db->limit($limit, $offset);
-    	return $this->db->get()->result(); 	
-    }
+    // public function get_events_manager($provid, $limit, $offset){
+    // 	$this->db->select('events_calendar.event_id,
+    // 						events_calendar.title,
+    // 						events_calendar.province,
+    // 						events_calendar.district,
+    // 						events_calendar.project,
+    // 						events_calendar.designation,
+    // 						events_calendar.trg_type,
+    // 						events_calendar.start_date,
+    // 						events_calendar.end_date,
+    // 						provinces.id,
+    // 						provinces.name as provName,
+    // 						district.id,
+    // 						district.name as cityName,
+    // 						xin_companies.company_id,
+    // 						xin_companies.name as compName,
+    // 						xin_designations.designation_id,
+    // 						xin_designations.designation_name,
+    // 						xin_training_types.training_type_id,
+    // 						xin_training_types.type');
+    // 	$this->db->from('events_calendar');
+    // 	$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
+    // 	$this->db->join('district', 'events_calendar.district = district.id', 'left');
+    // 	$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
+    // 	$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
+    // 	$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
+    // 	$this->db->where(array('provinces.id' => $provid));
+    // 	$this->db->order_by('events_calendar.event_id', 'DESC');
+    // 	$this->db->limit($limit, $offset);
+    // 	return $this->db->get()->result(); 	
+    // }
 	// Get event detail by event_id.
 	public function detail_event($event_id){
 		$this->db->select('events_calendar.event_id,
@@ -1302,35 +1302,35 @@ class Trainings_model extends CI_Model{
 		return $this->db->get()->row_array();
 	}
 	// Event detail -- Manager.
-	public function detail_event_manager($provid, $event_id){
-		$this->db->select('events_calendar.event_id,
-							events_calendar.title,
-							events_calendar.province,
-							events_calendar.district,
-							events_calendar.project,
-							events_calendar.designation,
-							events_calendar.trg_type,
-							events_calendar.start_date, end_date,
-							provinces.id,
-							provinces.name as provName,
-							district.id,
-							district.name as cityName,
-							xin_companies.company_id,
-							xin_companies.name as compName,
-							xin_designations.designation_id,
-							xin_designations.designation_name,
-							xin_training_types.training_type_id,
-							xin_training_types.type');
-		$this->db->from('events_calendar');
-		$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
-		$this->db->join('district', 'events_calendar.district = district.id', 'left');
-		$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
-		$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
-		$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
-		$this->db->where(array('provinces.id' => $provid));
-		$this->db->where('events_calendar.event_id', $event_id);
-		return $this->db->get()->row_array();
-	}
+	// public function detail_event_manager($provid, $event_id){
+	// 	$this->db->select('events_calendar.event_id,
+	// 						events_calendar.title,
+	// 						events_calendar.province,
+	// 						events_calendar.district,
+	// 						events_calendar.project,
+	// 						events_calendar.designation,
+	// 						events_calendar.trg_type,
+	// 						events_calendar.start_date, end_date,
+	// 						provinces.id,
+	// 						provinces.name as provName,
+	// 						district.id,
+	// 						district.name as cityName,
+	// 						xin_companies.company_id,
+	// 						xin_companies.name as compName,
+	// 						xin_designations.designation_id,
+	// 						xin_designations.designation_name,
+	// 						xin_training_types.training_type_id,
+	// 						xin_training_types.type');
+	// 	$this->db->from('events_calendar');
+	// 	$this->db->join('provinces', 'events_calendar.province = provinces.id', 'left');
+	// 	$this->db->join('district', 'events_calendar.district = district.id', 'left');
+	// 	$this->db->join('xin_companies', 'events_calendar.project = xin_companies.company_id', 'left');
+	// 	$this->db->join('xin_designations', 'events_calendar.designation = xin_designations.designation_id', 'left');
+	// 	$this->db->join('xin_training_types', 'events_calendar.trg_type = xin_training_types.training_type_id', 'left');
+	// 	$this->db->where(array('provinces.id' => $provid));
+	// 	$this->db->where('events_calendar.event_id', $event_id);
+	// 	return $this->db->get()->row_array();
+	// }
 	// Modify an event.... [Get data to form for edit...]
 	public function modify_event($event_id){
 		$this->db->select('events_calendar.event_id,

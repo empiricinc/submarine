@@ -461,6 +461,13 @@ class Contract extends MY_Controller {
         }
         redirect('contract');
     }
+    // Delete uploaded file / scanned copy of contract.
+    public function delete_file($file_id){
+    	$delete = $this->db->where('file_id', $file_id)->get('employee_contract_files')->row();
+    	$this->Contract_model->delete_file($delete->file_id); // This will delete the filename from DB.
+    	unlink('./uploads/contract/'.$delete->file_name); // This will delete the file from folder.
+    	redirect('contract'); // redirect link.
+    }
 	// Finishing a contract.
 	public function finish(){
 	 	$id = $this->input->post('id');
@@ -509,6 +516,10 @@ class Contract extends MY_Controller {
 			'status' => 0
 		);
 		$this->Contract_model->contract_extension($data);
+		$check_type = $this->db->get_where('employee_contract', array('user_id', $this->uri->segment(3)))->row();
+		if($check_type->contract_type == 5){
+			$this->db->update('');
+		}
 		$this->session->set_flashdata('messageactive', 'Contract has been extended successfully!');
 		redirect('contract');
 	}

@@ -45,6 +45,7 @@
             <?php $copies = $this->Contract_model->get_copies($this->uri->segment(3)); 
             if($copies): ?>
             <?php foreach($copies as $copy): ?>
+              <a href="<?php echo base_url(); ?>contract/delete_file/<?php echo $copy->file_id; ?>" class="btn btn-danger btn-xs">Delete <i class="fa fa-arrow-circle-right"></i></a>
               <a href="<?= base_url(); ?>uploads/contract/<?= $copy->file_name; ?>">
                 <img id="image" height="155" width="155" class="img-circle shadow" src="<?= base_url(); ?>uploads/contract/<?= $copy->file_name; ?>" alt="Loading image, please wait...">
               </a>

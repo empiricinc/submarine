@@ -199,7 +199,7 @@
 							<strong>Email: </strong> <?php echo $trainer_detail['email']; ?>
 						</p>
 						<p>
-							<strong>Expertise: </strong> <?php echo $trainer_detail['expertise']; ?>
+							<strong>Expertise: </strong> <?php echo strip_tags($trainer_detail['expertise']); ?>
 						</p>
 						<p>
 							<strong>Address: </strong> <?php echo $trainer_detail['address']; ?>

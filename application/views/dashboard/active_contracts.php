@@ -148,7 +148,7 @@ $(document).ready(function() {
                       <th>manger</th>
                       <th>type</th>
                       <th>submission date</th>
-                      <th>action</th>
+                      <th>action | operations</th>
                     </tr>
                   </thead>
                   <tbody id="filter_results">
@@ -319,7 +319,9 @@ $(document).ready(function() {
                   <td>${val.contract_manager}</td>
                   <td>${val.cont_type}</td>
                   <td>${subDate}</td>
-                  <td><button data-toggle="tooltip" title="Attached to personal file, no further actions needed!" class="btn btn-success btn-xs">Completed !</button></td>
+                  <td><button type="button" data-toggle="tooltip" title="Attached to personal file, no further actions needed!" class="btn btn-success btn-xs">Completed !</button>
+                    <a href="<?php echo base_url(); ?>contract/verify/${val.user_id}" class="btn btn-primary btn-xs">View Copies</a>
+                  </td>
                 </tr>
               `;
             }

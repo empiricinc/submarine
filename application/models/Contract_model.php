@@ -327,6 +327,16 @@ class Contract_model extends CI_Model {
 	   // $this->db->limit(10);
 	   return $this->db->get()->result();
 	}
+	// Contract history.
+	public function contract_history($user_id){
+		$this->db->select('employee_contract.*,
+									xin_contract_type.contract_type_id,
+									xin_contract_type.name');
+		$this->db->from('employee_contract');
+		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
+		$this->db->where('employee_contract.user_id', $user_id);
+		return $this->db->get()->result();
+	}
 		function applicantdetails($id){
   
 	 		$condition = " application_id =" . $id . " ";
@@ -347,7 +357,7 @@ class Contract_model extends CI_Model {
  		}
  		// Create contract.
  		public function create_contract($user_id = '', $data = ''){
- 			$this->db->where('user_id', $user_id);
+ 			$this->db->where(array('user_id' => $user_id, 'status' => 0));
  			$this->db->update('employee_contract', $data);
  		}
  		// Select contract format from the list.
@@ -434,14 +444,24 @@ class Contract_model extends CI_Model {
     // View employee's scanned contract copies.
     public function get_copies($user_id = ''){
     	$this->db->select('employee_contract.id,
-    						employee_contract.user_id,
-    						employee_contract_files.file_id,
-    						employee_contract_files.emp_id,
-    						employee_contract_files.file_name');
+		    						employee_contract.user_id,
+		    						employee_contract_files.file_id,
+		    						employee_contract_files.emp_id,
+		    						employee_contract_files.file_name');
     	$this->db->from('employee_contract_files');
     	$this->db->join('employee_contract', 'employee_contract_files.emp_id = employee_contract.user_id');
     	$this->db->where('employee_contract_files.emp_id', $user_id);
     	return $this->db->get()->result();
+    }
+    // Delete copies.
+    public function delete_file($file_id){
+    	$this->db->where('file_id', $file_id);
+    	$this->db->delete('employee_contract_files');
+    	if($this->db->affected_rows() > 0){
+    		return true;
+    	}else{
+    		return false;
+    	}
     }
 	// Printing contracts. Single contract printing.
 	public function contract_print($user_id){
@@ -777,7 +797,7 @@ class Contract_model extends CI_Model {
 	 // --------------------- Contract template setup --------------------------//
 	 // Get designations.
 	 public function get_designations(){
-	 	return $this->db->get('xin_designations_1')->result();
+	 	return $this->db->get('xin_designations')->result();
 	 }
 	 // Add new template.
 	 public function add_template($data){
@@ -790,28 +810,28 @@ class Contract_model extends CI_Model {
 	 }
 	 // Check for existing templates. View and edit the existing template.
 	 public function template_exists($id){
-	 	$this->db->select('documents_ahad_test_saddam.contract_type_id,
-	 								documents_ahad_test_saddam.name,
-	 								documents_ahad_test_saddam.contract_format,
-	 								documents_ahad_test_saddam.designation,
-	 								xin_designations_1.designation_id,
-	 								xin_designations_1.designation_name');
-	 	$this->db->from('documents_ahad_test_saddam');
-	 	$this->db->join('xin_designations_1', 'documents_ahad_test_saddam.designation = xin_designations_1.designation_id', 'left');
-	 	$this->db->where('documents_ahad_test_saddam.contract_type_id', $id);
+	 	$this->db->select('xin_contract_type.contract_type_id,
+	 								xin_contract_type.name,
+	 								xin_contract_type.contract_format,
+	 								xin_contract_type.designation,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('xin_contract_type');
+	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
+	 	$this->db->where('xin_contract_type.contract_type_id', $id);
 	 	return $this->db->get()->row_array();
 	 }
 	 // Count all templates to display pagination.
 	 public function count_templates(){
-	 	return $this->db->from('documents_ahad_test_saddam')->count_all_results();
+	 	return $this->db->from('xin_contract_type')->count_all_results();
 	 }
 	 // Get templates
 	 public function get_templates($limit, $offset){
-	 	$this->db->select('documents_ahad_test_saddam.*,
-	 								xin_designations_1.designation_id,
-	 								xin_designations_1.designation_name');
-	 	$this->db->from('documents_ahad_test_saddam');
-	 	$this->db->join('xin_designations_1', 'documents_ahad_test_saddam.designation = xin_designations_1.designation_id', 'left');
+	 	$this->db->select('xin_contract_type.*,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('xin_contract_type');
+	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
 	 	$this->db->limit($limit, $offset);
 	 	return $this->db->get()->result();
 	 }
@@ -824,18 +844,18 @@ class Contract_model extends CI_Model {
 	 // Update the template.
 	 public function update_template($id, $data){
 	 	$this->db->where('contract_type_id', $id);
-	 	$this->db->update('documents_ahad_test_saddam', $data);
+	 	$this->db->update('xin_contract_type', $data);
 	 	return true;
 	 }
 	 // Search templates.
 	 public function search_templates($keyword){
-	 	$this->db->select('documents_ahad_test_saddam.*,
-	 								xin_designations_1.designation_id,
-	 								xin_designations_1.designation_name');
-	 	$this->db->from('documents_ahad_test_saddam');
-	 	$this->db->join('xin_designations_1', 'documents_ahad_test_saddam.designation = xin_designations_1.designation_id', 'left');
-	 	$this->db->like('documents_ahad_test_saddam.name', $keyword);
-	 	$this->db->or_like('xin_designations_1.designation_name', $keyword);
+	 	$this->db->select('xin_contract_type.*,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('xin_contract_type');
+	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
+	 	$this->db->like('xin_contract_type.name', $keyword);
+	 	$this->db->or_like('xin_designations.designation_name', $keyword);
 	 	return $this->db->get()->result();
 	 }
 }

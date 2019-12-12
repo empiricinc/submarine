@@ -5,6 +5,11 @@
 * Author: Saddam
 */
 ?>
+<style type="text/css">
+	small{
+		color: red;
+	}
+</style>
 <section class="secMainWidth">
 	<section class="secFormLayout">
 		<div class="mainInputBg">
@@ -93,49 +98,63 @@
 												<td>Age / D.O.B</td>
 												<td>Below 25 Years=0,25-35 years=5,above 35-10</td>
 												<td>10</td>
-												<td><input type="text" name="dob_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="dob_marks" class="form-control marks" value="0" id="marks_10" required=""><small id="span_10"></small>
+												</td>
 												<td><input type="text" name="dob_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Marital Status</td>
 												<td>Married, Widow, Divorce=5, Single above 30 years=3, Young single=2</td>
 												<td>5</td>
-												<td><input type="text" name="marital_marks" class="form-control  marks" value="0"></td>
+												<td>
+													<input type="text" name="marital_marks" class="form-control  marks" value="0" id="marks_5" required=""><small id="span_5"></small>
+												</td>
 												<td><input type="text" name="marital_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Qualification</td>
 												<td>Literate=5, Matric=10, Illiterate=0</td>
 												<td>10</td>
-												<td><input type="text" name="qual_marks" class="form-control  marks" value="0"></td>
+												<td>
+													<input type="text" name="qual_marks" class="form-control  marks" value="0" id="marks_10" required=""><small id="span_10"></small>
+												</td>
 												<td><input type="text" name="qual_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Experience/ Professional affiliation</td>
 												<td>Working experience upto 5 years in Polio program=5, Midwife, LHW, Health program related experience etc=5</td>
 												<td>10</td>
-												<td><input type="text" name="exp_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="exp_marks" class="form-control marks" value="0" id="marks_10" required=""><small id="span_10"></small>
+												</td>
 												<td><input type="text" name="exp_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Communication skills</td>
 												<td>As per question</td>
 												<td>5</td>
-												<td><input type="text" name="comm_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="comm_marks" class="form-control marks" value="0" id="marks_5" required=""><small id="span_5"></small>
+												</td>
 												<td><input type="text" name="comm_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Mobility</td>
 												<td>As per question</td>
 												<td>5</td>
-												<td><input type="text" name="mob_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="mob_marks" class="form-control marks" value="0" id="marks_5" required=""><small id="span_5"></small>
+												</td>
 												<td><input type="text" name="mob_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Local language skills</td>
 												<td>As per question</td>
 												<td>5</td>
-												<td><input type="text" name="lang_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="lang_marks" class="form-control marks" value="0" id="marks_5" required=""><small id="span_5"></small>
+												</td>
 												<td><input type="text" name="lang_remarks" class="form-control"></td>
 											</tr>
 											<tr>
@@ -186,5 +205,30 @@
 			});
 			$('#total').val(sum);
 		});
+	});
+
+	// Restrict user from entering marks greater than 10.
+	$('#marks_10').keyup(function(){
+	    if(parseInt($(this).val()) > 10){
+	        $('#span_10').html("Value can't be >10.");
+	        $(this).val('');
+	    }else if(parseInt($(this).val()) < 1){
+	    	$('#span_10').html("Value can't be <0.");
+	        $(this).val('');
+	    }else{
+	    	$('#span_10').html('');
+	    }
+	});
+	// Restrict user from entering marks greater than 5.
+	$('#marks_5').keyup(function(){
+	    if(parseInt($(this).val()) > 5){
+	        $('#span_5').html("Value can't be >5.");
+	        $(this).val('');
+	    }else if(parseInt($(this).val()) < 1){
+	    	$('#span_5').html("Value can't be <0.");
+	        $(this).val('');
+	    }else{
+	    	$('#span_5').html('');
+	    }
 	});
 </script>

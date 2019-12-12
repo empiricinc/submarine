@@ -42,13 +42,7 @@
           <div class="col-md-8">
             <div class="tabelHeading">
               <?php if(empty($search_results)): ?>
-              <h3>list of completed interviews <br>
-                <small>
-                  <div class="label label-info">
-                    interviews completed can't be modified, except the one who did the interview &hellip;
-                  </div>
-                </small>
-              </h3>
+              <h3>list of completed interviews</h3>
               <?php else: ?>
                 <h3>search results</h3>
               <?php endif; ?>

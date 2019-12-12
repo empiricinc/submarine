@@ -100,7 +100,7 @@
 										</tr>
 									</thead>
 									<tbody id ='filter_results'>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
+										<?php //if($sl3['accessLevel3']): // Check Access Level.
 										if(!empty($list_trainings)):
 										foreach($list_trainings as $training): ?>
 										<tr>
@@ -181,7 +181,7 @@
 					<div class="col-md-10">
 						<div class="tabelSideListing text-center">
 							<span>
-								<?php echo $this->pagination->create_links(); endif; endif; ?>
+								<?php echo $this->pagination->create_links(); endif; //endif; ?>
 							</span>
 						</div>
 					</div>
@@ -242,7 +242,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
+										<?php //if($sl3['accessLevel3']): // Check Access Level.
 										foreach($results as $result): ?>
 										<tr>
 											<td>
@@ -270,7 +270,7 @@
 												<?= $result->hall_detail; ?>
 											</td>
 										</tr>
-										<?php endforeach; endif; ?>
+										<?php endforeach; //endif; ?>
 									</tbody>
 								</table>
 							</div>

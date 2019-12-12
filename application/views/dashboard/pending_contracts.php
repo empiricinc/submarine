@@ -148,8 +148,8 @@ h4 {
                       <th>district</th>
                       <th>domicile</th>
                       <th>gender</th>
-                      <th>email</th>
-                      <th>status</th>
+                      <th>type</th>
+                      <th>history</th>
                       <th>application date</th>
                       <th>action</th>
                     </tr>
@@ -191,18 +191,60 @@ h4 {
                       <?php if($contract->gender == 0){ echo "Male"; }else{ echo "Female"; } ?>
                     </td>
                     <td>
-                      <?php echo $contract->email; ?>
+                      <?php echo $contract->cont_type; ?>
                     </td>
-                    <td align="center">
-                      <?php if($contract->status == 0): ?>
-                      <a data-toggle="tooltip" title="Pending">
-                        <i class="fa fa-spinner"></i>
-                        <?php else: ?>
-                        <div class="label label-danger">
-                          Rejected
+                    <td>
+                      <?php $history = $this->Contract_model->contract_history($contract->user_id); ?>
+                      <a data-toggle="modal" data-target="#view_history<?php echo $contract->user_id; ?>" href="#" class="btn btn-primary btn-xs">History</a>
+                        <div class="modal fade" id="view_history<?php echo $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="view_history" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <!--Header-->
+                              <div class="modal-header">
+                                <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Contract history... </h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">×</span>
+                                </button>
+                              </div>
+                              <!--Body-->
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col-md-12">
+                                    <strong>Applicant's contract history for: <?php echo ucwords($contract->fullname); ?></strong>
+                                    <div class="table">
+                                      <table class="table table-hover">
+                                        <thead>
+                                          <tr>
+                                            <th>Serial</th>
+                                            <th>Emp ID</th>
+                                            <th>Contract Type</th>
+                                            <th>Date From</th>
+                                            <th>Date To</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php $counter = 1; foreach($history as $hist): ?>
+                                          <tr>
+                                            <td><?php echo $counter++; ?></td>
+                                            <td><?= $contract->compName.'-'.$contract->designation_name.'-'.$hist->user_id; ?></td>
+                                            <td><?= $hist->name; ?></td>
+                                            <td><?= date('M d, Y', strtotime($hist->from_date));?></td>
+                                            <td><?= date('M d, Y', strtotime($hist->to_date));?></td>
+                                          </tr>
+                                        <?php endforeach; ?>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!--Footer-->
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      <?php endif; ?>
-                      </a>
                     </td>
                     <td>
                       <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
