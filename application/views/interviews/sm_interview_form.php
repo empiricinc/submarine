@@ -77,56 +77,72 @@
 												<td>Personality</td>
 												<td>Appearance, Dress, Manner of Conducting Him/Herself</td>
 												<td>5</td>
-												<td><input type="text" name="per_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="per_marks" class="form-control marks marks_5" required="">
+												</td>
 												<td><input type="text" name="per_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Qualification</td>
 												<td>Relevance to Position</td>
 												<td>5</td>
-												<td><input type="text" name="qual_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="qual_marks" class="form-control marks marks_5" required="">
+												</td>
 												<td><input type="text" name="qual_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Experience</td>
 												<td>Relevance to Position</td>
 												<td>5</td>
-												<td><input type="text" name="exp_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="exp_marks" class="form-control marks marks_5" required="">
+												</td>
 												<td><input type="text" name="exp_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Job Knowledge</td>
 												<td>Knowledge of Job Contents, development world</td>
 												<td>10</td>
-												<td><input type="text" name="job_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="job_marks" class="form-control marks marks_10" required="">
+												</td>
 												<td><input type="text" name="job_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Personal Attributes/Supervisory Skills</td>
 												<td>Competencies (integrity, ambition, leadership, initiative, layalty, learning, resourceful)</td>
 												<td>10</td>
-												<td><input type="text" name="sup_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="sup_marks" class="form-control marks marks_10" required="">
+												</td>
 												<td><input type="text" name="sup_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Reporting & Computer Skills</td>
 												<td>As per question</td>
 												<td>5</td>
-												<td><input type="text" name="rep_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="rep_marks" class="form-control marks marks_5" required="">
+												</td>
 												<td><input type="text" name="rep_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Mobility</td>
 												<td>As per question</td>
 												<td>5</td>
-												<td><input type="text" name="mob_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="mob_marks" class="form-control marks marks_5" required="">
+												</td>
 												<td><input type="text" name="mob_remarks" class="form-control"></td>
 											</tr>
 											<tr>
 												<td>Communication Skills</td>
 												<td>As per question</td>
 												<td>5</td>
-												<td><input type="text" name="comm_marks" class="form-control marks" value="0"></td>
+												<td>
+													<input type="text" name="comm_marks" class="form-control marks marks_5" required="">
+												</td>
 												<td><input type="text" name="comm_remarks" class="form-control"></td>
 											</tr>
 											<tr>
@@ -183,5 +199,30 @@
 			});
 			$('#total').val(sum);
 		});
+	});
+	// Restrict user from entering marks greater than total marks.
+	$('.marks_5').keyup(function(){
+	    if(parseInt($(this).val()) > 5){
+	        alert("Value can't be greater than 5.");
+	        $(this).val('');
+	    }else if(parseInt($(this).val()) < 1){
+	    	alert("Value can't be less than 1.");
+	        $(this).val('');
+	    }else{
+	    	$('#span_2').html('');
+	    }
+	});
+
+	// Restrict user from entering marks greater than total marks.
+	$('.marks_10').keyup(function(){
+	    if(parseInt($(this).val()) > 10){
+	        alert("Value can't be greater than 10.");
+	        $(this).val('');
+	    }else if(parseInt($(this).val()) < 1){
+	    	alert("Value can't be less than 1.");
+	        $(this).val('');
+	    }else{
+	    	$('#span_2').html('');
+	    }
 	});
 </script>

@@ -153,43 +153,43 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                           <tbody>
                    <?php foreach ($userDetails as $row){ ?>
                             <tr>
-                              <td> Fullname</td>
+                              <td>Fullname</td>
                               <td><?php echo $row->fullname; ?></td>
                             </tr>
                             <tr>
-                              <td> Email 1</td>
+                              <td>Email</td>
                               <td><?php echo $row->email;?></td>
                             </tr>
                             <tr>
-                              <td> Gender </td>
+                              <td>Gender</td>
                               <td><?php echo  $row->genderName; ?></td>
                             </tr>
                             <tr>
-                              <td> Age </td>
+                              <td>Age</td>
                               <td><?php echo  $row->age_name; ?></td>
                             </tr>
                             <tr>
-                              <td> Education </td>
+                              <td>Education</td>
                               <td><?php echo  $row->edu_name;; ?></td>
                             </tr>
                             <tr>
-                              <td> Experience </td>
+                              <td>Experience</td>
                               <td><?php  echo  $row->minimum_experience;; ?></td>
                             </tr>
                             <tr>
-                              <td>Province </td>
+                              <td>Province</td>
                               <td><?php echo  $row->prov_name; ?></td>
                             </tr>
                             <tr>
-                              <td>District </td>
+                              <td>District</td>
                               <td><?php echo  $row->cityName; ?></td>
                             </tr>
                             <tr>
-                              <td> Message </td>
+                              <td> Message</td>
                               <td><?php echo  $row->message; ?></td>
                             </tr>
                             <tr>
-                              <td>Resume </td>
+                              <td>Resume</td>
                               <td> <a href="<?php echo base_url(); ?>uploads/resume/<?php echo  $row->job_resume; ?>" target="_blank">View Resume</a> </td>
                             </tr>
                     <?php } ?>  

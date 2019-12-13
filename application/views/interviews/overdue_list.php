@@ -42,13 +42,7 @@
           <div class="col-md-8">
             <div class="tabelHeading">
               <?php if(empty($search_results)): ?>
-                <h3>list of overdue interviews<br>
-                  <small style="text-transform: lowercase;">
-                    <div class="label label-info">
-                      overdue interviews can be re-scheduled &hellip;
-                    </div>
-                  </small>
-                </h3>
+                <h3>list of overdue interviews</h3>
               <?php else: ?>
                 <h3>search results</h3>
               <?php endif; ?>
@@ -102,35 +96,35 @@
                                   <tbody>
                                    <?php foreach ($overdue_data as $row){ ?>
                                     <tr>
-                                      <td> Full Name</td>
+                                      <td>Full Name</td>
                                       <td><?php echo $row->fullname; ?></td> 
                                     </tr>
                                     <tr>
-                                      <td> Email </td>
+                                      <td>Email</td>
                                       <td><?php echo $row->email;?></td> 
                                     </tr>
                                     <tr>
-                                      <td> Gender </td>
+                                      <td>Gender</td>
                                       <td><?php echo  $row->genderName; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Age </td>
+                                      <td>Age</td>
                                       <td><?php echo  $row->age_name; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Education </td>
+                                      <td>Education</td>
                                       <td><?php echo  $row->edu_name;; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Experience </td>
+                                      <td>Experience</td>
                                       <td><?php  echo  $row->minimum_experience;; ?></td>
                                     </tr>
                                     <tr>
-                                      <td>Province </td>
+                                      <td>Province</td>
                                       <td><?php echo  $row->prov_name; ?></td>
                                     </tr>
                                     <tr>
-                                      <td>District </td>
+                                      <td>District</td>
                                       <td><?php echo $row->cityName; ?></td>
                                     </tr>
                                     <tr>
@@ -154,7 +148,7 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Resume </td>
+                                      <td>Resume</td>
                                       <td><a href="<?php echo base_url(); ?>uploads/resume/<?php echo  $row->job_resume; ?>" target="_blank">View Resume</a></td>
                                     </tr>
                                     <?php } ?>  
