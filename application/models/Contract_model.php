@@ -362,8 +362,14 @@ class Contract_model extends CI_Model {
  		}
  		// Select contract format from the list.
  		public function get_contract_formats(){
- 			$this->db->select('contract_type_id, name, contract_format');
+ 			$this->db->select('xin_contract_type.contract_type_id,
+ 										xin_contract_type.designation,
+ 										xin_contract_type.name,
+ 										xin_contract_type.contract_format,
+ 										xin_designations.designation_id,
+ 										xin_designations.designation_name');
  			$this->db->from('xin_contract_type');
+ 			$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
  			return $this->db->get()->result();
  		}
  		// Get contract for extension.
@@ -856,6 +862,65 @@ class Contract_model extends CI_Model {
 	 	$this->db->join('xin_designations', 'xin_contract_type.designation = xin_designations.designation_id', 'left');
 	 	$this->db->like('xin_contract_type.name', $keyword);
 	 	$this->db->or_like('xin_designations.designation_name', $keyword);
+	 	return $this->db->get()->result();
+	 }
+	 // ---------------------- Offer letter template setup ---------------------------------- //
+	 // Save the template into the database.
+	 public function add_offer_template($data){
+	 	$this->db->insert('offer_letter_formats', $data);
+	 	if($this->db->affected_rows() > 0){
+	 		return true;
+	 	}else{
+	 		return false;
+	 	}
+	 }
+	 // Count offer letter templates.
+	 public function count_offer_templates(){
+	 	return $this->db->from('offer_letter_formats')->count_all_results();
+	 }
+	 // Get the pre-saved templates from the database.
+	 public function get_offer_templates($limit, $offset){
+	 	$this->db->select('offer_letter_formats.*,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('offer_letter_formats');
+	 	$this->db->join('xin_designations', 'offer_letter_formats.designation = xin_designations.designation_id','left');
+	 	$this->db->limit($limit, $offset);
+	 	return $this->db->get()->result();
+	 }
+	 // Edit offer letter template.
+	 public function edit_offer_template($id){
+	 	$this->db->select('offer_letter_formats.id,
+	 								offer_letter_formats.designation,
+	 								offer_letter_formats.offer_letter_text,
+	 								offer_letter_formats.offer_letter_type,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('offer_letter_formats');
+	 	$this->db->join('xin_designations', 'offer_letter_formats.designation = xin_designations.designation_id', 'left');
+	 	$this->db->where('offer_letter_formats.id', $id);
+	 	return $this->db->get()->row_array();
+	 }
+	 // Update offer letter template
+	 public function update_offer_template($id, $data){
+	 	$this->db->where('id', $id);
+	 	$this->db->update('offer_letter_formats', $data);
+	 	return true;
+	 }
+	 // Delete offer letter template.
+	 public function delete_offer_template($id){
+	 	$this->db->where('id', $id);
+	 	$this->db->delete('offer_letter_formats');
+	 	return true;
+	 }
+	 // Search offer letter templates.
+	 public function search_offer_templates($keyword){
+	 	$this->db->select('offer_letter_formats.*,
+	 								xin_designations.designation_id,
+	 								xin_designations.designation_name');
+	 	$this->db->from('offer_letter_formats');
+	 	$this->db->join('xin_designations', 'offer_letter_formats.designation = xin_designations.designation_id', 'left');
+	 	$this->db->like('xin_designations.designation_name', $keyword);
 	 	return $this->db->get()->result();
 	 }
 }

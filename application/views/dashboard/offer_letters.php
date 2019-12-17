@@ -112,7 +112,7 @@ h4 {
         <div class="col-md-12">
           <div class="headingMain">
             <h1>
-              Offer Letters Management Dashboard
+              Offer Letters Management Dashboard | <small><a href="<?php echo base_url('contract/offer_letter_setup'); ?>"><i class="fa fa-plus"></i> Templates</a></small>
             </h1>
             <?php if($success = $this->session->flashdata('success')): ?>
               <div class="alert alert-success">
@@ -215,61 +215,63 @@ h4 {
       </div>
       <div class="col-md-6">
         <div class="mainTableWhite">
-            <div class="row">
-              <div class="col-md-5">
-                  <div class="tabelHeading">
-                    <h3>accepted letters</h3>
-                  </div>
+          <div class="row">
+            <div class="col-md-5">
+                <div class="tabelHeading">
+                  <h3>accepted letters</h3>
+                </div>
+            </div>
+            <div class="col-md-7">
+              <div class="tabelTopBtn">
+                <a href="<?= base_url('contract/list_accepted_letters'); ?>" class="btn">View All</a>
               </div>
-              <div class="col-md-7">
-                <div class="tabelTopBtn">
-                  <a href="<?= base_url('contract/list_accepted_letters'); ?>" class="btn">View All</a>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tableMain">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>emp iD</th>
+                        <th>name</th>
+                        <th>project</th>
+                        <th>designation</th>
+                        <th>date sent</th>
+                        <th>status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php //if($sl3['accessLevel3']): // IF condition for Access Level. 
+                        foreach($letters as $accepted): 
+                          if($accepted->status == 1 OR $accepted->status == 2):
+                          ?>
+                      <tr>
+                        <td>CTC-<?= $accepted->user_id; ?></td>
+                        <td><?= $accepted->fullname; ?></td>
+                        <td><?= $accepted->name; ?></td>
+                        <td><?php echo $accepted->designation_name; ?></td>
+                        <td><?php echo date('M d, Y', strtotime($accepted->sdt)); ?></td>
+                        <td>
+                          <?php if($accepted->status != 0): ?>
+                            <button class="btn btn-success btn-xs">Accepted</button>
+                            <?php else: ?>
+                            <button class="btn btn-warning btn-xs">Pending</button>
+                          <?php endif; ?>
+                        </td>
+                      </tr>
+                        <?php endif; endforeach; //endif; ?>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="tableMain">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>emp iD</th>
-                          <th>name</th>
-                          <th>project</th>
-                          <th>designation</th>
-                          <th>date sent</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php //if($sl3['accessLevel3']): // IF condition for Access Level. 
-                          foreach($letters as $accepted): 
-                            if($accepted->status == 1 OR $accepted->status == 2):
-                            ?>
-                        <tr>
-                          <td>CTC-<?= $accepted->user_id; ?></td>
-                          <td><?= $accepted->fullname; ?></td>
-                          <td><?= $accepted->name; ?></td>
-                          <td><?php echo $accepted->designation_name; ?></td>
-                          <td><?php echo date('M d, Y', strtotime($accepted->sdt)); ?></td>
-                          <td>
-                            <?php if($accepted->status != 0): ?>
-                              <button class="btn btn-success btn-xs">Accepted</button>
-                              <?php else: ?>
-                              <button class="btn btn-warning btn-xs">Pending</button>
-                            <?php endif; ?>
-                          </td>
-                        </tr>
-                          <?php endif; endforeach; //endif; ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+          </div>
         </div>
       </div>
+    </div><br>
+    <div class="row">
       <div class="col-md-12">
         <div class="mainTableWhite">
             <div class="row">
@@ -331,24 +333,3 @@ h4 {
   </section>
 </section>
 <?php } ?>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-  // Check all checkboxes at once.
-  $("#checkAll").click(function () {
-     $('input:checkbox').not(this).prop('checked', this.checked);
- });
-// Show and hide buttons for printing and activating letters.
-$(function () {
-  $("#checkAll").click(function () {
-    if ($(this).is(":checked")) {
-      $("#printBtn").hide(1000, "linear");
-      $("#printBtn").show(1000, "linear");
-    } else {
-      $("#printBtn").show(1000, "linear");
-      $("#printBtn").hide(1000, "linear");
-    }
-  });
-});
-</script>

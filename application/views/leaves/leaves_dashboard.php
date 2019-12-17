@@ -79,68 +79,68 @@
                                 </div>
                                 <!--Body-->
                                 <div class="modal-body">
-                                     <div class="row">
-                                     	<div class="col-md-6">
-                                     		<h4>Information</h4><hr>
-                                     			<div class="row">
-                                     				<div class="col-md-6">
-                                     					<strong>Requested by: </strong>
-                                     				</div>
-                                     				<div class="col-md-6">
-                                     					<p><?php echo $pending->first_name; ?></p>
-                                     				</div>
-                                     			</div>
-                                     			<div class="row">
-                                     				<div class="col-md-6">
-                                     					<strong>Leave type: </strong>
-                                     				</div>
-                                     				<div class="col-md-6">
-                                     					<p><?php echo $pending->type_name; ?></p>
-                                     				</div>
-                                     			</div>
-                                     		  <div class="row">
-                                     		  	<div class="col-md-6">
-                                     		  		<strong>Date requested: </strong>
-                                     		  	</div>
-                                     		  	<div class="col-md-6">
-                                     		  		<p><?php echo date('d M, Y', strtotime($pending->applied_on)); ?></p>
-                                     		  	</div>
-                                     		  </div>
-		                                      <div class="row">
-		                                      	<div class="col-md-6">
-		                                      		<strong>From: </strong>
-		                                      	</div>
-		                                      	<div class="col-md-6">
-		                                      		<p><?php echo date('d M, Y', strtotime($pending->from_date)); ?></p>
-		                                      	</div>
-		                                      </div>
-		                                      <div class="row">
-		                                      	<div class="col-md-6">
-		                                      		<strong>Till: </strong>
-		                                      	</div>
-		                                      	<div class="col-md-6">
-		                                      		<p><?php echo date('d M, Y', strtotime($pending->to_date)); ?></p>
-		                                      	</div>
-		                                      </div>
-		                                      <div class="row">
-		                                      	<div class="col-md-6">
-		                                      		<strong>Reason: </strong>
-		                                      	</div>
-		                                      	<div class="col-md-6">
-		                                      		<p><?php echo $pending->reason; ?></p>
-		                                      	</div>
-		                                      </div>
-                                     	</div>
-                                     	<div class="col-md-6">
-                                     		<h4>Actions</h4><hr>
-                                     		<strong>Grant leave as </strong>
-                                     		<a data-toggle="tooltip" title="By clicking this button, the normal procedure will be followed and the leave status will be changed to Approved." href="<?= base_url(); ?>leaves/approve_leave/<?= $pending->leave_id; ?>" class="btn btn-info btn-xs">Paid Leave</a>
-                                     		<a data-toggle="tooltip" title="Are you sure to grant an unpaid leave? Salary will be deducted from the employee's salary and the payroll will be effected." href="<?= base_url(); ?>leaves/approve_leave_unpaid/<?= $pending->employee_id; ?>" class="btn btn-primary btn-xs">Unpaid Leave</a> <br><br>
-                                     		<strong>Or reject leave </strong>
-                                     		<a href="<?= base_url(); ?>leaves/reject_leave/<?= $pending->leave_id; ?>" class="btn btn-warning btn-xs">Reject Request</a> <br><br>
-                                     		<small><strong>Note: </strong>If the unpaid leave has clicked, the employee's data will go to the payroll and salary will be deducted.</small>
-                                     	</div>
-                                     </div>
+                                 <div class="row">
+                                 	<div class="col-md-6">
+                                 		<h4>Information</h4><hr>
+                                 			<div class="row">
+                                 				<div class="col-md-6">
+                                 					<strong>Requested by: </strong>
+                                 				</div>
+                                 				<div class="col-md-6">
+                                 					<p><?php echo $pending->first_name; ?></p>
+                                 				</div>
+                                 			</div>
+                                 			<div class="row">
+                                 				<div class="col-md-6">
+                                 					<strong>Leave type: </strong>
+                                 				</div>
+                                 				<div class="col-md-6">
+                                 					<p><?php echo $pending->type_name; ?></p>
+                                 				</div>
+                                 			</div>
+                                 		  <div class="row">
+                                 		  	<div class="col-md-6">
+                                 		  		<strong>Date requested: </strong>
+                                 		  	</div>
+                                 		  	<div class="col-md-6">
+                                 		  		<p><?php echo date('d M, Y', strtotime($pending->applied_on)); ?></p>
+                                 		  	</div>
+                                 		  </div>
+                                      <div class="row">
+                                      	<div class="col-md-6">
+                                      		<strong>From: </strong>
+                                      	</div>
+                                      	<div class="col-md-6">
+                                      		<p><?php echo date('d M, Y', strtotime($pending->from_date)); ?></p>
+                                      	</div>
+                                      </div>
+                                      <div class="row">
+                                      	<div class="col-md-6">
+                                      		<strong>Till: </strong>
+                                      	</div>
+                                      	<div class="col-md-6">
+                                      		<p><?php echo date('d M, Y', strtotime($pending->to_date)); ?></p>
+                                      	</div>
+                                      </div>
+                                      <div class="row">
+                                      	<div class="col-md-6">
+                                      		<strong>Reason: </strong>
+                                      	</div>
+                                      	<div class="col-md-6">
+                                      		<p><?php echo $pending->reason; ?></p>
+                                      	</div>
+                                      </div>
+                                 	</div>
+                                 	<div class="col-md-6">
+                                 		<h4>Actions</h4><hr>
+                                 		<strong>Grant leave as </strong>
+                                 		<a data-toggle="tooltip" title="By clicking this button, the normal procedure will be followed and the leave status will be changed to Approved." href="<?= base_url(); ?>leaves/approve_leave/<?= $pending->leave_id; ?>" class="btn btn-info btn-xs">Paid Leave</a>
+                                 		<a data-toggle="tooltip" title="Are you sure to grant an unpaid leave? Salary will be deducted from the employee's salary and the payroll will be effected." href="<?= base_url(); ?>leaves/approve_leave_unpaid/<?= $pending->employee_id; ?>" class="btn btn-primary btn-xs">Unpaid Leave</a> <br><br>
+                                 		<strong>Or reject leave </strong>
+                                 		<a href="<?= base_url(); ?>leaves/reject_leave/<?= $pending->leave_id; ?>" class="btn btn-warning btn-xs">Reject Request</a> <br><br>
+                                 		<small><strong>Note: </strong>If the unpaid leave has clicked, the employee's data will go to the payroll and salary will be deducted.</small>
+                                 	</div>
+                                 </div>
                                 </div>
                                 <!--Footer-->
                                 <div class="modal-footer">

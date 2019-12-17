@@ -659,37 +659,37 @@ class Contract extends MY_Controller {
 	            $applicant='';
 				foreach($applicants as $applicant){
 	            	$find = array(
-			            		"{{name}}",
-			            		"{{designation}}",
-			            		"{{district}}",
-			            		"{{date}}",
-			            		"{{start_date}}",
-			            		"{{end_date}}",
-			            		"{{session}}",
-			            		"{{logged_user}}",
-			            		"{{logged_email}}",
-			            		"{{cnic}}",
-			            		"{{gender}}",
-			            		"{{address}}",
-			            		"{{province}}"
+			            		"[[name]]",
+			            		"[[designation]]",
+			            		"[[district]]",
+			            		"[[date]]",
+			            		"[[start_date]]",
+			            		"[[end_date]]",
+			            		"[[session]]",
+			            		"[[logged_user]]",
+			            		"[[logged_email]]",
+			            		"[[cnic]]",
+			            		"[[gender]]",
+			            		"[[address]]",
+			            		"[[province]]"
 	            			);
 	            	$start_date = date("F jS, Y", strtotime($applicant->created_at));
 	            	$end_date = date('F jS, Y', strtotime($applicant->created_at));
 	            	$gender = $applicant->gender == 0 ? "Mr." : "Ms.";
 	        		$replace = array(
-            						'{{name}}' => $applicant->fullname,
-            						'{{designation}}'=>$applicant->designation_name,
-            						'{{district}}' => $applicant->dist_name,
-            						'{{date}}'=>date("M y"),
-            						'{{start_date}}' => $start_date,
-            						'{{end_date}}' => $end_date,
-            						'{{session}}'=> substr(strtoupper($session['username']), 0, 2),
-            						'{{logged_user}}' => ucfirst($session['username']),
-            						'{{logged_email}}' => $session['email'],
-            						'{{cnic}}' => $applicant->cnic,
-            						'{{gender}}' => $gender,
-            						'{{address}}' => 'P/O Madyan, Teh & Distt. Swat',
-            						'{{province}}' => $applicant->name
+            						'[[name]]' => $applicant->fullname,
+            						'[[designation]]'=>$applicant->designation_name,
+            						'[[district]]' => $applicant->dist_name,
+            						'[[date]]'=>date("M y"),
+            						'[[start_date]]' => $start_date,
+            						'[[end_date]]' => $end_date,
+            						'[[session]]'=> substr(strtoupper($session['username']), 0, 2),
+            						'[[logged_user]]' => ucfirst($session['username']),
+            						'[[logged_email]]' => $session['email'],
+            						'[[cnic]]' => $applicant->cnic,
+            						'[[gender]]' => $gender,
+            						'[[address]]' => 'P/O Madyan, Teh & Distt. Swat',
+            						'[[province]]' => $applicant->name
 	        					);
 	            	$subject = $formats->contract_format;
 	            	$save_format = str_replace($find, $replace, $subject);
@@ -822,7 +822,8 @@ class Contract extends MY_Controller {
 		$this->pagination->initialize($config);
 		 
 		// $data['sl3'] = $this->session->userdata('accessLevel');  
-  //       $data['sl2'] = $this->session->userdata('accessLevel');
+  		// $data['sl2'] = $this->session->userdata('accessLevel');
+		$data['path_url'] = '';
 	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
 	    $data['pen_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
 	    $data['rej_letters'] = $this->Contract_model->rejected_offer_letters($limit, $offset);
@@ -866,8 +867,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		// $data['sl3'] = $this->session->userdata('accessLevel');  
-  //       $data['sl2'] = $this->session->userdata('accessLevel');
-
+  		// $data['sl2'] = $this->session->userdata('accessLevel');
+		$data['path_url'] = '';
 		$data['pend_letters'] = $this->Contract_model->pending_offer_letters($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/pending_offer_letters', $data, TRUE);
     	$this->load->view('layout_main', $data); // Page load.
@@ -910,8 +911,8 @@ class Contract extends MY_Controller {
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		// $data['sl3'] = $this->session->userdata('accessLevel');  
-  //       $data['sl2'] = $this->session->userdata('accessLevel');
-
+  		// $data['sl2'] = $this->session->userdata('accessLevel');
+		$data['path_url'] = '';
 		$data['rejected_letters'] = $this->Contract_model->rejected_offer_letters($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/rejected_offer_letters', $data, TRUE);
     	$this->load->view('layout_main', $data); // Page load.
@@ -954,7 +955,8 @@ class Contract extends MY_Controller {
 		$this->pagination->initialize($config);
 		 
 		// $data['sl3'] = $this->session->userdata('accessLevel');  
-  //       $data['sl2'] = $this->session->userdata('accessLevel');
+  		// $data['sl2'] = $this->session->userdata('accessLevel');
+  		$data['path_url'] = '';
 	    $data['letters'] = $this->Contract_model->offer_letters($limit, $offset);
 	    $data['subview'] = $this->load->view('dashboard/accepted_offer_letters', $data, TRUE);
 	    $this->load->view('layout_main', $data); // Page load.
@@ -1146,6 +1148,108 @@ class Contract extends MY_Controller {
 		$data['subview'] = $this->load->view('dashboard/template_list', $data, TRUE);
 		$this->load->view('layout_main', $data);
 	}
+	// -------------------------- Offer Letter setup [setting up templates] ----------------------- //
+	// Load the page for adding  a new template.
+	public function offer_letter_setup(){
+		$data['parth_url'] = '';
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['subview'] = $this->load->view('dashboard/offer_letter_setup', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
+	}
+	// Offer letter templates list.
+	public function offer_letter_templates($offset = NULL){
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('contract/offer_letter_templates');
+		$config['total_rows'] = $this->Contract_model->count_offer_templates();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 3;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "prev &laquo;";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['path_url'] = '';
+		$data['templates'] = $this->Contract_model->get_offer_templates($limit, $offset);
+		$data['subview'] = $this->load->view('dashboard/offer_template_list', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
+	}
+	// Save template.
+	public function add_offer_letter(){
+		$data = array(
+					'designation' => $this->input->post('designation'),
+					'offer_letter_text' => $this->input->post('offer_letter_format'),
+					'offer_letter_type' => $this->input->post('offer_type'),
+					'created_at' => $this->input->post('created_at')
+				);
+		$where_letter = array('designation'=>$_POST['designation']);
+		$exists_letter = $this->db->select('designation')->from('offer_letter_formats')->where($where_letter)->get()->result();
+		if($exists_letter){
+			echo "The offer letter for this designation has already created! Try another one.";
+		}else{
+			$this->Contract_model->add_offer_template($data);
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been saved successfully!');
+			redirect('offer_letter_setup');
+		}
+	}
+	// Edit offer letter template.
+	public function edit_offer_template($id){
+		$data['path_url'] = '';
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['edit_template'] = $this->Contract_model->edit_offer_template($id);
+		$data['subview'] = $this->load->view('dashboard/offer_letter_setup', $data, TRUE);
+		$this->load->view('layout_main', $data); // Page load.
+	}
+	// Update offer letter template.
+	public function update_offer_letter(){
+		$id = $this->input->post('id');
+		$data = array(
+					'designation' => $this->input->post('designation'),
+					'offer_letter_text' => $this->input->post('offer_letter_format'),
+					'offer_letter_type' => $this->input->post('offer_type')
+				);
+		if($this->Contract_model->update_offer_template($id, $data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been udpated successfully!');
+			redirect('contract/offer_letter_templates');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Delete offer letter template.
+	public function delete_offer_template($id){
+		if($this->Contract_model->delete_offer_template($id)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Template has been deleted!');
+			redirect('contract/offer_letter_templates');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Search offer letter templates.
+	public function search_offer_templates(){
+		$keyword = $this->input->get('search_templates');
+		$data['results'] = $this->Contract_model->search_offer_templates($keyword);
+		$data['path_url'] = '';
+		$data['subview'] = $this->load->view('dashboard/offer_template_list', $data, TRUE);
+		$this->load->view('layout_main', $data);
+	}
+
+
 	// get company wise salary
 	public function payroll_company_wise()
 	{

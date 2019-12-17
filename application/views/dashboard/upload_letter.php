@@ -22,11 +22,70 @@
                 <select name="offer_letter_type" class="form-control" id="offer_type">
                   <option value="">Select type...</option>
                   <?php foreach($letters as $letter): ?>
-                    <option value="<?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                    <option value="<?php $find = array(
+                                                    "[[name]]",
+                                                    "[[designation]]",
+                                                    "[[district]]",
+                                                    "[[date]]",
+                                                    "[[start_date]]",
+                                                    "[[session]]",
+                                                    "[[logged_user]]",
+                                                    "[[logged_email]]",
+                                                    "[[cnic]]",
+                                                    "[[gender]]",
+                                                    "[[province]]",
+                                                    "[[spinsaree_eobi_salary]]",
+                                                    "[[spinsaree_eobi_benefit]]");
                   $subject = $letter->offer_letter_text;
-                 $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
-                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => date("F jS, Y", strtotime($applicant->created_at)), '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
-                      <?php echo str_replace($find, $replace, $subject); ?>">
+                  $gender = $applicant->gender == 0 ? "Mr" : "Ms";
+                  // EOBI clause.
+                  // If the applicant has a valid CNIC, the sentence below will be printed.
+                  $eobi_cnic = "The employee shall be entitled for EOBI benefits. A contribution shall be deducted from the salary on monthly basis and deposited to EOBI along with employer's contribution as per rules.";
+                  // If the applicant doesn't have valide CNIC, the below sentence will be printed.
+                  $eobi_non_cnic = "The employee shall not be entitled for EOBI benefits due ot lack of CNIC, hence no deduction shall be made from salary as part of EOBI contribution.";
+                  // If the applicant is overage, the below sentence will be printed.
+                  $eobi_overage = "The employee shall not be entitled for EOBI benefits due to overage, hence no deduction shall be made from salary as part of EOBI contribution.";
+                  // Insurance clause.
+                  $insurance_cnic = "The employee shall be entitled for death and accidental insurace as per employer's policy.";
+                  $insurace_non_cnic = "The employee shall not be provided with death and accidental insurance due to lack of CNIC.";
+                  $insurance_overage = "The employee shall not be provided with death and accidental insurace due to overage.";
+                  // $eobi_salary = $applicant->cnic != 0 ? $eobi_cnic : $eobi_non_cnic;
+                  $dob = strtotime($applicant->dob); // Applicant's Birth date.
+                  $today = time(); // today's date.
+                  $age = date('Y', $today) - date('Y', $dob); // subtract today's date form Birth date.
+                  // EOBI clasue.
+                  $eobi_salary = '';
+                  if($applicant->cnic == 0 OR $applicant->cnic_expiry_date < date('Y-m-d')){
+                    $eobi_salary .= $eobi_non_cnic;
+                  }elseif($age > '60' AND $applicant->gender == 0 OR $age > '55' AND $applicant->gender == 1){
+                    $eobi_salary .= $eobi_overage;
+                  }else{
+                    $eobi_salary .= $eobi_cnic;
+                  }
+                  // Insurance clasue.
+                  $eobi_benefit = '';
+                  if($applicant->cnic == 0 OR $applicant->cnic_expiry_date < date('Y-m-d')){
+                    $eobi_benefit .= $insurace_non_cnic;
+                  }elseif($age > '60' AND $applicant->gender == 0 OR $age > '55' AND $applicant->gender == 1){
+                    $eobi_benefit .= $insurance_overage;
+                  }else{
+                    $eobi_benefit .= $insurance_cnic;
+                  }
+                  $replace = array(
+                                '[[name]]' => $applicant->fullname,
+                                '[[designation]]'=>$applicant->designation_name,
+                                '[[district]]' => $applicant->dist_name,
+                                '[[date]]'=>date("M y"),
+                                '[[start_date]]' => date("F jS, Y", strtotime($applicant->created_at)),
+                                '[[logged_user]]'=> substr(ucfirst($session['username']), 0, 1),
+                                '[[session]]' => ucfirst($session['username']),
+                                '[[logged_email]]' => $session['email'],
+                                '[[cnic]]' => $applicant->cnic,
+                                '[[gender]]' => $gender,
+                                '[[province]]' => $applicant->name,
+                                '[[spinsaree_eobi_salary]]' => $eobi_salary,
+                                '[[spinsaree_eobi_benefit]]' => $eobi_benefit); ?>
+                      <?php echo htmlspecialchars(str_replace($find, $replace, $subject)); ?>">
                       <?php echo $letter->offer_letter_type; ?>
                     </option>
                   <?php endforeach; ?>
@@ -34,11 +93,33 @@
               </div><br><br><br>
               <div class="col-lg-12">
                 <textarea class='editor' name='offer_letter' id='letter_type'>
-                  <?php $find = array("{{name}}", "{{designation}}", "{{district}}", "{{date}}", "{{start_date}}", "{{session}}", "{{logged_user}}", "{{logged_email}}", "{{cnic}}", "{{gender}}", "{{address}}", "{{province}}");
+                  <?php $find = array(
+                                    "[[name]]",
+                                    "[[designation]]",
+                                    "[[district]]",
+                                    "[[date]]",
+                                    "[[start_date]]",
+                                    "[[session]]",
+                                    "[[logged_user]]",
+                                    "[[logged_email]]",
+                                    "[[cnic]]",
+                                    "[[gender]]",
+                                    "[[province]]");
                   // $contract = $this->Contract_model->applicant_data();
                   $subject = $letter_exists['attachment'];
                  $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
-                  $replace = array('{{name}}' => $applicant->fullname, '{{designation}}'=>$applicant->designation_name, '{{district}}' => $applicant->dist_name, '{{date}}'=>date("M y"), '{{start_date}}' => date("F jS, Y", strtotime($applicant->created_at)), '{{logged_user}}'=> substr(ucfirst($session['username']), 0, 1), '{{session}}' => ucfirst($session['username']),'{{logged_email}}' => $session['email'], '{{cnic}}' => $applicant->cnic, '{{gender}}' => $gender, '{{address}}' => 'P/O Madyan, Teh & Distt. Swat', '{{province}}' => $applicant->name); ?>
+                  $replace = array(
+                              '[[name]]' => $applicant->fullname,
+                              '[[designation]]'=>$applicant->designation_name,
+                              '[[district]]' => $applicant->dist_name,
+                              '[[date]]'=>date("M y"),
+                              '[[start_date]]' => date("F jS, Y", strtotime($applicant->created_at)),
+                              '[[logged_user]]'=> substr(ucfirst($session['username']), 0, 1),
+                              '[[session]]' => ucfirst($session['username']),
+                              '[[logged_email]]' => $session['email'],
+                              '[[cnic]]' => $applicant->cnic,
+                              '[[gender]]' => $gender,
+                              '[[province]]' => $applicant->name); ?>
                   <?php echo str_replace($find, $replace, $subject);//if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?>
                 </textarea><br><br>
               </div>
@@ -59,7 +140,6 @@
 </section>
 <!-- TinyMCE script -->
 <script src='<?= base_url(); ?>assets/tinymce/tinymce.min.js'></script>
-
 <script type="text/javascript">
 tinymce.init({
     // basic tinyMCE stuff
@@ -82,51 +162,14 @@ tinymce.init({
         this.getDoc().body.style.fontFamily = 'Book Antiqua';
       });
     },
-    // Adding more variables to the form, but we don't need to add more vars.
-    // setup : function(ed) {
-    //     window.tester = ed;
-    //     ed.addButton('mybutton', {
-    //         title : 'My button',
-    //         text : 'Insert variable',
-    //         onclick : function() {
-    //             ed.plugins.variables.addVariable('account_id');         
-    //         }
-    //     });
-    //     ed.on('variableClick', function(e) {
-    //        console.log('click', e);
-    //     });
-    // },
-    // variable plugin related
     plugins: "variable, code, advlist, autolink, image, lists, charmap, print, preview, hr, pagebreak, anchor, searchreplace, wordcount, visualblocks, visualchars, fullscreen, insertdatetime, media, nonbreaking, save, table, contextmenu, directionality, emoticons, template, paste, textcolor, fullpage, spellchecker, lineheight",
-    // variable_mapper: {  // Will look for variables in replace them with the text.
-    //     name: name,
-    //     designation: designation,
-    //     address: 'Hayat Abad, Phase III',
-    //     district: district,
-    //     province: province,
-    //     cnic: cnic,
-    //     start_date: start_date,
-    //     end_date: start_date,
-    //     date: date,
-    //     session: session,
-    //     logged_user: logged_user,
-    //     logged_email: logged_email,
-    //     gender: gender
-    // },
     template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
     template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
     height: 600,
     image_caption: true,
     quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
     noneditable_noneditable_class: "mceNonEditable",
-    //toolbar_drawer: 'sliding',
-    //contextmenu: "link image imagetools table",
-    //variable_prefix: '{{',
-    //variable_suffix: '}}',
-    //variable_class: 'bbbx-my-variable',
-    //variable_valid: ['name', 'designation', 'address', 'district', 'province', 'cnic', 'start_date', 'end_date', 'date', 'session', 'gender', 'logged_user', 'logged_email']
 });
-
 // Get offer letter from database to the textarea.
 $(function() {
     $("#offer_type").change(function() {
