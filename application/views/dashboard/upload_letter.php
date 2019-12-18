@@ -93,34 +93,7 @@
               </div><br><br><br>
               <div class="col-lg-12">
                 <textarea class='editor' name='offer_letter' id='letter_type'>
-                  <?php $find = array(
-                                    "[[name]]",
-                                    "[[designation]]",
-                                    "[[district]]",
-                                    "[[date]]",
-                                    "[[start_date]]",
-                                    "[[session]]",
-                                    "[[logged_user]]",
-                                    "[[logged_email]]",
-                                    "[[cnic]]",
-                                    "[[gender]]",
-                                    "[[province]]");
-                  // $contract = $this->Contract_model->applicant_data();
-                  $subject = $letter_exists['attachment'];
-                 $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
-                  $replace = array(
-                              '[[name]]' => $applicant->fullname,
-                              '[[designation]]'=>$applicant->designation_name,
-                              '[[district]]' => $applicant->dist_name,
-                              '[[date]]'=>date("M y"),
-                              '[[start_date]]' => date("F jS, Y", strtotime($applicant->created_at)),
-                              '[[logged_user]]'=> substr(ucfirst($session['username']), 0, 1),
-                              '[[session]]' => ucfirst($session['username']),
-                              '[[logged_email]]' => $session['email'],
-                              '[[cnic]]' => $applicant->cnic,
-                              '[[gender]]' => $gender,
-                              '[[province]]' => $applicant->name); ?>
-                  <?php echo str_replace($find, $replace, $subject);//if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?>
+                  <?php if(!empty($letter_exists)){ echo $letter_exists['attachment']; } ?>
                 </textarea><br><br>
               </div>
               <div class="col-lg-12">

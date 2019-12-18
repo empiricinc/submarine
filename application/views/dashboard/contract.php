@@ -329,7 +329,7 @@ h4 {
                                 <!--Body-->
                                 <div class="modal-body">
                                   <div class="row">
-                                    <div class="col-md-10 col-md-offset-1" id="printThis">
+                                    <div class="col-md-10 col-md-offset-1" id="printThis" style="font-family: book antiqua;">
                                       <!-- <h3 class="text-center"><strong>Description</strong></h3> -->
                                      <?php echo $contract->long_description; ?>
                                     </div>
@@ -658,10 +658,17 @@ $(function () {
 </script>
 <script type="text/javascript">
   function printDiv(printThis){
-    var printContent = document.getElementById(printThis).innerHTML;
-    var originalContent = document.body.innerHTML;
-    document.body.innerHTML = printContent;
-    window.print();
-    document.body.innerHTML = originalContent;
+    // var printContent = document.getElementById(printThis).innerHTML;
+    // var originalContent = document.body.innerHTML;
+    // document.body.innerHTML = printContent;
+    // window.print();
+    // document.body.innerHTML = originalContent;
+
+    var content = document.getElementById('printThis').innerHTML;
+    var win = window.open();
+    win.document.write(content);
+    win.document.body.style.fontFamily="book antiqua";  
+    // win.document.body.status.fontSize="14px";
+    win.print();
   }
 </script>
