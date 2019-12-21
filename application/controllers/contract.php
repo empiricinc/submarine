@@ -662,33 +662,31 @@ class Contract extends MY_Controller {
 			            		"[[name]]",
 			            		"[[designation]]",
 			            		"[[district]]",
-			            		"[[date]]",
+			            		"[[current_month_year]]",
 			            		"[[start_date]]",
 			            		"[[end_date]]",
-			            		"[[session]]",
-			            		"[[logged_user]]",
+			            		"[[initial]]",
+			            		"[[signature_name]]",
 			            		"[[logged_email]]",
 			            		"[[cnic]]",
-			            		"[[gender]]",
-			            		"[[address]]",
+			            		"[[title]]",
 			            		"[[province]]"
 	            			);
 	            	$start_date = date("F jS, Y", strtotime($applicant->created_at));
 	            	$end_date = date('F jS, Y', strtotime($applicant->created_at));
-	            	$gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+	            	$title = $applicant->gender == 0 ? "Mr" : "Ms";
 	        		$replace = array(
             						'[[name]]' => $applicant->fullname,
             						'[[designation]]'=>$applicant->designation_name,
             						'[[district]]' => $applicant->dist_name,
-            						'[[date]]'=>date("M y"),
+            						'[[current_month_year]]'=>date("M y"),
             						'[[start_date]]' => $start_date,
             						'[[end_date]]' => $end_date,
-            						'[[session]]'=> substr(strtoupper($session['username']), 0, 2),
-            						'[[logged_user]]' => ucfirst($session['username']),
+            						'[[initial]]'=> substr(strtoupper($session['username']), 0, 1),
+            						'[[signature_name]]' => ucfirst($session['username']),
             						'[[logged_email]]' => $session['email'],
             						'[[cnic]]' => $applicant->cnic,
-            						'[[gender]]' => $gender,
-            						'[[address]]' => 'P/O Madyan, Teh & Distt. Swat',
+            						'[[title]]' => $title,
             						'[[province]]' => $applicant->name
 	        					);
 	            	$subject = $formats->contract_format;

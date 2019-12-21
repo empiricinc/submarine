@@ -23,7 +23,7 @@
 				<div class="col-lg-8">
 					<div class="tabelHeading">
 					<?php if(empty($results)): ?>
-						<h3>papers list | <small> click on any of the job to view the paper for that specific job post...</small></h3>
+						<h3>papers list | <small>click on the link to view detail | <a href="<?php echo base_url('tests/subjective_questions'); ?>" class="btn btn-primary btn-sm">View Subjective Questions</a></small></h3>
 					<?php else: ?>
 						<h3>search results | <small> for <?php echo $_GET['search_papers']; ?></small></h3>
 					<?php endif; ?>

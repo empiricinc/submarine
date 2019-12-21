@@ -21,7 +21,7 @@
 						</div>
 					<?php endif; ?>
 					<div class="tabelHeading">
-						<h3>create exam paper <span style="text-transform: lowercase;">(create paper for specific job) | </span><a href="" class="btn btn-primary btn-xs">Add Subjective Questions</a></h3>
+						<h3>create exam paper <span style="text-transform: lowercase;">(create paper for specific job) | </span><a href="<?php echo base_url('tests/subjective_paper'); ?>" class="btn btn-primary btn-xs">Add Subjective Questions</a></h3>
 					</div><hr>
 				</div>
 				<form method="post" action="<?php echo base_url('tests/get_paper'); ?>">

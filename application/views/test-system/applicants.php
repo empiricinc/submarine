@@ -266,7 +266,7 @@
 						<strong>Email: </strong><?php echo $applicant_detail['email']; ?>
 					</p>
 					<p>
-						<strong>Gender: </strong><?php echo $applicant_detail['gender']; ?>
+						<strong>Gender: </strong><?php if($applicant_detail['gender'] == 0){ echo 'Male'; }else{ echo 'Female'; } ?>
 					</p>
 					<p>
 						<strong>Education: </strong><?php echo $applicant_detail['edu_name']; ?>

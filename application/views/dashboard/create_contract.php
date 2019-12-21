@@ -40,21 +40,20 @@
                                                       "[[name]]",
                                                       "[[designation]]",
                                                       "[[district]]",
-                                                      "[[date]]",
-                                                      "[[start_date]]",
-                                                      "[[end_date]]",
-                                                      "[[session]]",
-                                                      "[[logged_user]]",
+                                                      "[[current_month_year]]",
+                                                      "[[contract_start_date]]",
+                                                      "[[contract_expiry_date]]",
+                                                      "[[initial]]",
+                                                      "[[signature_name]]",
                                                       "[[logged_email]]",
                                                       "[[cnic]]",
-                                                      "[[gender]]",
-                                                      "[[address]]",
+                                                      "[[title]]",
                                                       "[[province]]",
                                                       "[[spinsaree_eobi_salary]]",
                                                       "[[spinsaree_eobi_benefit]]"
                                                   );
                   $subject = $type->contract_format;
-                  $gender = $applicant->gender == 0 ? "Mr." : "Ms.";
+                  $title = $applicant->gender == 0 ? "Mr" : "Ms";
                   // EOBI clause.
                   // If the applicant has a valid CNIC, the sentence below will be printed.
                   $eobi_cnic = "The employee shall be entitled for EOBI benefits. A contribution shall be deducted from the salary on monthly basis and deposited to EOBI along with employer's contribution as per rules.";
@@ -94,15 +93,14 @@
                                     '[[name]]' => $applicant->fullname,
                                     '[[designation]]'=>$applicant->designation_name,
                                     '[[district]]' => $applicant->dist_name,
-                                    '[[date]]'=>date("M y"),
-                                    '[[start_date]]' => $start_date,
-                                    '[[end_date]]' => $end_date,
-                                    '[[logged_user]]'=> substr(ucfirst($session['username']), 0, 1),
-                                    '[[session]]' => ucfirst($session['username']),
+                                    '[[current_month_year]]'=>date("M y"),
+                                    '[[contract_start_date]]' => $start_date,
+                                    '[[contract_expiry_date]]' => $end_date,
+                                    '[[signature_name]]'=> substr(ucfirst($session['username']), 0, 1),
+                                    '[[initial]]' => ucfirst($session['username']),
                                     '[[logged_email]]' => $session['email'],
                                     '[[cnic]]' => $applicant->cnic,
-                                    '[[gender]]' => $gender,
-                                    '[[address]]' => 'P/O Madyan, Teh & Distt. Swat',
+                                    '[[title]]' => $title,
                                     '[[province]]' => $applicant->name,
                                     '[[spinsaree_eobi_salary]]' => $eobi_salary,
                                     '[[spinsaree_eobi_benefit]]' => $eobi_benefit

@@ -670,5 +670,6 @@ $(function () {
     win.document.body.style.fontFamily="book antiqua";  
     // win.document.body.status.fontSize="14px";
     win.print();
+    win.close();
   }
 </script>

@@ -743,6 +743,113 @@ class Tests extends MY_Controller{
 		$data['content'] = 'test-system/papers_list';
 		$this->load->view('test-system/components/template', $data);
 	}
+	// ------------------------ Subjective Questions setup ---------------------------- //
+	// Subjective papers setup.
+	public function subjective_paper(){
+		$data['title'] = 'Test System | Subjective Papers';
+		$data['content'] = 'test-system/subjective_papers';
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$this->load->view('test-system/components/template', $data);
+	}
+	// List subjective questions.
+	public function subjective_questions($offset = NULL){
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('tests/subjective_questions');
+		$config['total_rows'] = $this->Tests_model->count_subjective();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 10;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['sub_questions'] = $this->Tests_model->get_subjective_questions($limit, $offset);
+		$data['title'] = 'Test System | List Subjective Questions';
+		$data['content'] = 'test-system/sub_questions_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Save subjective paper.
+	public function save_subjective_paper(){
+		$data = array(
+					'project_id' => $this->input->post('project'),
+					'designation' => $this->input->post('designation'),
+					'question_text' => $this->input->post('question'),
+					'created_at' => date('Y-m-d')
+				);
+		if($this->Tests_model->add_subjective_questions($data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong> The question has saved successfully!');
+			redirect('tests/subjective_questions');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Edit subjective questions.
+	public function edit_subjective($id){
+		$data['edit'] = $this->Tests_model->edit_subjective($id);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['title'] = 'Test System | Edit Question';
+		$data['content'] = 'test-system/subjective_papers';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Update subjective question after editing.
+	public function update_subjective_paper(){
+		$id = $this->input->post('id');
+		$data = array(
+					'project_id' => $this->input->post('project'),
+					'designation' => $this->input->post('designation'),
+					'question_text' => $this->input->post('question'),
+					'created_at' => date('Y-m-d')
+				);
+		if($this->Tests_model->update_subjective($id, $data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Question has been updated successfully.');
+			redirect('tests/subjective_questions');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Delete subjective question.
+	public function delete_subjective($id){
+		if($this->Tests_model->delete_subjective($id)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>The question has been deleted successfully.');
+			redirect('tests/subjective_questions');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Search subjective questions.
+	public function search_subjective(){
+		$keyword = $this->input->get('search_question');
+		$data['results'] = $this->Tests_model->search_subjective($keyword);
+		$data['title'] = 'Test System | Search Results';
+		$data['content'] = 'test-system/sub_questions_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Get subjective paper. Display questions and textarea for answers.
+	public function subjective_paper_view(){
+		$data['title'] = 'Test System | Question Paper - Subjective';
+		$data['content'] = 'test-system/question_paper_subjective';
+		$data['questions'] = $this->Tests_model->subjective_question_paper();
+		$this->load->view('test-system/components/template', $data);
+	}
 }
 
 ?>

@@ -763,6 +763,94 @@ class Tests_model extends CI_Model{
 		$this->db->from('provinces');
 		return $this->db->get()->result();
 	}
+
+	// ------------------------ Subjective Questions ----------------------------------//
+	// Add subjective questions.
+	public function add_subjective_questions($data){
+		$this->db->insert('ex_questions_subjective', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Count all subjective questions.
+	public function count_subjective(){
+		return $this->db->from('ex_questions_subjective')->count_all_results();
+	}
+	// Get/List subjective questions.
+	public function get_subjective_questions($limit, $offset){
+		$this->db->select('ex_questions_subjective.*,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('ex_questions_subjective');
+		$this->db->join('xin_companies', 'ex_questions_subjective.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'ex_questions_subjective.designation = xin_designations.designation_id', 'left');
+		$this->db->limit($limit, $offset);
+		return $this->db->get()->result();
+	}
+	// View question detail.
+	public function single_subjective($id){
+		$this->db->select('id, question_text');
+		$this->db->from('ex_questions_subjective');
+		$this->db->where('id', $id);
+		return $this->db->get()->row();
+	}
+	// Edit subjective question.
+	public function edit_subjective($id){
+		$this->db->select('ex_questions_subjective.*,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('ex_questions_subjective');
+		$this->db->join('xin_companies', 'ex_questions_subjective.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'ex_questions_subjective.designation = xin_designations.designation_id', 'left');
+		$this->db->where('ex_questions_subjective.id', $id);
+		return $this->db->get()->row();
+	}
+	// Update a subjective question.
+	public function update_subjective($id, $data){
+		$this->db->where('id', $id);
+		$this->db->update('ex_questions_subjective', $data);
+		return true;
+	}
+	// Delete subjective question.
+	public function delete_subjective($id){
+		$this->db->where('id', $id);
+		$this->db->delete('ex_questions_subjective');
+		return true;
+	}
+	// Search subjective questions.
+	public function search_subjective($keyword){
+		$this->db->select('ex_questions_subjective.*,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('ex_questions_subjective');
+		$this->db->join('xin_companies', 'ex_questions_subjective.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'ex_questions_subjective.designation = xin_designations.designation_id', 'left');
+		$this->db->like('ex_questions_subjective.question_text', $keyword);
+		$this->db->or_like('xin_companies.name', $keyword);
+		$this->db->or_like('xin_designations.designation_name', $keyword);
+		return $this->db->get()->result();
+	}
+	// Subjective paper view.
+	public function subjective_question_paper(){
+		$this->db->select('ex_questions_subjective.*,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name');
+		$this->db->from('ex_questions_subjective');
+		$this->db->join('xin_companies', 'ex_questions_subjective.project_id = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'ex_questions_subjective.designation = xin_designations.designation_id', 'left');
+		$this->db->limit(5);
+		return $this->db->get()->result();
+	}
 }
 
 ?>
