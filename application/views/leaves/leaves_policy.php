@@ -5,9 +5,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tabelHeading">
-            <h3>template setup
-              <span>(setup template and press the save button)</span> | 
-              <small><a href="<?php echo base_url('contract/offer_letter_templates'); ?>"><i class="fa fa-eye"></i> Recently Added</a></small>
+            <h3>leaves policy setup | <small><a href="<?php echo base_url('leaves/leaves_setup'); ?>"><i class="fa fa-eye"></i> Recently Added</a></small>
             </h3>
           </div>
         </div>
@@ -37,8 +35,6 @@
                  <?php if(!empty($edit_template)): ?>
                  <option value="<?php echo $edit_template['offer_letter_type'];  ?>" selected><?php echo $edit_template['offer_letter_type']; ?></option><?php endif; ?>
                  <option value="Offer Letter">Offer Letter</option>
-                 <option value="Withdrawal Letter">Withdrawal Letter</option>
-                 <option value="Reference Letter">Reference Letter</option>
                </select>
               </div><br><br><br>
               <div class="col-lg-12">

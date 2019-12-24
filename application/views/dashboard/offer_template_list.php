@@ -21,7 +21,7 @@
         <div class="col-md-7">
           <div class="tabelHeading">
             <?php if(empty($results)): ?>
-                <h3>template list</h3>
+                <h3>template list | <small>offer & withdrawal letters for different designations</small></h3>
               <?php else: ?>
                 <h3>serach results <small><a href="javascript:history.go(-1)">Back</a></small></h3>
               <?php endif; ?>

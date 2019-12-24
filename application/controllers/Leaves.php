@@ -229,6 +229,14 @@ class Leaves extends CI_Controller
         $data['subview'] = $this->load->view('leaves/rejected_leaves', $data, TRUE);
         $this->load->view('layout_main', $data); // Page load.
     }
+
+    // ---------------------------------- Leaves policy ------------------------------------------ //
+    // Get to the setup page.
+    public function leaves_policy(){
+        $data['path_url'] = '';
+        $data['subview'] = $this->load->view('leaves/leaves_policy', $data, TRUE);
+        $this->load->view('layout_main', $data); // Page load.
+    }
 }
 
 ?>

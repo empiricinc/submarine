@@ -16,7 +16,7 @@
 					<?php endif; ?>
 					<h1>
 						Leaves Management Dashboard
-						<span>statistics and more...</span>
+						<span>statistics and more... | <small><a href="<?php echo base_url('leaves/leaves_policy'); ?>"><i class="fa fa-plus"></i> Policy Setup</a></small></span>
 					</h1>
 				</div>
 			</div>

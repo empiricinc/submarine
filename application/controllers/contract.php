@@ -1247,7 +1247,6 @@ class Contract extends MY_Controller {
 		$this->load->view('layout_main', $data);
 	}
 
-
 	// get company wise salary
 	public function payroll_company_wise()
 	{
