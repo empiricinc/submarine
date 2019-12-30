@@ -923,5 +923,178 @@ class Contract_model extends CI_Model {
 	 	$this->db->like('xin_designations.designation_name', $keyword);
 	 	return $this->db->get()->result();
 	 }
+
+	// ------------------------------- Search queries ---------------------------------------- //
+	 // Get projects.
+	 public function get_projects(){
+	 	return $this->db->get('xin_companies')->result();
+	 }
+	 // Get designations
+	 public function get_provinces(){
+	 	return $this->db->get('provinces')->result();
+	 }
+	// Search pending contracts.
+	 public function search_pending_contracts($applicant_name, $project, $designation, $province, $date_from, $date_to){
+	 	$this->db->select('employee_contract.*,
+			 	 					xin_contract_type.contract_type_id,
+			 	 					xin_contract_type.name as cont_type,
+			 	 					xin_job_applications.application_id,
+			 	 					xin_job_applications.job_id,
+			 	 					xin_job_applications.fullname,
+			 	 					xin_job_applications.province,
+			 	 					xin_job_applications.city_name,
+			 	 					xin_job_applications.gender,
+			 	 					xin_job_applications.email,
+			 	 					xin_job_applications.message,
+			 	 					xin_job_applications.created_at,
+			 	 					xin_jobs.job_id,
+			 	 					xin_jobs.company,
+			 	 					xin_jobs.designation_id,
+			 	 					xin_companies.company_id,
+			 	 					xin_companies.name as compName,
+			 	 					xin_designations.designation_id,
+			 	 					xin_designations.designation_name,
+			 	 					provinces.id,
+			 	 					provinces.name,
+			 	 					city.id,
+			 	 					city.name as city_name,
+			 	 					domicile.id,
+			 	 					domicile.name as dom_name');
+	 	$this->db->from('employee_contract');
+	 	$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
+		$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		// $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
+		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
+		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
+		$this->db->where('xin_job_applications.fullname', $applicant_name);
+		$this->db->where('employee_contract.status', 0);
+		$this->db->or_where('xin_companies.name', $project);
+		$this->db->where('employee_contract.status', 0);
+		$this->db->or_where('xin_designations.designation_name', $designation);
+		$this->db->where('employee_contract.status', 0);
+		$this->db->or_where('provinces.name', $province);
+		$this->db->where('employee_contract.status', 0);
+		$this->db->or_where('employee_contract.sdt >=', $date_from);
+		$this->db->where('employee_contract.sdt <=', $date_to);
+		$this->db->where('employee_contract.status', 0);
+	 	$query = $this->db->get();
+	 	return $query->result();
+	 }
+	 // Search active contracts.
+	 public function search_active_contracts($applicant_name, $project, $designation, $province, $date_from, $date_to){
+	 	$this->db->select('employee_contract.*,
+			 	 					xin_contract_type.contract_type_id,
+			 	 					xin_contract_type.name as cont_type,
+			 	 					xin_job_applications.application_id,
+			 	 					xin_job_applications.job_id,
+			 	 					xin_job_applications.fullname,
+			 	 					xin_job_applications.province,
+			 	 					xin_job_applications.city_name,
+			 	 					xin_job_applications.gender,
+			 	 					xin_job_applications.email,
+			 	 					xin_job_applications.message,
+			 	 					xin_job_applications.created_at,
+			 	 					xin_jobs.job_id,
+			 	 					xin_jobs.company,
+			 	 					xin_jobs.designation_id,
+			 	 					xin_companies.company_id,
+			 	 					xin_companies.name as compName,
+			 	 					xin_designations.designation_id,
+			 	 					xin_designations.designation_name,
+			 	 					provinces.id,
+			 	 					provinces.name,
+			 	 					city.id,
+			 	 					city.name as city_name,
+			 	 					domicile.id,
+			 	 					domicile.name as dom_name');
+	 	$this->db->from('employee_contract');
+	 	$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
+		$this->db->join('xin_job_applications', 'employee_contract.user_id = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		// $this->db->join('gender', 'xin_job_applications.gender = gender.gender_id', 'left');
+		$this->db->join('provinces', 'xin_job_applications.province = provinces.id', 'left');
+		$this->db->join('city', 'xin_job_applications.city_name = city.id', 'left');
+		$this->db->join('domicile', 'xin_job_applications.domicile = domicile.id', 'left');
+		$this->db->where('xin_job_applications.fullname', $applicant_name);
+		$this->db->where('employee_contract.status', 1);
+		$this->db->or_where('xin_companies.name', $project);
+		$this->db->where('employee_contract.status', 1);
+		$this->db->or_where('xin_designations.designation_name', $designation);
+		$this->db->where('employee_contract.status', 1);
+		$this->db->or_where('provinces.name', $province);
+		$this->db->where('employee_contract.status', 1);
+		$this->db->or_where('employee_contract.sdt >=', $date_from);
+		$this->db->where('employee_contract.sdt <=', $date_to);
+		$this->db->where('employee_contract.status', 1);
+	 	$query = $this->db->get();
+	 	return $query->result();
+	 }
+	 // Search to be expired contracts.
+	 public function search_expiring_contracts($applicant_name, $project, $designation, $province, $date_from, $date_to){
+		$date1 = date('Y-m-d');
+		$str2 = date('Y-m-d', strtotime('+15 days', strtotime($date1)));
+		$this->db->select('employee_contract.id,
+									employee_contract.user_id,
+									employee_contract.from_date,
+									employee_contract.to_date,
+									employee_contract.contract_manager,
+									employee_contract.contract_type,
+									employee_contract.status,
+									employee_contract.sdt,
+									xin_contract_type.contract_type_id,
+									xin_contract_type.name as contType,
+                           xin_employees.employee_id,
+                           xin_employees.first_name,
+                           xin_employees.last_name,
+                           xin_employees.email,
+                           xin_employees.company_id,
+                           xin_employees.designation_id,
+                           xin_employees.department_id,
+                           xin_employees.provience_id,
+                           xin_employees.city_id,
+                           xin_employees.user_role_id,
+                           xin_companies.company_id,
+                           xin_companies.name,
+                           xin_designations.designation_id,
+                           xin_designations.designation_name,
+                           xin_departments.department_id,
+                           provinces.id,
+                           provinces.name as provName,
+                           district.id,
+                           district.name as distName');
+		$this->db->from('employee_contract');
+		$this->db->join('xin_contract_type', 'employee_contract.contract_type = xin_contract_type.contract_type_id', 'left');
+      $this->db->join('xin_employees', 'employee_contract.user_id = xin_employees.employee_id', 'left');
+      $this->db->join('xin_companies', 'xin_employees.company_id = xin_companies.company_id', 'left');
+      $this->db->join('xin_designations', 'xin_employees.designation_id = xin_designations.designation_id', 'left');
+      $this->db->join('xin_departments', 'xin_employees.department_id = xin_departments.department_id', 'left');
+      $this->db->join('provinces', 'xin_employees.provience_id = provinces.id', 'left');
+      $this->db->join('district', 'xin_employees.city_id = district.id', 'left');
+      $this->db->where('xin_employees.first_name', $applicant_name);
+		$this->db->where('employee_contract.status !=', 0);
+		$this->db->where('employee_contract.to_date <=', $str2);
+		$this->db->or_where('xin_companies.name', $project);
+		$this->db->where('employee_contract.status !=', 0);
+		$this->db->where('employee_contract.to_date <=', $str2);
+		$this->db->or_where('xin_designations.designation_name', $designation);
+		$this->db->where('employee_contract.status !=', 0);
+		$this->db->where('employee_contract.to_date <=', $str2);
+		$this->db->or_where('provinces.name', $province);
+		$this->db->where('employee_contract.status !=', 0);
+		$this->db->where('employee_contract.to_date <=', $str2);
+		$this->db->or_where('employee_contract.sdt >=', $date_from);
+		$this->db->where('employee_contract.sdt <=', $date_to);
+		$this->db->where('employee_contract.to_date <=', $str2);
+		$this->db->where('employee_contract.status !=', 0);
+		$this->db->order_by('employee_contract.id', 'DESC');
+		$query = $this->db->get();
+		return $query->result();
+	}
 }
 ?>

@@ -235,6 +235,10 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
+		$data['path_url'] = '';
+		$data['projects'] = $this->Contract_model->get_projects();
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['provinces'] = $this->Contract_model->get_provinces();
 		$data['pen_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/pending_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
@@ -280,6 +284,9 @@ class Contract extends MY_Controller {
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		$data['active_contracts'] = $this->Contract_model->all_active_contracts($limit, $offset);
+		$data['projects'] = $this->Contract_model->get_projects();
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['provinces'] = $this->Contract_model->get_provinces();
       	$data['path_url'] = 'dashboard';
 		$data['subview'] = $this->load->view('dashboard/active_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data); // Page load.
@@ -324,6 +331,9 @@ class Contract extends MY_Controller {
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
+		$data['projects'] = $this->Contract_model->get_projects();
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['provinces'] = $this->Contract_model->get_provinces();
 		$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
 		$data['subview'] = $this->load->view('dashboard/expired_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data);
@@ -1247,6 +1257,55 @@ class Contract extends MY_Controller {
 		$this->load->view('layout_main', $data);
 	}
 
+	// --------------------------------- Search Contracts ---------------------------------------------- // 
+	// Search pending contracts.
+	public function search_pending_contracts(){
+		$applicant_name = $this->input->post('applicant_name');
+		$project = $this->input->post('project');
+		$designation = $this->input->post('designation');
+		$province = $this->input->post('province');
+		$date_from = $this->input->post('from_date');
+		$date_to = $this->input->post('to_date');
+		$data['search_results'] = $this->Contract_model->search_pending_contracts($applicant_name, $project, $designation, $province, $date_from, $date_to);
+		$data['projects'] = $this->Contract_model->get_projects();
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['provinces'] = $this->Contract_model->get_provinces();
+		$data['path_url'] = '';
+		$data['subview'] =  $this->load->view('dashboard/pending_contracts', $data, TRUE);
+		$this->load->view('layout_main', $data);
+	}
+	// Search active contracts.
+	public function search_active_contracts(){
+		$applicant_name = $this->input->post('applicant_name');
+		$project = $this->input->post('project');
+		$designation = $this->input->post('designation');
+		$province = $this->input->post('province');
+		$date_from = $this->input->post('from_date');
+		$date_to = $this->input->post('to_date');
+		$data['search_results'] = $this->Contract_model->search_active_contracts($applicant_name, $project, $designation, $province, $date_from, $date_to);
+		$data['projects'] = $this->Contract_model->get_projects();
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['provinces'] = $this->Contract_model->get_provinces();
+		$data['path_url'] = '';
+		$data['subview'] =  $this->load->view('dashboard/active_contracts', $data, TRUE);
+		$this->load->view('layout_main', $data);
+	}
+	// Search to be expired contracts.
+	public function search_expiring_contracts(){
+		$applicant_name = $this->input->post('applicant_name');
+		$project = $this->input->post('project');
+		$designation = $this->input->post('designation');
+		$province = $this->input->post('province');
+		$date_from = $this->input->post('from_date');
+		$date_to = $this->input->post('to_date');
+		$data['search_results'] = $this->Contract_model->search_expiring_contracts($applicant_name, $project, $designation, $province, $date_from, $date_to);
+		$data['projects'] = $this->Contract_model->get_projects();
+		$data['designations'] = $this->Contract_model->get_designations();
+		$data['provinces'] = $this->Contract_model->get_provinces();
+		$data['path_url'] = '';
+		$data['subview'] =  $this->load->view('dashboard/expired_contracts', $data, TRUE);
+		$this->load->view('layout_main', $data);
+	}
 	// get company wise salary
 	public function payroll_company_wise()
 	{

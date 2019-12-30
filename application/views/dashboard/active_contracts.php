@@ -107,14 +107,76 @@ $(document).ready(function() {
   $distributed = $this->Contract_model->count_distributed_contracts();
   $attached = $this->Contract_model->count_attached_contracts();
 ?>
-<form action="<?php echo base_url('contract/bulk_update'); ?>" method="post">
+<div class="row">
+  <section class="secMainWidthFilter">
+    <section class="secIndexTable margint-top-0">
+      <div class="col-lg-2 no-leftPad">
+        <div class="main-leftFilter">
+          <div class="tabelHeading">
+            <h3>Search Contracts <a data-toggle="tooltip" title="Click to refresh" data-placement="right" onclick="document.location.reload(true);" class="fa fa-refresh"></a></h3>
+          </div>
+          <div class="selectBoxMain">
+            <form method="post" action="<?= base_url('contract/search_active_contracts'); ?>">
+              <div class="filterSelect">
+                <input type="text" name="applicant_name" class="form-control" placeholder="Applicant name">
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <select class="form-control" name="project">
+                  <option value="">Select project...</option>
+                  <?php foreach($projects as $project): ?>
+                    <option value="<?php echo $project->name; ?>">
+                      <?php echo $project->name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <select class="form-control" name="designation">
+                  <option value="">Select designation...</option>
+                  <?php foreach($designations as $designation): ?>
+                    <option value="<?php echo $designation->designation_name; ?>">
+                      <?php echo $designation->designation_name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <select class="form-control" name="province">
+                  <option value="">Select province...</option>
+                  <?php foreach($provinces as $province): ?>
+                    <option value="<?php $province->name; ?>">
+                      <?php echo $province->name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <input type="date" name="from_date" class="form-control" placeholder="From" autocomplete="off">
+              </div>
+              <div class="filterSelect">
+                <input type="date" name="to_date" class="form-control" placeholder="To" autocomplete="off">
+              </div>
+              <div class="filterSelectBtn">
+                <button data-toggle="tooltip" title="Click to search" data-placement="right" type="submit" class="btn btnSubmit">Search</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+  <div class="col-lg-10">
   <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
     <section class="secIndexTable">
       <div class="mainTableWhite">
         <div class="row">
           <div class="col-md-4">
             <div class="tabelHeading">
-              <h3>active contracts' list | <small><a href="javascript:history.go(-1);"><div class="label label-warning">back</div></a>&nbsp;<a href=""><div class="label label-primary">active</div></a></small></h3>
+              <h3><?php if(empty($search_results)): ?>active contracts <?php else: ?> search results <?php endif; ?> | <small><a href="javascript:history.go(-1);"><div class="label label-warning">back</div></a>&nbsp;<a href=""><div class="label label-primary">active</div></a></small></h3>
             </div>
           </div>
           <div class="col-md-5 text-right">
@@ -122,7 +184,7 @@ $(document).ready(function() {
               <span id="active" class="btn"><b><?= $active; ?></b> Active</span>
               <span id="printed" class="btn"><b><?= $printed; ?></b> Printed</span>
               <span id="distributed" class="btn"><b><?= $distributed; ?></b> Distributed</span>
-              <span id="attached" class="btn"><b><?= $attached; ?></b> Attached to File</span>
+              <span id="attached" class="btn"><b><?= $attached; ?></b> Attached</span>
             </div>
           </div>
           <div class="col-md-3 text-right" id="printBtn" style="display: block; font-size: 30px; margin-top: 5px; margin-left: -14px;">
@@ -152,7 +214,7 @@ $(document).ready(function() {
                     </tr>
                   </thead>
                   <tbody id="filter_results">
-                  <?php
+                  <?php if(empty($search_results) AND !empty($active_contracts)){
                     foreach ($active_contracts as $contract){
                     $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
                     if($contract->status == 1){
@@ -191,7 +253,52 @@ $(document).ready(function() {
                       </td>
                     </tr>
                   <?php endif; ?>
-                    <?php } } ?>
+                    <?php } } } ?>
+                    <?php if(!empty($search_results) AND empty($active_contracts)){
+                    foreach ($search_results as $result){
+                    $userDetails = $this->Contract_model->applicantdetails($result->user_id);
+                    if($result->status == 1){
+                  ?>
+                  <?php if($result->user_id): ?>
+                    <tr>
+                      <td>
+                        <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $result->user_id; ?>">
+                      </td>
+                      <td>
+                        CTC-<?= $result->name.'-'.$result->user_id; ?>
+                      </td>
+                      <td>
+                        <?php echo $result->fullname;?>
+                      </td>
+                      <td>
+                        <?php echo $result->compName; ?>
+                      </td>
+                      <td>
+                        <?php echo $result->designation_name; ?>
+                      </td>
+                      <td>
+                        <?php echo date('M d, Y', strtotime($result->from_date)).' - '.date('M d, Y', strtotime($result->to_date)); ?>
+                      </td>
+                      <td>
+                        <?php echo $result->contract_manager; ?>
+                      </td>
+                      <td>
+                        <?php echo $result->cont_type; ?>
+                      </td>
+                      <td>
+                        <?php echo date('M d, Y', strtotime($result->sdt)); ?>
+                      </td>
+                      <td>
+                        <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $result->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
+                      </td>
+                    </tr>
+                  <?php endif; ?>
+                    <?php } } } ?>
+                    <?php if(empty($search_results) AND empty($active_contracts)): ?>
+                      <div class="alert alert-danger">
+                        <p><strong>Aww snap! </strong>We couldn't find what you're looking for at the moment. Try again.</p>
+                      </div>
+                    <?php endif; ?>
                   </tbody>
                 </table>
               </div>
@@ -201,7 +308,7 @@ $(document).ready(function() {
         <div class="row">
           <div class="col-md-3"></div>
           <div class="col-md-6 text-center">
-            <?php echo $this->pagination->create_links(); ?>
+            <?php if(empty($search_results) AND !empty($active_contracts)){ echo $this->pagination->create_links(); } ?>
           </div>
           <div class="col-md-3"></div>
         </div>
@@ -209,6 +316,10 @@ $(document).ready(function() {
     </section>
   </section>
   <?php } ?>
+  </div>
+</div>
+<form action="<?php echo base_url('contract/bulk_update'); ?>" method="post">
+  
   <script type="text/javascript">
     $(document).ready(function(){
       $('#checkAll').click(function(){

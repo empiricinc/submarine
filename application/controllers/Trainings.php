@@ -866,6 +866,21 @@ class Trainings extends CI_Controller{
 		$data['expenses'] = $this->Trainings_model->training_expenses($trg_id); 
 		$this->load->view('training-files/components/template', $data);
 	}
+	// Save training expenses to payroll.
+	public function save_to_payroll(){
+		$expenses = 1000 + 2000 + 500;
+		$data = array(
+				'training_expense' => $expenses,
+				);
+		$ids = $this->input->post('employee'); 
+		var_dump($ids);
+		if(isset($_POST['employee'])){
+			$this->db->where_in('user_id', $ids);
+			$this->db->update('employee_expenses', $data);
+		}else{
+			echo "Select at least checkbox from the list below.";
+		}
+	}
 	// Training reports.
 	public function training_reports(){
 		$data['reports'] = $this->Trainings_model->training_report();

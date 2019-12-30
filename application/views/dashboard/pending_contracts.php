@@ -110,178 +110,365 @@ h4 {
     $(document).ready(function() {
         $('#contact_list2').DataTable();
     });
+    $(document).ready(function(){
+      $('.date').ui-datepicker();
+    });
 </script>
-<section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
-  <form action="<?php echo base_url('contract/activate_all_contracts'); ?>" method="post">
-    <section class="secIndexTable">
-      <div class="mainTableWhite">
-        <div class="col-lg-12">
-          <div class="row">
-          <div class="col-md-4">
-            <div class="tabelHeading">
-              <?php $count = $this->Contract_model->count_contracts(); ?>
-              <h3>list of all pending contracts | <small><a href="javascript:history.go(-1);">Back &laquo;</a>
-                <div class="label label-info">total no. of contracts pending currently: <?php echo $count; ?></div>
-              </small></h3>
-            </div>
+<div class="row">
+  <section class="secMainWidthFilter">
+    <section class="secIndexTable margint-top-0">
+      <div class="col-lg-2 no-leftPad">
+        <div class="main-leftFilter">
+          <div class="tabelHeading">
+            <h3>Search Contracts <a data-toggle="tooltip" title="Click to refresh" data-placement="right" onclick="document.location.reload(true);" class="fa fa-refresh"></a></h3>
           </div>
-          <div class="col-lg-8 text-right" id="printBtn" style="display: block; font-size: 30px; margin-top: 5px;">
-              <button data-toggle="tooltip" title="Activate Contracts." data-placement="left" type="submit" name="activate_bulk" class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
-              <button data-toggle="tooltip" title="Generate Contracts" type="submit" name="generate_bulk" class="btn btn-info">Generate</button>
-            <a target="blank" data-toggle="tooltip" title="Print Contracts" data-placement="left" href="<?= base_url('contract/print_all_contracts'); ?>" class="btn btn-primary"><i class="fa fa-print"></i></a>
-          </div>
-        </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="tableMain">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th><input type="checkbox" id="checkAll"></th>
-                      <th>Emp iD</th>
-                      <th>name</th>
-                      <th>project</th>
-                      <th>designation</th>
-                      <th>province</th>
-                      <th>district</th>
-                      <th>domicile</th>
-                      <th>gender</th>
-                      <th>type</th>
-                      <th>history</th>
-                      <th>application date</th>
-                      <th>action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <?php  
-                    $i=0;
-                    foreach ($pen_contracts as $contract){
-                    $i++;
-                    $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
-                    if($contract->status == 0){
-                  ?>
-                  <tr>
-                    <td>
-                      <input type="checkbox" name="print[]" id="checkPrint" style="display: block;" value="<?php echo $contract->user_id; ?>">
-                    </td>
-                    <td>
-                      <?php echo $contract->compName.'-'.$contract->designation_name.'-'.$contract->user_id; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->fullname; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->compName; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->designation_name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->city_name; ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->dom_name; ?>
-                    </td>
-                    <td>
-                      <?php if($contract->gender == 0){ echo "Male"; }else{ echo "Female"; } ?>
-                    </td>
-                    <td>
-                      <?php echo $contract->cont_type; ?>
-                    </td>
-                    <td>
-                      <?php $history = $this->Contract_model->contract_history($contract->user_id); ?>
-                      <a data-toggle="modal" data-target="#view_history<?php echo $contract->user_id; ?>" href="#" class="btn btn-primary btn-xs">History</a>
-                        <div class="modal fade" id="view_history<?php echo $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="view_history" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <!--Header-->
-                              <div class="modal-header">
-                                <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Contract history... </h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">×</span>
-                                </button>
-                              </div>
-                              <!--Body-->
-                              <div class="modal-body">
-                                <div class="row">
-                                  <div class="col-md-12">
-                                    <strong>Applicant's contract history for: <?php echo ucwords($contract->fullname); ?></strong>
-                                    <div class="table">
-                                      <table class="table table-hover">
-                                        <thead>
-                                          <tr>
-                                            <th>Serial</th>
-                                            <th>Emp ID</th>
-                                            <th>Contract Type</th>
-                                            <th>Date From</th>
-                                            <th>Date To</th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php $counter = 1; foreach($history as $hist): ?>
-                                          <tr>
-                                            <td><?php echo $counter++; ?></td>
-                                            <td><?= $contract->compName.'-'.$contract->designation_name.'-'.$hist->user_id; ?></td>
-                                            <td><?= $hist->name; ?></td>
-                                            <td><?= date('M d, Y', strtotime($hist->from_date));?></td>
-                                            <td><?= date('M d, Y', strtotime($hist->to_date));?></td>
-                                          </tr>
-                                        <?php endforeach; ?>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <!--Footer-->
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                    </td>
-                    <td>
-                      <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
-                    </td>
-                    <td id="allChecked">
-                    <?php
-                      if($contract->status == 0): ?>
-                        <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>">
-                          <i class="fa fa-check-circle"></i></a>
-                        <a data-toggle="tooltip" data-placement="left" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description === NULL){ echo base_url('contract/activate_first'); }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
-                        <a data-toggle="tooltip" data-placement="left" title="Reject Contract. The reject operation can't be reverted." href="<?php echo base_url("contract/reject/{$contract->user_id}"); ?>" onclick="javascript: return confirm('Are you sure to reject this contract ?');">
-                          <i class="fa fa-close"></i>
-                        </a>
-                     <?php else: ?>
-                        Contract Activated
-                     <?php endif; ?>                  
-                    </td>
-                  </tr>
-                  <?php } } ?>
-                </tbody>
-                </table>
+          <div class="selectBoxMain">
+            <form method="post" action="<?= base_url('contract/search_pending_contracts'); ?>">
+              <div class="filterSelect">
+                <input type="text" name="applicant_name" class="form-control" placeholder="Applicant name">
+                <span></span>
               </div>
-            </div>
+              <div class="filterSelect">
+                <select class="form-control" name="project">
+                  <option value="">Select project...</option>
+                  <?php foreach($projects as $project): ?>
+                    <option value="<?php echo $project->name; ?>">
+                      <?php echo $project->name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <select class="form-control" name="designation">
+                  <option value="">Select designation...</option>
+                  <?php foreach($designations as $designation): ?>
+                    <option value="<?php echo $designation->designation_name; ?>">
+                      <?php echo $designation->designation_name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <select class="form-control" name="province">
+                  <option value="">Select province...</option>
+                  <?php foreach($provinces as $province): ?>
+                    <option value="<?php $province->name; ?>">
+                      <?php echo $province->name; ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <span></span>
+              </div>
+              <div class="filterSelect">
+                <input type="date" name="from_date" class="form-control" placeholder="From" autocomplete="off">
+              </div>
+              <div class="filterSelect">
+                <input type="date" name="to_date" class="form-control" placeholder="To" autocomplete="off">
+              </div>
+              <div class="filterSelectBtn">
+                <button data-toggle="tooltip" title="Click to search" data-placement="right" type="submit" class="btn btnSubmit">Search</button>
+              </div>
+            </form>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-1"></div>
-          <div class="col-lg-10 text-center">
-            <?php echo $this->pagination->create_links(); ?>
-          </div>
-          <div class="col-lg-1"></div>
         </div>
       </div>
     </section>
-  </form>
-</section>
+  </section>
+  <div class="col-lg-10">
+    <section class="secMainWidthFilter">
+      <section class="secIndexTable margint-top-0">
+        <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
+          <form action="<?php echo base_url('contract/activate_all_contracts'); ?>" method="post">
+            <section class="secIndexTable">
+              <div class="mainTableWhite">
+                <div class="col-lg-12">
+                  <div class="row">
+                  <div class="col-md-5">
+                    <div class="tabelHeading">
+                      <?php $count = $this->Contract_model->count_contracts(); ?>
+                      <h3><?php if(empty($search_results)): ?>list of all pending contracts <?php else: ?> search results <?php endif; ?> | <small><a href="javascript:history.go(-1);">Back &laquo;</a>
+                        <div class="label label-info">total no. of contracts pending currently: <?php echo $count; ?></div>
+                      </small></h3>
+                    </div>
+                  </div>
+                  <div class="col-lg-7 text-right" id="printBtn" style="display: block; font-size: 30px; margin-top: 5px;">
+                      <button data-toggle="tooltip" title="Activate Contracts." data-placement="left" type="submit" name="activate_bulk" class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
+                      <button data-toggle="tooltip" title="Generate Contracts" type="submit" name="generate_bulk" class="btn btn-info">Generate</button>
+                    <a target="blank" data-toggle="tooltip" title="Print Contracts" data-placement="left" href="<?= base_url('contract/print_all_contracts'); ?>" class="btn btn-primary"><i class="fa fa-print"></i></a>
+                  </div>
+                </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="tableMain">
+                      <div class="table-responsive">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th><input type="checkbox" id="checkAll"></th>
+                              <th>Emp iD</th>
+                              <th>name</th>
+                              <th>project</th>
+                              <th>designation</th>
+                              <th>province</th>
+                              <th>district</th>
+                              <th>domicile</th>
+                              <th>gender</th>
+                              <th>type</th>
+                              <th>history</th>
+                              <th>application date</th>
+                              <th>action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php if(empty($search_results) AND !empty($pen_contracts)){
+                              $i=0;
+                              foreach ($pen_contracts as $contract){
+                              $i++;
+                              $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
+                              if($contract->status == 0){
+                            ?>
+                            <tr>
+                              <td>
+                                <input type="checkbox" name="print[]" id="checkPrint" style="display: block;" value="<?php echo $contract->user_id; ?>">
+                              </td>
+                              <td>
+                                <?php echo $contract->compName.'-'.$contract->designation_name.'-'.$contract->user_id; ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->fullname; ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->compName; ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->designation_name; ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->name; ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->city_name; ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->dom_name; ?>
+                              </td>
+                              <td>
+                                <?php if($contract->gender == 0){ echo "Male"; }else{ echo "Female"; } ?>
+                              </td>
+                              <td>
+                                <?php echo $contract->cont_type; ?>
+                              </td>
+                              <td>
+                                <?php $history = $this->Contract_model->contract_history($contract->user_id); ?>
+                                <a data-toggle="modal" data-target="#view_history<?php echo $contract->user_id; ?>" href="#" class="btn btn-primary btn-xs">History</a>
+                                  <div class="modal fade" id="view_history<?php echo $contract->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="view_history" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <!--Header-->
+                                        <div class="modal-header">
+                                          <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Contract history... </h4>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                          </button>
+                                        </div>
+                                        <!--Body-->
+                                        <div class="modal-body">
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                              <strong>Applicant's contract history for: <?php echo ucwords($contract->fullname); ?></strong>
+                                              <div class="table">
+                                                <table class="table table-hover">
+                                                  <thead>
+                                                    <tr>
+                                                      <th>Serial</th>
+                                                      <th>Emp ID</th>
+                                                      <th>Contract Type</th>
+                                                      <th>Date From</th>
+                                                      <th>Date To</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                  <?php $counter = 1; foreach($history as $hist): ?>
+                                                    <tr>
+                                                      <td><?php echo $counter++; ?></td>
+                                                      <td><?= $contract->compName.'-'.$contract->designation_name.'-'.$hist->user_id; ?></td>
+                                                      <td><?= $hist->name; ?></td>
+                                                      <td><?= date('M d, Y', strtotime($hist->from_date));?></td>
+                                                      <td><?= date('M d, Y', strtotime($hist->to_date));?></td>
+                                                    </tr>
+                                                  <?php endforeach; ?>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!--Footer-->
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </td>
+                              <td>
+                                <?php echo date('M d, Y', strtotime($contract->created_at)); ?>
+                              </td>
+                              <td id="allChecked">
+                              <?php
+                                if($contract->status == 0): ?>
+                                  <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $contract->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
+                                  <a data-toggle="tooltip" data-placement="left" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $contract->user_id; ?>">
+                                    <i class="fa fa-check-circle"></i></a>
+                                  <a data-toggle="tooltip" data-placement="left" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($contract->long_description === NULL){ echo base_url('contract/activate_first'); }else{ echo base_url() ?>contract/activatecontract/<?= $contract->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($contract->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
+                                  <a data-toggle="tooltip" data-placement="left" title="Reject Contract. The reject operation can't be reverted." href="<?php echo base_url("contract/reject/{$contract->user_id}"); ?>" onclick="javascript: return confirm('Are you sure to reject this contract ?');">
+                                    <i class="fa fa-close"></i>
+                                  </a>
+                               <?php else: ?>
+                                  Contract Activated
+                               <?php endif; ?>                  
+                              </td>
+                            </tr>
+                            <?php } } } ?>
+                              <?php if(!empty($search_results)){
+                              $i=0;
+                              foreach ($search_results as $result){
+                              $i++;
+                              $userDetails = $this->Contract_model->applicantdetails($result->user_id);
+                              if($result->status == 0){
+                            ?>
+                            <tr>
+                              <td>
+                                <input type="checkbox" name="print[]" id="checkPrint" style="display: block;" value="<?php echo $result->user_id; ?>">
+                              </td>
+                              <td>
+                                <?php echo $result->compName.'-'.$result->designation_name.'-'.$result->user_id; ?>
+                              </td>
+                              <td>
+                                <?php echo $result->fullname; ?>
+                              </td>
+                              <td>
+                                <?php echo $result->compName; ?>
+                              </td>
+                              <td>
+                                <?php echo $result->designation_name; ?>
+                              </td>
+                              <td>
+                                <?php echo $result->name; ?>
+                              </td>
+                              <td>
+                                <?php echo $result->city_name; ?>
+                              </td>
+                              <td>
+                                <?php echo $result->dom_name; ?>
+                              </td>
+                              <td>
+                                <?php if($result->gender == 0){ echo "Male"; }else{ echo "Female"; } ?>
+                              </td>
+                              <td>
+                                <?php echo $result->cont_type; ?>
+                              </td>
+                              <td>
+                                <?php $history = $this->Contract_model->contract_history($result->user_id); ?>
+                                <a data-toggle="modal" data-target="#view_history<?php echo $result->user_id; ?>" href="#" class="btn btn-primary btn-xs">History</a>
+                                  <div class="modal fade" id="view_history<?php echo $result->user_id; ?>" tabindex="-1" role="dialog" aria-labelledby="view_history" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <!--Header-->
+                                        <div class="modal-header">
+                                          <h4 style="display: inline-block;" class="modal-title" id="myModalLabel">Applicant's Contract history... </h4>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                          </button>
+                                        </div>
+                                        <!--Body-->
+                                        <div class="modal-body">
+                                          <div class="row">
+                                            <div class="col-md-12">
+                                              <strong>Applicant's contract history for: <?php echo ucwords($result->fullname); ?></strong>
+                                              <div class="table">
+                                                <table class="table table-hover">
+                                                  <thead>
+                                                    <tr>
+                                                      <th>Serial</th>
+                                                      <th>Emp ID</th>
+                                                      <th>Contract Type</th>
+                                                      <th>Date From</th>
+                                                      <th>Date To</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                  <?php $counter = 1; foreach($history as $hist): ?>
+                                                    <tr>
+                                                      <td><?php echo $counter++; ?></td>
+                                                      <td><?= $result->compName.'-'.$result->designation_name.'-'.$hist->user_id; ?></td>
+                                                      <td><?= $hist->name; ?></td>
+                                                      <td><?= date('M d, Y', strtotime($hist->from_date));?></td>
+                                                      <td><?= date('M d, Y', strtotime($hist->to_date));?></td>
+                                                    </tr>
+                                                  <?php endforeach; ?>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!--Footer-->
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </td>
+                              <td>
+                                <?php echo date('M d, Y', strtotime($result->created_at)); ?>
+                              </td>
+                              <td id="allChecked">
+                              <?php
+                                if($result->status == 0): ?>
+                                  <a data-toggle="tooltip" title="Create new contract or make changes in the existing one." href="<?= base_url(); ?>contract/create_contract/<?= $result->user_id; ?>"><i class="fa fa-plus-circle"></i></a>
+                                  <a data-toggle="tooltip" data-placement="left" title="Upload scanned copies of contract to verify it." href="<?= base_url(); ?>contract/verify/<?= $result->user_id; ?>">
+                                    <i class="fa fa-check-circle"></i></a>
+                                  <a data-toggle="tooltip" data-placement="left" title="Activate Contract, the RED color indicates that it's not activated yet. If activated, it'll be disappeared from here." href="<?php if($result->long_description === NULL){ echo base_url('contract/activate_first'); }else{ echo base_url() ?>contract/activatecontract/<?= $result->user_id; } ?>" onclick="javascript:return confirm('Are you sure to activate the contract ?');"><i class="fa fa-arrow-circle-right" id=<?php if($result->long_description == NULL): ?>"activate"<?php  else: ?>id="activated"<?php endif; ?>></i></a>
+                                  <a data-toggle="tooltip" data-placement="left" title="Reject Contract. The reject operation can't be reverted." href="<?php echo base_url("contract/reject/{$result->user_id}"); ?>" onclick="javascript: return confirm('Are you sure to reject this contract ?');">
+                                    <i class="fa fa-close"></i>
+                                  </a>
+                               <?php else: ?>
+                                  Contract Activated
+                               <?php endif; ?>                  
+                              </td>
+                            </tr>
+                            <?php } } } ?>
+                            <?php if(empty($search_results) AND empty($pen_contracts)): ?>
+                              <div class="alert alert-danger">
+                                <p class="text-center"><strong>Aww Snap! </strong> We couldn't find what you're looking for at the moment. Try again.</p>
+                              </div>
+                            <?php endif; ?>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-1"></div>
+                  <div class="col-lg-10 text-center">
+                    <?php if(!empty($pen_contracts) AND empty($search_results)){ echo $this->pagination->create_links(); } ?>
+                  </div>
+                  <div class="col-lg-1"></div>
+                </div>
+              </div>
+            </section>
+          </form>
+        </section>
+      </section>
+    </section>
+  </div>
+</div>
 <?php } ?>
 <script type="text/javascript">
 // Check all checkboxes at once.

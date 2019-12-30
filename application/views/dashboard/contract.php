@@ -458,7 +458,7 @@ h4 {
                           <td><?= $exp_cont->name; ?></td>
                           <td>
                             <?php if($date2 > $date1): ?>
-                            <?php echo $diff->format("%a day(s) left"); elseif($date2 <= $date1): echo '<button data-toggle="tooltip" title='.$diff->format('"%a days ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
+                            <?php echo $diff->format("%a day(s) left"); elseif($date2 <= $date1): echo '<button data-toggle="tooltip" title='.$diff->format('"%mm %dd ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
                           </td>
                           <td>
                             <a data-toggle="tooltip" title="<?php echo date('M d, Y', strtotime($exp_cont->from_date)).' - '.date('M d, Y', strtotime($exp_cont->to_date)); ?>" href="<?= base_url(); ?>contract/extend/<?= $exp_cont->user_id; ?>" class="btn btn-primary btn-xs">Extend</a>
