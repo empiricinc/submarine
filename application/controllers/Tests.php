@@ -164,7 +164,7 @@ class Tests extends MY_Controller{
 	public function exam_login(){
 		$this->load->view('test-system/exam_login');
 	}
-	// Log the applicant in to the paper.
+	// Log the applicant in to the paper. (Objective paper)
 	public function begin_exam(){
 		$post_data = $this->input->post();
 		$validate = $this->Tests_model->validate_applicant($post_data);
@@ -300,9 +300,31 @@ class Tests extends MY_Controller{
 			$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
 		}
 		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will be informed about the result shortly !');
-		redirect('tests/test_submitted');
+		redirect('tests/subjective_paper_view/'.$_POST['applicant_id']);
 	}
 	// Redirect the user to the test submitted page, where he can check his/her result, marks, failed/passed and more...
+	// Save applicant's paper. (Subjective)
+	public function applicant_test_subjective(){
+		$session = $this->session->userdata('rollnumber');
+		if(empty($session)){
+			redirect('tests/exam_login');
+		}
+		$question_id = $_POST['question_id'];
+		$applicant_id = $_POST['applicant_id'];
+		$answers = $_POST['answer'];
+		$length = count($answers);
+		$length = count($question_id);
+		for ($i = 0; $i < $length; $i++) {
+			$data = array(
+					'question_id' => $question_id[$i],
+					'applicant_id' => $applicant_id,
+					'answer_text' => $answers[$i]
+				);
+			$this->Tests_model->applicant_test_subjective($data);
+		}
+		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will be informed about the result shortly !');
+		redirect('tests/test_submitted');
+	}
 	public function test_submitted(){
 		// After teh applicant submit the paper, destroy the session and get him/her outta there.
 		$this->session->sess_destroy();
@@ -641,7 +663,7 @@ class Tests extends MY_Controller{
 	public function save_result(){
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('applicant_rollnumber', 'Applicant Roll Number', 'required|numeric');
-		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[2]');
+		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[2]|less_than['.$this->input->post("total_marks").']');
 		$this->form_validation->set_rules('total_marks', 'Total Marks', 'required|numeric');
 		if($this->form_validation->run() == FALSE){
 			$this->add_result();
@@ -845,10 +867,32 @@ class Tests extends MY_Controller{
 	}
 	// Get subjective paper. Display questions and textarea for answers.
 	public function subjective_paper_view(){
-		$data['title'] = 'Test System | Question Paper - Subjective';
-		$data['content'] = 'test-system/question_paper_subjective';
 		$data['questions'] = $this->Tests_model->subjective_question_paper();
+		$this->load->view('test-system/question_paper_subjective', $data);
+	}
+	// Get attempted papers.
+	public function attempted_papers(){
+		$data['title'] = 'Test System | Attempted Papers';
+		$data['content'] = 'test-system/attempted_papers_list';
+		$data['attempted'] = $this->Tests_model->get_attempted_papers();
 		$this->load->view('test-system/components/template', $data);
+	}
+	// Subjective result.
+	public function save_subjective_result(){
+		$data = array(
+			'applicant_id' => $this->input->post('applicant_id'),
+			'marks' => $this->input->post('marks')
+		);
+		$already_exist = $this->db->get_where('subjective_test_result', array('applicant_id' => $_POST['applicant_id']));
+		if($already_exist->num_rows() > 0){
+			echo "The result for this applicant has already been saved in the database, try another one.";
+			return FALSE;
+		}elseif($this->Tests_model->save_subjective_result($data)){
+			$this->session->set_flashdata('success', '<strong>Success ! </strong> The result has been saved successfully.');
+			redirect('tests/attempted_papers');
+		}else{
+			echo "The operation wasn't successful! try again.";
+		}
 	}
 }
 

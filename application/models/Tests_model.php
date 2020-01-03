@@ -113,12 +113,16 @@ class Tests_model extends CI_Model{
 							xin_jobs.job_id,
 							xin_jobs.job_title,
 							xin_jobs.company,
-							xin_jobs.designation_id');
+							xin_jobs.designation_id,
+							subjective_test_result.id,
+							subjective_test_result.applicant_id,
+							subjective_test_result.marks');
 		$this->db->from('test_result');
 		$this->db->join('xin_job_applications', 'test_result.rollnumber = xin_job_applications.application_id', 'left');
 		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
 		$this->db->join('xin_companies' , 'xin_jobs.company = xin_companies.company_id', 'left');
 		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('subjective_test_result', 'test_result.rollnumber = subjective_test_result.applicant_id', 'left');
 		$this->db->where(array('test_result.rollnumber' => $appli_id));
 		$this->db->or_where('test_result.sdt >=', $date_from);
 		$this->db->where('test_result.sdt <=', $date_to);
@@ -850,6 +854,48 @@ class Tests_model extends CI_Model{
 		$this->db->join('xin_designations', 'ex_questions_subjective.designation = xin_designations.designation_id', 'left');
 		$this->db->limit(5);
 		return $this->db->get()->result();
+	}
+	// Save subjective paper after attempting.
+	public function applicant_test_subjective($data){
+		$this->db->insert('subjective_papers', $data);
+		if($this->db->affected_rows() > 0){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
+	// Get attempted papers (Subjective).
+	public function get_attempted_papers(){
+		$this->db->select('subjective_papers.*,
+							xin_job_applications.application_id,
+							xin_job_applications.fullname,
+							xin_job_applications.job_id,
+							ex_questions_subjective.id,
+							ex_questions_subjective.question_text,
+							xin_jobs.job_id,
+							xin_jobs.job_title');
+		$this->db->from('subjective_papers');
+		$this->db->join('xin_job_applications', 'subjective_papers.applicant_id = xin_job_applications.application_id', 'left');
+		$this->db->join('ex_questions_subjective', 'subjective_papers.question_id = ex_questions_subjective.id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->group_by('subjective_papers.applicant_id');
+		return $this->db->get()->result();
+	}
+	// Get subjective answers by applicant_id.
+	public function subjective_result($applicant_id){
+		$this->db->select('*');
+		$this->db->from('subjective_papers');
+		$this->db->where('applicant_id', $applicant_id);
+		return $this->db->get()->result();
+	}
+	// Save subjective part result.
+	public function save_subjective_result($data){
+		$this->db->insert('subjective_test_result', $data);
+		if($this->db->affected_rows() > 0){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
 	}
 }
 

@@ -12,7 +12,7 @@
 				<div class="row">
 					<div class="col-md-8">
 						<div class="tabelHeading">
-							<h3>subjective questions <span>(list of the subjective questions) | <a href="<?php echo base_url('tests/subjective_paper'); ?>" class="btn btn-primary btn-sm">add new</a> <a href="<?php echo base_url('tests/subjective_paper_view'); ?>" class="btn btn-info btn-info btn-sm">View Paper</a></span></h3>
+							<h3>subjective questions <span>(list of the subjective questions) | <a href="<?php echo base_url('tests/subjective_paper'); ?>" class="btn btn-primary btn-sm">add new</a> <a href="<?php echo base_url('tests/subjective_paper_view'); ?>" class="btn btn-info btn-info btn-sm">View Paper</a> <a href="<?php echo base_url('tests/attempted_papers'); ?>" class="btn btn-info btn-warning btn-sm">Attempted Papers</a></span></h3>
 						</div>
 					</div>
 					<div class="col-md-4">

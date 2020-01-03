@@ -116,9 +116,11 @@
 											<td><?php echo $result->job_title; ?></td>
 											<td>CTC-2019-0<?php echo $result->rollnumber; ?></td>
 											<td><?php echo date('M d, Y', strtotime($result->sdt)); ?></td>
-											<td><?php echo $result->obtain_marks; ?></td>
 											<td>
-												<?php if($result->obtain_marks >= 15): ?>
+												<?php echo $total_marks = $result->obtain_marks + $result->marks; ?>
+											</td>
+											<td>
+												<?php if($total_marks >= 15): ?>
 													<button class="btn btn-success btn-xs">Passed</button>
 												<?php else: ?>
 													<button class="btn btn-danger btn-xs">Failed</button>

@@ -22,17 +22,17 @@
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_name" class="form-control" placeholder="Applicant's name" id="applicant_name" style="color: #aeafaf;" readonly="">
+							<input type="text" name="applicant_name" class="form-control" placeholder="Applicant's name" id="applicant_name" style="color: #aeafaf;" readonly="" value="<?php echo set_value('applicant_name'); ?>">
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_project" class="form-control" placeholder="Applicant's Project" id="project" style="color: #aeafaf;" readonly="">
+							<input type="text" name="applicant_project" class="form-control" placeholder="Applicant's Project" id="project" style="color: #aeafaf;" readonly="" value="<?php echo set_value('applicant_project'); ?>">
 						</div>
 					</div>
 					<div class="col-lg-3">
 						<div class="inputFormMain">
-							<input type="text" name="applicant_designation" class="form-control" placeholder="Applicant's Designation" id="designation" style="color: #aeafaf;" readonly="">
+							<input type="text" name="applicant_designation" class="form-control" placeholder="Applicant's Designation" id="designation" style="color: #aeafaf;" readonly="" value="<?php echo set_value('applicant_designation'); ?>">
 						</div>
 					</div>
 					<div class="col-lg-3">
@@ -49,7 +49,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="inputFormMain">
-							<textarea name="additional_comment" class="form-control" placeholder="Additional remarks (if any?)" style="color: #aeafaf;" rows="2"></textarea>
+							<textarea name="additional_comment" class="form-control" placeholder="Additional remarks (if any?)" style="color: #aeafaf;" rows="2"><?php echo set_value('additional_comment'); ?></textarea>
 						</div>
 					</div>
 					<div class="col-lg-12">

@@ -874,17 +874,13 @@ class Trainings extends CI_Controller{
 				);
 		$ids = $this->input->post('employee'); 
 		var_dump($ids);
+		echo $expenses;
 		if(isset($_POST['employee'])){
 			$this->db->where_in('user_id', $ids);
 			$this->db->update('employee_expenses', $data);
 		}else{
-			echo "Select at least checkbox from the list below.";
+			echo "Select at least one checkbox from the list below.";
 		}
-	}
-	// Training reports.
-	public function training_reports(){
-		$data['reports'] = $this->Trainings_model->training_report();
-		var_dump($data);
 	}
 	// Get the data you wish to show on the page.
 	public function get_count_desig($desig_id = '', $status = ''){
