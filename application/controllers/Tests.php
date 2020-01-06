@@ -663,7 +663,7 @@ class Tests extends MY_Controller{
 	public function save_result(){
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('applicant_rollnumber', 'Applicant Roll Number', 'required|numeric');
-		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[2]|less_than['.$this->input->post("total_marks").']');
+		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[2]');
 		$this->form_validation->set_rules('total_marks', 'Total Marks', 'required|numeric');
 		if($this->form_validation->run() == FALSE){
 			$this->add_result();
