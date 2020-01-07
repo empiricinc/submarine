@@ -506,6 +506,12 @@ function applicantdetails($id){
 			return false;
 		}
 	}
+	// Upate SM Interview if roll number already exists.
+	public function update_sm_interview($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('interview_result', $data);
+		return true;
+	}
 	// Save DHCSO interview.
 	public function save_dhcso_interview($data){
 		$this->db->insert('interview_result', $data);
@@ -514,6 +520,12 @@ function applicantdetails($id){
 		}else{
 			return false;
 		}
+	}
+	// Update DHCSO interview if the roll number already exists.
+	public function update_dhcso_interview($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('interview_result', $data);
+		return true;
 	}
 	// Save FCM/CHW interview.
 	public function save_fcm_interview($data){
@@ -524,9 +536,13 @@ function applicantdetails($id){
 			return false;
 		}
 	}
-
-	 // read job info
-
+	// Update FCM/CHW interview if roll number already
+	public function update_fcm_interview($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('interview_result', $data);
+		return true;
+	}
+	// read job info
 /*	 public function read_job_information($id) {
 
 		$condition = "id =" . "'" . $id . "'";

@@ -432,11 +432,23 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark8' => $this->input->post('comm_remarks'),
 			'remark10' => $this->input->post('overall_remarks')
 		);
-		if($this->Interview_model->save_sm_interview($data)){
+		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
+		if($exists->rollnumber){
+			$rollnumber = $this->input->post('rollnumber');
+			$add_obtained = $obtained + $exists->obtain_marks;
+			$add_total = $exists->total_marks + 50;
+			$data2 = array(
+				'obtain_marks' => $add_obtained,
+				'total_marks' => $add_total
+				);
+			$this->Interview_model->update_sm_interview($rollnumber, $data2);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been udpated successfully.');
+			redirect('interview');
+		}elseif($this->Interview_model->save_sm_interview($data)){
 			$this->session->set_flashdata('success', '<strong>Success !</strong> The interview result has been saved successfully');
 			redirect('interview');
 		}else{
-			echo "The operation wasn't successful";
+			echo "The operation wasn't successful! try again.";
 		}
 	}
 	// Interview form for DHCSO.
@@ -473,11 +485,23 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark9' => $this->input->post('comm_remarks'),
 			'remark10' => $this->input->post('overall_remarks')
 		);
-		if($this->Interview_model->save_dhcso_interview($data)){
+		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
+		if($exists->rollnumber){
+			$rollnumber = $this->input->post('rollnumber');
+			$add_obtained = $obtained + $exists->obtain_marks;
+			$add_total = $exists->total_marks + 50;
+			$data1 = array(
+				'obtain_marks' => $add_obtained,
+				'total_marks' => $add_total
+				);
+			$this->Interview_model->update_dhcso_interview($rollnumber, $data1);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been updated successfully.');
+			redirect('interview');
+		}elseif($this->Interview_model->save_dhcso_interview($data)){
 			$this->session->set_flashdata('success', '<strong>Success !</strong> The interview result has been submitted successfully.');
 			redirect('interview');
 		}else{
-			echo "The operation wasn't successful";
+			echo "The operation wasn't successful! try again.";
 		}
 	}
 	// Interview form for FCM/CHW.
@@ -509,8 +533,20 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark6' => $this->input->post('mob_remarks'),
 			'remark7' => $this->input->post('lang_remarks'),
 			'remark10' => $this->input->post('overall_remarks')
-		);
-		if($this->Interview_model->save_fcm_interview($data)){
+			);
+		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
+		if($exists->rollnumber){
+			$rollnumber = $this->input->post('rollnumber');
+			$add_obtained = $obtained + $exists->obtain_marks;
+			$add_total = $exists->total_marks + 50;
+			$data3 = array(
+				'obtain_marks' => $add_obtained,
+				'total_marks' => $add_total
+				);
+			$this->Interview_model->update_fcm_interview($rollnumber, $data3);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been updated successfully.');
+			redirect('interview');
+		}elseif($this->Interview_model->save_fcm_interview($data)){
 			$this->session->set_flashdata('success', '<strong>Success !</strong> The interview result has been submitted successfully.');
 			redirect('interview');
 		}else{

@@ -42,7 +42,7 @@
           <div class="col-md-8">
             <div class="tabelHeading">
               <?php if(empty($search_results)): ?>
-              <h3>list of completed interviews</h3>
+              <h3>list of completed interviews <br><small style="text-transform: lowercase;">the link on the name indicates that the interview's been conducted by one or two interviewers.</small></h3>
               <?php else: ?>
                 <h3>search results</h3>
               <?php endif; ?>
@@ -164,7 +164,13 @@
                           </div>
                         </div>
                       </td>
-                      <td><?= $completed->fullname; ?></td>
+                      <td>
+                        <?php if($completed->total_marks < 150): ?>
+                          <a data-toggle="tooltip" title="Click to update interview result." href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/form_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/form_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); } ?>"><?= $completed->fullname; ?></a>
+                          <?php else: ?>
+                            <?= $completed->fullname; ?>
+                          <?php endif; ?>
+                      </td>
                       <td><?= $completed->comp_name; ?></td>
                       <td><?= $completed->designation_name; ?></td>
                       <td><?= $completed->prov_name; ?></td>
@@ -298,7 +304,13 @@
                           </div>
                         </div>
                       </td>
-                      <td><?= $result->fullname; ?></td>
+                      <td>
+                        <?php if($result->total_marks < 150): ?>
+                          <a data-toggle="tooltip" title="Click to update interview result." href="<?php if($result->designation_id == 12 OR $result->designation_id == 13){ echo base_url("interview/form_sm/{$result->rollnumber}"); }elseif($result->designation_id == 5){ echo base_url("interview/form_dhcso/{$result->rollnumber}"); }elseif($result->designation_id == 8 OR $result->designation_id == 14){ echo base_url("interview/form_fcm/{$result->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$result->rollnumber}"); } ?>"><?= $result->fullname; ?></a>
+                          <?php else: ?>
+                            <?= $result->fullname; ?>
+                          <?php endif; ?>
+                      </td>
                       <td><?= $result->comp_name; ?></td>
                       <td><?= $result->designation_name; ?></td>
                       <td><?= $result->prov_name; ?></td>

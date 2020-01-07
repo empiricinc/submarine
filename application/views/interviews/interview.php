@@ -210,7 +210,11 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
             <td><?php echo $interview->provName;?></td>
             <td><?php echo date('M d, Y', strtotime($interview->interview_date)); ?></td>
             <td>
-              <a href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-plus"></i> Result</a>
+              <a target="_blank" href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); } ?>" class="btn btn-primary btn-xs">Int 1</a>
+
+              <a target="_blank" href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); } ?>" class="btn btn-primary btn-xs">Int 2</a>
+
+              <a target="_blank" href="<?php if($interview->designation_id == 12 OR $interview->designation_id == 13){ echo base_url("interview/form_sm/{$interview->rollnumber}"); }elseif($interview->designation_id == 5){ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); }elseif($interview->designation_id == 8 OR $interview->designation_id == 14){ echo base_url("interview/form_fcm/{$interview->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$interview->rollnumber}"); } ?>" class="btn btn-primary btn-xs">Int 3</a>
             </td>
           </tr>
         <?php } ?>               
@@ -225,12 +229,12 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
       <div class="col-md-6">
         <div class="mainTableWhite">
           <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-9">
               <div class="tabelHeading">
-                <h3>completed interviews</h3>
+                <h3>completed interviews |<small style="text-transform: lowercase;">the link on the name indicates that the interview's been conducted by one or two interviewers.</small></h3>
               </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-3">
               <div class="tabelTopBtn">
                 <a href="<?= base_url('interview/list_completed'); ?>" class="btn">
                   View All
@@ -344,7 +348,12 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                             </div>
                           </div>
                         </td>
-                        <td><?= $completed->fullname; ?></td>
+                        <td><?php if($completed->total_marks < 150): ?>
+                          <a data-toggle="tooltip" title="Click to update interview result." href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/form_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/form_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); } ?>"><?= $completed->fullname; ?></a>
+                          <?php else: ?>
+                            <?= $completed->fullname; ?>
+                          <?php endif; ?>
+                        </td>
                         <td><?= $completed->comp_name; ?></td>
                         <td><?= $completed->designation_name; ?></td>
                         <td><?= $completed->prov_name; ?></td>
