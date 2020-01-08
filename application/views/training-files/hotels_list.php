@@ -53,7 +53,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
+										<?php //if($sl3['accessLevel3']): // Check Access Level.
 										if(!empty($hotels_list)):
 										foreach($hotels_list as $hotel): ?>
 										<tr>
@@ -209,7 +209,7 @@
 										    </div>
 										  </div>
 										</div>
-										<?php endforeach; endif; ?>
+										<?php endforeach; //endif; ?>
 									</tbody>
 								</table>
 							</div>

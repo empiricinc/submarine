@@ -88,7 +88,7 @@
                                 '[[spinsaree_eobi_salary]]' => $eobi_salary,
                                 '[[spinsaree_eobi_benefit]]' => $eobi_benefit); ?>
                       <?php echo htmlspecialchars(str_replace($find, $replace, $subject)); ?>">
-                      <?php echo $letter->offer_letter_type; ?>
+                      <?php echo $letter->offer_letter_type.' - '.$letter->designation_name; ?>
                     </option>
                   <?php endforeach; ?>
                 </select>

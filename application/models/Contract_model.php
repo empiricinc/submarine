@@ -601,7 +601,12 @@ class Contract_model extends CI_Model {
 	}
 	// Get offer letter formats.
 	public function get_offer_letters(){
-		return $this->db->from('offer_letter_formats')->get()->result();
+		$this->db->select('offer_letter_formats.*,
+									xin_designations.designation_id,
+									xin_designations.designation_name');
+		$this->db->from('offer_letter_formats');
+		$this->db->join('xin_designations', 'offer_letter_formats.designation = xin_designations.designation_id', 'left');
+		return $this->db->get()->result();
 	}
 	// Check if the offer letter exists.
 	public function offer_letter_exists(){
