@@ -477,15 +477,26 @@ class Contract_model extends CI_Model {
 		return $this->db->get()->result();
 	}
 	// Printing contracts. Print multiple having status equals 0 (Pending...)
-	public function print_bulk(){
+	public function print_bulk($ids){
 		$this->db->select('*');
 		$this->db->from('employee_contract');
 		$this->db->where('status', 0);
+		$this->db->where_in('user_id', $ids);
+		return $this->db->get()->result();
+	}
+	// Printing contracts. Print multiple having status equals 1 (Activated...)
+	public function print_bulk2($ids){
+		$this->db->select('*');
+		$this->db->from('employee_contract');
+		$this->db->where('status', 1);
+		$this->db->where_in('user_id', $ids);
 		return $this->db->get()->result();
 	}
 	// Add multiple to distributed.
-	public function distribute_bulk(){
-		return $this->db->where('status', 2)->update('employee_contract', array('status' => 3));
+	public function distribute_bulk($ids, $data){
+		$this->db->where_in('user_id', $ids);
+		$this->db->where('status', 2);
+		$this->db->update('employee_contract', $data);
 	}
 	// Bulk attach to personal file.
 	public function attach_bulk(){

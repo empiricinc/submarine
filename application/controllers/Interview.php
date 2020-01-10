@@ -433,7 +433,7 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark10' => $this->input->post('overall_remarks')
 		);
 		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
-		if($exists->rollnumber){
+		if(!empty($exists)){
 			$rollnumber = $this->input->post('rollnumber');
 			$add_obtained = $obtained + $exists->obtain_marks;
 			$add_total = $exists->total_marks + 50;
@@ -486,7 +486,7 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark10' => $this->input->post('overall_remarks')
 		);
 		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
-		if($exists->rollnumber){
+		if(!empty($exists)){
 			$rollnumber = $this->input->post('rollnumber');
 			$add_obtained = $obtained + $exists->obtain_marks;
 			$add_total = $exists->total_marks + 50;
@@ -535,7 +535,7 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark10' => $this->input->post('overall_remarks')
 			);
 		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
-		if($exists->rollnumber){
+		if(!empty($exists)){
 			$rollnumber = $this->input->post('rollnumber');
 			$add_obtained = $obtained + $exists->obtain_marks;
 			$add_total = $exists->total_marks + 50;

@@ -169,157 +169,156 @@ $(document).ready(function() {
       </div>
     </section>
   </section>
+<form action="<?php echo base_url('contract/bulk_update'); ?>" method="post">
   <div class="col-lg-10">
-  <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
-    <section class="secIndexTable">
-      <div class="mainTableWhite">
-        <div class="row">
-          <div class="col-md-4">
-            <div class="tabelHeading">
-              <h3><?php if(empty($search_results)): ?>active contracts <?php else: ?> search results <?php endif; ?> | <small><a href="javascript:history.go(-1);"><div class="label label-warning">back</div></a>&nbsp;<a href=""><div class="label label-primary">active</div></a></small></h3>
+    <section class="secMainWidth" style="padding: 0px;margin-top: -40px;">
+      <section class="secIndexTable">
+        <div class="mainTableWhite">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="tabelHeading">
+                <h3><?php if(empty($search_results)): ?>active contracts <?php else: ?> search results <?php endif; ?> | <small><a href="javascript:history.go(-1);"><div class="label label-warning">back</div></a>&nbsp;<a href=""><div class="label label-primary">active</div></a></small></h3>
+              </div>
+            </div>
+            <div class="col-md-5 text-right">
+              <div class="tabelTopBtn status-btns">
+                <span id="active" class="btn"><b><?= $active; ?></b> Active</span>
+                <span id="printed" class="btn"><b><?= $printed; ?></b> Printed</span>
+                <span id="distributed" class="btn"><b><?= $distributed; ?></b> Distributed</span>
+                <span id="attached" class="btn"><b><?= $attached; ?></b> Attached</span>
+              </div>
+            </div>
+            <div class="col-md-3 text-right" id="printBtn" style="display: block; font-size: 30px; margin-top: 5px; margin-left: -14px;">
+              <button class="btn btn-success" disabled><i class="fa fa-arrow-right"></i></button>
+              <button data-toggle="tooltip" title="Print all Contracts" type="submit" name="print_bulk" class="btn btn-primary"><i class="fa fa-print"></i></button>
+              <button data-toggle="tooltip" title="Distribute contracts." data-placement="left" type="submit" name="distribute_bulk" class="btn btn-info"><i class="fa fa-share"></i></button>
+              <button data-toggle="tooltip" title="Attach to personal file." data-placement="left" type="submit" name="attach_bulk" class="btn btn-primary"><i class="fa fa-forward"></i></button>
             </div>
           </div>
-          <div class="col-md-5 text-right">
-            <div class="tabelTopBtn status-btns">
-              <span id="active" class="btn"><b><?= $active; ?></b> Active</span>
-              <span id="printed" class="btn"><b><?= $printed; ?></b> Printed</span>
-              <span id="distributed" class="btn"><b><?= $distributed; ?></b> Distributed</span>
-              <span id="attached" class="btn"><b><?= $attached; ?></b> Attached</span>
-            </div>
-          </div>
-          <div class="col-md-3 text-right" id="printBtn" style="display: block; font-size: 30px; margin-top: 5px; margin-left: -14px;">
-            <button class="btn btn-success" disabled><i class="fa fa-arrow-right"></i></button>
-            <a data-toggle="tooltip" title="Print contracts." data-placement="left" target="blank" href="<?php echo base_url('contract/print_all_contracts'); ?>" class="btn btn-primary"><i class="fa fa-print"></i></a>
-            <button data-toggle="tooltip" title="Distribute contracts." data-placement="left" type="submit" name="distribute_bulk" class="btn btn-info"><i class="fa fa-share"></i></button>
-            <button data-toggle="tooltip" title="Attach to personal file." data-placement="left" type="submit" name="attach_bulk" class="btn btn-primary"><i class="fa fa-forward"></i></button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="tableMain">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th><input type="checkbox" id="checkAll"></th>
-                      <th>emp iD</th>
-                      <th>name</th>
-                      <th>project</th>
-                      <th>designation</th>
-                      <th>contract duration</th>
-                      <th>manger</th>
-                      <th>type</th>
-                      <th>submission date</th>
-                      <th>action | operations</th>
-                    </tr>
-                  </thead>
-                  <tbody id="filter_results">
-                  <?php if(empty($search_results) AND !empty($active_contracts)){
-                    foreach ($active_contracts as $contract){
-                    $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
-                    if($contract->status == 1){
-                  ?>
-                  <?php if($contract->user_id): ?>
-                    <tr>
-                      <td>
-                        <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $contract->user_id; ?>">
-                      </td>
-                      <td>
-                        CTC-<?= $contract->name.'-'.$contract->user_id; ?>
-                      </td>
-                      <td>
-                        <?php echo $contract->fullname;?>
-                      </td>
-                      <td>
-                        <?php echo $contract->name; ?>
-                      </td>
-                      <td>
-                        <?php echo $contract->designation_name; ?>
-                      </td>
-                      <td>
-                        <?php echo date('M d, Y', strtotime($contract->from_date)).' - '.date('M d, Y', strtotime($contract->to_date)); ?>
-                      </td>
-                      <td>
-                        <?php echo $contract->contract_manager; ?>
-                      </td>
-                      <td>
-                        <?php echo $contract->cont_type; ?>
-                      </td>
-                      <td>
-                        <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
-                      </td>
-                      <td>
-                        <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
-                      </td>
-                    </tr>
-                  <?php endif; ?>
-                    <?php } } } ?>
-                    <?php if(!empty($search_results) AND empty($active_contracts)){
-                    foreach ($search_results as $result){
-                    $userDetails = $this->Contract_model->applicantdetails($result->user_id);
-                    if($result->status == 1){
-                  ?>
-                  <?php if($result->user_id): ?>
-                    <tr>
-                      <td>
-                        <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $result->user_id; ?>">
-                      </td>
-                      <td>
-                        CTC-<?= $result->name.'-'.$result->user_id; ?>
-                      </td>
-                      <td>
-                        <?php echo $result->fullname;?>
-                      </td>
-                      <td>
-                        <?php echo $result->compName; ?>
-                      </td>
-                      <td>
-                        <?php echo $result->designation_name; ?>
-                      </td>
-                      <td>
-                        <?php echo date('M d, Y', strtotime($result->from_date)).' - '.date('M d, Y', strtotime($result->to_date)); ?>
-                      </td>
-                      <td>
-                        <?php echo $result->contract_manager; ?>
-                      </td>
-                      <td>
-                        <?php echo $result->cont_type; ?>
-                      </td>
-                      <td>
-                        <?php echo date('M d, Y', strtotime($result->sdt)); ?>
-                      </td>
-                      <td>
-                        <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $result->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
-                      </td>
-                    </tr>
-                  <?php endif; ?>
-                    <?php } } } ?>
-                    <?php if(empty($search_results) AND empty($active_contracts)): ?>
-                      <div class="alert alert-danger">
-                        <p><strong>Aww snap! </strong>We couldn't find what you're looking for at the moment. Try again.</p>
-                      </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="tableMain">
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" id="checkAll"></th>
+                        <th>emp iD</th>
+                        <th>name</th>
+                        <th>project</th>
+                        <th>designation</th>
+                        <th>contract duration</th>
+                        <th>manger</th>
+                        <th>type</th>
+                        <th>submission date</th>
+                        <th>action | operations</th>
+                      </tr>
+                    </thead>
+                    <tbody id="filter_results">
+                    <?php if(empty($search_results) AND !empty($active_contracts)){
+                      foreach ($active_contracts as $contract){
+                      $userDetails = $this->Contract_model->applicantdetails($contract->user_id);
+                      if($contract->status == 1){
+                    ?>
+                    <?php if($contract->user_id): ?>
+                      <tr>
+                        <td>
+                          <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $contract->user_id; ?>">
+                        </td>
+                        <td>
+                          CTC-<?= $contract->name.'-'.$contract->user_id; ?>
+                        </td>
+                        <td>
+                          <?php echo $contract->fullname;?>
+                        </td>
+                        <td>
+                          <?php echo $contract->name; ?>
+                        </td>
+                        <td>
+                          <?php echo $contract->designation_name; ?>
+                        </td>
+                        <td>
+                          <?php echo date('M d, Y', strtotime($contract->from_date)).' - '.date('M d, Y', strtotime($contract->to_date)); ?>
+                        </td>
+                        <td>
+                          <?php echo $contract->contract_manager; ?>
+                        </td>
+                        <td>
+                          <?php echo $contract->cont_type; ?>
+                        </td>
+                        <td>
+                          <?php echo date('M d, Y', strtotime($contract->sdt)); ?>
+                        </td>
+                        <td>
+                          <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $contract->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
+                        </td>
+                      </tr>
                     <?php endif; ?>
-                  </tbody>
-                </table>
+                      <?php } } } ?>
+                      <?php if(!empty($search_results) AND empty($active_contracts)){
+                      foreach ($search_results as $result){
+                      $userDetails = $this->Contract_model->applicantdetails($result->user_id);
+                      if($result->status == 1){
+                    ?>
+                    <?php if($result->user_id): ?>
+                      <tr>
+                        <td>
+                          <input type="checkbox" id="checkPrint" name="print[]" value="<?php echo $result->user_id; ?>">
+                        </td>
+                        <td>
+                          CTC-<?= $result->name.'-'.$result->user_id; ?>
+                        </td>
+                        <td>
+                          <?php echo $result->fullname;?>
+                        </td>
+                        <td>
+                          <?php echo $result->compName; ?>
+                        </td>
+                        <td>
+                          <?php echo $result->designation_name; ?>
+                        </td>
+                        <td>
+                          <?php echo date('M d, Y', strtotime($result->from_date)).' - '.date('M d, Y', strtotime($result->to_date)); ?>
+                        </td>
+                        <td>
+                          <?php echo $result->contract_manager; ?>
+                        </td>
+                        <td>
+                          <?php echo $result->cont_type; ?>
+                        </td>
+                        <td>
+                          <?php echo date('M d, Y', strtotime($result->sdt)); ?>
+                        </td>
+                        <td>
+                          <a target="blank" data-toggle="tooltip" title="Print contract" href="<?= base_url(); ?>contract/print_contract/<?= $result->user_id; ?>" class="btn btn-primary btn-xs">Print</a>
+                        </td>
+                      </tr>
+                    <?php endif; ?>
+                      <?php } } } ?>
+                      <?php if(empty($search_results) AND empty($active_contracts)): ?>
+                        <div class="alert alert-danger">
+                          <p><strong>Aww snap! </strong>We couldn't find what you're looking for at the moment. Try again.</p>
+                        </div>
+                      <?php endif; ?>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-6 text-center">
-            <?php if(empty($search_results) AND !empty($active_contracts)){ echo $this->pagination->create_links(); } ?>
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 text-center">
+              <?php if(empty($search_results) AND !empty($active_contracts)){ echo $this->pagination->create_links(); } ?>
+            </div>
+            <div class="col-md-3"></div>
           </div>
-          <div class="col-md-3"></div>
         </div>
-      </div>
+      </section>
     </section>
-  </section>
-  <?php } ?>
-  </div>
-</div>
-<form action="<?php echo base_url('contract/bulk_update'); ?>" method="post">
-  
+    <?php } ?>
+    </div>
+</div>  
   <script type="text/javascript">
     $(document).ready(function(){
       $('#checkAll').click(function(){

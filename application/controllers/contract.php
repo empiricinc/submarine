@@ -715,6 +715,39 @@ class Contract extends MY_Controller {
 			} // 1st foreach
 			$this->session->set_flashdata('messageactive', 'Contracts generated successfully.');
 			redirect($_SERVER['HTTP_REFERER']);
+		}elseif(isset($_POST['print_bulk'])){ // Print bulk. Send the IDs in the form request.
+			$this->load->library('Pdf');
+		    $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
+		    $pdf->SetTitle('Employment Contract');
+		    $pdf->SetHeaderMargin(30);
+		    $pdf->SetTopMargin(20);
+		    $pdf->setFooterMargin(20);
+		    $pdf->SetAutoPageBreak(true);
+		    $pdf->SetCreator(PDF_CREATOR);
+		    $pdf->SetAuthor('Saddam');
+		    $pdf->SetDisplayMode('real', 'default');
+		    $pdf->SetCreator(PDF_CREATOR);
+		    $pdf->setFontSubsetting(true);
+		    $pdf->setFont('times', '', 12);
+		    $pdf->setPrintHeader(false);
+		    $pdf->setPrintFooter(false);
+		        // Add a page
+		    $contracts = $this->Contract_model->print_bulk($ids);
+		    ob_start();
+		    foreach($contracts as $print){
+			    // $title = $print->title;
+			    $content = $print->long_description;
+			    $pdf->AddPage(); // Data will be loaded to the page here.
+			    $html =  $content;
+			    $pdf->writeHTML($html, true, false, true, false, '');
+			}
+		    ob_clean();
+		    $pdf->Output(md5(time()).'.pdf', 'I');
+		    $status = $this->db->select('status')->from('employee_contract');
+		    $this->db->where('status', 1);
+		    if($status == 1){
+		    	$this->db->update('employee_contract', array('status' => '2'));
+		    }
 		}else{
 			echo "Select at least one checkbox from the list.";
 			return false;
@@ -740,8 +773,49 @@ class Contract extends MY_Controller {
 	}
 	// Status change in bulk.
 	public function bulk_update(){
-		print_r($_POST);
-		
+		$ids = $this->input->post('print');
+		if(isset($_POST['print_bulk'])){
+			$this->load->library('Pdf');
+		    $pdf = new Pdf('P', 'mm', 'Letter', true, 'UTF-8', false);
+		    $pdf->SetTitle('Employment Contract');
+		    $pdf->SetHeaderMargin(30);
+		    $pdf->SetTopMargin(20);
+		    $pdf->setFooterMargin(20);
+		    $pdf->SetAutoPageBreak(true);
+		    $pdf->SetCreator(PDF_CREATOR);
+		    $pdf->SetAuthor('Saddam');
+		    $pdf->SetDisplayMode('real', 'default');
+		    $pdf->SetCreator(PDF_CREATOR);
+		    $pdf->setFontSubsetting(true);
+		    $pdf->setFont('times', '', 12);
+		    $pdf->setPrintHeader(false);
+		    $pdf->setPrintFooter(false);
+		        // Add a page
+		    $contracts = $this->Contract_model->print_bulk2($ids);
+		    var_dump($ids); exit;
+		    ob_start();
+		    foreach($contracts as $print){
+			    // $title = $print->title;
+			    $content = $print->long_description;
+			    $pdf->AddPage(); // Data will be loaded to the page here.
+			    $html =  $content;
+			    $pdf->writeHTML($html, true, false, true, false, '');
+			}
+		    ob_clean();
+		    $pdf->Output(md5(time()).'.pdf', 'I');
+		    $status = $this->db->select('*')->from('employee_contract');
+		    if($status->status == 1){
+		    	$this->db->where_in('user_id'. $ids);
+		    	$this->db->update('employee_contract', array('status' => '2'));
+		    }
+		}elseif(isset($_POST['distribute_bulk'])){
+			$data = array(
+				'status' => 3
+			);
+			var_dump($ids); exit;
+			$this->Contract_model->distribute_bulk($ids, $data);
+			redirect('contract/all_active');
+		}	
 	}
 	public function count_age(){
 		$birthday = $this->db->get_where('xin_job_applications', array('application_id'=> 257))->row();

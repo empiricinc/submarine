@@ -111,7 +111,7 @@ h4 {
           <div class="col-md-3 text-right" id="printBtn" style="font-size: 30px; margin-top: 8px; display: block;">
             <button data-toggle="tooltip" title="Activate Multiple contracts." type="submit" name="activate_bulk" class="btn btn-primary"><i class="fa fa-arrow-right"></i></button>
             <button data-toggle="tooltip" title="Generate Contracts" type="submit" name="generate_bulk" class="btn btn-info">Generate</button>
-            <a data-toggle="tooltip" title="Print all Contracts" target="blank" href="<?= base_url('contract/print_all_contracts'); ?>" class="btn btn-primary"><i class="fa fa-print"></i></a>
+            <button data-toggle="tooltip" title="Print all Contracts" type="submit" name="print_bulk" class="btn btn-primary"><i class="fa fa-print"></i></button>
           </div>
             <div class="col-md-2 text-right">
               <div class="tabelTopBtn">
