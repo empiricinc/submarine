@@ -1380,6 +1380,13 @@ class Contract extends MY_Controller {
 		$data['subview'] =  $this->load->view('dashboard/expired_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data);
 	}
+	// View previous contracts.
+	public function view_previous($id){
+		$data['previous'] = $this->Contract_model->previous_contract($id);
+		$data['path_url'] = '';
+		$data['subview'] = $this->load->view('dashboard/view_previous', $data, TRUE);
+		$this->load->view('layout_main', $data);
+	}
 	// get company wise salary
 	public function payroll_company_wise()
 	{

@@ -208,6 +208,7 @@ h4 {
                                                 <th>Contract Type</th>
                                                 <th>Date From</th>
                                                 <th>Date To</th>
+                                                <th>Action</th>
                                               </tr>
                                             </thead>
                                             <tbody>
@@ -218,6 +219,7 @@ h4 {
                                                 <td><?= $hist->name; ?></td>
                                                 <td><?= date('M d, Y', strtotime($hist->from_date));?></td>
                                                 <td><?= date('M d, Y', strtotime($hist->to_date));?></td>
+                                                <td><a href="<?php echo base_url("contract/view_previous/{$hist->id}"); ?>" class="btn btn-primary btn-sm">View</a></td>
                                               </tr>
                                             <?php endforeach; ?>
                                             </tbody>

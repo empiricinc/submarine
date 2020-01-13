@@ -1112,5 +1112,12 @@ class Contract_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result();
 	}
+	// View previous history.
+	public function previous_contract($id){
+		$this->db->select('id, long_description, from_date, to_date');
+		$this->db->from('employee_contract');
+		$this->db->where('id', $id);
+		return $this->db->get()->row();
+	}
 }
 ?>
