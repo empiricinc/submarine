@@ -394,11 +394,11 @@ h4 {
               </div>
                <!--Extend contract modal starts. -->
               <div class="modal fade" id="extendContracts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog modal-lg" role="document">
                   <div class="modal-content">
                       <!--Header-->
                     <div class="modal-header">
-                      <h4 style="display: inline;">Extend Multiple contracts... </h4>
+                      <h4 style="display: inline;">Select employees who you wanna extend contracts for, enter dates and hit <strong>Submit</strong> button in the bottom.</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                       </button>
@@ -406,6 +406,30 @@ h4 {
                     <!--Body-->
                     <div class="modal-body">
                       <form action="<?= base_url('contract/extend_all'); ?>" method="post">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <table class="table table-hover">
+                              <thead>
+                                <th><input type="checkbox" name="" id="extendBulkModal"></th>
+                                <th>Employee ID</th>
+                                <th>Employee Name</th>
+                                <th>Designation</th>
+                                <th>Previous Contract Expiry</th>
+                              </thead>
+                              <tbody>
+                                <?php foreach($expired_contracts as $employee): ?>
+                                  <tr>
+                                    <td><input type="checkbox" name="user_id" value="<?php echo $employee->user_id; ?>" class="modalCheckboxes"></td>
+                                    <td><?php echo $employee->name.'-'.$employee->designation_name.'-'. $employee->user_id; ?></td>
+                                    <td><?php echo $employee->first_name; ?></td>
+                                    <td><?php echo $employee->designation_name; ?></td>
+                                    <td><?php echo date('D, F jS, Y', strtotime($employee->to_date)); ?></td>
+                                  </tr>
+                                <?php endforeach; ?>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
                         <div class="row">
                           <div class="col-md-6">
                             <label>Date From</label>
@@ -440,7 +464,9 @@ h4 {
                     <table class="table">
                       <thead>
                         <tr>
+                          <th><input type="checkbox" name="" id="extendMultiple"></th>
                           <th>emp iD</th>
+                          <th>name</th>
                           <th>type</th>
                           <th>days left</th>
                           <th>actions</th>
@@ -456,8 +482,10 @@ h4 {
                           $diff = date_diff($date1, $date2);
                         ?>
                         <tr>
+                          <td><input type="checkbox" name="extendAll[]" value="<?php echo $exp_cont->user_id; ?>"></td>
                           <td>CTC-<?= $contract->name.'-'.$exp_cont->user_id; ?></td>
-                          <td><?= $exp_cont->name; ?></td>
+                          <td><?php echo $exp_cont->first_name; ?></td>
+                          <td><?= $exp_cont->contType; ?></td>
                           <td>
                             <?php if($date2 > $date1): ?>
                             <?php echo $diff->format("%a day(s) left"); elseif($date2 <= $date1): echo '<button data-toggle="tooltip" title='.$diff->format('"%mm %dd ago."').' class="btn btn-warning btn-xs">Expired</button>'; endif; ?>
@@ -645,6 +673,12 @@ h4 {
   $("#checkAll").click(function () {
      $('input:checkbox').not(this).prop('checked', this.checked);
  });
+  $('#extendMultiple').click(function(){
+    $("input:checkbox[name='extendAll[]']").not(this).prop('checked', this.checked);
+  });
+  $('#extendBulkModal').click(function(){
+    $('input:checkbox[class="modalCheckboxes"]').not(this).prop('checked', this.checked);
+  });
 // Show and hide buttons for printing and activating contracts.
 $(function () {
   $("#checkAll").click(function () {

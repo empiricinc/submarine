@@ -409,12 +409,14 @@ class Contract_model extends CI_Model {
 			return false;
 		}
 	}
-	// Extend multiple contracts at once.
-	public function extend_bulk($date, $data){
-		$this->db->where('to_date <=', $date);
-		// $this->db->where('status !=', 5);
-		$this->db->update('employee_contract', $data);
-		return true;
+	// Extend multiple contracts at once. function extend_bulk($date, $data) --> Update query.
+	public function extend_bulk($data){
+		$this->db->insert('employee_contract', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	// Finish contract
 	public function finish_contract($id = '', $data = ''){

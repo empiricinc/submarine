@@ -159,11 +159,11 @@ h4 {
                 </div>
                  <!--Extend contract modal starts. -->
                 <div class="modal fade" id="extendContracts" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
+                  <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <!--Header-->
                       <div class="modal-header">
-                        <h4 style="display: inline;">Extend Contracts... </h4>
+                        <h4 style="display: inline;">Select employees who you wanna extend contracts for, enter dates and hit <strong>Submit</strong> button in the bottom.</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">×</span>
                         </button>
@@ -171,6 +171,30 @@ h4 {
                       <!--Body-->
                       <div class="modal-body">
                         <form action="<?= base_url('contract/extend_all'); ?>" method="post">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <table class="table table-hover">
+                                <thead>
+                                  <th><input type="checkbox" name="" id="extendBulkModal" onclick="selectAllModal();"></th>
+                                  <th>Employee ID</th>
+                                  <th>Employee Name</th>
+                                  <th>Designation</th>
+                                  <th>Previous Contract Expiry</th>
+                                </thead>
+                                <tbody>
+                                  <?php foreach($expired_contracts as $expired): ?>
+                                    <tr>
+                                      <td><input type="checkbox" name="user_id[]" value="<?php echo $expired->user_id; ?>" class="modalExtend"></td>
+                                      <td><?php echo $expired->name.'-'.$expired->designation_name.'-'. $expired->user_id; ?></td>
+                                      <td><?php echo $expired->first_name; ?></td>
+                                      <td><?php echo $expired->designation_name; ?></td>
+                                      <td><?php echo date('D, F jS, Y', strtotime($expired->to_date)); ?></td>
+                                    </tr>
+                                  <?php endforeach; ?>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
                           <div class="row">
                             <div class="col-md-6">
                               <label>Date From</label>
@@ -202,9 +226,10 @@ h4 {
                   <div class="col-md-12">
                     <div class="tableMain">
                       <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-condensed">
                           <thead>
                               <tr>
+                                <th><input type="checkbox" name="" id="extendMultiple" onclick="selectAll();"></th>
                                 <th>employee iD</th>
                                 <th>name</th>
                                 <th>project</th>
@@ -226,6 +251,7 @@ h4 {
                             $diff=date_diff($date1, $date2);
                           ?>
                           <tr>
+                            <td><input type="checkbox" name="extendAll[]" value="<?php echo $exp_cont->user_id; ?>" class="checkAll"></td>
                             <td><?= $exp_cont->name.'-'.$exp_cont->designation_name.'-'. $exp_cont->user_id; ?></td>
                             <td><?= $exp_cont->first_name.' '.$exp_cont->last_name; ?></td>
                             <td><?= $exp_cont->name; ?></td>
@@ -293,6 +319,7 @@ h4 {
                             $diff=date_diff($date1, $date2);
                           ?>
                           <tr>
+                            <td><input type="checkbox" name="extendAll[]" value="<?php echo $result->user_id; ?>"></td>
                             <td><?= $result->name.'-'.$result->designation_name.'-'. $result->user_id; ?></td>
                             <td><?= $result->first_name.' '.$result->last_name; ?></td>
                             <td><?= $result->name; ?></td>
@@ -370,5 +397,25 @@ h4 {
     </section>
   </div>
 </div>
-
 <?php } ?>
+<script type="text/javascript">
+  function selectAll(){
+    var blnChecked = document.getElementById("extendMultiple").checked;
+    var check_invoices = document.getElementsByClassName("checkAll");
+    var intLength = check_invoices.length;
+    for(var i = 0; i < intLength; i++){
+      var check_invoice = check_invoices[i];
+      check_invoice.checked = blnChecked;
+    }
+  }
+  // Check all in bootstrap modal.
+  function selectAllModal(){
+    var blnChecked = document.getElementById("extendBulkModal").checked;
+    var check_invoices = document.getElementsByClassName("modalExtend");
+    var intLength = check_invoices.length;
+    for(var i = 0; i < intLength; i++){
+      var check_invoice = check_invoices[i];
+      check_invoice.checked = blnChecked;
+    }
+  }
+</script>

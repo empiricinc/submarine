@@ -184,7 +184,7 @@ class Contract extends MY_Controller {
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		$data['all_contract']=$this->Contract_model->contract_information($limit, $offset);
-		$data['expired_contracts'] = $this->Contract_model->get_by_date();
+		$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
 		$data['pending_contracts'] = $this->Contract_model->get_pending_contracts($limit, $offset);
 		$data['rejected_contracts'] = $this->Contract_model->rejected_contracts($limit, $offset);
 		//$data['list_jobs'] = $this->Contract_model->jobs_list(); 
@@ -335,6 +335,7 @@ class Contract extends MY_Controller {
 		$data['designations'] = $this->Contract_model->get_designations();
 		$data['provinces'] = $this->Contract_model->get_provinces();
 		$data['expired_contracts'] = $this->Contract_model->all_expired_contracts($limit, $offset);
+		$data['path_url'] = '';
 		$data['subview'] = $this->load->view('dashboard/expired_contracts', $data, TRUE);
 		$this->load->view('layout_main', $data);
 	}
@@ -535,15 +536,20 @@ class Contract extends MY_Controller {
 	}
 		// Extend All contracts at once.
 	public function extend_all(){
-		$date_0 = date('Y-m-d');
-		$date_1 = strtotime($date_0. '+ 15 days');
-		$date = date('Y-m-d', $date_1);
-		$data = array(
-			'from_date' => $this->input->post('date_from'),
-			'to_date' => $this->input->post('date_to'),
-			'status' => 0
-		);
-		if($this->Contract_model->extend_bulk($date, $data)){
+		// $date_0 = date('Y-m-d');
+		// $date_1 = strtotime($date_0. '+ 15 days');
+		// $date = date('Y-m-d', $date_1);
+		$user_id = $_POST['user_id'];
+		for ($i = 0; $i < count($user_id); $i++){ // Count of all the selected records in a loop.
+			$data = array(
+				'user_id' => $_POST['user_id'][$i],
+				'from_date' => $this->input->post('date_from'),
+				'to_date' => $this->input->post('date_to'),
+				'status' => 0
+			);
+			$success = $this->Contract_model->extend_bulk($data); // Use this var to show a message.
+		}
+		if($success){
 			$this->session->set_flashdata('messageactive', '<strong>Woohoo ! </strong> Contracts have been extended successfully!');
 			redirect('contract');
 		}else{
@@ -665,7 +671,7 @@ class Contract extends MY_Controller {
 			foreach($ids as $value){
 				$session = $this->session->userdata('username');
 				$applicants = $this->Contract_model->applicants_data($value);
-				$formats = $this->db->get_where('xin_contract_type', array('contract_type_id' => 4))->row();
+				$formats = $this->db->get_where('xin_contract_type', array('name' => 'Probation'))->row();
 	            $applicant='';
 				foreach($applicants as $applicant){
 	            	$find = array(
@@ -704,11 +710,6 @@ class Contract extends MY_Controller {
 					$data2 = array(
 						'long_description' => $save_format
 					);
-					//$this->db->where_in('user_id', $ids);	
-					//echo "<pre>"; print_r($replace); 
-					//$this->db->where('status', 0)->update('employee_contract', $data2);
-					// $this->session->set_flashdata('messageactive', 'Contracts generated successfully.');
-					// redirect('contract');
 	            } // 2nd foreach.
 					$this->db->where_in('user_id', $value);	
 					$this->db->where('status', 0)->update('employee_contract', $data2);
