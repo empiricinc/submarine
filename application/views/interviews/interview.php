@@ -256,6 +256,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                         <th>location</th>
                         <th>marks</th>
                         <th>date</th>
+                        <th>action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -363,6 +364,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                           </div>
                         </td>
                         <td><?= date('M d, Y', strtotime($completed->sdt)); ?></td>
+                        <td><a href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/print_sheet_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/print_sheet_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-print"></i></a></td>
                       </tr>
                     <?php endforeach; ?>
                     </tbody>

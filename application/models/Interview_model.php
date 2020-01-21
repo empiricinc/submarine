@@ -542,6 +542,38 @@ function applicantdetails($id){
 		$this->db->update('interview_result', $data);
 		return true;
 	}
+	// Print interview assessment sheet.
+	public function print_sheet($rollnumber){
+		$this->db->select('interview_result.rollnumber,
+							interview_result.obtain_marks,
+							interview_result.total_marks,
+							interview_result.remark10,
+							interview_result.sdt,
+							xin_job_applications.application_id,
+							xin_job_applications.job_id,
+							xin_job_applications.fullname,
+							xin_job_applications.cnic,
+							xin_job_applications.city_name,
+							xin_jobs.job_id,
+							xin_jobs.company,
+							xin_jobs.designation_id,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name,
+							district.id,
+							district.name as cityName');
+		$this->db->from('interview_result');
+		$this->db->join('xin_job_applications', 'interview_result.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
+		$this->db->where('interview_result.rollnumber', $this->uri->segment(3));
+		echo $this->db->last_query();
+		$query = $this->db->get();
+		return $query->row();
+	}
 	// read job info
 /*	 public function read_job_information($id) {
 

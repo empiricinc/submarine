@@ -553,7 +553,87 @@ $this->load->model('job_longlisted_model'); // load model
 			echo "The operation wasn't successful";
 		}
 	}
-	
+	// Print interview assessment sheet for individual applicant having designation DHCSO.
+	public function print_sheet_dhcso($rollnumber){
+		$this->load->library('Pdf');
+	    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	    $pdf->SetTitle('Interview Assessment Sheet');
+	    $pdf->SetHeaderMargin(30);
+	    $pdf->SetTopMargin(20);
+	    $pdf->setFooterMargin(20);
+	    $pdf->SetAutoPageBreak(true);
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->SetAuthor('Saddam');
+	    $pdf->SetDisplayMode('real', 'default');
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->setFontSubsetting(true);
+	    $pdf->setFont('times', '', 12);
+	    $pdf->setPrintHeader(false);
+	    $pdf->setPrintFooter(false);
+	    // Add a page
+	    $data['sheet'] = $this->Interview_model->print_sheet($rollnumber);
+	    // $title = $print->title;
+	    ob_start();
+	    $pdf->AddPage(); // Data will be loaded to the page here.
+	    $html = $this->load->view('interviews/print_sheet', $data, true);
+	    $pdf->writeHTML($html, true, false, true, false, '');
+	    ob_clean();
+	    $pdf->Output(md5(time()).'.pdf', 'I');
+	}
+	// Print interview assessment sheet for individual applicant designation CHW/FCM.
+	public function print_sheet_fcm($rollnumber){
+		$this->load->library('Pdf');
+	    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	    $pdf->SetTitle('Interview Assessment Sheet');
+	    $pdf->SetHeaderMargin(30);
+	    $pdf->SetTopMargin(20);
+	    $pdf->setFooterMargin(20);
+	    $pdf->SetAutoPageBreak(true);
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->SetAuthor('Saddam');
+	    $pdf->SetDisplayMode('real', 'default');
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->setFontSubsetting(true);
+	    $pdf->setFont('times', '', 12);
+	    $pdf->setPrintHeader(false);
+	    $pdf->setPrintFooter(false);
+	    // Add a page
+	    $data['sheet'] = $this->Interview_model->print_sheet($rollnumber);
+	    // $title = $print->title;
+	    ob_start();
+	    $pdf->AddPage(); // Data will be loaded to the page here.
+	    $html = $this->load->view('interviews/print_sheet_fcm', $data, true);
+	    $pdf->writeHTML($html, true, false, true, false, '');
+	    ob_clean();
+	    $pdf->Output(md5(time()).'.pdf', 'I');
+	}
+	// Print interview assessment sheet for individual applicant having designation SM.
+	public function print_sheet_sm($rollnumber){
+		$this->load->library('Pdf');
+	    $pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
+	    $pdf->SetTitle('Interview Assessment Sheet');
+	    $pdf->SetHeaderMargin(30);
+	    $pdf->SetTopMargin(20);
+	    $pdf->setFooterMargin(20);
+	    $pdf->SetAutoPageBreak(true);
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->SetAuthor('Saddam');
+	    $pdf->SetDisplayMode('real', 'default');
+	    $pdf->SetCreator(PDF_CREATOR);
+	    $pdf->setFontSubsetting(true);
+	    $pdf->setFont('times', '', 12);
+	    $pdf->setPrintHeader(false);
+	    $pdf->setPrintFooter(false);
+	    // Add a page
+	    $data['sheet'] = $this->Interview_model->print_sheet($rollnumber);
+	    // $title = $print->title;
+	    ob_start();
+	    $pdf->AddPage(); // Data will be loaded to the page here.
+	    $html = $this->load->view('interviews/print_sheet_sm', $data, true);
+	    $pdf->writeHTML($html, true, false, true, false, '');
+	    ob_clean();
+	    $pdf->Output(md5(time()).'.pdf', 'I');
+	}
 
 	// get opened and closed tickets for chart
 

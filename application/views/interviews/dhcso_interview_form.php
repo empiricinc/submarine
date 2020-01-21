@@ -7,7 +7,7 @@
 ?>
 <section class="secMainWidth">
 	<section class="secFormLayout">
-		<div class="mainInputBg">
+		<div class="mainInputBg" id="printThis">
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="tabelHeading text-center">
@@ -180,6 +180,7 @@
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
 							<button type="reset" class="btn btnSubmit">Reset</button>
+							<a href="<?php echo base_url("interview/print_sheet_dhcso/{$applicant_detail->rollnumber}"); ?>" class="btn btnSubmit">PDF</a>
 						</div>
 					</div>
 				</form>
@@ -268,4 +269,15 @@
 	    	$('#span_8').html('');
 	    }
 	});
+</script>
+<script type="text/javascript">
+	function printDiv(printThis){
+    var content = document.getElementById('printThis').innerHTML;
+    var win = window.open();
+    win.document.write(content);
+    win.document.body.style.fontFamily="book antiqua";  
+    // win.document.body.status.fontSize="14px";
+    win.print();
+    win.close();
+  }
 </script>
