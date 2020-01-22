@@ -872,12 +872,12 @@ class Trainings extends CI_Controller{
 		$data = array(
 				'training_expense' => $expenses,
 				);
-		$ids = $this->input->post('employee'); 
-		var_dump($ids);
-		echo $expenses;
+		$ids = $this->input->post('employee');
 		if(isset($_POST['employee'])){
 			$this->db->where_in('user_id', $ids);
 			$this->db->update('employee_expenses', $data);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Expenses have been saved to payroll successfully.');
+			redirect('trainings');
 		}else{
 			echo "Select at least one checkbox from the list below.";
 		}

@@ -104,7 +104,7 @@
 									<table class="table">
 										<thead>
 											<tr>
-												<th><input type="checkbox"></th>
+												<th><input type="checkbox" id="savePayroll"></th>
 												<th>employee name</th>
 												<th>attendance status</th>
 												<th>project</th>
@@ -190,3 +190,11 @@
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+// Script to check multiple checkboxes at once.
+$(document).ready(function(){
+	$("#savePayroll").click(function(){
+		$('input:checkbox').not(this).prop('checked', this.checked);
+	});
+});
+</script>

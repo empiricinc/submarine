@@ -14,6 +14,11 @@
 						<span>statistics and more...</span>
 					</h1>
 				</div>
+				<?php if($success = $this->session->flashdata('success')): ?>
+					<div class="alert alert-success text-center">
+						<?php echo $success; ?>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>
