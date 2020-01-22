@@ -187,6 +187,7 @@
 												<th>leave type</th>
 												<th>date applied</th>
 												<th>status</th>
+												<th>type</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -203,6 +204,13 @@
 												</td>
 												<td>
 													<button data-toggle="tooltip" title="<?= date('d M, Y', strtotime($approved->from_date)).' - '.date('d M, Y', strtotime($approved->to_date)); ?>" class="btn btn-success btn-xs">Approved <i class="fa fa-check"></i></button>
+												</td>
+												<td>
+													<?php if($approved->status == 2): ?>
+														<button class="btn btn-primary btn-xs">Paid</button>
+													<?php elseif($approved->status == 4): ?>
+														<button class="btn btn-warning btn-xs">Unpaid</button>
+													<?php endif; ?>
 												</td>
 											</tr>
 											<?php endforeach; ?>

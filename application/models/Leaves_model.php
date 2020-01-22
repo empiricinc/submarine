@@ -50,6 +50,7 @@ class Leaves_model extends CI_Model
     	$this->db->join('xin_leave_type', 'xin_leave_applications.leave_type_id = xin_leave_type.leave_type_id', 'left');
     	$this->db->limit($limit, $offset);
     	$this->db->where(array('xin_leave_applications.status' => 2));
+        $this->db->or_where(array('xin_leave_applications.status' => 4));
     	return $this->db->get()->result();
     }
     public function rejected_leaves($limit= '', $offset = ''){
@@ -124,8 +125,10 @@ class Leaves_model extends CI_Model
         $this->db->join('xin_leave_type', 'xin_leave_applications.leave_type_id = xin_leave_type.leave_type_id', 'left');
         $this->db->like('xin_employees.first_name', $keyword);
         $this->db->where(array('xin_leave_applications.status' => 2));
+        $this->db->or_where(array('xin_leave_applications.status' => 4));
         $this->db->or_like('xin_leave_type.type_name', $keyword);
         $this->db->where(array('xin_leave_applications.status' => 2));
+        $this->db->or_where(array('xin_leave_applications.status' => 4));
         return $this->db->get()->result();
     }
     // Search in rejected leave requests.
