@@ -76,8 +76,8 @@ class Leaves_model extends CI_Model
     	}
     }
     // Approve leave request, unpaid leave.
-    public function approve_leave_unpaid($leave_id, $data){
-        $this->db->where('leave_id', $leave_id);
+    public function approve_leave_unpaid($employee_id, $data){
+        $this->db->where('employee_id', $employee_id);
         $this->db->update('xin_leave_applications', $data);
         if($this->db->affected_rows() > 0){
             return true;

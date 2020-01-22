@@ -169,23 +169,26 @@ class Leaves extends CI_Controller
     	}
     }
     // Approve leave request. [Unpaid leave].
-    public function approve_leave_unpaid($leave_id){
-        echo "You're not authorized to approve this type of leaves yet...<br>"; //exit;
+    public function approve_leave_unpaid($employee_id){
+        // echo "You're not authorized to approve this type of leaves yet...<br>"; //exit;
         $data = array(
             'status' => 4
         );
         // Check for employee_id and deduct salary accordingly! [while granting unpaid leave.]
-        $unpaid = $this->db->select('user_id, basic_salary')->from('employee_salary')->where('user_id', 248)->get()->row();
-        echo 'Basic salary: '.$unpaid->basic_salary.'<br>';
-        $basic_salary = $unpaid->basic_salary .'<br>';
+        $unpaid = $this->db->select('user_id, basic_salary')->from('employee_salary')->where('user_id', $employee_id)->get()->row();
+        // echo 'Basic salary: '.$unpaid->basic_salary.'<br>';
+        $basic_salary = $unpaid->basic_salary;
         $leaves = 1;
         $per_day = (int)$basic_salary / 30;
-        echo 'Per day salary: '.$per_day * $leaves .'<br>';
+        // echo 'Per day salary: '.$per_day * $leaves .'<br>';
         $deduction = (int)$basic_salary - $per_day;
-        echo 'Salary after deduction of a day leave: '.$deduction;
-        var_dump($unpaid);
-        exit;
-        if($this->leaves_model->approve_leave_unpaid($leave_id)){            
+        // echo 'Salary after deduction of a day leave: '.$deduction;
+        if($this->leaves_model->approve_leave_unpaid($employee_id, $data)){
+            $data1 = array(
+                'leaves_deduction' => $per_day
+            );
+            $this->db->where('user_id', $employee_id);
+            $this->db->update('employee_deductions', $data1);
             $this->session->set_flashdata('success', '<strong>Success !</strong> The leave request has been approved. The leave granted with the deduction is salary.');
             redirect('leaves');
         }else{
