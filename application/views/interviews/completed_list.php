@@ -72,6 +72,7 @@
                       <th>district</th>
                       <th>marks</th>
                       <th>interview date</th>
+                      <th>action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -176,11 +177,12 @@
                       <td><?= $completed->prov_name; ?></td>
                       <td><?= $completed->city_name; ?></td>
                       <td>
-                        <div class="label label-success" style="display: inline-block;">
+                        <button class="btn btn-success btn-xs">
                         <?= round($completed->obtain_marks/$completed->total_marks*100).'%'; ?>
-                        </div>
+                        </button>
                       </td>
                       <td><?= date('l, M jS, Y', strtotime($completed->sdt)); ?></td>
+                      <td><a target="_blank" href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/print_sheet_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/print_sheet_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-print"></i></a></td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>

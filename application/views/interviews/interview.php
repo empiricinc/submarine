@@ -359,12 +359,12 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                         <td><?= $completed->designation_name; ?></td>
                         <td><?= $completed->prov_name; ?></td>
                         <td>
-                          <div class="label label-success" style="display: inline-block;">
+                          <button class="btn btn-success btn-xs">
                             <?= round($completed->obtain_marks / $completed->total_marks *100).'%'; ?>
-                          </div>
+                          </button>
                         </td>
                         <td><?= date('M d, Y', strtotime($completed->sdt)); ?></td>
-                        <td><a href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/print_sheet_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/print_sheet_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-print"></i></a></td>
+                        <td><a target="_blank" href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/print_sheet_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/print_sheet_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-print"></i></a></td>
                       </tr>
                     <?php endforeach; ?>
                     </tbody>
