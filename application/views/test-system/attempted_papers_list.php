@@ -123,20 +123,26 @@
 												      	<?php $que_no = 1; foreach($app_answers as $answer): ?>
 												        <p>
 												        	<strong>Ans <?php echo $que_no++ .'.'; ?></strong>
-												        	<?php echo $answer->answer_text; ?>
+												        	<?php echo $answer->answer_text; ?><br>
+												        	<input type="text" name="marks_perQ" class="form-control input-sm add_marks" placeholder="Enter marks here...">
 												        </p>
 												    	<?php endforeach; ?><hr>
 												    	<form action="<?php echo base_url('tests/save_subjective_result'); ?>" method="post">
 												    		<input type="hidden" name="applicant_id" value="<?php echo $attempt->applicant_id; ?>">
 												    		<div class="row">
 												    			<div class="col-md-4">
-												    				<strong>Enter cumulative marks</strong>
+												    				<strong>Cumulative marks</strong>
 												    			</div>
 												    			<div class="col-md-5">
-												    				<input type="number" name="marks" class="form-control input-sm" placeholder="Enter cumulative marks here..." autocomplete="off" required="">
+												    				<input type="number" name="marks" class="form-control input-sm" placeholder="Cumulative marks..." autocomplete="off" required="" id="cumulative_marks" readonly="">
 												    			</div>
 												    			<div class="col-md-3">
 												    				<button type="submit" class="btn btn-primary btn-sm">Save Result</button>
+												    			</div>
+												    		</div><br>
+												    		<div class="row">
+												    			<div class="col-md-12 text-center">
+												    				<span id="span_warning" style="color:red;"></span>
 												    			</div>
 												    		</div>
 												    	</form>
@@ -171,3 +177,26 @@
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('.add_marks').keyup(function(){
+			var sum = 0;
+			$('.add_marks').each(function(){
+				sum += Number($(this).val());
+			});
+			$('#cumulative_marks').val(sum);
+		});
+	});
+	// Put validation for a value should not be greater than 10.
+	$('.add_marks').keyup(function(){
+	    if(parseInt($(this).val()) > 10){
+	        $('#span_warning').html("The value can't be greater than 10. Try entering less than or equal to that instead.");
+	        $('.add_marks').val('');
+	    }else if(parseInt($(this).val()) < 1){
+	    	$('#span_warning').html("The value can't be less than 1. Try entering greater than or equal to that instead.");
+	        $(this).val('');
+	    }else{
+	    	$('#span_warning').html("");
+	    }
+	});
+</script>
