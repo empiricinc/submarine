@@ -180,7 +180,6 @@
 						<div class="submitBtn">
 							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
 							<button type="reset" class="btn btnSubmit">Reset</button>
-							<a href="<?php echo base_url("interview/print_sheet_dhcso/{$applicant_detail->rollnumber}"); ?>" class="btn btnSubmit">PDF</a>
 						</div>
 					</div>
 				</form>
