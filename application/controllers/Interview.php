@@ -430,16 +430,40 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark6' => $this->input->post('rep_remarks'),
 			'remark7' => $this->input->post('mob_remarks'),
 			'remark8' => $this->input->post('comm_remarks'),
-			'remark10' => $this->input->post('overall_remarks')
+			'remark10' => $this->input->post('overall_remarks'),
+			'mark1' => $this->input->post('per_marks'),
+			'mark2' => $this->input->post('qual_marks'),
+			'mark3' => $this->input->post('exp_marks'),
+			'mark4' => $this->input->post('job_marks'),
+			'mark5' => $this->input->post('sup_marks'),
+			'mark6' => $this->input->post('rep_marks'),
+			'mark7' => $this->input->post('mob_marks'),
+			'mark8' => $this->input->post('comm_marks')
 		);
 		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
 		if(!empty($exists)){
 			$rollnumber = $this->input->post('rollnumber');
 			$add_obtained = $obtained + $exists->obtain_marks;
 			$add_total = $exists->total_marks + 50;
+			$que1[] = $this->input->post('per_marks');
+			$que2[] = $this->input->post('qual_marks');
+			$que3[] = $this->input->post('exp_marks');
+			$que4[] = $this->input->post('job_marks');
+			$que5[] = $this->input->post('sup_marks');
+			$que6[] = $this->input->post('rep_marks');
+			$que7[] = $this->input->post('mob_marks');
+			$que8[] = $this->input->post('comm_marks');
 			$data2 = array(
 				'obtain_marks' => $add_obtained,
-				'total_marks' => $add_total
+				'total_marks' => $add_total,
+				'mark1' => implode(',', $que1),
+				'mark2' => implode(',', $que2),
+				'mark3' => implode(',', $que3),
+				'mark4' => implode(',', $que4),
+				'mark5' => implode(',', $que5),
+				'mark6' => implode(',', $que6),
+				'mark7' => implode(',', $que7),
+				'mark8' => implode(',', $que8)
 				);
 			$this->Interview_model->update_sm_interview($rollnumber, $data2);
 			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been udpated successfully.');
@@ -483,16 +507,43 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark7' => $this->input->post('prof_remarks'),
 			'remark8' => $this->input->post('attrib_remarks'),
 			'remark9' => $this->input->post('comm_remarks'),
-			'remark10' => $this->input->post('overall_remarks')
+			'remark10' => $this->input->post('overall_remarks'),
+			'mark1' => $this->input->post('per_marks'),
+			'mark2' => $this->input->post('con_marks'),
+			'mark3' => $this->input->post('qual_marks'),
+			'mark4' => $this->input->post('exp_marks'),
+			'mark5' => $this->input->post('comp_marks'),
+			'mark6' => $this->input->post('job_marks'),
+			'mark7' => $this->input->post('prof_marks'),
+			'mark8' => $this->input->post('attrib_marks'),
+			'mark9' => $this->input->post('comm_marks')
 		);
 		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
 		if(!empty($exists)){
 			$rollnumber = $this->input->post('rollnumber');
 			$add_obtained = $obtained + $exists->obtain_marks;
 			$add_total = $exists->total_marks + 50;
+			$que1[] = $this->input->post('per_marks');
+			$que2[] = $this->input->post('con_marks');
+			$que3[] = $this->input->post('qual_marks');
+			$que4[] = $this->input->post('exp_marks');
+			$que5[] = $this->input->post('comp_marks');
+			$que6[] = $this->input->post('job_marks');
+			$que7[] = $this->input->post('prof_marks');
+			$que8[] = $this->input->post('attrib_marks');
+			$que9[] = $this->input->post('comm_marks');
 			$data1 = array(
 				'obtain_marks' => $add_obtained,
-				'total_marks' => $add_total
+				'total_marks' => $add_total,
+				'mark1' => implode(',', $que1),
+				'mark2' => implode(',', $que3),
+				'mark3' => implode(',', $que3),
+				'mark4' => implode(',', $que4),
+				'mark5' => implode(',', $que5),
+				'mark6' => implode(',', $que6),
+				'mark7' => implode(',', $que7),
+				'mark8' => implode(',', $que8),
+				'mark9' => implode(',', $que9)
 				);
 			$this->Interview_model->update_dhcso_interview($rollnumber, $data1);
 			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been updated successfully.');
@@ -532,16 +583,37 @@ $this->load->model('job_longlisted_model'); // load model
 			'remark5' => $this->input->post('comm_remarks'),
 			'remark6' => $this->input->post('mob_remarks'),
 			'remark7' => $this->input->post('lang_remarks'),
-			'remark10' => $this->input->post('overall_remarks')
+			'remark10' => $this->input->post('overall_remarks'),
+			'mark1' => $this->input->post('dob_marks'),
+			'mark2' => $this->input->post('marital_marks'),
+			'mark3' => $this->input->post('qual_marks'),
+			'mark4' => $this->input->post('exp_marks'),
+			'mark5' => $this->input->post('comm_marks'),
+			'mark6' => $this->input->post('mob_marks'),
+			'mark7' => $this->input->post('lang_marks')
 			);
 		$exists = $this->db->get_where('interview_result', array('rollnumber' => $_POST['rollnumber']))->row();
 		if(!empty($exists)){
 			$rollnumber = $this->input->post('rollnumber');
 			$add_obtained = $obtained + $exists->obtain_marks;
 			$add_total = $exists->total_marks + 50;
+			$que1[] = $this->input->post('dob_marks');
+			$que2[] = $this->input->post('marital_marks');
+			$que3[] = $this->input->post('qual_marks');
+			$que4[] = $this->input->post('exp_marks');
+			$que5[] = $this->input->post('comm_marks');
+			$que6[] = $this->input->post('mob_marks');
+			$que7[] = $this->input->post('lang_marks');
 			$data3 = array(
 				'obtain_marks' => $add_obtained,
-				'total_marks' => $add_total
+				'total_marks' => $add_total,
+				'mark1' => implode(',', $que1),
+				'mark2' => implode(',', $que2),
+				'mark3' => implode(',', $que3),
+				'mark4' => implode(',', $que4),
+				'mark5' => implode(',', $que5),
+				'mark6' => implode(',', $que6),
+				'mark7' => implode(',', $que7)
 				);
 			$this->Interview_model->update_fcm_interview($rollnumber, $data3);
 			$this->session->set_flashdata('success', '<strong>Success !</strong> Interview marks have been updated successfully.');
