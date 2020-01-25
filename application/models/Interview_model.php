@@ -544,11 +544,7 @@ function applicantdetails($id){
 	}
 	// Print interview assessment sheet.
 	public function print_sheet($rollnumber){
-		$this->db->select('interview_result.rollnumber,
-							interview_result.obtain_marks,
-							interview_result.total_marks,
-							interview_result.remark10,
-							interview_result.sdt,
+		$this->db->select('interview_result.*,
 							xin_job_applications.application_id,
 							xin_job_applications.job_id,
 							xin_job_applications.fullname,

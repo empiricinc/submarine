@@ -64,7 +64,7 @@
 				<td>Appearance, Dressing</td>
 				<td>Interviewer should assess whether s/he properly dressed up for the interview = 2, Not = 0</td>
 				<td align="center">2 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark1; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -72,7 +72,7 @@
 				<td>General conduct/communication with coordinators and panel members</td>
 				<td>Satisfactory = 3, Normal = 1, Poor = 0</td>
 				<td align="center">3 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark2; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -80,7 +80,7 @@
 				<td>Relevant qualification as per TORs or Master level qualification however not</td>
 				<td>Relevant qualification = 5, Not Relavant = 2</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark3; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -88,7 +88,7 @@
 				<td>Relavant experience as per TORs and general experience</td>
 				<td>One mark per year for relevant experience while for general experience not relevant to the position total marks will be max. 2.</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark4; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -96,7 +96,7 @@
 				<td>Competence assessment through scenario based questions taken from TORs</td>
 				<td>Ask 5 scenario based questions relevant to the position, (2 marks each * 5 questions)</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark5; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -104,7 +104,7 @@
 				<td>Knowledge of the position and TORs s/he has applied for</td>
 				<td>Ask three questions on the job position and TORs (2 marks each * 3 questions)</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark6; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -112,7 +112,7 @@
 				<td>Competence assessment through scenario based questions taken from TORs</td>
 				<td>Ask 3 scenario based questions relevant to the position, (2 marks each * 3 questions)</td>
 				<td align="center">6 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark7; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -120,7 +120,7 @@
 				<td>Competencies (integrity, ambition, initiative, learning aptitude)</td>
 				<td>As per panel members judgement</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td><?php echo $sheet->mark8; ?></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -128,7 +128,7 @@
 				<td>Effectively expressing and conveying ideas in response to questions</td>
 				<td>Ask questions on strength and weaknesses and mark accordingly</td>
 				<td align="center">8 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark9; ?></td>
 				<td></td>
 			</tr>
 			<tr>

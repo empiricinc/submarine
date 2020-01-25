@@ -78,49 +78,49 @@
 				<td>Age / D.O.B</td>
 				<td>Below 25 year=0, 25-35 years = 5, above 35 years=10</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark1; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Marital Status</td>
 				<td>Married, Widow, Divorce = 5, Single above 30 years = 3, Young single = 2</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark2; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Qualification</td>
 				<td>Literate = 5, Matric = 10, Illiterate = 0</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark3; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Experience/ Professional Affiliation</td>
 				<td>Working experience upto 5 years in polio program = 5, Midwife, LHW, Health program related experience etc = 5</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark4; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Commnunication skills</td>
 				<td>As per question</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark5; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Mobility</td>
 				<td>As per question</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark6; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Local language skills</td>
 				<td>As per question</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark7; ?></td>
 				<td></td>
 			</tr>
 			<tr>

@@ -70,56 +70,56 @@
 				<td>Personality</td>
 				<td>Appearance, Dress, Manner of conducting him/herself</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark1; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Qualification</td>
 				<td>Relevance to position</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark2; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Experience</td>
 				<td>Relevance to position</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark3; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Job knowledge</td>
 				<td>Knowledge of job contents, development world</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark4; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Personal attributes/ Supervisory skills</td>
 				<td>Competencies (integrity, ambition, leadership, initiative, loyalty, learning, resourceful)</td>
 				<td align="center">10 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark5; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Reporting and Computer skills</td>
 				<td>As per question</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark6; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Mobility</td>
 				<td>As per question</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark7; ?></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td>Communication Skills</td>
 				<td>As per question</td>
 				<td align="center">5 * 3</td>
-				<td></td>
+				<td align="center"><?php echo $sheet->mark8; ?></td>
 				<td></td>
 			</tr>
 			<tr>
