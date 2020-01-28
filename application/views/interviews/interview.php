@@ -350,7 +350,7 @@ $userDetails = $this->Interview_model->applicantdetails($interview->rollnumber);
                           </div>
                         </td>
                         <td><?php if($completed->total_marks < 150): ?>
-                          <a data-toggle="tooltip" title="Click to update interview result." href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/form_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/form_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); } ?>"><?= $completed->fullname; ?></a>
+                          <a target="_blank" data-toggle="tooltip" title="Click to update interview result." href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/form_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/form_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); } ?>"><?= $completed->fullname; ?></a>
                           <?php else: ?>
                             <?= $completed->fullname; ?>
                           <?php endif; ?>
