@@ -46,6 +46,7 @@
 												<th>Name</th>
 												<th>job title</th>
 												<th>email</th>
+												<th>roll no.</th>
 												<th>exam date</th>
 											</tr>
 										</thead>
@@ -56,10 +57,13 @@
 													<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $applicant->application_id; ?>"><?php echo $applicant->fullname; ?></a>
 												</td>
 												<td>
-													<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?php echo substr($applicant->job_title, 0, 20).' ...'; ?></a>
+													<a data-toggle="tooltip" title="<?php echo $applicant->job_title; ?>" href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?php echo substr($applicant->job_title, 0, 20).' ...'; ?></a>
 												</td>
 												<td>
 													<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
+												</td>
+												<td>
+													<?php echo $applicant->rollnumber; ?>
 												</td>
 												<td>
 													<?php echo date('M d, Y - h:i a', strtotime($applicant->test_date)); ?>
@@ -200,7 +204,7 @@
 									<?php foreach($jobs as $job): ?>
 									<tr>
 										<td>
-											<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25).' ...'; ?></a>
+											<a data-toggle="tooltip" title="<?php echo $job->job_title; ?>" href="<?php echo base_url(); ?>tests/detail_job/<?php echo $job->job_id; ?>"><?php echo substr($job->job_title, 0, 25).' ...'; ?></a>
 										</td>
 										<td>
 											<?php echo $job->prov_name; ?>
@@ -243,3 +247,8 @@
 		</div>
 	</section>
 </section>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip()
+	});
+</script>

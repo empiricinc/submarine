@@ -231,6 +231,7 @@ if($system[0]->system_skin=='skin-6'){
                       <li><a href="<?php echo base_url(); ?>resignations/view">Resignations</a></li>
                       <li><a href="<?php echo base_url(); ?>investigation">Investigation</a></li>
                       <li><a href="<?php echo base_url(); ?>reports/employees">Reports</a></li>
+                      <li><a href="<?php echo base_url(); ?>leaves">Leaves</a></li>
                     </ul>
                 </li>
 

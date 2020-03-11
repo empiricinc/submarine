@@ -27,6 +27,10 @@ class Tests extends MY_Controller{
 		$this->load->model('Xin_model');
 	}
 	public function index($offset = NULL){
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('');
+		}
 		$limit = 10;
 		if(!is_null($offset)){
 			$this->uri->segment(3);
@@ -103,6 +107,7 @@ class Tests extends MY_Controller{
 		$data['addopt'] = $this->Tests_model->add_choices($id);
 		$data['title'] = 'Tests System | Add Answers';
 		$data['content'] = 'test-system/add_answers';
+		$data['opt_exist'] = $this->Tests_model->options_exist();
 		$this->load->view('test-system/components/template', $data); 
 	}
 	// Create answers for a question with its ID...
@@ -114,24 +119,23 @@ class Tests extends MY_Controller{
 		$options_array = $_POST['option'];
 		$ques_id = $_POST['que_id'];
 		$options_len = count($options_array);
-		// $data = $this->input->post('mark');
-		// Take the checkbox value and insert it into the database with the status of 1 or 0
-		//$chkbox = 0;
+		$status = $_POST['mark'];
+		$correct = '';
+		// Take the radio button value and insert it into the database with the status of 1 or 0
 		for($i = 0; $i < $options_len; $i++){
+			if($status == $i+1) // If the radio button was checked, the status will be 1, else 0. 
+				$correct = 1; 
+			else
+				$correct = 0;
 			$data = array(
 				'q_id' => $ques_id,
 				'ans_name' => $_POST['option'][$i],
-				//'status' => $chkbox
+				'status' => $correct			
 			);
-			// if(isset($_POST['mark1'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// if(isset($_POST['mark2'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// if(isset($_POST['mark3'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// if(isset($_POST['mark4'])){ $chkbox = 1; } else { $chkbox = 0; }
-			// echo "<pre>"; print_r($data); exit();
 			$this->Tests_model->create_answers($data);
 		}
-		$this->session->set_flashdata('success', '<strong>Good Job! </strong>  Anwers have been added successfully!');
-		return redirect('tests/all_questions');
+		$this->session->set_flashdata('success', '<strong>Good Job! </strong>  Answers have been added successfully!');
+		return redirect("tests/add_options/{$_POST['que_id']}");
 	}
 	// View single record...
 	public function view_single($id){
@@ -160,22 +164,24 @@ class Tests extends MY_Controller{
 	public function exam_login(){
 		$this->load->view('test-system/exam_login');
 	}
-	// Log the applicant in to the paper.
+	// Log the applicant in to the paper. (Objective paper)
 	public function begin_exam(){
 		$post_data = $this->input->post();
 		$validate = $this->Tests_model->validate_applicant($post_data);
 		if($validate){
+			$this->session->set_userdata('rollnumber', $post_data['roll_no']);
 			redirect("tests/questions_for_test/{$post_data['roll_no']}");
-		} elseif($validate['test_date'] > date('Y-m-d', strtotime($post_data['test_date']))) {
-			$this->session->set_flashdata('failed', '<strong>Aww Snap !</strong> Your exam date is over, you are not allowed to take the exam.');
-			redirect('tests/exam_login');
 		} else {
-			$this->session->set_flashdata('failed', '<strong>Aww snap !</strong> Looks like you have not applied for the post advertised. <br><strong>OR</strong><br> The date you have been given for the exam is over, contact system administrator for further information.');
+			$this->session->set_flashdata('failed', '<strong>Aww snap !</strong> Looks like you have already taken the exam. <br><strong>OR</strong><br> The date you have been given for the exam is over, contact system administrator for further information.');
 			redirect('tests/exam_login');
 		}
 	}
 	// Random questions / data to display
 	public function questions_for_test(){
+		$session = $this->session->userdata('rollnumber');
+		if(empty($session)){
+			redirect('tests/exam_login');
+		}
 		// Get answers with the question ID stored as FK in the answers table.
 		$data['questions_rand'] = $this->Tests_model->test_questions();
 		// Get without join, the questions only...
@@ -272,21 +278,56 @@ class Tests extends MY_Controller{
 		$length = count($answers);
 		$length = count($question_id);
 		for($j = 0; $j < $length; $j++){
+			$answer = isset($_POST['answer']) ? $answers : '0';
 			$data = array(
 			'question_id' => $_POST['question_id'][$j],
-			'answer_id'   => $_POST['answer'][$j],
+			'answer_id'   => $answer[$j],
 			'applicant_id' => $_POST['applicant_id']
 			);
+			// echo "<pre>"; print_r($data);
 			$this->Tests_model->submit_paper($data);
 		}
-		$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
-		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will informed about the result shortly !');
-		redirect('tests/test_submitted');
+		// exit;
+		// Check the applicant's id twice, so that there's no chance of duplicate entry.
+		$exists = $this->db->get_where('test_result', array('rollnumber' => $applicant_id));
+		if($exists->num_rows() > 0){
+			echo "You've already taken the exam. Try applying next time !";
+			// $this->db->select('exam_date')->from('ex_applicants')->get()->result();
+			// $this->db->where(array('exam_date' => date('Y-m-d'), 'applicant_id' => $applicant_id));
+			// $this->db->delete('ex_applicants');
+			return FALSE;
+		}else{
+			$query = $this->db->query('INSERT INTO test_result(rollnumber, obtain_marks, total_marks) SELECT '.$applicant_id.', COUNT(ex_applicants.applicant_id) AS marks, 50 FROM ex_applicants JOIN ex_answers ON ex_applicants.answer_id = ex_answers.ans_id AND ex_answers.status = 1 WHERE ex_applicants.applicant_id = '.$applicant_id.'');
+		}
+		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will be informed about the result shortly !');
+		redirect('tests/subjective_paper_view/'.$_POST['applicant_id']);
 	}
 	// Redirect the user to the test submitted page, where he can check his/her result, marks, failed/passed and more...
+	// Save applicant's paper. (Subjective)
+	public function applicant_test_subjective(){
+		$session = $this->session->userdata('rollnumber');
+		if(empty($session)){
+			redirect('tests/exam_login');
+		}
+		$question_id = $_POST['question_id'];
+		$applicant_id = $_POST['applicant_id'];
+		$answers = $_POST['answer'];
+		$length = count($answers);
+		$length = count($question_id);
+		for ($i = 0; $i < $length; $i++) {
+			$data = array(
+					'question_id' => $question_id[$i],
+					'applicant_id' => $applicant_id,
+					'answer_text' => $answers[$i]
+				);
+			$this->Tests_model->applicant_test_subjective($data);
+		}
+		$this->session->set_flashdata('success', '<strong>Congratulations! </strong> Your test has been submitted successfully! You will be informed about the result shortly !');
+		redirect('tests/test_submitted');
+	}
 	public function test_submitted(){
-		// $data['title'] = 'Test System | Test Submitted';
-		// $data['content'] = 'test-system/test_submitted';
+		// After teh applicant submit the paper, destroy the session and get him/her outta there.
+		$this->session->sess_destroy();
 		$this->load->view('test-system/test_submitted');
 	}
 	// Modify answers / options for the questions. Display the data in the form...
@@ -382,6 +423,8 @@ class Tests extends MY_Controller{
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
 		$data['all_applicants'] = $this->Tests_model->total_applicants($limit, $offset);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | All Applicants';
 		$data['content'] = 'test-system/applicants';
 		$this->load->view('test-system/components/template', $data);
@@ -457,6 +500,9 @@ class Tests extends MY_Controller{
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['provinces'] = $this->Tests_model->get_provinces();
 		$data['title'] = 'Test System | Jobs';
 		$data['content'] = 'test-system/jobs';
 		$data['jobs_list'] = $this->Tests_model->jobs_list($limit, $offset);
@@ -491,6 +537,8 @@ class Tests extends MY_Controller{
 	    $config["num_tag_open"] = "<li>";
 	    $config["num_tag_close"] = "</li>";
 		$this->pagination->initialize($config);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | Appeared Applicants';
 		$data['content'] = 'test-system/appeared';
 		$data['appeared_list'] = $this->Tests_model->all_appeared($limit, $offset);
@@ -506,24 +554,46 @@ class Tests extends MY_Controller{
 	}
 	// Applicants search
 	public function applicant_search(){
-		$applicant = $this->input->get('search_applicant');
-		$data['results'] = $this->Tests_model->search_applicants($applicant);
+		$project = $this->input->get('project');
+		$designation = $this->input->get('designation');
+		$job_title = $this->input->get('job_title');
+		$rollnumber = $this->input->get('rollnumber');
+		$keyword = $this->input->get('keyword');
+		$date_from = $this->input->get('date_from');
+		$date_to = $this->input->get('date_to');
+		$data['results'] = $this->Tests_model->search_applicants($project, $designation, $keyword, $job_title, $rollnumber, $date_from, $date_to);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | Applicants Search';
 		$data['content'] = 'test-system/applicants';
 		$this->load->view('test-system/components/template', $data);
 	}
 	// Jobs search
 	public function job_search(){
-		$job = $this->input->get('search_job');
-		$data['results'] = $this->Tests_model->search_jobs($job);
+		$project = $this->input->get('project');
+		$designation = $this->input->get('designation');
+		$province = $this->input->get('province');
+		$date_from = $this->input->get('date_from');
+		$date_to = $this->input->get('date_to');
+		$data['results'] = $this->Tests_model->search_jobs($project, $designation, $province, $date_from, $date_to);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['provinces'] = $this->Tests_model->get_provinces();
 		$data['title'] = 'Test System | Jobs Search';
 		$data['content'] = 'test-system/jobs';
 		$this->load->view('test-system/components/template', $data);
 	}
 	// Appeared applicants search
 	public function appeared_search(){
-		$appeared = $this->input->get('search_appeared');
-		$data['results'] = $this->Tests_model->search_appeared($appeared);
+		$keyword = $this->input->get('keyword');
+		$project = $this->input->get('project');
+		$designation = $this->input->get('designation');
+		$rollnumber = $this->input->get('rollnumber');
+		$date_from = $this->input->get('date_from');
+		$date_to = $this->input->get('date_to');
+		$data['results'] = $this->Tests_model->search_appeared($project, $designation, $keyword, $rollnumber, $date_from, $date_to);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
 		$data['title'] = 'Test System | Appeared Applicants Search';
 		$data['content'] = 'test-system/appeared';
 		$this->load->view('test-system/components/template', $data);
@@ -577,11 +647,253 @@ class Tests extends MY_Controller{
 		$data['content'] = 'test-system/reports';
 		$this->load->view('test-system/components/template', $data);
 	}
-
-	// public function get_result(){
-	// 	$data = $this->Tests_model->save_test_result();
-	// 	var_dump($data);
-	// }
+	// -------------------------- Add result, create and view paper ----------------------------- //
+	public function get_rollnumber($rollnumber){
+		// $rollnumber = $this->input->post('applicant_rollnumber');
+		$data = $this->Tests_model->get_rollnumber_detail($rollnumber);
+		echo json_encode($data);
+	}
+	// Add result manually.
+	public function add_result(){
+		$data['title'] = 'Test System | Add Result';
+		$data['content'] = 'test-system/result_card';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Save result for the applicant who can't take the exam online.
+	public function save_result(){
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('applicant_rollnumber', 'Applicant Roll Number', 'required|numeric');
+		$this->form_validation->set_rules('marks_obtained', 'Marks Obtained', 'required|numeric|max_length[2]');
+		$this->form_validation->set_rules('total_marks', 'Total Marks', 'required|numeric');
+		if($this->form_validation->run() == FALSE){
+			$this->add_result();
+		}else{
+			$data = array(
+				'rollnumber' => $this->input->post('applicant_rollnumber'),
+				'obtain_marks' => $this->input->post('marks_obtained'),
+				'total_marks' => $this->input->post('total_marks')
+			);
+			// var_dump($data); exit;
+			$this->Tests_model->add_result($data);
+			$this->session->set_flashdata('success', '<strong>Success !</strong> Result has been saved successfully');
+			redirect('tests/total_appeared');
+		}
+	}
+	// Create paper for exam/post.
+	public function create_paper(){
+		$data['title'] = 'Test System | Create Paper';
+		$data['content'] = 'test-system/create_paper';
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Get all the questions on the page to select from them.
+	public function get_paper(){
+		$project = $this->input->post('project');
+		$designation = $this->input->post('designation');
+		$data['title'] = 'Test System | Select Questions';
+		$data['content'] = 'test-system/create_paper';
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['jobs'] = $this->Tests_model->get_jobs();
+		$data['list_questions'] = $this->Tests_model->get_for_paper($project, $designation);
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Save paper into the database.
+	public function save_paper(){
+		foreach($_POST['question'] as $key => $val){
+			$data = array(
+				'job_id' => $_POST['job_id'],
+				'que_id' => $val,
+				'project_id' => $_POST['project'],
+				'designation_id' => $_POST['designation'],
+				'marks' => $_POST['marks'][$key],
+				'created_at' => date('Y-m-d')
+			);
+			$this->Tests_model->create_paper($data);
+		}
+		$this->session->set_flashdata('success', '<strong>Success !</strong> Paper has been created successfully!');
+		redirect('tests/create_paper');
+	}
+	// View paper pattern.
+	public function paper($job_id){
+		$data['title'] = 'Test System | Question Paper';
+		$data['content'] = 'test-system/paper_pattern';
+		$data['qdash'] = $this->Tests_model->question_paper($job_id);
+		$data['questions_rand'] = $this->Tests_model->get_paper_pattern($job_id);
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Paper detail, click on a job title and view the paper.
+	public function list_papers($offset = NULL){
+		$limit = 20;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('tests/list_papers');
+		$config['total_rows'] = $this->Tests_model->count_jobs();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 10;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['papers'] = $this->Tests_model->get_jobs_papers($limit, $offset);
+		$data['title'] = 'Test System | Papers List';
+		$data['content'] = 'test-system/papers_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Search in papers.
+	public function papers_search(){
+		$keyword = $this->input->get('search_papers');
+		$data['results'] = $this->Tests_model->search_papers($keyword);
+		$data['title'] = 'Test System | Search Results';
+		$data['content'] = 'test-system/papers_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// ------------------------ Subjective Questions setup ---------------------------- //
+	// Subjective papers setup.
+	public function subjective_paper(){
+		$data['title'] = 'Test System | Subjective Papers';
+		$data['content'] = 'test-system/subjective_papers';
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$this->load->view('test-system/components/template', $data);
+	}
+	// List subjective questions.
+	public function subjective_questions($offset = NULL){
+		$limit = 10;
+		if(!empty($offset)){
+			$this->uri->segment(3);
+		}
+		$this->load->library('pagination');
+		$config['uri_segment'] = 3;
+		$config['base_url'] = base_url('tests/subjective_questions');
+		$config['total_rows'] = $this->Tests_model->count_subjective();
+		$config['per_page'] = $limit;
+		$config['num_links'] = 10;
+		$config["full_tag_open"] = '<ul class="pagination">';
+	    $config["full_tag_close"] = '</ul>';
+	    $config["first_tag_open"] = '<li>';
+	    $config["first_tag_close"] = '</li>';
+	    $config["last_tag_open"] = '<li>';
+	    $config["last_tag_close"] = '</li>';
+	    $config['next_link'] = 'next &raquo;';
+	    $config["next_tag_open"] = '<li>';
+	    $config["next_tag_close"] = '</li>';
+	    $config["prev_link"] = "&laquo; prev";
+	    $config["prev_tag_open"] = "<li>";
+	    $config["prev_tag_close"] = "</li>";
+	    $config["cur_tag_open"] = "<li class='active'><a href='javascript:void(0);'>";
+	    $config["cur_tag_close"] = "</a></li>";
+	    $config["num_tag_open"] = "<li>";
+	    $config["num_tag_close"] = "</li>";
+		$this->pagination->initialize($config);
+		$data['sub_questions'] = $this->Tests_model->get_subjective_questions($limit, $offset);
+		$data['title'] = 'Test System | List Subjective Questions';
+		$data['content'] = 'test-system/sub_questions_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Save subjective paper.
+	public function save_subjective_paper(){
+		$data = array(
+					'project_id' => $this->input->post('project'),
+					'designation' => $this->input->post('designation'),
+					'question_text' => $this->input->post('question'),
+					'created_at' => date('Y-m-d')
+				);
+		if($this->Tests_model->add_subjective_questions($data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong> The question has saved successfully!');
+			redirect('tests/subjective_questions');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Edit subjective questions.
+	public function edit_subjective($id){
+		$data['edit'] = $this->Tests_model->edit_subjective($id);
+		$data['projects'] = $this->Tests_model->get_projects();
+		$data['designations'] = $this->Tests_model->get_designations();
+		$data['title'] = 'Test System | Edit Question';
+		$data['content'] = 'test-system/subjective_papers';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Update subjective question after editing.
+	public function update_subjective_paper(){
+		$id = $this->input->post('id');
+		$data = array(
+					'project_id' => $this->input->post('project'),
+					'designation' => $this->input->post('designation'),
+					'question_text' => $this->input->post('question'),
+					'created_at' => date('Y-m-d')
+				);
+		if($this->Tests_model->update_subjective($id, $data)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>Question has been updated successfully.');
+			redirect('tests/subjective_questions');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Delete subjective question.
+	public function delete_subjective($id){
+		if($this->Tests_model->delete_subjective($id)){
+			$this->session->set_flashdata('success', '<strong>Success! </strong>The question has been deleted successfully.');
+			redirect('tests/subjective_questions');
+		}else{
+			echo "The operation wasn't successful! Try again.";
+		}
+	}
+	// Search subjective questions.
+	public function search_subjective(){
+		$keyword = $this->input->get('search_question');
+		$data['results'] = $this->Tests_model->search_subjective($keyword);
+		$data['title'] = 'Test System | Search Results';
+		$data['content'] = 'test-system/sub_questions_list';
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Get subjective paper. Display questions and textarea for answers.
+	public function subjective_paper_view(){
+		$data['questions'] = $this->Tests_model->subjective_question_paper();
+		$this->load->view('test-system/question_paper_subjective', $data);
+	}
+	// Get attempted papers.
+	public function attempted_papers(){
+		$data['title'] = 'Test System | Attempted Papers';
+		$data['content'] = 'test-system/attempted_papers_list';
+		$data['attempted'] = $this->Tests_model->get_attempted_papers();
+		$this->load->view('test-system/components/template', $data);
+	}
+	// Subjective result.
+	public function save_subjective_result(){
+		$data = array(
+			'applicant_id' => $this->input->post('applicant_id'),
+			'marks' => $this->input->post('marks')
+		);
+		$already_exist = $this->db->get_where('subjective_test_result', array('applicant_id' => $_POST['applicant_id']));
+		if($already_exist->num_rows() > 0){
+			echo "The result for this applicant has already been saved in the database, try another one.";
+			return FALSE;
+		}elseif($this->Tests_model->save_subjective_result($data)){
+			$this->session->set_flashdata('success', '<strong>Success ! </strong> The result has been saved successfully.');
+			redirect('tests/attempted_papers');
+		}else{
+			echo "The operation wasn't successful! try again.";
+		}
+	}
 }
 
 ?>

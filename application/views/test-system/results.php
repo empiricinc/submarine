@@ -52,16 +52,16 @@
 							<span></span>
 						</div>
 						<div class="filterSelect">
-							<input type="text" name="applicant_name" class="form-control" placeholder="Search by name...">
+							<input type="text" name="applicant_name" class="form-control" placeholder="Search by name">
 						</div>
 						<div class="filterSelect">
-							<input type="text" name="roll" class="form-control" placeholder="Search by roll number...">
+							<input type="text" name="roll" class="form-control" placeholder="Search by roll number">
 						</div>
 						<div class="filterSelect">
-							<input type="text" name="date_from" class="form-control date" placeholder="From date...">
+							<input type="text" name="date_from" class="form-control date" placeholder="From date">
 						</div>
 						<div class="filterSelect">
-							<input type="text" name="date_to" class="form-control date" placeholder="To date...">
+							<input type="text" name="date_to" class="form-control date" placeholder="To date">
 						</div>
 						<div class="filterSelectBtn">
 							<button type="submit" class="btn btnSubmit">Search</button>
@@ -81,7 +81,7 @@
 					<div class="col-md-4">
 						<div class="tabelTopBtn">
 							<a href="<?php echo base_url('tests/add_questions'); ?>" class="btn">
-								<img src="<?php echo base_url('dashboardDesign/assets/img/plus.png'); ?>" alt=""> Create Exam
+								<img src="<?php echo base_url('assets/img/plus.png'); ?>" alt=""> Create Exam
 							</a>
 							<a href="<?php echo base_url('tests'); ?>" class="btn">
 								<i class="fa fa-home"></i> Home
@@ -116,12 +116,14 @@
 											<td><?php echo $result->job_title; ?></td>
 											<td>CTC-2019-0<?php echo $result->rollnumber; ?></td>
 											<td><?php echo date('M d, Y', strtotime($result->sdt)); ?></td>
-											<td><?php echo $result->obtain_marks; ?></td>
 											<td>
-												<?php if($result->obtain_marks >= 15): ?>
-													Passed
+												<?php echo $total_marks = $result->obtain_marks + $result->marks; ?>
+											</td>
+											<td>
+												<?php if($total_marks >= 15): ?>
+													<button class="btn btn-success btn-xs">Passed</button>
 												<?php else: ?>
-													Failed
+													<button class="btn btn-danger btn-xs">Failed</button>
 												<?php endif; ?>
 											</td>
 										</tr>

@@ -50,7 +50,7 @@
 						<h3 style="color: lightgreen;">your time starts now | <span id="time"></span> <small> remaining ...</small></h3>
 					</div>
 				</div>
-				<form action="<?php echo base_url('tests/applicants_test'); ?>" method="post">
+				<form action="<?php echo base_url('tests/applicants_test'); ?>" method="post" id='js_submit'>
 					<ul>
 						<?php $counter = 1;  ?>
 						<?php foreach($qdash as $que_rand) : ?>
@@ -68,7 +68,7 @@
 								<strong>
 									<?php echo $i++; // Print alphabetical numbers before the options. ?>
 								-</strong>
-								<input type="checkbox" name="answer[]" value="<?=$ans->ans_id; ?>"> 
+								<input type="radio" name="answer[]<?php echo $ans->ques_id; ?>" value="<?=$ans->ans_id; ?>"> 
 								<?= $ans->ans_name; ?>
 							</li>
 						<?php endif;
@@ -89,35 +89,46 @@
 	<script type="text/javascript">
 // Countdown Timer for test paper. 
 function startTimer(duration, display) {
-    var start = Date.now(),
-        diff,
-        minutes,
-        seconds;
-    function timer() {
-        // get the number of seconds that have elapsed since 
-        // startTimer() was called
-        diff = duration - (((Date.now() - start) / 1000) | 0);
-        // does the same job as parseInt truncates the float
-        minutes = (diff / 60) | 0;
-        seconds = (diff % 60) | 0;
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10)
+        seconds = parseInt(timer % 60, 10);
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-        display.textContent = minutes + ":" + seconds; 
-        if (diff <= 0) {
-            // add one second so that the count down starts at the full duration
-            // example 60:00 not 59:59
-            start = Date.now() + 1000;
+        display.textContent = minutes + ":" + seconds;
+        if (--timer < 0) {
+            timer = 0;
+            //alert("Your time has ended. Click OK to continue !");
+            document.getElementById('js_submit').submit();
+            // timer = duration; // uncomment this line to reset timer automatically after reaching 0
         }
-    };
-    // we don't want to wait a full second before the timer starts
-    timer();
-    setInterval(timer, 1000);
+    }, 1000);
 }
 window.onload = function () {
-    var testTime = 60 * 60,
+	// Show user the messages before beginning the paper.
+	alert("Your time starts now. Click OK to begin paper...");
+	alert("Are you sure to begin paper?");
+    var time = 70 * 60 // your time in seconds here 70 * 60 means 70 minutes.
         display = document.querySelector('#time');
-    startTimer(testTime, display);
+    startTimer(time, display);
 };
+// Disable the F5 and R key to restrict the user from reloading the page.
+document.onkeydown = function(){
+  switch (event.keyCode){
+        case 116 : //F5 button
+            event.returnValue = false;
+            event.keyCode = 0;
+            return false;
+        case 82 : //R button
+            if (event.ctrlKey){ 
+                event.returnValue = false;
+                event.keyCode = 0;
+                return false;
+            }
+    }
+}
+// Disable the mouse's right-click on the page which the user is currently on. (Question Paper)
+document.addEventListener('contextmenu', event => event.preventDefault());
 </script>
 </body>
 </html>

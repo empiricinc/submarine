@@ -42,13 +42,7 @@
           <div class="col-md-8">
             <div class="tabelHeading">
               <?php if(empty($search_results)): ?>
-              <h3>list of completed interviews <br>
-                <small>
-                  <div class="label label-info">
-                    interviews completed can't be modified, except the one who did the interview &hellip;
-                  </div>
-                </small>
-              </h3>
+              <h3>list of completed interviews <br><small style="text-transform: lowercase;">the link on the name indicates that the interview's been conducted by one or two interviewers.</small></h3>
               <?php else: ?>
                 <h3>search results</h3>
               <?php endif; ?>
@@ -78,7 +72,7 @@
                       <th>district</th>
                       <th>marks</th>
                       <th>interview date</th>
-                      <th>remarks</th>
+                      <th>action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -102,35 +96,35 @@
                                   <tbody>
                                    <?php foreach ($com_data as $row){ ?>
                                     <tr>
-                                      <td> Full Name</td>
+                                      <td>Full Name</td>
                                       <td><?php echo $row->fullname; ?></td> 
                                     </tr>
                                     <tr>
-                                      <td> Email </td>
+                                      <td>Email</td>
                                       <td><?php echo $row->email;?></td> 
                                     </tr>
                                     <tr>
-                                      <td> Gender </td>
+                                      <td>Gender</td>
                                       <td><?php echo  $row->genderName; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Age </td>
+                                      <td>Age</td>
                                       <td><?php echo  $row->age_name; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Education </td>
+                                      <td>Education</td>
                                       <td><?php echo  $row->edu_name;; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Experience </td>
+                                      <td>Experience</td>
                                       <td><?php  echo  $row->minimum_experience;; ?></td>
                                     </tr>
                                     <tr>
-                                      <td>Province </td>
+                                      <td>Province</td>
                                       <td><?php echo  $row->prov_name; ?></td>
                                     </tr>
                                     <tr>
-                                      <td>District </td>
+                                      <td>District</td>
                                       <td><?php echo  $row->cityName; ?></td>
                                     </tr>
                                     <tr>
@@ -152,15 +146,11 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Comments</td>
-                                      <td><?= $row->comments; ?></td>
-                                    </tr>
-                                    <tr>
                                       <td>Result submission date</td>
                                       <td><?= date('M d, Y', strtotime($row->int_date)); ?></td>
                                     </tr>
                                     <tr>
-                                      <td>Resume </td>
+                                      <td>Resume</td>
                                       <td> <a href="<?php echo base_url(); ?>uploads/resume/<?php echo  $row->job_resume; ?>" target="_blank">View Resume</a> </td>
                                     </tr>
                                     <?php } ?>  
@@ -175,49 +165,24 @@
                           </div>
                         </div>
                       </td>
-                      <td><?= $completed->fullname; ?></td>
+                      <td>
+                        <?php if($completed->total_marks < 150): ?>
+                          <a target="_blank" data-toggle="tooltip" title="Click to update interview result." href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/form_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/form_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$completed->rollnumber}"); } ?>"><?= $completed->fullname; ?></a>
+                          <?php else: ?>
+                            <?= $completed->fullname; ?>
+                          <?php endif; ?>
+                      </td>
                       <td><?= $completed->comp_name; ?></td>
                       <td><?= $completed->designation_name; ?></td>
                       <td><?= $completed->prov_name; ?></td>
                       <td><?= $completed->city_name; ?></td>
                       <td>
-                        <div class="label label-success" style="display: inline-block;">
+                        <button class="btn btn-success btn-xs">
                         <?= round($completed->obtain_marks/$completed->total_marks*100).'%'; ?>
-                        </div>
+                        </button>
                       </td>
                       <td><?= date('l, M jS, Y', strtotime($completed->sdt)); ?></td>
-                      <td>
-                        <a href="#commentModal" data-toggle="modal" data-target="#comment_detail<?= $completed->rollnumber; ?>">
-                          <?= substr($completed->comments, 0, 20).'&hellip;'; ?>
-                        </a>
-                        <div class="modal fade" id="comment_detail<?= $completed->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <!--Header-->
-                              <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Remarks... </h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">×</span>
-                                </button>
-                              </div>
-                              <!--Body-->
-                              <div class="modal-body">
-                                <table class="table table-hover">
-                                  <tbody>
-                                   <?php foreach ($com_data as $row){ ?>
-                                    <p><?= $row->comments; ?></p>
-                                    <?php } ?>  
-                                  </tbody>
-                                </table>
-                              </div>
-                              <!--Footer-->
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
+                      <td><a target="_blank" href="<?php if($completed->designation_id == 12 OR $completed->designation_id == 13){ echo base_url("interview/print_sheet_sm/{$completed->rollnumber}"); }elseif($completed->designation_id == 5){ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); }elseif($completed->designation_id == 8 OR $completed->designation_id == 14){ echo base_url("interview/print_sheet_fcm/{$completed->rollnumber}"); }else{ echo base_url("interview/print_sheet_dhcso/{$completed->rollnumber}"); } ?>" class="btn btn-primary btn-xs"><i class="fa fa-print"></i></a></td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
@@ -249,7 +214,6 @@
                       <th>district</th>
                       <th>marks</th>
                       <th>interview date</th>
-                      <th>remarks</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -323,10 +287,6 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Comments</td>
-                                      <td><?= $row->comments; ?></td>
-                                    </tr>
-                                    <tr>
                                       <td>Result submission date</td>
                                       <td><?= date('M d, Y', strtotime($row->int_date)); ?></td>
                                     </tr>
@@ -346,7 +306,13 @@
                           </div>
                         </div>
                       </td>
-                      <td><?= $result->fullname; ?></td>
+                      <td>
+                        <?php if($result->total_marks < 150): ?>
+                          <a data-toggle="tooltip" title="Click to update interview result." href="<?php if($result->designation_id == 12 OR $result->designation_id == 13){ echo base_url("interview/form_sm/{$result->rollnumber}"); }elseif($result->designation_id == 5){ echo base_url("interview/form_dhcso/{$result->rollnumber}"); }elseif($result->designation_id == 8 OR $result->designation_id == 14){ echo base_url("interview/form_fcm/{$result->rollnumber}"); }else{ echo base_url("interview/form_dhcso/{$result->rollnumber}"); } ?>"><?= $result->fullname; ?></a>
+                          <?php else: ?>
+                            <?= $result->fullname; ?>
+                          <?php endif; ?>
+                      </td>
                       <td><?= $result->comp_name; ?></td>
                       <td><?= $result->designation_name; ?></td>
                       <td><?= $result->prov_name; ?></td>
@@ -357,38 +323,6 @@
                         </div>
                       </td>
                       <td><?= date('l, M jS, Y', strtotime($result->sdt)); ?></td>
-                      <td>
-                        <a href="#commentModal" data-toggle="modal" data-target="#comment_detail<?= $result->rollnumber; ?>">
-                          <?= substr($result->comments, 0, 20).'&hellip;'; ?>
-                        </a>
-                        <div class="modal fade" id="comment_detail<?= $result->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <!--Header-->
-                              <div class="modal-header">
-                                <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Remarks... </h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">×</span>
-                                </button>
-                              </div>
-                              <!--Body-->
-                              <div class="modal-body">
-                                <table class="table table-hover">
-                                  <tbody>
-                                   <?php foreach ($com_data as $row){ ?>
-                                    <p><?= $row->comments; ?></p>
-                                    <?php } ?>  
-                                  </tbody>
-                                </table>
-                              </div>
-                              <!--Footer-->
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>

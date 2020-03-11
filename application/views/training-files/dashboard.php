@@ -14,6 +14,11 @@
 						<span>statistics and more...</span>
 					</h1>
 				</div>
+				<?php if($success = $this->session->flashdata('success')): ?>
+					<div class="alert alert-success text-center">
+						<?php echo $success; ?>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</section>
@@ -53,7 +58,7 @@
 											</tr>
 										</thead>
 										<tbody>
-										<?php $serial = 1; if($sl3['accessLevel3']): // Check Access Level.
+										<?php $serial = 1; //if($sl3['accessLevel3']): // Check Access Level.
 										foreach($trainings_list as $training): ?>
 											<tr>
 												<td>
@@ -73,7 +78,7 @@
 													<?php echo date('M d, Y', strtotime($training->end_date)); ?>
 												</td>
 											</tr>
-										<?php endforeach; endif; ?>
+										<?php endforeach; //endif; ?>
 										</tbody>
 									</table>
 								</div>
@@ -122,7 +127,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											<?php $sno =1; if($sl3['accessLevel3']):
+											<?php $sno =1; //if($sl3['accessLevel3']):
 											foreach($refreshers as $refresh): ?>
 											<tr>
 												<td>
@@ -142,7 +147,7 @@
 													<?php echo date('M d, Y', strtotime($refresh->end_date)); ?>
 												</td>
 											</tr>
-											<?php endforeach; endif; ?>
+											<?php endforeach; //endif; ?>
 										</tbody>
 									</table>
 								</div>
@@ -189,7 +194,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<?php if($sl3['accessLevel3']): // Check Access Level.
+									<?php //if($sl3['accessLevel3']): // Check Access Level.
 									foreach($completed_trainings as $completed): ?>
 									<tr>
 										<td>
@@ -223,7 +228,7 @@
 											<?= $completed->attendees; ?>
 										</td>
 									</tr>
-									<?php endforeach; endif; ?>
+									<?php endforeach; //endif; ?>
 								</tbody>
 							</table>
 						</div>

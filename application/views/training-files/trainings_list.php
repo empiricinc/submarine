@@ -8,6 +8,9 @@
 	.label{
 		cursor: pointer;
 	}
+	small#attendance{
+		color: red;
+	}
 </style>
 <?php if(empty($results)): ?>
 <section class="secMainWidthFilter">
@@ -25,7 +28,7 @@
 								</span> |
 								<small>
 									<a href="<?php echo base_url('trainings/add_trainings'); ?>"><i class="fa fa-plus"></i> add new training</a>
-									<a href="<?php echo base_url('trainings/export_trainings'); ?>" class="btn btn-success btn-xs">Export Excel</a>
+									<a href="<?php echo base_url('trainings/export_trainings'); ?>" class="btn btn-success btn-xs">Download CSV</a>
 								</small><br>
 								<small id="status-btns">
 									<a href="<?= base_url('trainings/all_trainings'); ?>">
@@ -97,7 +100,7 @@
 										</tr>
 									</thead>
 									<tbody id ='filter_results'>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
+										<?php //if($sl3['accessLevel3']): // Check Access Level.
 										if(!empty($list_trainings)):
 										foreach($list_trainings as $training): ?>
 										<tr>
@@ -115,7 +118,7 @@
 												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>trainings/detail_trainer/<?php echo $training->trainer_id; ?>"><?=$training->first_name." ".$training->last_name; ?></a>
+												<?= $training->trainer_two; ?>
 											</td>
 											<td>
 												<?=$training->facilitator_name; ?>
@@ -143,11 +146,17 @@
 														View
 													</span> &nbsp;
 												</a>
-												<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
+												<?php if($training->trainee_employees==''){ ?>
+													<span data-toggle="tooltip" title="No trainees registered." class="label label-success">
+														No Data
+													</span> &nbsp;
+												<?php }else{ ?>
+												<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id;  ?>">
 													<span class="label label-success">
 														Atdnc
 													</span> &nbsp;
 												</a>
+												<?php } ?>
 												<a href="">
 													<span class="label label-info">
 														Trg Mtrl
@@ -172,7 +181,7 @@
 					<div class="col-md-10">
 						<div class="tabelSideListing text-center">
 							<span>
-								<?php echo $this->pagination->create_links(); endif; endif; ?>
+								<?php echo $this->pagination->create_links(); endif; //endif; ?>
 							</span>
 						</div>
 					</div>
@@ -233,7 +242,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php if($sl3['accessLevel3']): // Check Access Level.
+										<?php //if($sl3['accessLevel3']): // Check Access Level.
 										foreach($results as $result): ?>
 										<tr>
 											<td>
@@ -261,7 +270,7 @@
 												<?= $result->hall_detail; ?>
 											</td>
 										</tr>
-										<?php endforeach; endif; ?>
+										<?php endforeach; //endif; ?>
 									</tbody>
 								</table>
 							</div>
@@ -282,7 +291,11 @@
 					<div class="col-lg-4">
 						<small>
 							<h3>Training Information</h3>
-							<a href="<?php echo base_url(); ?>trainings/attendance/<?= $training_detail['trg_id']; ?>"><i class="fa fa-plus"></i> Attendance</a>
+							<?php if($employee_names): ?>
+								<a href="<?php echo base_url(); ?>trainings/attendance/<?= $training_detail['trg_id']; ?>"><i class="fa fa-plus"></i> Attendance</a>
+							<?php else: ?>
+								 <i class="fa fa-plus"></i> Attendance |<small id='attendance'> Can't be taken because of no trainees registered! <a href="<?= base_url(); ?>trainings/delete_trg/<?= $training_detail['trg_id']; ?>" class="btn btn-danger btn-xs" onclick="javascript:return confirm('Are you sure to remove this ?');">Remove</a></small>
+							<?php endif; ?>
 						</small>
 					</div>
 					<div class="col-lg-4 text-right">
@@ -304,16 +317,14 @@
 		</div>
 		<div class="panel-body">
 			<div class="row">
-				<div class="col-lg-12">
+				<div class="col-lg-10 col-lg-offset-1">
 					<div class="row">
-						<div class="col-lg-2"><h3>Employee Name</h3></div>
-						<div class="col-lg-3"><h3>Designation</h3></div>
-						<div class="col-lg-2"><h3>Project</h3></div>
-						<div class="col-lg-2"><h3>Contact</h3></div>
-						<div class="col-lg-3"><h3>Address</h3></div>
+						<div class="col-lg-4"><h3>Employee Name</h3></div>
+						<div class="col-lg-4"><h3>Designation</h3></div>
+						<div class="col-lg-4"><h3>Project</h3></div>
 					</div>
 					<p class="lead">
-						<?php echo $employee_names; ?>
+						<?php if($employee_names){ echo $employee_names; }else{ echo $no_employees; } ?>
 					</p>
 				</div>
 			</div>
@@ -364,17 +375,17 @@
 								<td>${val.location}</td>
 								<td>${val.hall_detail}</td>
 								<td>
-									<a href="<?php echo base_url(); ?>trainings/activity_reporting/<?php echo $training->trg_id; ?>">
+									<a href="<?php echo base_url(); ?>trainings/activity_reporting/${val.trg_id}">
 										<span class="label label-warning">
 											Acty Rpt
 										</span>&nbsp;
 									</a>
-									<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/<?php echo $training->trg_id; ?>">
+									<a href="<?php echo base_url(); ?>trainings/get_activity_reporting/${val.trg_id}">
 										<span class="label label-danger">
 											View
 										</span> &nbsp;
 									</a>
-									<a href="<?php echo base_url(); ?>trainings/attendance/<?php echo $training->trg_id; ?>">
+									<a href="<?php echo base_url(); ?>trainings/attendance/${val.trg_id}">
 										<span class="label label-success">
 											Attendance
 										</span> &nbsp;
@@ -397,5 +408,10 @@
 				}
 			});
 		});
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
 	});
 </script>

@@ -7,17 +7,62 @@
 <?php if(empty($results)): ?>
 <section class="secMainWidthFilter">
 	<div class="row marg">
-		<div class="col-lg-12">
+		<div class="col-lg-2 no-leftPad">
+			<div class="main-leftFilter">
+				<div class="tabelHeading">
+					<h3>Search Applicants <a href="<?php echo base_url('tests/applicants'); ?>" class="fa fa-refresh"></a></h3>
+				</div>
+				<div class="selectBoxMain">
+					<form method="get" action="<?php echo base_url('tests/applicant_search'); ?>">
+						<div class="filterSelect">
+							<select class="form-control" id="project" name="project">
+								<option value="">Project</option>
+								<?php foreach($projects as $proj) : ?>
+									<option value="<?php echo $proj->name; ?>">
+										<?php echo $proj->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<select class="form-control" id="designation" name="designation">
+								<option value="">Designation</option>
+								<?php foreach ($designations as $desig): ?>
+									<option value="<?= $desig->designation_name; ?>">
+										<?= $desig->designation_name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<input type="text" name="rollnumber" class="form-control" placeholder="Search by Roll no.">
+						</div>
+						<div class="filterSelect">
+							<input type="text" name="keyword" class="form-control" placeholder="Search by applicant name">
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_from" class="form-control" placeholder="Search by applicant name">
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_to" class="form-control" placeholder="Search by applicant name">
+						</div>
+						<div class="filterSelectBtn">
+							<button class="btn btnSubmit">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-10">
 			<div class="mainTableWhite">
 				<div class="row">
 					<div class="col-md-8">
 						<div class="tabelHeading">
 							<?php if(empty($applicant_detail)): ?>
 							<h3>
-									all applicants 
-									<span>
-										(list of the applicants applied for jobs) 
-									</span> | 
+								all applicants|
 								<small>
 									<a href="<?php echo base_url('tests/total_appeared'); ?>">See Applicants appeared in Exam</a>
 								</small>
@@ -54,6 +99,7 @@
 											<th>applicant's name</th>
 											<th>job title</th>
 											<th>email</th>
+											<th>roll no.</th>
 											<th>exam date</th>
 										</tr>
 									</thead>
@@ -65,10 +111,13 @@
 												<a href="<?php echo base_url(); ?>tests/detail_applicant/<?php echo $applicant->application_id; ?>"><?=$applicant->fullname; ?></a>
 											</td>
 											<td>
-												<a href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?= substr($applicant->job_title, 0, 25).' ...'; ?></a>
+												<a data-toggle="tooltip" title="<?php echo $applicant->job_title; ?>" href="<?php echo base_url(); ?>tests/detail_job/<?php echo $applicant->job_id; ?>"><?= substr($applicant->job_title, 0, 25).' ...'; ?></a>
 											</td>
 											<td>
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
+											</td>
+											<td>
+												<?php echo $applicant->rollnumber; ?>
 											</td>
 											<td>
 												<?=date('M d, Y', strtotime($applicant->test_date)); ?>
@@ -99,33 +148,60 @@
 <?php else:  ?>
 <section class="secMainWidthFilter">
 	<div class="row marg">
-		<div class="col-lg-12">
+		<div class="col-lg-2 no-leftPad">
+			<div class="main-leftFilter">
+				<div class="tabelHeading">
+					<h3>Search Applicants <a href="<?php echo base_url('tests/applicants'); ?>" class="fa fa-refresh"></a></h3>
+				</div>
+				<div class="selectBoxMain">
+					<form method="get" action="<?php echo base_url('tests/applicant_search'); ?>">
+						<div class="filterSelect">
+							<select class="form-control" id="project" name="project">
+								<option value="">Project</option>
+								<?php foreach($projects as $proj) : ?>
+									<option value="<?php echo $proj->name; ?>">
+										<?php echo $proj->name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<select class="form-control" id="designation" name="designation">
+								<option value="">Designation</option>
+								<?php foreach ($designations as $desig): ?>
+									<option value="<?= $desig->designation_name; ?>">
+										<?= $desig->designation_name; ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+							<span></span>
+						</div>
+						<div class="filterSelect">
+							<input type="text" name="rollnumber" class="form-control" placeholder="Search by Roll no.">
+						</div>
+						<div class="filterSelect">
+							<input type="text" name="keyword" class="form-control" placeholder="Search by applicant name">
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_from" class="form-control" placeholder="Search by applicant name">
+						</div>
+						<div class="filterSelect">
+							<input type="date" name="date_to" class="form-control" placeholder="Search by applicant name">
+						</div>
+						<div class="filterSelectBtn">
+							<button class="btn btnSubmit">Search</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-10">
 			<div class="mainTableWhite">
 				<div class="row">
 					<div class="col-md-8">
 						<div class="tabelHeading">
-							<h3>you've searched for:  
-								<span>
-									<?php echo $_GET['search_applicant']; ?>
-								</span>
-							</h3>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="tabelTopBtn">
-							<form class="form-inline" action="<?php echo base_url('tests/applicant_search'); ?>" method="get">
-								<div class="inputFormMain">
-									<a href="javascript:history.go(-1);" class="form-control">Go back</a>
-									<div class="input-group">
-										<input type="text" name="search_applicant" class="form-control" placeholder="Search applicants..." required="" autocomplete="off">
-										<div class="input-group-btn">
-											<button type="submit" class="btn btnSubmit">
-												<i class="fa fa-search"></i>
-											</button>
-										</div>
-									</div>
-								</div>
-							</form>
+							<h3>Search Results</h3>
 						</div>
 					</div>
 				</div>
@@ -139,7 +215,8 @@
 											<th>applicant's name</th>
 											<th>job title</th>
 											<th>email</th>
-											<th>date applied</th>
+											<th>roll no.</th>
+											<th>exam date</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -155,7 +232,10 @@
 												<a href="mailto:<?php echo $applicant->email; ?>"><?php echo $applicant->email; ?></a>
 											</td>
 											<td>
-												<?=date('M d, Y', strtotime($applicant->created_at)); ?>
+												<?php echo $applicant->rollnumber; ?>
+											</td>
+											<td>
+												<?=date('M d, Y', strtotime($applicant->test_date)); ?>
 											</td>
 										</tr>
 										<?php endforeach; ?>
@@ -186,7 +266,7 @@
 						<strong>Email: </strong><?php echo $applicant_detail['email']; ?>
 					</p>
 					<p>
-						<strong>Gender: </strong><?php echo $applicant_detail['gender']; ?>
+						<strong>Gender: </strong><?php if($applicant_detail['gender'] == 0){ echo 'Male'; }else{ echo 'Female'; } ?>
 					</p>
 					<p>
 						<strong>Education: </strong><?php echo $applicant_detail['edu_name']; ?>
@@ -251,3 +331,8 @@
 	</div>
 	</div>
 <?php endif; ?>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
+	});
+</script>

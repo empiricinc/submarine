@@ -91,79 +91,90 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-12">
-						<div class="tableMain">
-							<div class="table-responsive">
-								<table class="table">
-									<thead>
-										<tr>
-											<th>employee name</th>
-											<th>attendance status</th>
-											<th>project</th>
-											<th>designation</th>
-											<th>behavior</th>
-											<th>dSA</th>
-											<th>travel</th>
-											<th>stay</th>
-											<th>total</th>
-										</tr>
-									</thead>
-									<tbody>
-										<?php foreach($expenses as $expense): ?>
-										<tr>
-											<td>
-												<?= $expense->first_name." ".$expense->last_name; ?>
-											</td>
-											<td>
-												<?= $expense->status; ?>
-											</td>
-											<td>
-												<?= $expense->name; ?>
-											</td>
-											<td>
-												<?= $expense->designation_name; ?>
-											</td>
-											<td>
-												<?php if($expense->designation AND $expense->behavior == 'local'): echo "Local";
-												else: echo "Non Local"; endif;
-											 ?>
-											</td>
-											<td>
-												<?php if($expense->dsa == NULL): echo "..."; ?>
-												<?php elseif($expense->status == 'Absent'): echo "..."; else: ?>
-													<?= $expense->dsa; ?>
-												<?php endif; ?>
-											</td>
-											<td>
-												<?php if($expense->status == 'Absent'):
-														echo "..."; else:
-												?>
-												<?= $expense->travel; 
-													endif;
-												?>
-											</td>
-											<td>
-												<?php if($expense->stay_allowance == NULL): echo "..."; ?>
-												<?php else: ?>
-													<?= $expense->stay_allowance; ?>
-												<?php endif; ?>
-											</td>
-											<td>
-												<?php if($expense->status == 'Absent'):
-													echo ($expense->travel) - ($expense->travel); else:
-												echo $expense->dsa + $expense->travel + $expense->stay_allowance;
-												endif; 
-												?>
-											</td>
-										</tr>
-										<?php endforeach; ?>
-									</tbody>
-								</table>
+				<form action="<?php echo base_url('trainings/save_to_payroll'); ?>" method="post">
+					<div class="row container-fluid">
+						<div class="col-lg-12 text-right">
+							<input type="submit" name="submit" class="btn btn-primary" value="Save Payroll">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="tableMain">
+								<div class="table-responsive">
+									<table class="table">
+										<thead>
+											<tr>
+												<th><input type="checkbox" id="savePayroll"></th>
+												<th>employee name</th>
+												<th>attendance status</th>
+												<th>project</th>
+												<th>designation</th>
+												<th>behavior</th>
+												<th>dSA</th>
+												<th>travel</th>
+												<th>stay</th>
+												<th>total</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach($expenses as $expense): ?>
+											<tr>
+												<td>
+													<input type="checkbox" name="employee[]" value="<?php echo $expense->employee_id; ?>">
+												</td>
+												<td>
+													<?= $expense->first_name; ?>
+												</td>
+												<td>
+													<?= $expense->status; ?>
+												</td>
+												<td>
+													<?= $expense->name; ?>
+												</td>
+												<td>
+													<?= $expense->designation_name; ?>
+												</td>
+												<td>
+													<?php if($expense->designation AND $expense->behavior == 'local'): echo "Local";
+													else: echo "Non Local"; endif;
+												 ?>
+												</td>
+												<td>
+													<?php if($expense->dsa == NULL): echo "..."; ?>
+													<?php elseif($expense->status == 'Absent'): echo "..."; else: ?>
+														<?= $expense->dsa; ?>
+													<?php endif; ?>
+												</td>
+												<td>
+													<?php if($expense->status == 'Absent'):
+															echo "..."; else:
+													?>
+													<?= $expense->travel; 
+														endif;
+													?>
+												</td>
+												<td>
+													<?php if($expense->stay_allowance == NULL): echo "..."; ?>
+													<?php else: ?>
+														<?= $expense->stay_allowance; ?>
+													<?php endif; ?>
+												</td>
+												<td>
+													<?php if($expense->status == 'Absent'):
+														echo ($expense->travel) - ($expense->travel); else:
+													echo $expense->dsa + $expense->travel + $expense->stay_allowance;
+													endif; 
+													?>
+												</td>
+											</tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				</form>
 				<div class="row">
 					<div class="col-md-1"></div>
 					<div class="col-md-10">
@@ -179,3 +190,11 @@
 		</div>
 	</div>
 </section>
+<script type="text/javascript">
+// Script to check multiple checkboxes at once.
+$(document).ready(function(){
+	$("#savePayroll").click(function(){
+		$('input:checkbox').not(this).prop('checked', this.checked);
+	});
+});
+</script>

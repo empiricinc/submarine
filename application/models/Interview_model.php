@@ -22,7 +22,7 @@ class Interview_model extends CI_Model {
     }
     // Interviews not done yet, schedules interviews.
 	 public function interview_information() {
-	 	$due_date = date('Y-m-d h:i:s');
+	 	$due_date = date('Y-m-d');
 	 	$this->db->select('*');
 	 	$this->db->from('assign_interview');
 	 	$this->db->where('interview_date >', $due_date);
@@ -38,7 +38,7 @@ class Interview_model extends CI_Model {
 	}
 	// Get scheduled interviews. (Interview date > Current date)
 	public function scheduled_interviews(){
-		$due_date = date('Y-m-d h:i:s');
+		$due_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.application_id,
 							xin_job_applications.job_id,
@@ -72,7 +72,7 @@ class Interview_model extends CI_Model {
 	}
 	// Search interviews.
 	public function scheduled_search($rollno, $name, $project, $designation, $province, $district){
-		$int_date = date('Y-m-d h:i:s');
+		$int_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.application_id,
 							xin_job_applications.fullname,
@@ -115,7 +115,7 @@ class Interview_model extends CI_Model {
 	}
 	// Count scheduled interviews.
 	public function count_scheduled(){
-		$date_range = date('Y-m-d h:i:s');
+		$date_range = date('Y-m-d');
 		$this->db->select('*');
 		$this->db->from('assign_interview');
 		$this->db->where('interview_date >=', $date_range);
@@ -125,7 +125,7 @@ class Interview_model extends CI_Model {
 	}
 	// Get all scheduled interviews.
 	public function all_scheduled($limit, $offset){
-		$due_date = date('Y-m-d h:i:s');
+		$due_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.application_id,
 							xin_job_applications.job_id,
@@ -188,7 +188,6 @@ function applicantdetails($id){
     					interview_result.rollnumber,
     					interview_result.obtain_marks,
     					interview_result.total_marks,
-    					interview_result.comments,
     					interview_result.sdt as int_date,
     					assign_interview.id,
     					assign_interview.rollnumber,
@@ -232,7 +231,6 @@ function applicantdetails($id){
     						interview_result.rollnumber,
     						interview_result.obtain_marks,
     						interview_result.total_marks,
-    						interview_result.comments,
     						interview_result.sdt,
     						xin_job_applications.application_id,
     						xin_job_applications.fullname,
@@ -266,7 +264,6 @@ function applicantdetails($id){
     						interview_result.rollnumber,
     						interview_result.obtain_marks,
     						interview_result.total_marks,
-    						interview_result.comments,
     						interview_result.sdt,
     						xin_job_applications.application_id,
     						xin_job_applications.fullname,
@@ -301,7 +298,7 @@ function applicantdetails($id){
    	}
     // Overdue interviews, date passed and not done yet.
     public function overdue_interviews(){
-		$range = date('Y-m-d h:i:s');
+		$range = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -336,7 +333,7 @@ function applicantdetails($id){
 	}
 	// Count all overdue interviews.
 	public function count_overdue(){
-		$date_range = date('Y-m-d h:i:s');
+		$date_range = date('Y-m-d');
 		$this->db->select('*');
 		$this->db->from('assign_interview');
 		$this->db->where('interview_date <', $date_range);
@@ -346,7 +343,7 @@ function applicantdetails($id){
 	}
 	// Get all overdue interviews. (List of all overdue interviews)
 	public function all_overdue($limit, $offset){
-		$range = date('Y-m-d h:i:s');
+		$range = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -381,7 +378,7 @@ function applicantdetails($id){
 	}
 	// Search overdue interviews.
 	public function overdue_search($rollno, $name, $project, $designation, $province, $district){
-		$overdue_date = date('Y-m-d h:i:s');
+		$overdue_date = date('Y-m-d');
 		$this->db->select('assign_interview.*,
 							xin_job_applications.fullname,
 							xin_job_applications.email,
@@ -423,9 +420,157 @@ function applicantdetails($id){
 		$this->db->where('rollnumber NOT IN(SELECT rollnumber FROM interview_result)');
 		return $this->db->get()->result();
 	}
-
-	 // read job info
-
+	// Re-schedule an interview.
+	public function re_schedule($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('assign_interview', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Delete an interview.
+	public function delete_interview($rollnumber){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->delete('assign_interview');
+		return true;
+	}
+	// Get rollnumber detail for applicant for entering interview marks manually.
+	public function get_rollnumber_detail($rollnumber){
+		$this->db->select('assign_interview.rollnumber,
+									xin_job_applications.application_id,
+									xin_job_applications.job_id,
+									xin_job_applications.fullname,
+									xin_jobs.job_id,
+									xin_jobs.company,
+									xin_jobs.designation_id,
+									xin_companies.company_id,
+									xin_companies.name,
+									xin_designations.designation_id,
+									xin_designations.designation_name');
+		$this->db->from('assign_interview');
+		$this->db->join('xin_job_applications', 'assign_interview.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->where('assign_interview.rollnumber', $rollnumber);
+		echo $this->db->last_query();
+		$query = $this->db->get();
+		return $query->row();
+	}
+	// Save interview marks.
+	public function save_marks($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Display applicant detail in the form while adding result.
+	public function applicant_detail($rollnumber){
+		$this->db->select('assign_interview.rollnumber,
+							assign_interview.interview_date,
+									xin_job_applications.application_id,
+									xin_job_applications.job_id,
+									xin_job_applications.fullname,
+									xin_job_applications.cnic,
+									xin_job_applications.city_name,
+									xin_jobs.job_id,
+									xin_jobs.company,
+									xin_jobs.designation_id,
+									xin_companies.company_id,
+									xin_companies.name,
+									xin_designations.designation_id,
+									xin_designations.designation_name,
+									district.id,
+									district.name as cityName');
+		$this->db->from('assign_interview');
+		$this->db->join('xin_job_applications', 'assign_interview.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
+		$this->db->where('assign_interview.rollnumber', $this->uri->segment(3));
+		echo $this->db->last_query();
+		$query = $this->db->get();
+		return $query->row();
+	}
+	// Save SM interview.
+	public function save_sm_interview($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Upate SM Interview if roll number already exists.
+	public function update_sm_interview($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('interview_result', $data);
+		return true;
+	}
+	// Save DHCSO interview.
+	public function save_dhcso_interview($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Update DHCSO interview if the roll number already exists.
+	public function update_dhcso_interview($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('interview_result', $data);
+		return true;
+	}
+	// Save FCM/CHW interview.
+	public function save_fcm_interview($data){
+		$this->db->insert('interview_result', $data);
+		if($this->db->affected_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	// Update FCM/CHW interview if roll number already
+	public function update_fcm_interview($rollnumber, $data){
+		$this->db->where('rollnumber', $rollnumber);
+		$this->db->update('interview_result', $data);
+		return true;
+	}
+	// Print interview assessment sheet.
+	public function print_sheet($rollnumber){
+		$this->db->select('interview_result.*,
+							xin_job_applications.application_id,
+							xin_job_applications.job_id,
+							xin_job_applications.fullname,
+							xin_job_applications.cnic,
+							xin_job_applications.city_name,
+							xin_jobs.job_id,
+							xin_jobs.company,
+							xin_jobs.designation_id,
+							xin_companies.company_id,
+							xin_companies.name,
+							xin_designations.designation_id,
+							xin_designations.designation_name,
+							district.id,
+							district.name as cityName');
+		$this->db->from('interview_result');
+		$this->db->join('xin_job_applications', 'interview_result.rollnumber = xin_job_applications.application_id', 'left');
+		$this->db->join('xin_jobs', 'xin_job_applications.job_id = xin_jobs.job_id', 'left');
+		$this->db->join('xin_companies', 'xin_jobs.company = xin_companies.company_id', 'left');
+		$this->db->join('xin_designations', 'xin_jobs.designation_id = xin_designations.designation_id', 'left');
+		$this->db->join('district', 'xin_job_applications.city_name = district.id', 'left');
+		$this->db->where('interview_result.rollnumber', $this->uri->segment(3));
+		echo $this->db->last_query();
+		$query = $this->db->get();
+		return $query->row();
+	}
+	// read job info
 /*	 public function read_job_information($id) {
 
 		$condition = "id =" . "'" . $id . "'";

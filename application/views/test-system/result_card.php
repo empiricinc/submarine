@@ -4,59 +4,87 @@
 *  Location: Views / test-system / result_card.php
 */
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Test System | Test Submitted </title>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-	<meta property="og:locale" content="en_US" />
-	<meta property="og:type" content="website" />
-	<meta property="og:title" content="" />
-	<meta property="og:description" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:site_name" content="" />
-	<meta name="og:card" content="" />
-	<meta name="og:description" content="" />
-	<meta name="og:title" content="" />
-	<meta name="og:image" content="" />
-
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700,800|Roboto:400,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/bootstrap.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/style.css'); ?>">
-	<script src="<?php echo base_url('dashboardDesign/assets/js/jquery.js'); ?>"></script>
-</head>
-<body>
-	<section class="secMainWidth">
-		<section class="secFormLayout">
-			<div class="mainInputBg">
-				<div class="col-lg-12 text-center">
+<section class="secMainWidth">
+	<section class="secFormLayout">
+		<div class="mainInputBg">
+			<div class="row">
+				<div class="col-lg-12">
 					<div class="tabelHeading">
-						<h3>Applicant's result card</h3>
-						<div class="solidLine"></div>
+						<h3>add result <span style="text-transform: lowercase;">(add result manually, for applicants who are unable to take the exam online.)</span></h3>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-lg-12 text-center">
-					<?php $counter = 0; foreach($calc_result as $result): ?>
-						<p><strong style="font-weight: bold; color: red; font-size: 25px;"><?php ++$counter; ?></strong> <strong><?php //echo $result->ans_name; ?></strong></p>
-					<?php endforeach; ?>
-					<?php if($counter > 6): // If an applicant scored more than 6, will be passed. ?>
-						<h3 style="text-align: center; color: green;">Your score is: <strong style="font-size: 2em;"><?php echo $counter; ?></strong>
-						</h3><br>
-					<?php else: // If an applicant scored less than 6, will be failed. ?>
-						<h3 style="text-align: center; color: red;">Your score is: <strong style="font-size: 2em; text-shadow: 15px 18px #aeafaf;"><?php echo $counter; ?></strong><br>
-						</h3><br>
-					<?php endif; ?>
+				<form method="post" action="<?php echo base_url('tests/save_result'); ?>">
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<input type="text" name="applicant_rollnumber" class="form-control" placeholder="Applicant's roll number" id='rollnumber' style="color: #aeafaf;" required="required" value="<?php echo set_value('applicant_rollnumber'); ?>">
+							<span style="color: red;"><?php echo form_error('applicant_rollnumber'); ?></span>
+						</div>
 					</div>
-				</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<input type="text" name="applicant_name" class="form-control" placeholder="Applicant's name" id="applicant_name" style="color: #aeafaf;" readonly="" value="<?php echo set_value('applicant_name'); ?>">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<input type="text" name="applicant_project" class="form-control" placeholder="Applicant's Project" id="project" style="color: #aeafaf;" readonly="" value="<?php echo set_value('applicant_project'); ?>">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<input type="text" name="applicant_designation" class="form-control" placeholder="Applicant's Designation" id="designation" style="color: #aeafaf;" readonly="" value="<?php echo set_value('applicant_designation'); ?>">
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<input type="text" name="marks_obtained" class="form-control" placeholder="Marks Obtained" style="color: #aeafaf;" required="required" value="<?php echo set_value('marks_obtained'); ?>">
+							<span style="color: red;"><?php echo form_error('marks_obtained'); ?></span>
+						</div>
+					</div>
+					<div class="col-lg-3">
+						<div class="inputFormMain">
+							<input type="text" name="total_marks" class="form-control" placeholder="Total Marks" style="color: #aeafaf;" required="required" value="<?php echo set_value('total_marks'); ?>">
+							<span style="color: red;"><?php echo form_error('total_marks'); ?></span>
+						</div>
+					</div>
+					<div class="col-lg-6">
+						<div class="inputFormMain">
+							<textarea name="additional_comment" class="form-control" placeholder="Additional remarks (if any?)" style="color: #aeafaf;" rows="2"><?php echo set_value('additional_comment'); ?></textarea>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="submitBtn">
+							<button id="save" type="submit" class="btn btnSubmit">Submit</button>
+							<button type="reset" class="btn btnSubmit">Reset</button>
+						</div>
+					</div>
+				</form>
 			</div>
-		</section>
+		</div>
 	</section>
-	<script src="<?php echo base_url('dashboardDesign/assets/js/bootstrap.min.js'); ?>"></script>
-	<script src="<?php echo base_url('dashboardDesign/assets/js/custom.js'); ?>"></script>
-</body>
-</html>
+</section>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#rollnumber').on('change', function(){
+			var rollnumber = $('#rollnumber').val();
+			$.ajax({
+				url: '<?php echo base_url(); ?>tests/get_rollnumber/' + rollnumber,
+				method: 'POST',
+				dataType: 'JSON',
+				data: {rollnumber: rollnumber},
+				success: function(data){
+					console.log(data);
+					if(data){
+						$('#applicant_name').val(data.fullname);
+						$('#project').val(data.name);
+						$('#designation').val(data.designation_name);
+					}else{
+						$('#applicant_name').val('');
+						$('#project').val('');
+						$('#designation').val('');
+					}
+				}
+			});
+		});
+	});
+</script>

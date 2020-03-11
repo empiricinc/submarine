@@ -42,13 +42,7 @@
           <div class="col-md-8">
             <div class="tabelHeading">
               <?php if(empty($search_results)): ?>
-                <h3>list of overdue interviews<br>
-                  <small style="text-transform: lowercase;">
-                    <div class="label label-info">
-                      overdue interviews can be re-scheduled &hellip;
-                    </div>
-                  </small>
-                </h3>
+                <h3>list of overdue interviews</h3>
               <?php else: ?>
                 <h3>search results</h3>
               <?php endif; ?>
@@ -77,6 +71,7 @@
                       <th>province</th>
                       <th>district</th>
                       <th>interview date</th>
+                      <th>actions | operations</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -101,35 +96,35 @@
                                   <tbody>
                                    <?php foreach ($overdue_data as $row){ ?>
                                     <tr>
-                                      <td> Full Name</td>
+                                      <td>Full Name</td>
                                       <td><?php echo $row->fullname; ?></td> 
                                     </tr>
                                     <tr>
-                                      <td> Email </td>
+                                      <td>Email</td>
                                       <td><?php echo $row->email;?></td> 
                                     </tr>
                                     <tr>
-                                      <td> Gender </td>
+                                      <td>Gender</td>
                                       <td><?php echo  $row->genderName; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Age </td>
+                                      <td>Age</td>
                                       <td><?php echo  $row->age_name; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Education </td>
+                                      <td>Education</td>
                                       <td><?php echo  $row->edu_name;; ?></td>
                                     </tr>
                                     <tr>
-                                      <td> Experience </td>
+                                      <td>Experience</td>
                                       <td><?php  echo  $row->minimum_experience;; ?></td>
                                     </tr>
                                     <tr>
-                                      <td>Province </td>
+                                      <td>Province</td>
                                       <td><?php echo  $row->prov_name; ?></td>
                                     </tr>
                                     <tr>
-                                      <td>District </td>
+                                      <td>District</td>
                                       <td><?php echo $row->cityName; ?></td>
                                     </tr>
                                     <tr>
@@ -153,7 +148,7 @@
                                       </td>
                                     </tr>
                                     <tr>
-                                      <td>Resume </td>
+                                      <td>Resume</td>
                                       <td><a href="<?php echo base_url(); ?>uploads/resume/<?php echo  $row->job_resume; ?>" target="_blank">View Resume</a></td>
                                     </tr>
                                     <?php } ?>  
@@ -174,6 +169,41 @@
                       <td><?= $overdue->provName; ?></td>
                       <td><?= $overdue->cityName; ?></td>
                       <td><?= date('l, M jS, Y', strtotime($overdue->sdt)); ?></td>
+                      <td>
+                        <a href="#" data-toggle="modal" data-target="#re_schedule<?= $overdue->rollnumber; ?>" class="btn btn-primary btn-xs">Re-schedule</a>
+                       <a href="<?= base_url(); ?>interview/delete_interview/<?= $overdue->rollnumber; ?>" class="btn btn-danger btn-xs" onclick="javascript:return confirm('Are you sure to delete ?');">Delete</a>
+                      <div class="modal fade" id="re_schedule<?= $overdue->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <!--Header-->
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Re-schedule an Interview... </h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <!--Body-->
+                            <div class="modal-body">
+                              <form action="<?= base_url('interview/re_schedule'); ?>" method="post">
+                                <input type="hidden" name="rollnumber" value="<?= $overdue->rollnumber; ?>">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <label>Interview Date</label>
+                                    <input type="text" name="interview_date" class="form-control date" value="<?php echo date('Y-m-d', strtotime($overdue->interview_date)); ?>"><br>
+                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                    <button type="reset" class="btn btn-default btn-sm">Cancel</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>
@@ -204,6 +234,7 @@
                       <th>province</th>
                       <th>district</th>
                       <th>interview date</th>
+                      <th>actions | operations</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -301,6 +332,41 @@
                       <td><?= $result->provName; ?></td>
                       <td><?= $result->cityName; ?></td>
                       <td><?= date('l, M jS, Y', strtotime($result->sdt)); ?></td>
+                       <td>
+                        <a href="#" data-toggle="modal" data-target="#re_schedule<?= $result->rollnumber; ?>" class="btn btn-primary btn-xs">Re-schedule</a>
+                       <a href="<?= base_url(); ?>interview/delete_interview/<?= $result->rollnumber; ?>" class="btn btn-danger btn-xs" onclick="javascript:return confirm('Are you sure to delete ?');">Delete</a>
+                      <div class="modal fade" id="re_schedule<?= $result->rollnumber; ?>" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" tabindex="-1">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <!--Header-->
+                            <div class="modal-header">
+                              <h4 class="modal-title" id="myModalLabel" style="display: inline-block;">Re-schedule an Interview... </h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                              </button>
+                            </div>
+                            <!--Body-->
+                            <div class="modal-body">
+                              <form action="<?= base_url('interview/re_schedule'); ?>" method="post">
+                                <input type="hidden" name="rollnumber" value="<?= $result->rollnumber; ?>">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <label>Interview Date</label>
+                                    <input type="text" name="interview_date" class="form-control date" value="<?php echo date('Y-m-d', strtotime($result->interview_date)); ?>"><br>
+                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                    <button type="reset" class="btn btn-default btn-sm">Cancel</button>
+                                  </div>
+                                </div>
+                              </form>
+                            </div>
+                            <!--Footer-->
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
                     </tr>
                   <?php endforeach; ?>
                   </tbody>

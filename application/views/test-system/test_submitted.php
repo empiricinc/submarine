@@ -24,10 +24,10 @@
 	<meta name="og:image" content="" />
 
 	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,900|Open+Sans:400,700,800|Roboto:400,700,900" rel="stylesheet">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/font-awesome.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/bootstrap.min.css'); ?>">
-	<link rel="stylesheet" href="<?php echo base_url('dashboardDesign/assets/css/style.css'); ?>">
-	<script src="<?php echo base_url('dashboardDesign/assets/js/jquery.js'); ?>"></script>
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/font-awesome.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/bootstrap.min.css'); ?>">
+	<link rel="stylesheet" href="<?php echo base_url('assets/css/style.css'); ?>">
+	<script src="<?php echo base_url('assets/js/jquery.js'); ?>"></script>
 </head>
 <body>
 	<section class="secMainWidth">
@@ -53,16 +53,14 @@
 					<div class="col-lg-12 text-center">
 						<div class="submitBtn">
 							<a href="http://www.ctc.org.pk" target="blank" class="btn btnSubmit">Visit our Site</a>
-							<a href="http://www.ctc.org.pk/business-opportunities/jobs/" class="btn btnSubmit" target="blank">View Job Criteria</a>
-							<a href="?" class="btn btnSubmit">Call for Result</a>
-							<a href="?" class="btn btnSubmit">More info</a>
+							<a href="http://www.ctc.org.pk/career" class="btn btnSubmit" target="blank">View Job Criteria</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</section>
 	</section>
-	<script src="<?php echo base_url('dashboardDesign/assets/js/bootstrap.min.js'); ?>"></script>
-	<script src="<?php echo base_url('dashboardDesign/assets/js/custom.js'); ?>"></script>
+	<script src="<?php echo base_url('assets/js/bootstrap.min.js'); ?>"></script>
+	<script src="<?php echo base_url('assets/js/custom.js'); ?>"></script>
 </body>
 </html>

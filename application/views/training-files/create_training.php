@@ -266,7 +266,7 @@ $(document).ready(function(){
 		// $('#countcheckboxes').html(counCheckbox);
 		// $('#total').html(counCheckbox)--;
 		if($('.select_max:checked').length > limit){
-			alert('Your limit to select employees has exceeded, you can select 3 employees in one training. Please adjust the rest in another training !');
+			alert('Your limit to select employees has exceeded, you can select 25 employees in one training. Please adjust the rest in another training !');
 			this.checked = false; // will not allow the checkbox to be checked.
 		}
 
@@ -309,7 +309,7 @@ $(document).ready(function(){
 					}
 					print +=
 		           	"<tr><td>"+ counter++ +"</td><td>" +
-		            res[j].first_name + " " + res[j].last_name + // First & last name.
+		            res[j].first_name + // Employee name
 		            "</td><td>" +
 		            res[j].name + "<td>" + res[j].designation_name +
 		            "</td><td><input class='select_max' type='checkbox' "+checked+" name='employee[]' value='"+ res[j].employee_id +"' data-desg='"+res[j].designation_id+"'> Mark as trainee" 
@@ -342,10 +342,10 @@ $(document).ready(function(){
 			dataType: 'JSON',
 			success: function(resp){
 				if(resp == ''){
-					alert("There are currently NO employees for Induction training !");
+					alert("There are currently NO employees for this training !");
 					console.log(resp);
 				}else{
-					alert("You're having employees who are available for Refresher training, you can select them from the list !");
+					alert("You're having employees who are available for the training selected, you can select them from the list !");
 					console.log(resp);
 				}
 			}
